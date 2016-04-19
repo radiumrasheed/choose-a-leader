@@ -18,7 +18,7 @@
     <div collapse="isCollapsed" class="pull-right navbar-collapse collapse" id="navbar-main">
         <ul class="nav navbar-nav">
             <li ng-show="!isGuest() && notAdmin()"><a ui-sref="dashboard">DASHBOARD</a></li>
-            <li ng-show="!notAdmin()"><a ui-sref="admin_dashboard">DASHBOARD</a></li>
+            <li ng-show="!isGuest && !notAdmin()"><a ui-sref="admin_dashboard">DASHBOARD</a></li>
             <li ng-show="isGuest()"><a ui-sref="login">Client Login</a></li>
             <li ng-show="isGuest()"><a ui-sref="admin_login">Admin Panel</a></li>
 
