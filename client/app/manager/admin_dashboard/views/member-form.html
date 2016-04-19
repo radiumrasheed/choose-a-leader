@@ -9,7 +9,7 @@
         <div class="form-group">
             <label class="col-sm-4 control-label">Enrollment. Number</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control"
+                <input type="text" class="form-control" ng-model="selectedMember.sc_number"
                        value="{{selectedMember.sc_number}}" required>
             </div>
         </div>
@@ -17,8 +17,9 @@
         <div class="form-group">
             <label class="col-sm-4 control-label">NBA Branch <span class="required">*</span> </label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" placeholder="NBA Local Branch"
-                       ng-model="selectedMember.branch" required autofocus>
+                <small class="text-danger">Please select <b>{{selectedMember.branch}}</b> from the list</small>
+                <input type="text" class="form-control" placeholder="NBA Local Branch" branch-select-plugin="Select Branch"
+                       ng-model="selectedMember._branch" required autofocus>
             </div>
         </div>
 

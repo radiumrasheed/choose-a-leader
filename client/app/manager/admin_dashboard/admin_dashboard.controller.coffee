@@ -37,7 +37,6 @@ angular.module 'elektorApp'
     else toastr.error "Please fill the form appropriately"
       
 .controller 'ResultsCtrl', ( $scope, Vote, $timeout, $rootScope, Setting, toastr, $stateParams, Poll ) ->
-  
   pollId = $stateParams.id
   
   Poll.get id: pollId, (poll) ->
@@ -157,7 +156,6 @@ angular.module 'elektorApp'
     else toastr.error "Error Saving Candidate Details"
 
 .controller 'MembersCtrl', ( $scope, Member, $modal, toastr, $localStorage ) ->
-
   modal = null
   $scope.perPage = $localStorage.memberPerPage or 15
   $scope.currentPage = 1

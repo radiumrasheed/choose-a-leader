@@ -3,8 +3,14 @@
         <div class="panel-title">
             <i class="fa fa-users"></i> ALL MEMBERS <span ng-show="total">({{total}})</span>
 
+
             <select class="pull-right" ng-model="perPage" ng-options="item for item in pageSizes"
                     ng-change="pageChanged()"></select>
+
+            <button class="btn btn-purple btn-xs pull-right mr-10"><i class="fa fa-search"></i> Search</button>
+
+            <input class="pull-right m-r-15 text-success name-filter" placeholder="Search By Name" type="text"
+                   ng-model="name">
         </div>
     </div>
     <div class="panel-body no-padding">
