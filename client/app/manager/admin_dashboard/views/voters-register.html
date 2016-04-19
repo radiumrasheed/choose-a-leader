@@ -1,0 +1,52 @@
+<div class="panel panel-green">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <i class="fa fa-users"></i> VOTERS REGISTER <span ng-show="total">({{total}})</span>
+
+            <select class="pull-right" ng-model="perPage" ng-options="item for item in pageSizes"
+                    ng-change="pageChanged()"></select>
+        </div>
+    </div>
+    <div class="panel-body no-padding">
+
+        <div class="text-center">
+            <pagination first-text="First" last-text="Last" next-text="Next"
+                        previous-text="Previous"
+                        boundary-links="true"
+                        items-per-page="perPage"
+                        class="centered-pager"
+                        ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+        </div>
+
+        <table class="table table-striped table-condensed table-hover">
+            <tr>
+                <th>S/N.</th>
+                <th>NAME</th>
+                <th>ENROLLMENT NO.</th>
+                <th>PHONE</th>
+                <th>ACCESS CODE</th>
+            </tr>
+            <tr ng-repeat="m in members track by $index">
+                <td>{{(currentPage-1)*perPage+$index+1}}.</td>
+                <td>{{m.surname}} {{m.firstName || m.othername}} {{m.middleName}}</td>
+                <td>{{m.sc_number}}</td>
+                <td>{{m.phone}}</td>
+                <td>{{m.accessCode}}</td>
+            </tr>
+        </table>
+
+        <div class="text-center">
+            <pagination first-text="First" last-text="Last" next-text="Next"
+                        previous-text="Previous"
+                        boundary-links="true"
+                        items-per-page="perPage"
+                        class="centered-pager"
+                        ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+        </div>
+
+    </div>
+
+    <div class="panel-footer text-left">
+        <b>Number of Members: {{total}}</b>
+    </div>
+</div>

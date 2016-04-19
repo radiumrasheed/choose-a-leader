@@ -1,0 +1,28 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container admin">
+    <div class="row">
+        <div class="center-form panel">
+            <div class="panel-body">
+                <h2 class="text-center"><i class="fa fa-lock"></i> Admin Login</h2><br>
+
+                <form method="post" ng-submit="login()" name="loginForm">
+
+                    <div class="form-group">
+                        <input class="form-control input-lg" type="text"
+                               ng-model="username" placeholder="Username" required autofocus>
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control input-lg" type="password"
+                               ng-model="password" placeholder="Password" required>
+                    </div>
+
+                    <button type="submit" ng-disabled="loginForm.$invalid"
+                            class="btn btn-lg btn-block btn-default">Sign In
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

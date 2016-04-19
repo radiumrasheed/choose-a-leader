@@ -1,0 +1,42 @@
+<div class="modal-header pad-10">
+    <h4>
+        Fix Member Branch Record
+        <button class="btn btn-xs btn-danger pull-right" ng-click="closeModal()"><i class="fa fa-times"></i></button>
+    </h4>
+</div>
+<div class="modal-body">
+    <form name="fixForm" ng-submit="fixForm.$valid && submitFix(fixForm, new_branch)" class="form form-horizontal">
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Name</label>
+            <div class="col-sm-8">
+                <input class="form-control" readonly
+                       value="{{[selectedRecord._member.surname, (selectedRecord._member.firstName||selectedRecord._member.othername)].join(' ')}}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Correct Branch/State</label>
+            <div class="col-sm-4">
+                <input class="form-control" readonly value="{{selectedRecord.branch}}">
+            </div>
+            <div class="col-sm-4">
+                <input class="form-control" readonly value="{{selectedRecord.state}}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Branch <span class="required">*</span></label>
+            <div class="col-sm-8">
+                <input id="_branch" class="form-control" branch-select-plugin="Select Branch"
+                       ng-model="new_branch" autofocus required>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-disabled="fixForm.$invalid" type="submit"
+            ng-click="fixForm.$valid && submitFix(fixForm, new_branch)">
+        <i class="fa fa-save m-r-10"></i> Save Changes</button>
+    <button class="btn btn-danger pull-left" ng-click="closeModal()"><i class="fa fa-times"></i> Cancel</button>
+</div>

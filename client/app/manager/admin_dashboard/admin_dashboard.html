@@ -1,0 +1,77 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container" id="admin_dashboard">
+    <div class="row">
+        <div class="col-md-3" admin-menu></div>
+        <div class="col-md-9" ui-view>
+            <div class="row stats">
+                <div class="col-md-12">
+                    <div class="alert alert-success">
+                        <h5 class="text-left text-uppercase">Platform Usage Information</h5>
+                        <p class="text-white text-justify"></p>
+                    </div>
+                </div>
+                <div class="col-md-4" ng-repeat="s in settings">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <h2 class="panel-title text-uppercase">
+                                <i class="fa fa-calendar"></i> {{s.label}}
+                            </h2>
+                        </div>
+                        <div class="panel-body">
+                            <h2>{{s.type=='binary'?s.value:ago(s.value)}}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <h2 class="panel-title text-uppercase">
+                                <i class="fa fa-dashboard"></i> Open Positions
+                            </h2>
+                        </div>
+                        <div class="panel-body">
+                            <h2>14</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <h2 class="panel-title text-uppercase">
+                                <i class="fa fa-info-circle"></i> Number of members
+                            </h2>
+                        </div>
+                        <div class="panel-body">
+                            <h2>14,789</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <h2 class="panel-title text-uppercase">
+                                <i class="fa fa-info-circle"></i> Accredited Members
+                            </h2>
+                        </div>
+                        <div class="panel-body">
+                            <h2>11,237</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <h2 class="panel-title text-uppercase">
+                                <i class="fa fa-thumbs-up"></i> Votes Cast
+                            </h2>
+                        </div>
+                        <div class="panel-body">
+                            <h2>0</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

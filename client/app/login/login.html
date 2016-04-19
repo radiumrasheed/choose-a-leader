@@ -1,0 +1,37 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="center-form panel">
+            <div class="panel-body">
+                <h3 class="text-center"><i class="icon glyphicon-lock"></i> Secure Login</h3><br>
+
+                <div class="alert alert-danger text-center" ng-show="formError">{{formError}}</div>
+
+                <form method="post" ng-submit="loginForm.$valid && login()" name="loginForm">
+
+                    <div class="form-group">
+                        <input class="form-control input-lg" type="text"
+                               ng-model="username" placeholder="Your Enrollment Number" required autofocus>
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control input-lg" type="password"
+                               ng-model="password" placeholder="Password" required>
+                    </div>
+
+                    <button type="submit" ng-disabled="loginForm.$invalid || submitting"
+                            class="btn btn-lg btn-block btn-default">Sign In
+                    </button>
+
+                    <hr>
+
+                    <div class="text-center">
+                        Don't have a password?
+                        <a class="text-success text-bold text-underline" ui-sref="request_password">Request Password</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

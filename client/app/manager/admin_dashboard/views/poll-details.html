@@ -1,0 +1,37 @@
+<div class="panel panel-green">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <i class="fa fa-users"></i> POLL DETAILS
+        </div>
+    </div>
+    <div class="panel-body no-padding">
+
+        <div class="alert alert-info">
+            <b class="text-uppercase">{{position.name}}</b><br>
+            {{position.description}}
+        </div>
+
+        <table class="table table-striped m-t-10">
+            <tr>
+                <th>S/N.</th>
+                <th>CANDIDATE</th>
+                <th class="text-center">VOTES</th>
+            </tr>
+            <tr ng-repeat="c in position.candidates track by $index">
+                <td>{{$index+1}}</td>
+                <th>{{c._member.firstName}} {{c._member.surname}}</th>
+                <td class="text-center">{{getVotes(c._member._id)}}</td>
+            </tr>
+        </table>
+
+        <div google-chart chart="chartObject" style="height:350px; width:100%;"></div>
+
+    </div>
+
+    <div class="panel-footer text-left">
+        <div>
+            Number of Candidates: {{position.candidates.length}}
+            <span class="pull-right">Votes Cast: {{votes.length}}</span>
+        </div>
+    </div>
+</div>

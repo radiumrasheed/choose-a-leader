@@ -1,0 +1,53 @@
+.ballots {
+  margin: 3% auto;
+
+  .panel-heading {
+    font-weight: 400;
+  }
+
+  .ballot-panel {
+
+    .panel-title {
+      max-height: 22px;
+      font-size: 14px;
+    }
+
+    .panel-body {
+      height: 205px;
+      background-size: cover;
+
+      .tint {
+        background: rgba(0,0,0,0.6);
+        color: #FFF;
+        padding: 10px;
+        display: none;
+        height: 100%;
+        position: relative;
+        cursor: pointer;
+      }
+
+      .printed {
+        display: none;
+      }
+
+      &:hover {
+        .tint {
+          display: block;
+        }
+        .printed {
+          display: none;
+        }
+      }
+    }
+
+    &.selected {
+      opacity: 0.4;
+
+      .printed {
+        display: block;
+        height: 100%;
+        background: url('/assets/images/thumbprint.png') no-repeat center center;
+      }
+    }
+  }
+}

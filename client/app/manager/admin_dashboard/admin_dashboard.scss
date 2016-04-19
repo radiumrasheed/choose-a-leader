@@ -1,0 +1,21 @@
+#admin_dashboard {
+  margin: 3% auto;
+
+  .panel {
+    .panel-heading {
+      font-weight: 400;
+      i {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .stats {
+    .panel-body {
+      text-align: center;
+      h2 {
+        font-weight: 500;
+      }
+    }
+  }
+}

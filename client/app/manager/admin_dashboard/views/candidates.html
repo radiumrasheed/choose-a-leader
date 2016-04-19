@@ -1,0 +1,102 @@
+<div class="panel panel-green">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <i class="fa fa-users"></i> Position Details
+            <button class="btn btn-xs btn-danger pull-right" ng-click="newCandidate()"><i
+                    class="fa fa-plus-square"></i> Add New
+                Candidate</button>
+        </div>
+    </div>
+    <div class="panel-body no-padding">
+
+        <div class="alert alert-info">
+            <b class="text-uppercase">{{position.name}}</b><br>
+            {{position.description}}
+        </div>
+
+        <form name="candidateForm" class="form-horizontal pad-10" ng-show="showCandidateForm">
+            <div class="alert alert-success text-white">
+                ALl fields marked <span class="required">*</span> are required.
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label">Candidate <span class="required">*</span></label>
+                <div class="col-md-8">
+                    <input id="_member" class="form-control" member-select-plugin="Select Member"
+                           ng-model="candidate._member" autofocus required>
+                    <!--<select ng-model="candidate._member" class="form-control" required>-->
+                        <!--<option value="">Select Candidate</option>-->
+                        <!--<option ng-repeat="m in members" value="{{m._id}}">{{m.firstName}} {{m.surname}}</option>-->
+                    <!--</select>-->
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label">Bio <span class="required">*</span></label>
+                <div class="col-md-8">
+                    <textarea ng-model="candidate.bio" rows="3" class="form-control" required>Description
+                    </textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label">Photograph <span class="required">*</span></label>
+                <div class="col-md-8">
+                    <!--<input type="file" ng-model="candidate.photo" base-sixty-four-input onprogress="uploadProgress"-->
+                           <!--class="form-control" required>-->
+                    <!--<span ng-show="loaded>0 && loaded < 100">{{loaded}}/100%</span>-->
+
+                    <div class="btn-sm btn-primary btn button" ngf-select="uploadFile($file)" ngf-resize="{width: 400, height: 205}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="205"><i
+                            class="fa fa-photo"></i> Attach
+                        Candidate Photo
+                    </div>
+                    <br>
+                    <span ng-show="loaded.length">{{loaded}}</span>
+                    <div ng-show="error" class="alert alert-danger">{{error}}</div>
+                    <a ng-show="photo" cl-href="{{photo.public_id}}" format="jpg" target="_blank">
+                        <cl-image public-id="{{photo.public_id}}" class="thumbnail inline" width="230" crop="fit"
+                                  quality="75" format="jpg"/>
+                    </a>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-8 col-md-offset-4">
+                    <button type="button" class="btn btn-sm btn-danger"
+                            ng-click="hideForm(candidateForm)">
+                        <i class="fa fa-times"></i> CANCEL
+                    </button>
+                    <button class="btn btn-default btn-sm"
+                            ng-click="candidateForm.$valid && photo && submit(candidateForm)"
+                            type="submit"
+                            ng-disabled="candidateForm.$invalid || !photo"><i class="fa fa-check-square"></i> SAVE
+                    </button>
+                </div>
+            </div>
+
+        </form>
+
+        <ul class="list-group m-t-10">
+            <li class="list-group-item text-justify" ng-repeat="c in position.candidates track by $index">
+                <div class="row">
+                    <img ng-src="{{c.secure_url}}" width="120" class="thumbnail col-sm-3 col-sm-offset-1">
+                    <!--<a ng-show="photo" cl-href="{{c.public_id}}" format="png" target="_blank" class="pull-left m-r-10">-->
+                    <!--<cl-image public-id="{{c.public_id}}" class="thumbnail inline" width="120" crop="fit"-->
+                    <!--quality="95" format="png"/>-->
+                    <!--</a>-->
+                    <div class="col-sm-8">
+                        <b class="text-uppercase"> {{c._member.firstName || c._member.othername}} {{c._member
+                            .surname}}</b><br>
+                        <small>{{c.bio}}</small>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="panel-footer text-left">
+        Number of Candidates: {{position.candidates.length}}
+        <a class="pull-right btn btn-xs btn-danger" ng-click="closeMe()"><i class="fa fa-times"></i> Close</a>
+    </div>
+</div>

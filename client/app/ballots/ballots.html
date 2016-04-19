@@ -1,0 +1,162 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container ballots" ng-cloak>
+    <div class="row">
+        <div class="col-md-3" menu></div>
+
+        <div class="col-md-9" ng-show="!showBallotPage">
+            <div class="alert text-center alert-primary">
+                <h4 class="text-uppercase">{{poll.title}}</h4>
+                <p class="text-white">{{poll.description}}</p>
+            </div>
+
+            <div class="alert alert-info text-center">
+                <h3>{{message}}</h3>
+            </div>
+
+            <a ui-sref="polls" class="btn btn-block btn-xlg btn-primary"><i class="fa fa-home"></i> Back to
+                Polls Page</a>
+        </div>
+
+        <div class="col-md-9" ng-show="showBallotPage">
+            <div class="alert text-center alert-primary">
+                <h4 class="text-uppercase">{{poll.title}}</h4>
+                <p class="text-white">{{poll.description}}</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-success">
+                        <h5 class="text-center text-white text-uppercase">Ballot Casting Instructions</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-hide="showingReceipt">
+
+                <div class="col-sm-12" ng-repeat="position in positions track by $index">
+                    <div class="panel"
+                         ng-class="{'panel-green':!ballot[position._id], 'panel-purple': ballot[position._id]}">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <i class="fa fa-star"></i> {{position.name}}
+                                <button class="pull-right btn btn-xs"
+                                        ng-class="{'btn-primary':collapse[$index], 'btn-danger':!collapse[$index]}"
+                                        ng-click="toggleCollapse($index)">
+                                    {{collapse[$index]?"Show Candidates":"Hide Position"}}</button>
+                                <span class="pull-right m-r-10"><em>{{(ballot[position._id]._member.firstName||ballot[position._id]._member.othername)+" "+ballot[position._id]._member.surname}}</em></span>
+                            </div>
+                        </div>
+                        <div collapse="collapse[$index]" class="panel-body text-justify">{{position.description}}</div>
+                    </div>
+
+                    <div class="row" collapse="collapse[$index]">
+                        <div class="col-md-4" ng-repeat="candidate in position.candidates track by $index">
+                            <div class="panel panel-green ballot-panel"
+                                 ng-class="{selected: selected[position._id][candidate._id]}">
+                                <div class="panel-heading">
+                                    <div class="panel-title" data-ellipsis
+                                         ng-bind="candidate._member.firstName||candidate._member.othername + ' ' + candidate._member.surname">
+                                        <!--{{candidate._member.firstName||candidate._member.othername}}-->
+                                        <!--{{candidate._member.surname}}-->
+                                    </div>
+                                </div>
+                                <div class="panel-body no-padding" style="background-image:
+                                url({{candidate.secure_url}});" show-tint>
+                                    <div class="tint" ng-click="setChoice(position._id, candidate)">
+                                        <small>{{candidate.bio}}</small>
+                                    </div>
+                                    <div class="printed"></div>
+                                </div>
+                                <div class="panel-footer">
+                                    <button class="btn btn-default btn-block"
+                                            ng-click="setChoice(position._id, candidate)"><i
+                                            class="fa fa-thumbs-up"></i>
+                                        SELECT</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12" ng-show="positions.length">
+                    <br><br>
+                    <button ng-click="showReceipt()" class="btn btn-xlg btn-default btn-block"
+                            ng-show="ballotFilled()">
+                        <i class="fa fa-check-square"></i> Done Casting Ballot <i class="fa fa-thumbs-up"></i>
+                    </button>
+                </div>
+
+            </div>
+
+            <div ng-show="showingReceipt" class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <i class="fa fa-registered"></i> Ballot Receipt
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-striped table-hover">
+                                <tr>
+                                    <th class="text-right">POSITION</th>
+                                    <th>YOUR VOTE</th>
+                                </tr>
+                                <tr ng-repeat="p in positions">
+                                    <th class="text-right">{{p.name}}</th>
+                                    <td
+                                            class="text-uppercase">{{ballot[p._id]._member.firstName||ballot[p._id]._member.othername}}
+                                        {{ballot[p._id]._member.surname}}</td>
+                                </tr>
+                            </table>
+                            <hr>
+                            <form name="ballotForm" class="form-horizontal">
+                                <div class="alert alert-info">
+                                    In order to accept your vote, please enter your password and your ACCESS CODE.
+                                    Your ACCESS CODE was sent to you as an SMS when you registered.
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-md-offset-3 control-label">
+                                        Your Password <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-4">
+                                        <input type="password" name="password" ng-model="ballot.password"
+                                               placeholder="PASSWORD"
+                                               class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-md-offset-3 control-label">
+                                        ACCESS CODE <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-4">
+                                        <input name="accessCode" type="text" ng-model="ballot.accessCode"
+                                               placeholder="ACCESS CODE"
+                                               class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <div class="form-group">
+                                    <div class="col-sm-3 col-sm-offset-3">
+                                        <button type="button" class="btn btn-danger btn-block" ng-click="backToBallot()">
+                                            <i class="fa fa-arrow-left"></i> Go Back
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <button class="btn btn-default btn-block" ng-click="submitBallot(ballotForm)"
+                                                ng-disabled="ballotForm.$invalid"><i class="fa fa-check-square"></i>
+                                            Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

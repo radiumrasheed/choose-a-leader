@@ -1,0 +1,28 @@
+<div class="panel panel-green">
+    <div class="panel-heading">
+        <div class="panel-title"><i class="fa fa-cogs"></i> POLL SETTINGS</div>
+    </div>
+    <div class="panel-body">
+        <form name="settingsForm" class="form-horizontal">
+            <div class="alert alert-success text-white">
+                ALl fields marked <span class="required">*</span> are required.
+            </div>
+
+            <div class="form-group" ng-repeat="s in settings">
+                <label class="col-md-3 col-md-offset-2 control-label">{{s.label}} <span class="required">*</span>
+                </label>
+                <div class="col-md-4">
+                    <input type="{{s.type}}" ng-model="s.value" class="form-control" required>
+                </div>
+                <div class="col-md-3" ng-show="s.type=='datetime-local'">{{ago(s.value)}}</div>
+            </div>
+
+        </form>
+    </div>
+    <div class="panel-footer text-left">
+        Last Updated: {{ago(12345)}}
+        <a class="pull-right btn-link" ng-hide="settingsForm.$invalid" ng-click="submit(settingsForm)"><i
+                class="fa fa-check-square"></i>
+            Update Settings</a>
+    </div>
+</div>

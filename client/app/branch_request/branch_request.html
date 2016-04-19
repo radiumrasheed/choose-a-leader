@@ -1,0 +1,54 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container br-page">
+    <div class="row">
+        <div class="center-form panel">
+            <div class="panel-body">
+                <h3 class="text-center"><i class="fa fa-exclamation-triangle m-r-15"></i> {{formSuccess?"Request Sent Successfully":"Incorrect Branch Information"}}</h3><br>
+
+                <div class="alert alert-danger text-center" ng-show="formError">{{formError}}</div>
+                <div class="alert alert-success text-center"
+                     ng-show="formSuccess"><h3 class="text-white">{{formSuccess}}</h3></div>
+
+                <form method="post" ng-submit="branchForm.$valid && sendRequest(branchForm)" name="branchForm"
+                      ng-hide="formSuccess">
+
+                    <div class="form-group">
+                        <input class="form-control input-lg" type="text" readonly
+                               value="{{[member.surname, (member.firstName || member.othername)].join(' ')}}" >
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control input-lg" type="text" readonly value="{{member.sc_number}}" >
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control input-lg" type="text"
+                               ng-model="br.branch" placeholder="Your NBA Local Branch" required autofocus>
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control input-lg" type="text"
+                               ng-model="br.state" placeholder="Your State" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control input-lg" type="email"
+                               ng-model="br.email" placeholder="Your Email Address" required>
+                    </div>
+
+                    <button type="submit" ng-disabled="branchForm.$invalid || submitting"
+                            class="btn btn-lg btn-block btn-default">Request Branch Update
+                    </button>
+
+                </form>
+
+                <hr>
+
+                <div class="text-center">
+                    <a class="text-success text-bold text-underline" ui-sref="login">Login Here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="panel panel-green">
+    <div class="panel-heading">
+        <h2 class="panel-title text-uppercase text-left">
+            <i class="fa fa-list m-r-15"></i> Welcome
+        </h2>
+    </div>
+    <div class="panel-body no-padding">
+        <ul class="list-group text-left side-menu">
+            <li class="list-group-item">
+                <a ui-sref="dashboard"><i class="fa fa-home"></i> Home</a>
+            </li>
+            <li class="list-group-item">
+                <a ui-sref="profile"><i class="fa fa-user"></i> My Profile</a>
+            </li>
+            <!--<li class="list-group-item">-->
+                <!--<a ui-sref="dashboard"><i class="fa fa-check-square"></i> Accreditation</a>-->
+            <!--</li>-->
+            <li class="list-group-item">
+                <a ui-sref="polls"><i class="fa fa-thumbs-o-up"></i> Polls</a>
+            </li>
+            <!--<li class="list-group-item">-->
+                <!--<a ui-sref="ballots"><i class="fa fa-thumbs-o-up"></i> Cast Votes</a>-->
+            <!--</li>-->
+            <li class="list-group-item" ng-show="showResults">
+                <a ui-sref="results"><i class="fa fa-check-square"></i> Poll Results</a>
+            </li>
+            <li class="list-group-item">
+                <a ui-sref="ballot_receipt"><i class="fa fa-registered"></i> Ballot Receipt</a>
+            </li>
+            <li class="list-group-item">
+                <a ui-sref="update_password"><i class="fa fa-key"></i> Change Password</a>
+            </li>
+        </ul>
+    </div>
+</div>

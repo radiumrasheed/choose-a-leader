@@ -1,0 +1,53 @@
+<div class="panel panel-green">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <i class="fa fa-users"></i> BRANCH MANAGEMENT <span ng-show="total">({{total}})</span>
+
+            <select class="pull-right" ng-model="perPage" ng-options="item for item in pageSizes"
+                    ng-change="pageChanged()"></select>
+
+            <button class="btn btn-danger btn-xs pull-right m-r-15" ng-show="hasSelected()"
+                    ng-click="mergeSelected()"><i class="fa fa-plus-square"></i> Merge Selected</button>
+        </div>
+    </div>
+    <div class="panel-body no-padding">
+
+        <div class="text-center">
+            <pagination first-text="First" last-text="Last" next-text="Next"
+                        previous-text="Previous"
+                        boundary-links="true"
+                        items-per-page="perPage"
+                        class="centered-pager"
+                        ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+        </div>
+
+        <table class="table table-striped table-condensed table-hover">
+            <tr>
+                <th style="width: 25px;"/>
+                <th class="col-sm-1">S/N.</th>
+                <th>NAME</th>
+                <th>STATE</th>
+            </tr>
+            <tr ng-repeat="b in branches track by $index">
+                <td><input type="checkbox" ng-model="b.selected" /></td>
+                <td class="">{{(currentPage-1)*perPage+$index+1}}.</td>
+                <td>{{b.name}}</td>
+                <td>{{b.state}}</td>
+            </tr>
+        </table>
+
+        <div class="text-center">
+            <pagination first-text="First" last-text="Last" next-text="Next"
+                        previous-text="Previous"
+                        boundary-links="true"
+                        items-per-page="perPage"
+                        class="centered-pager"
+                        ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+        </div>
+
+    </div>
+
+    <div class="panel-footer text-left">
+        <b>Number of Branches: {{total}}</b>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container dashboard">
+    <div class="row">
+        <div class="col-md-3" menu></div>
+
+        <div class="col-md-9">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-success">
+                        <!--<h5 class="text-left text-uppercase">Platform Usage Information</h5>-->
+                        <p class="text-white text-justify">Information on how to vote:</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <h2 class="panel-title text-uppercase">
+                                <i class="fa fa-calendar"></i> {{starts.label}}
+                            </h2>
+                        </div>
+                        <div class="panel-body">
+                            <h2>{{ago(starts.value)}}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <h2 class="panel-title text-uppercase">
+                                <i class="fa fa-calendar"></i> {{ends.label}}
+                            </h2>
+                        </div>
+                        <div class="panel-body">
+                            <h2>{{ago(ends.value)}}</h2>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="col-md-6">-->
+                    <!--<div class="panel panel-green">-->
+                        <!--<div class="panel-heading">-->
+                            <!--<h2 class="panel-title text-uppercase">-->
+                                <!--<i class="fa fa-dashboard"></i> Open Positions-->
+                            <!--</h2>-->
+                        <!--</div>-->
+                        <!--<div class="panel-body">-->
+                            <!--<h2>14</h2>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+            <div class="row text-center">
+                <div class="col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <h2 class="panel-title text-uppercase">
+                                <i class="fa fa-info-circle"></i> My NBA Branch
+                            </h2>
+                        </div>
+                        <div class="panel-body">
+                            <h2>{{$user._member._branch.name}}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <h2 class="panel-title text-uppercase">
+                                <i class="fa fa-info-circle"></i> Enrollment Number
+                            </h2>
+                        </div>
+                        <div class="panel-body">
+                            <h2>{{$user._member.sc_number}}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

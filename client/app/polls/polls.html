@@ -1,0 +1,24 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container polls">
+    <div class="row">
+        <div class="col-md-3" menu></div>
+
+        <div class="col-md-9">
+            <div class="alert alert-success">
+                <h5 class="text-center text-uppercase text-white">Please select a poll from the list. Open Polls are
+                    colored blue and closed polls are in red. Polls that are yet to open are colored amber.</h5>
+            </div>
+
+            <div class="alert" ng-repeat="p in polls" ng-click="showBallot(p)"
+                 ng-class="{'alert-primary hover': open(p), 'alert-danger': after(p.closes), 'alert-warning': yetToOpen(p)}">
+                <span class="label pull-right" ng-class="{'label-purple': open(p), 'label-primary': !open(p)}">
+                    Open{{after(p.opens)?"ed":"s"}} {{ago(p.opens)}} - Close{{before(p.closes)?"s":"d"}}
+                    {{ago(p.closes)}}
+                </span>
+                <h3 class="text-left" ng-class="{'text-white': !yetToOpen(p)}">{{p.title}}</h3>
+                <p>{{p.description}}</p>
+            </div>
+        </div>
+    </div>
+</div>

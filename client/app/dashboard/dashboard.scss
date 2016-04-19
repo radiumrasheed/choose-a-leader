@@ -1,0 +1,22 @@
+.dashboard {
+  margin: 3% auto;
+  text-align: center;
+
+  .panel {
+    .panel-body {
+      h2 {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        font-weight: 400;
+      }
+    }
+
+    .panel-heading {
+      h2 {
+        i {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}

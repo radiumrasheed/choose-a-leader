@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <i class="fa fa-list"></i> {{poll._branch.name}}: {{poll.title}}
+                    <span class="pull-right label label-info">{{poll._branch.name}}</span>
+                </div>
+            </div>
+            <div class="panel-body">{{poll.description}}</div>
+            <div class="panel-footer text-left">
+                Opens: {{ago(poll.opens)}}
+                <span class="pull-right">Closes: {{ago(poll.closes)}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="btn btn-lg btn-block btn-primary" ng-show="closed()" ng-click="makePublic()">Publish Results</button>
+<br>
+<div class="row">
+    <div class="col-md-6" data-ng-repeat="p in results">
+        <div class="panel panel-green">
+            <div class="panel-body">
+
+                <div class="alert alert-info hidden">
+                    {{p._id.description}}
+                </div>
+
+                <div google-chart chart="chartData(p._id.name, p.votes)" style="height:350px; width:100%;"></div>
+
+            </div>
+
+            <div class="panel-footer text-left">
+                <div>
+                    Number of Candidates: {{p.votes.length}}
+                    <span class="pull-right">Votes Cast: {{p.count}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

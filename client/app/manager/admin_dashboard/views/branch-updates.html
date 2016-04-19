@@ -1,0 +1,58 @@
+<div class="panel panel-green">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <i class="fa fa-edit"></i> BRANCH UPDATE REQUESTS <span ng-show="total">({{total}})</span>
+        </div>
+    </div>
+    <div class="panel-body no-padding">
+
+        <div class="text-center">
+            <pagination first-text="First" last-text="Last" next-text="Next"
+                        previous-text="Previous"
+                        boundary-links="true"
+                        items-per-page="perPage"
+                        class="centered-pager"
+                        ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+        </div>
+
+        <table class="table table-striped table-bordered table-condensed table-hover">
+            <tr>
+                <th class="text-right">S/N.</th>
+                <th>NAME</th>
+                <th>Current Branch</th>
+                <th>Correct Branch</th>
+                <th>State</th>
+                <th>Submitted</th>
+                <th class="col-sm-2" />
+            </tr>
+            <tr ng-repeat="r in requests track by $index">
+                <td class="text-right">{{(currentPage-1)*perPage+$index+1}}.</td>
+                <td>{{[r._member.surname, (r._member.firstName || r._member.othername)].join(' ')
+                    }}</td>
+                <td>{{r._member.branch}}</td>
+                <td>{{r.branch}}</td>
+                <td>{{r.state}}</td>
+                <td>{{ago(r.submitted)}}</td>
+                <td class="text-center">
+                    <button class="btn btn-danger btn-xs" ng-click="deleteRecord(r, $index)"><i class="fa fa-times"></i></button>
+                    <button ng-click="fixRecord(r, $index)" class="btn btn-primary btn-xs"><i class="fa fa-check-square"></i>
+                        Fix Record</button>
+                </td>
+            </tr>
+        </table>
+
+        <div class="text-center">
+            <pagination first-text="First" last-text="Last" next-text="Next"
+                        previous-text="Previous"
+                        boundary-links="true"
+                        items-per-page="perPage"
+                        class="centered-pager"
+                        ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+        </div>
+
+    </div>
+
+    <div class="panel-footer text-left">
+        <b>Number of Requests: {{total}}</b>
+    </div>
+</div>

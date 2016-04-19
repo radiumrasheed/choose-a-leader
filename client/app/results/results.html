@@ -1,0 +1,19 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container polls">
+    <div class="row">
+        <div class="col-md-3" menu></div>
+
+        <div class="col-md-9">
+            <!--<pre>{{polls | json}}</pre>-->
+
+            <div class="alert alert-primary hover" ng-repeat="p in polls" ng-click="showResults(p)">
+                <span class="label label-purple pull-right">
+                    Opened {{ago(p.opens)}} - Closed {{ago(p.closes)}}
+                </span>
+                <h3 class="text-left text-white">{{p.title}}</h3>
+                <p class="text-left">{{p.description}}</p>
+            </div>
+        </div>
+    </div>
+</div>
