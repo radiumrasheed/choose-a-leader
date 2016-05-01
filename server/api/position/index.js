@@ -18,5 +18,7 @@ router.post('/:id', sessionSec, controller.addCandidate);
 router.get('/:id', sessionSec, controller.show);
 router.put('/:id', sessionSec, controller.update);
 router.patch('/:id', sessionSec, controller.update);
+router.delete('/:id', sessionSec, controller.destroy);
+router.delete('/:id/candidates/:candidate_id', sessionSec, controller.destroyCandidate);
 
 module.exports = router;

@@ -11,3 +11,8 @@ angular.module 'elektorApp'
       method: "GET"
       isArray: true
       url: "/api/positions/ballotPaper"
+
+.service 'Candidate', ($resource) ->
+  $resource "/api/positions/:id/candidates/:candidate_id", null,
+    destroyCandidate:
+      method: "DELETE"

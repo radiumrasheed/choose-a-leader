@@ -20,7 +20,7 @@ angular.module 'elektorApp'
         # Check if User has voted before
         Vote.query pollId: $stateParams.id
         .$promise.then (votes) ->
-          console.log votes
+#          console.log votes
           if votes.length then $scope.message = "You've cast your ballot already. The results would be ready " + $rootScope.ago poll.closes
           else
             $scope.showBallotPage = true

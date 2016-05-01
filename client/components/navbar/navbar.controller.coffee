@@ -2,7 +2,6 @@
 
 angular.module 'elektorApp'
 .controller 'NavbarCtrl', ($scope, $location, $auth, $state, $rootScope, $timeout, Setting) ->
-
   $scope.headBoard = ->
     Setting.query {}, (settings) ->
       $scope.settings = _.filter settings, (s) ->

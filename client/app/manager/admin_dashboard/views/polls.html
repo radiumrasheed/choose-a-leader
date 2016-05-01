@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <div class="panel-title">
             <i class="fa fa-users"></i> POLLS <span ng-show="total">({{total}})</span>
-            <button class="btn btn-xs btn-danger pull-right" ng-click="newPoll()"><i
+            <button class="btn btn-xs btn-primary pull-right" ng-click="newPoll()"><i
                     class="fa fa-plus-square"></i> Add New POLL</button>
         </div>
     </div>
@@ -25,6 +25,7 @@
                 <th>CLOSES</th>
                 <th>BRANCH</th>
                 <th class="col-sm-2" />
+                <th>DELETE</th>
             </tr>
             <tr ng-repeat="p in polls track by $index">
                 <td class="text-right">{{(currentPage-1)*perPage+$index+1}}.</td>
@@ -40,6 +41,9 @@
                     <a ui-sref="admin_dashboard.positions({id: p._id})" class="btn btn-primary btn-xs"><i
                             class="fa fa-users"></i>
                         Candidates</a>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-danger btn-xs" ng-click="delete(p, $index)"><i class="fa fa-trash"></i></button>
                 </td>
             </tr>
         </table>

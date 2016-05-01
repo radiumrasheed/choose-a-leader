@@ -29,14 +29,14 @@
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">Title</label>
                                     <div class="col-md-4">
-                                        <input class="form-control" ng-model="user._member.title"
+                                        <input ng-disabled="!notAdmin()" class="form-control" ng-model="user._member.title"
                                                placeholder="E.g. Chief, Dr, Mr, Mrs, Prof, etc">
                                     </div>
                                     <label class="col-md-2 control-label">
                                         First Name <span class="required">*</span>
                                     </label>
                                     <div class="col-md-4">
-                                        <input class="form-control" ng-model="user._member.firstName" ng-value="user._member.firstName || user._member.othername"
+                                        <input ng-disabled="!notAdmin()" class="form-control" ng-model="user._member.firstName" ng-value="user._member.firstName || user._member.othername"
                                                placeholder="First (Given) Name" required>
                                     </div>
                                 </div>
@@ -44,14 +44,14 @@
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">Middle Name</label>
                                     <div class="col-md-4">
-                                        <input class="form-control" ng-model="user._member.middleName"
+                                        <input ng-disabled="!notAdmin()" class="form-control" ng-model="user._member.middleName"
                                                placeholder="Middle Name">
                                     </div>
                                     <label class="col-md-2 control-label">
                                         Surname <span class="required">*</span>
                                     </label>
                                     <div class="col-md-4">
-                                        <input class="form-control" ng-model="user._member.surname"
+                                        <input ng-disabled="!notAdmin()" class="form-control" ng-model="user._member.surname"
                                                placeholder="Surname" required>
                                     </div>
                                 </div>
@@ -72,7 +72,7 @@
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">Gender</label>
                                     <div class="col-md-4">
-                                        <select ng-model="user._member.gender" class="form-control">
+                                        <select ng-disabled="!notAdmin()" ng-model="user._member.gender" class="form-control">
                                             <option value="">Your Gender</option>
                                             <option>Male</option>
                                             <option>Female</option>

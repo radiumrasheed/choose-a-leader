@@ -1,16 +1,22 @@
 'use strict'
 
+
 angular.module 'elektorApp'
-.controller 'AdminDashboardCtrl', ($scope, $rootScope) ->
-  $scope.message = 'Hello'
+.controller 'AdminDashboardCtrl', ($scope, $rootScope, Auth, $state) ->
+  Auth.me (response) ->
+    if response.role isnt "admin"
+      $state.go "dashboard"
+    else
+      $scope.message = 'Hello'
 
-  $rootScope.$on "pollSettings", (e, data) ->
-    $scope.settings = data
+      $rootScope.$on "pollSettings", (e, data) ->
+        $scope.settings = data
 
-.controller 'PositionsCtrl', ( $scope, Position, toastr, $stateParams, Poll ) ->
+.controller 'PositionsCtrl', ($scope, Position, toastr, $stateParams, Poll) ->
   pollId = $stateParams.id
-  $scope.poll = Poll.get id : pollId
+  $scope.poll = Poll.get id: pollId
   $scope.positions = Position.query _poll: pollId
+  $scope.position = {}
 
   $scope.reset = ->
     $scope.position =
@@ -22,23 +28,41 @@ angular.module 'elektorApp'
     $scope.showPositionForm = true
     $scope.reset()
 
+  $scope.editPosition = (position) ->
+    $scope.position = position
+    $scope.showPositionForm = true
+
+  $scope.deletePosition = (position, $index) ->
+    if confirm "Are you sure?"
+      Position.delete id: position._id, ->
+        $scope.positions.splice $index, 1
+        $scope.total -= 1
+
   $scope.hideForm = ->
     $scope.reset()
     $scope.showPositionForm = false
 
   $scope.submit = (form) ->
     if form.$valid
-      p = new Position $scope.position
-      p.$save (result) ->
-        $scope.positions.push result
+      if $scope.position._id
+        Position.update
+          id: $scope.position._id
+        , $scope.position
         form.$setPristine()
         form.$setUntouched()
         $scope.hideForm()
+      else
+        p = new Position $scope.position
+        p.$save (result) ->
+          $scope.positions.push result
+          form.$setPristine()
+          form.$setUntouched()
+          $scope.hideForm()
     else toastr.error "Please fill the form appropriately"
-      
-.controller 'ResultsCtrl', ( $scope, Vote, $timeout, $rootScope, Setting, toastr, $stateParams, Poll ) ->
+
+.controller 'ResultsCtrl', ($scope, Vote, $timeout, $rootScope, Setting, toastr, $stateParams, Poll) ->
   pollId = $stateParams.id
-  
+
   Poll.get id: pollId, (poll) ->
     $scope.poll = poll
 
@@ -49,7 +73,7 @@ angular.module 'elektorApp'
     if not $scope.poll.published
       Poll.update
         id: pollId
-      , published: true , ->
+      , published: true, ->
         $scope.poll.published = true
         toastr.success "Results have been published"
     else
@@ -80,8 +104,8 @@ angular.module 'elektorApp'
     _.each candidates, (c) ->
       chartObject.data.rows.push
         c: [
-          { v: [c.candidate.surname, (c.candidate.firstName||c.candidate.othername) ].join ' ' }
-          { v: c.count }
+          {v: [c.candidate.surname, (c.candidate.firstName || c.candidate.othername)].join ' '}
+          {v: c.count}
         ]
 
     chartObject.options =
@@ -89,7 +113,7 @@ angular.module 'elektorApp'
 
     chartObject
 
-.controller 'CandidatesCtrl', ( $scope, $stateParams, Position, toastr, Member, Upload, cloudinary, $state ) ->
+.controller 'CandidatesCtrl', ($scope, $stateParams, Position, Candidate, toastr, Member, Upload, cloudinary, $state) ->
   $scope.position = Position.get id: $stateParams.position_id
 
   # TODO: Make this filterable
@@ -113,6 +137,12 @@ angular.module 'elektorApp'
   $scope.newCandidate = ->
     $scope.showCandidateForm = true
     $scope.reset()
+
+  $scope.deleteCandidate = (candidate, $index) ->
+    if confirm "Are you sure?"
+      Candidate.destroyCandidate id: $stateParams.position_id, candidate_id: candidate._id, ->
+        $scope.polls.splice $index, 1
+        $scope.total -= 1
 
   $scope.hideForm = (form) ->
     form.$setPristine()
@@ -155,7 +185,7 @@ angular.module 'elektorApp'
         toastr.success "Candidate Added Successfully!"
     else toastr.error "Error Saving Candidate Details"
 
-.controller 'MembersCtrl', ( $scope, Member, $modal, toastr, $localStorage ) ->
+.controller 'MembersCtrl', ($scope, Member, $modal, toastr, $localStorage) ->
   modal = null
   $scope.perPage = $localStorage.memberPerPage or 15
   $scope.currentPage = 1
@@ -176,7 +206,7 @@ angular.module 'elektorApp'
   $scope.pageChanged = ->
     $localStorage.memberPerPage = $scope.perPage
     $scope.load $scope.currentPage
-    
+
   $scope.editMember = (member) ->
     $scope.selectedMember = member
     if member.othername?
@@ -187,7 +217,7 @@ angular.module 'elektorApp'
       templateUrl: "app/manager/admin_dashboard/views/member-form.html"
       scope: $scope
       backdrop: 'static'
-      
+
   $scope.closeModal = ->
     $scope.selectedMember = null
     modal.dismiss()
@@ -201,10 +231,13 @@ angular.module 'elektorApp'
     if confirm "Are you sure?"
       Member.update
         id: member._id
-      , verified:1 , ->
+      , verified: 1, ->
         member.verified = 1
 
 .controller 'VotersRegisterCtrl', ($scope, Member, $localStorage) ->
+  $scope.sortType = "surname"
+  $scope.sortReverse = false
+  $scope.searchVotersRegister = ""
   $scope.perPage = $localStorage.votersRegisterPerPage or 15
   $scope.currentPage = 1
   $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
@@ -225,16 +258,16 @@ angular.module 'elektorApp'
     $localStorage.votersRegisterPerPage = $scope.perPage
     $scope.load $scope.currentPage
 
-.controller 'BURCtrl', ( $scope, BranchRequest, toastr, $modal, Member ) ->
+.controller 'BURCtrl', ($scope, BranchRequest, toastr, $modal, Member) ->
   $scope.perPage = 10
   $scope.currentPage = 1
 
   modal = null
   $scope.new_branch = null
-  
+
   $scope.closeModal = ->
     modal.dismiss()
-  
+
   $scope.load = (page) ->
     BranchRequest.query
       page: page
@@ -249,11 +282,11 @@ angular.module 'elektorApp'
 
   $scope.pageChanged = ->
     $scope.load $scope.currentPage
-    
+
   $scope.fixRecord = (record, index) ->
     $scope.selectedRecord = angular.copy record
     $scope.selectedIndex = index
-    
+
     modal = $modal.open
       templateUrl: "app/manager/admin_dashboard/views/fix-record.html"
       backdrop: "static"
@@ -263,16 +296,16 @@ angular.module 'elektorApp'
     if theForm.$valid and confirm "Are you sure? Change to #{new_branch}?"
       Member.update
         id: $scope.selectedRecord._member._id
-      , _branch: new_branch , ->
+      , _branch: new_branch, ->
         BranchRequest.update
           id: $scope.selectedRecord._id
-        , resolved: true , ->
+        , resolved: true, ->
           $scope.closeModal()
 
           $scope.selectedRecord = null
           $scope.selectedIndex = null
           $scope.load $scope.currentPage
-            
+
   $scope.deleteRecord = (r, $index) ->
     if confirm "Are you sure?"
       BranchRequest.delete id: r._id, ->
@@ -283,6 +316,10 @@ angular.module 'elektorApp'
   $scope.perPage = $localStorage.branchPerPage or 15
   $scope.currentPage = 1
   $scope.branches = []
+
+  $scope.sortType = "name"
+  $scope.sortReverse = false
+  $scope.searchBranch = ""
 
   $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
 
@@ -315,12 +352,13 @@ angular.module 'elektorApp'
         _.remove $scope.branches, (b) -> (selectedBranches.indexOf b._id) isnt -1
         $scope.branches.push branch
 
-.controller 'PollsCtrl', ( $scope, Poll, $modal, $timeout, toastr ) ->
+#Rasheed made changes to support delete
+.controller 'PollsCtrl', ($scope, Poll, $modal, $timeout, toastr) ->
   $scope.perPage = 15
   $scope.currentPage = 1
-  
+
   $scope.poll = {}
-  modal = undefined 
+  modal = undefined
 
   $scope.load = (page) ->
     Poll.query
@@ -335,7 +373,7 @@ angular.module 'elektorApp'
 
   $scope.pageChanged = ->
     $scope.load $scope.currentPage
-    
+
   $scope.newPoll = ->
     modal = $modal.open
       templateUrl: "app/manager/admin_dashboard/views/new-poll.html"
@@ -343,11 +381,17 @@ angular.module 'elektorApp'
       scope: $scope
 
   $scope.edit = (poll) ->
-    $scope.poll=  poll
+    $scope.poll = poll
     modal = $modal.open
       templateUrl: "app/manager/admin_dashboard/views/new-poll.html"
       backdrop: "static"
       scope: $scope
+
+  $scope.delete = (poll, $index) ->
+    if confirm "Are you sure?"
+      Poll.delete id: poll._id, ->
+        $scope.polls.splice $index, 1
+        $scope.total -= 1
 
   $scope.closeModal = ->
     $scope.poll = {}
@@ -359,8 +403,8 @@ angular.module 'elektorApp'
   $scope.toggleMin()
 
   $scope.datePicker = [
-    { isOpen: false }
-    { isOpen: false }
+    {isOpen: false}
+    {isOpen: false}
   ]
 
   $scope.open = (pos, $event) ->
@@ -375,7 +419,7 @@ angular.module 'elektorApp'
     formatYear: 'yy'
     startingDay: 1
     class: 'datepicker'
-    
+
   $scope.submit = (theForm) ->
     if theForm.$valid and ((not $scope.poll.national and $scope.poll._branch) or $scope.poll.national)
       if $scope.poll._id
@@ -412,11 +456,11 @@ angular.module 'elektorApp'
       _.each $scope.position.candidates, (c) ->
         $scope.chartObject.data.rows.push
           c: [
-            { v: c._member.surname }
-            { v: $scope.getVotes c._member._id }
+            {v: c._member.surname}
+            {v: $scope.getVotes c._member._id}
           ]
-#        $scope.data[0].push $scope.getVotes c._member._id
-#        c.code
+      #        $scope.data[0].push $scope.getVotes c._member._id
+      #        c.code
 
       $scope.chartObject.options =
         title: $scope.position.name
@@ -427,7 +471,6 @@ angular.module 'elektorApp'
       v.candidate is id ).length
 
 .controller 'PollSettingsCtrl', ($scope, Setting, toastr) ->
-
   $scope.settings = []
 
   Setting.query {}
@@ -447,6 +490,5 @@ angular.module 'elektorApp'
             cb()
 
       async.parallel jobs, (err, results) ->
-        console.log err, results
         toastr.success "Settings Updated Successfully"
     else toastr.error "Please fill the form appropriately"

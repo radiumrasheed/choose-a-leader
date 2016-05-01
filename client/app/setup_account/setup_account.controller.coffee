@@ -4,14 +4,14 @@ angular.module 'elektorApp'
 .controller 'SetupAccountCtrl', ($scope, Auth, toastr, Utils, $state) ->
 
   $scope.reset = ->
-    Auth.me (user) ->
-      $scope.user = user
-      $scope.user._member.firstName = angular.copy $scope.user._member.othername
+    console.log "forget authentication"
+#    Auth.me (user) ->
+#      $scope.user = user
+#      $scope.user._member.firstName = angular.copy $scope.user._member.othername
 
   $scope.reset()
 
   $scope.submit = (theForm) ->
-
     if theForm.$valid
       $scope.submitting = true
       Auth.update

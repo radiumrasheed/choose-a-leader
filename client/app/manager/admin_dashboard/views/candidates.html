@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <div class="panel-title">
             <i class="fa fa-users"></i> Position Details
-            <button class="btn btn-xs btn-danger pull-right" ng-click="newCandidate()"><i
+            <button class="btn btn-xs btn-primary pull-right" ng-click="newCandidate()"><i
                     class="fa fa-plus-square"></i> Add New
                 Candidate</button>
         </div>
@@ -89,6 +89,9 @@
                             .surname}}</b><br>
                         <small>{{c.bio}}</small>
                     </div>
+                  <a class="btn btn-xs btn-danger pull-right" ng-click="deleteCandidate(c, $index)">
+                    <i class="fa fa-trash"></i>
+                  </a>
                 </div>
             </li>
         </ul>

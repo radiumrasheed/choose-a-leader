@@ -141,6 +141,17 @@ exports.addCandidate = function(req, res) {
   });
 };
 
+//Deletes a position's candidate fromthe DB.
+exports.destroyCandidate = function(req, res) {
+  Position.update({_id : req.params.id}
+    , { $pull : { "candidates" : { _id : req.params.candidate_id } } }, function (err) {
+      if (err) {
+        return handleError(res, err);
+      }
+      return res.send(204);
+  });
+};
+
 // Deletes a position from the DB.
 exports.destroy = function(req, res) {
   Position.findById(req.params.id, function (err, position) {
