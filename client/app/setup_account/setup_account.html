@@ -1,9 +1,15 @@
-<div ng-include="'components/navbar/navbar.html'"></div>
+<div ng-include="'components/navbar/navbar.html'" xmlns="http://www.w3.org/1999/html"></div>
 
 <div class="container" id="setup_account">
+    <div class=" row jumbotron" style="background-color: #006933">
+        <div class="container">
+            <h2 class="text-white text-center">Welcome to the NBA Election Portal</h2>
+            <p class="text-white">Please enter the phone number you provided on the voters' register to continue with accreditation.</p>
+        </div>
+    </div>
     <div class="row">
 
-        <div class="center-form panel panel-green" ng-hide="showNext">
+      <div class="center-form panel panel-green" ng-hide="showNext || showLast">
             <div class="panel-heading">
                 <div class="panel-title">
                     Verify Your Account
@@ -17,18 +23,18 @@
                 <form name="setupForm" class="form-horizontal">
 
                     <div class="form-group">
-                        <label class="col-sm-5 control-label">Enrollment. Number</label>
+                        <label class="col-sm-5 control-label">Enrollment Number <span class="required">*</span> </label>
                         <div class="col-sm-7">
                             <input readonly type="text" class="form-control"
-                                   value="{{user._member.sc_number}}" required>
+                                   value="{{member.sc_number}}" required>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-5 control-label">NBA Branch</label>
+                        <label class="col-sm-5 control-label">NBA Branch <span class="required">*</span> </label>
                         <div class="col-sm-7">
                             <input readonly type="text" class="form-control"
-                                   value="{{user._member.branch}}" required>
+                                   value="{{member.branch}}" required>
                         </div>
                     </div>
 
@@ -36,15 +42,15 @@
                         <label class="col-sm-5 control-label">Title</label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control" placeholder="Hon. Justice, etc"
-                                   ng-model="user._member.title" autofocus>
+                                   ng-model="member.title" autofocus>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-5 control-label">First Name <span class="required">*</span> </label>
                         <div class="col-sm-7">
-                            <input type="text" placeholder="FIRST NAME" class="form-control"
-                                   ng-model="user._member.firstName" ng-value="user._member.othername"
+                            <input readonly type="text" placeholder="FIRST NAME" class="form-control"
+                                   ng-model="member.firstName" ng-value="member.othername"
                                    required>
                         </div>
                     </div>
@@ -52,7 +58,7 @@
                     <div class="form-group">
                         <label class="col-sm-5 control-label">Surname <span class="required">*</span> </label>
                         <div class="col-sm-7">
-                            <input type="text" placeholder="SURNAME" class="form-control" ng-model="user._member.surname"
+                            <input readonly type="text" placeholder="SURNAME" class="form-control" ng-model="member.surname"
                                    required>
                         </div>
                     </div>
@@ -60,28 +66,40 @@
                     <div class="form-group">
                         <label class="col-sm-5 control-label">Middle Name </label>
                         <div class="col-sm-7">
-                            <input type="text" placeholder="MIDDLE NAME" class="form-control"
-                                   ng-model="user._member.middleName">
+                            <input readonly type="text" placeholder="MIDDLE NAME" class="form-control"
+                                   ng-model="member.middleName">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-5 control-label">Email <span class="required">*</span> </label>
+                      <label class="col-sm-5 control-label">Email <span class="required">*</span> </label>
+                      <div class="col-sm-7">
+                        <input readonly type="email" placeholder="EMAIL" class="form-control"
+                               ng-model="member.email">
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-5 control-label">Phone Number <span class="required">*</span> </label>
                         <div class="col-sm-7">
-                            <input type="email" placeholder="EMAIL ADDRESS" class="form-control"
-                                   ng-model="user._member.email" required>
+                            <input readonly type="tel" placeholder="PHONE NUMBER" class="form-control"
+                                   ng-model="member.phone" required>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-5 control-label">Confirm Email <span class="required">*</span> </label>
+                        <label class="col-sm-5 control-label">Confirm Phone Number <span class="required">*</span> </label>
                         <div class="col-sm-7">
-                            <input type="email" placeholder="Re-Type EMAIL ADDRESS" class="form-control"
-                                   ng-model="email_conf" required>
+                            <input type="tel" placeholder="Re-Type PHONE NUMBER" class="form-control"
+                                   ng-model="phone_conf" required>
                         </div>
                     </div>
 
                 </form>
+
+                <div class="alert alert-warning text-white">
+                  <span class="required">Make sure you have this phone with you. You'll receive an SMS with your password shortly. </br>Please change it on the nexe phase!</span>
+                </div>
             </div>
             <div class="panel-footer">
                 <div class="row">
@@ -92,56 +110,110 @@
                     </div>
                     <div class="col-sm-7">
                         <button class="btn btn-default btn-block"
-                                ng-disabled="setupForm.$invalid || (setupForm.$valid && user._member.email != email_conf) || submitting"
+                                ng-disabled="setupForm.$invalid || (setupForm.$valid && member.phone != phone_conf) || submitting"
                                 ng-click="submit(setupForm)"><i
-                                class="fa fa-check"></i> COMPLETE </button>
+                                class="fa fa-check"></i> GET PASSWORD </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="center-form panel panel-green" ng-show="showNext">
-            <div class="panel-heading">
-                <div class="panel-title">
-                    Confirm Access Code
-                </div>
-            </div>
-            <div class="panel-body">
 
-                <form name="accessForm" class="form-horizontal">
-
-                    <p class="alert alert-info">Enter the Access Code that was sent to your phone number as an
-                        SMS. If you didn't get the SMS, please <button type="button" ng-click="resendCode()"
-                                                                       ng-disabled="resendingCode"
-                                                                       class="btn btn-sm btn-default">Click
-                            Here</button> to have it resent to you. </p>
-
-                    <div class="form-group">
-                        <div class="col-sm-6 col-sm-offset-3">
-                            <label class="control-label">Access Code <span class="required">*</span> </label><br><br>
-                            <input type="text" maxlength="8" placeholder="Enter Access Code"
-                                   class="form-control input-lg"
-                                   ng-model="accessCode" required>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-            <div class="panel-footer">
-                <div class="row">
-                    <div class="col-sm-5">
-                        <button class="btn btn-danger btn-block"
-                                ng-click="showNext=false"> <i
-                                class="fa fa-times"></i> BACK</button>
-                    </div>
-                    <div class="col-sm-7">
-                        <button class="btn btn-default btn-block" ng-disabled="accessForm.$invalid || submitting"
-                                ng-click="compareCode(accessForm)"><i
-                                class="fa fa-check"></i> CONFIRM CODE </button>
-                    </div>
-                </div>
-            </div>
+      <div class="center-form panel panel-green" ng-show="showNext">
+        <div class="panel-heading">
+          <div class="panel-title"><i class="fa fa-edit"></i> Change Password</div>
         </div>
+        <div class="panel-body">
+          <br><br>
+          <div class="row">
+            <form method="post" ng-submit="pwdForm.$valid && changePassword(pwdForm)" name="pwdForm" class="col-sm-6 col-xs-6 col-md-6 col-md-offset-3 col-sm-offset-3 m-t-10">
+
+              <div class="alert alert-danger text-center" ng-show="formError">{{formError}}</div>
+              <div class="alert alert-success text-center" ng-show="formSuccess">{{formSuccess}}</div>
+
+              <div class="form-group">
+                <input class="form-control" type="password"
+                       ng-model="u.current_password" ng-minlength="4"
+                       placeholder="Enter your current password" required autofocus>
+                <small class="text-danger" ng-show="pwdForm.$valid && (u.current_password != u.clear_password)">
+                  Incorrect Password
+                </small>
+              </div>
+
+              <div class="form-group">
+                <input class="form-control" type="password"
+                       ng-model="u.password" ng-minlength="4"
+                       placeholder="New Password (at least 4 characters)" required>
+              </div>
+
+              <div class="form-group">
+                <input class="form-control" type="password" name="pwd"
+                       ng-model="password_cnf" placeholder="Re-Type Password" required>
+
+                <div class="text-center m-t-10">
+                  <small class="text-danger" ng-show="pwdForm.$valid && (u.password != password_cnf)">
+                    Passwords do not match!
+                  </small>
+                </div>
+              </div>
+
+              <button type="submit" ng-disabled="pwdForm.$invalid || (pwdForm.$valid && u.password != password_cnf) || submitting"
+                      class="btn btn-block btn-default">Change Password
+              </button>
+            </form>
+          </div>
+          <br><br>
+        </div>
+        <div class="panel-footer">
+          <div class="text-left">
+
+          </div>
+        </div>
+      </div>
+
+
+      <div class="center-form panel panel-green" ng-show="showLast">
+          <div class="panel-heading">
+              <div class="panel-title">
+                  Confirm Access Code
+              </div>
+          </div>
+          <div class="panel-body">
+
+              <form name="accessForm" class="form-horizontal">
+
+                  <p class="alert alert-info">Enter the Access Code that was sent to your phone number as an
+                      SMS. If you didn't get the SMS, please <button type="button" ng-click="resendCode()"
+                                                                     ng-disabled="resendingCode"
+                                                                     class="btn btn-sm btn-default">Click
+                          Here</button> to have it resent to you. </p>
+
+                  <div class="form-group">
+                      <div class="col-sm-6 col-sm-offset-3">
+                          <label class="control-label">Access Code <span class="required">*</span> </label><br><br>
+                          <input type="text" maxlength="8" placeholder="Enter Access Code"
+                                 class="form-control input-lg"
+                                 ng-model="accessCode" required>
+                      </div>
+                  </div>
+
+              </form>
+          </div>
+          <div class="panel-footer">
+              <div class="row">
+                  <div class="col-sm-5">
+                      <button class="btn btn-danger btn-block"
+                              ng-click="showNext=false"> <i
+                              class="fa fa-times"></i> BACK</button>
+                  </div>
+                  <div class="col-sm-7">
+                      <button class="btn btn-default btn-block" ng-disabled="accessForm.$invalid || submitting"
+                              ng-click="compareCode(accessForm)"><i
+                              class="fa fa-check"></i> CONFIRM CODE </button>
+                  </div>
+              </div>
+          </div>
+      </div>
 
     </div>
 </div>

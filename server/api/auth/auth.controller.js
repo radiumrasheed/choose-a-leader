@@ -199,6 +199,7 @@ exports.update = function (req, res) {
   });
 };
 
+/*Get phone number*/
 var extractPhoneNumber = function (phone_number) {
   var phone = phone_number.split(',')[0];
   phone = phone.split('/')[0];
@@ -242,7 +243,7 @@ exports.sendCode = function (req, res) {
  * @param res
  */
 exports.confirm = function (req, res) {
-  User.findById(req.user).populate('_member').exec(function (err, user) {
+  User.findById(req.body._id).populate('_member').exec(function (err, user) {
     if (err) {
       return handleError(res, err);
     }
@@ -251,18 +252,14 @@ exports.confirm = function (req, res) {
     }
 
     Member.findById(user._member._id, function (err, member) {
-      if (err) {
-        return handleError(res, err);
-      }
-      if (!member) {
-        return res.send(404);
-      }
+      if (err) { return handleError(res, err); }
+      if (!member) { return res.send(404); }
       var oldConf = member.codeConfirmed;
       if (oldConf) {
-        return res.status(200).json({message: "Access Code Confirmed"});
+        return res.status(200).json({message: "Access Code already Confirmed"});
       }
 
-      if (member.accessCode == req.body.code) {
+      if (member.accessCode == req.query.code) {
         member.codeConfirmed = true;
         member.save(function () {
           var phone = extractPhoneNumber(member.phone);
@@ -323,7 +320,6 @@ exports.confirmReset = function (req, res) {
 };
 
 exports.changePassword = function (req, res) {
-
   if (req.body._id === undefined) {
     return res.status(400).json({message: 'Invalid password reset request.'});
   }
@@ -346,8 +342,19 @@ exports.changePassword = function (req, res) {
         if (err !== null) {
           return handleError(res, err);
         }
+        if (req.query.sendCode) {
+          Member.findById(theUser._member, function(err, updatedM) {
+            var phone = extractPhoneNumber(updatedM.phone);
 
-        return res.status(200).json({message: "Password Changed Successfully!."});
+            mailer.sendVerificationSMS(phone, updatedM.accessCode, function () {
+              console.log(phone, updatedM.accessCode);
+            });
+            return res.status(200).json({message: "Password Changed Successfully!. Voting Code sent!"});
+          });
+        } else {
+          return res.status(200).json({message: "Password Changed Successfully!. Voting code not sent"});
+        }
+        // return res.status(200).json({message: "Password Changed Successfully!."});
       });
 
     } else {

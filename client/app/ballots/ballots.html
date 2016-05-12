@@ -1,6 +1,9 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
+
+
 <div class="container ballots" ng-cloak>
+
     <div class="row">
         <div class="col-md-3" menu></div>
 
@@ -64,12 +67,23 @@
                                 <div class="panel-body no-padding" style="background-image:
                                 url({{candidate.secure_url}});" show-tint>
                                     <div class="tint" ng-click="setChoice(position._id, candidate)">
-                                        <small>{{candidate.bio}}</small>
+                                        <script type="text/ng-template" id="bioModalContent.html">
+                                            <div class="modal-header" >
+                                                <h3 class="modal-title">Candidates Profile</h3>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>{{ bio }}</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-warning" type="button" ng-click="cancel()">Okay</button>
+                                            </div>
+                                        </script>
                                     </div>
                                     <div class="printed"></div>
                                 </div>
-                                <div class="panel-footer">
-                                    <button class="btn btn-default btn-block"
+                                <div class="panel-footer btn-block">
+                                    <button class="btn btn-primary" ng-click="open(candidate.bio)">View Profile</button>
+                                    <button class="btn btn-default"
                                             ng-click="setChoice(position._id, candidate)"><i
                                             class="fa fa-thumbs-up"></i>
                                         SELECT</button>

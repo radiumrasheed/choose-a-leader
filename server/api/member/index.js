@@ -5,11 +5,13 @@ var controller = require('./member.controller');
 var sessionSec = require('../../components/tools/sessionSec');
 
 var router = express.Router();
-router.use(sessionSec);
+// router.use(sessionSec);
+router.get('/me', controller.showMember);
+router.put('/createUser', controller.createUser);
+router.get('/', sessionSec, controller.index);
 
-router.get('/', controller.index);
-router.get('/:id', controller.show);
-router.put('/:id', controller.update);
-router.patch('/:id', controller.update);
+router.get('/:id', sessionSec, controller.show);
+router.put('/:id', sessionSec, controller.update);
+router.patch('/:id', sessionSec, controller.update);
 
 module.exports = router;

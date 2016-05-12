@@ -39,5 +39,6 @@ angular.module 'elektorApp'
 
     chartObject.options =
       title: title
+      bars: 'horizontal'
 
     chartObject

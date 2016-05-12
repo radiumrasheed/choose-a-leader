@@ -5,81 +5,96 @@
         <div class="col-md-3" menu></div>
 
         <div class="col-md-9">
-
             <div class="row">
-                <div class="col-md-12">
-                    <div class="alert alert-success">
-                        <!--<h5 class="text-left text-uppercase">Platform Usage Information</h5>-->
-                        <p class="text-white text-justify">HOW TO VOTE:</p>
-                        <p class="text-red text-justify">   Go to Polls to see available polls</p>
-
-                    </div>
-                </div>
-            </div>
-            <div class="row text-center">
-                <div class="col-md-6">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            <h2 class="panel-title text-uppercase">
-                                <i class="fa fa-calendar"></i> {{starts.label}}
-                            </h2>
+              <div class="col-md-12">
+                <div class="panel panel-default panel-green">
+                  <div class="panel-heading">
+                    <h1 class="panel-title text-uppercase">
+                      <i class="fa fa-dashboard"> </i>  Welcome Back, {{$user._member.title + " " + $user._member.firstName + " " + $user._member.surname}}
+                    </h1>
+                  </div>
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="alert alert-success" role="alert">
+                          <!--<h5 class="text-left text-uppercase">Platform Usage Information</h5>-->
+                          <h5 class="text-center text-uppercase">How to vote in 3 Steps</h5>
+                          <p class="text-white text-left">   Go to Polls to see available polls.</p>
+                          <p class="text-white text-left">   Click on an open poll to see available positions.</p>
+                          <p class="text-white text-left">   Choose candidate and VOTE.</p>
                         </div>
-                        <div class="panel-body">
+                      </div>
+                    </div>
+                    <div class="row text-center">
+                      <div class="col-md-6">
+                        <div class="panel panel-success">
+                          <div class="panel-heading">
+                            <h2 class="panel-title text-uppercase">
+                              <i class="fa fa-calendar"></i> {{starts.label}}
+                            </h2>
+                          </div>
+                          <div class="panel-body">
                             <h2>{{ago(starts.value)}}</h2>
+                          </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
+                      </div>
+                      <div class="col-md-6">
+                        <div class="panel panel-success">
+                          <div class="panel-heading">
                             <h2 class="panel-title text-uppercase">
-                                <i class="fa fa-calendar"></i> {{ends.label}}
+                              <i class="fa fa-calendar"></i> {{ends.label}}
                             </h2>
-                        </div>
-                        <div class="panel-body">
+                          </div>
+                          <div class="panel-body">
                             <h2>{{ago(ends.value)}}</h2>
+                          </div>
                         </div>
+                      </div>
+                      <!--<div class="col-md-6">-->
+                      <!--<div class="panel panel-green">-->
+                      <!--<div class="panel-heading">-->
+                      <!--<h2 class="panel-title text-uppercase">-->
+                      <!--<i class="fa fa-dashboard"></i> Open Positions-->
+                      <!--</h2>-->
+                      <!--</div>-->
+                      <!--<div class="panel-body">-->
+                      <!--<h2>14</h2>-->
+                      <!--</div>-->
+                      <!--</div>-->
+                      <!--</div>-->
                     </div>
-                </div>
-                <!--<div class="col-md-6">-->
-                    <!--<div class="panel panel-green">-->
-                        <!--<div class="panel-heading">-->
-                            <!--<h2 class="panel-title text-uppercase">-->
-                                <!--<i class="fa fa-dashboard"></i> Open Positions-->
-                            <!--</h2>-->
-                        <!--</div>-->
-                        <!--<div class="panel-body">-->
-                            <!--<h2>14</h2>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            </div>
-            <div class="row text-center">
-                <div class="col-md-6">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
+                    <div class="row text-center">
+                      <div class="col-md-6">
+                        <div class="panel panel-success">
+                          <div class="panel-heading">
                             <h2 class="panel-title text-uppercase">
-                                <i class="fa fa-info-circle"></i> My NBA Branch
+                              <i class="fa fa-info-circle"></i> My NBA Branch
                             </h2>
-                        </div>
-                        <div class="panel-body">
+                          </div>
+                          <div class="panel-body">
                             <h2>{{$user._member._branch.name}}</h2>
+                          </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
+                      </div>
+                      <div class="col-md-6">
+                        <div class="panel panel-success">
+                          <div class="panel-heading">
                             <h2 class="panel-title text-uppercase">
-                                <i class="fa fa-info-circle"></i> Enrollment Number
+                              <i class="fa fa-info-circle"></i> Enrollment Number
                             </h2>
-                        </div>
-                        <div class="panel-body">
+                          </div>
+                          <div class="panel-body">
                             <h2>{{$user._member.sc_number}}</h2>
+                          </div>
                         </div>
+                      </div>
                     </div>
+                    <!--<h1>{{$user._member.firstName + " " + $user._member.surname}}</h1>-->
+                  </div>
                 </div>
+              </div>
             </div>
+
 
         </div>
     </div>

@@ -1,9 +1,10 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'BallotsCtrl', ($scope, Poll, $stateParams, Position, $state, $window, toastr, Vote, Setting, $rootScope, Auth, $auth, $sessionStorage) ->
+.controller 'BallotsCtrl', ($scope, Poll, $stateParams, Position, $state, $window, toastr, Vote, Setting, $rootScope, Auth, $auth, $sessionStorage, $log, $modal) ->
 
   $scope.showBallotPage = false
+
   Auth.me (user) ->
     $scope.user = user
 
@@ -52,8 +53,7 @@ angular.module 'elektorApp'
       keys = _.keys $scope.selected[position]
       _.each keys, (k) ->
         $scope.selected[position][k] = k is candidate._id
-
-      return
+        return
 
     $scope.ballotFilled = ->
       keys = _.keys $scope.ballot
@@ -82,3 +82,31 @@ angular.module 'elektorApp'
         , (err) ->
           toastr.error err.data.message
       else toastr.error "Please fill the form before submitting."
+
+    $scope.open = (bio) ->
+      modalInstance = $modal.open(
+        animation: $scope.animationsEnabled
+        templateUrl: 'bioModalContent.html'
+        controller: 'ModalInstanceCtrl'
+        size: ''
+        resolve: bio: ->
+          $scope.bio
+          $scope.bio = bio
+      )
+      modalInstance.result.then ((bio) ->
+        $scope.selected = bio
+        return
+      ), ->
+        $log.info 'Modal dismissed at: ' + new Date
+        return
+      return
+
+    $scope.toggleAnimation = ->
+      $scope.animationsEnabled = !$scope.animationsEnabled
+      return
+
+.controller 'ModalInstanceCtrl', ($scope, $modalInstance, bio) ->
+  $scope.bio = bio
+
+  $scope.cancel = ->
+    $modalInstance.dismiss 'cancel'

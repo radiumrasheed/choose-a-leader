@@ -32,4 +32,5 @@ angular.module 'elektorApp'
         moment().isAfter(dt)
 
       $scope.showBallot = (p) ->
-        if $scope.open p then $state.go "ballots", id: p._id
+#        if $scope.open p then 
+        $state.go "ballots", id: p._id

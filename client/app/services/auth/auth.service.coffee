@@ -20,3 +20,6 @@ angular.module 'elektorApp'
     confirmCode:
       method: 'POST'
       url: '/auth/confirmCode'
+    sendOTP:
+      method: 'GET'
+      url: '/auth/sendOTP'

@@ -5,20 +5,37 @@
         <div class="col-md-3" menu></div>
 
         <div class="col-md-9">
-            <div class="alert alert-success">
-                <h5 class="text-center text-uppercase text-white">Please select a poll from the list. Open Polls are
-                    colored blue and closed polls are in red. Polls that are yet to open are colored amber.</h5>
-            </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="panel panel-default panel-green">
+                <div class="panel-heading">
+                  <h1 class="panel-title text-uppercase">
+                    <i class="fa fa-thumbs-o-up"> </i>  Polls
+                  </h1>
+                </div>
+                <div class="panel-body">
+                  <div class="alert alert-info">
+                    <h5 class="text-center text-uppercase text-black">LEGEND</h5>
+                    <p class="text-left text-blue">
+                      Open Polls are labelled <i style="color: blue;">blue</i>  -
+                      Closed Polls are labelled <i style="color: red;">red</i>  -
+                      Polls Ahead are labelled <i style="color: orange;">orange</i>
+                    </p>
+                  </div>
 
-            <div class="alert" ng-repeat="p in polls" ng-click="showBallot(p)"
-                 ng-class="{'alert-primary hover': open(p), 'alert-danger': after(p.closes), 'alert-warning': yetToOpen(p)}">
+                  <div class="alert" ng-repeat="p in polls" ng-click="showBallot(p)"
+                       ng-class="{' well hover': open(p), 'alert alert-danger hover': after(p.closes), 'alert alert-warning hover': yetToOpen(p)}">
                 <span class="label pull-right" ng-class="{'label-purple': open(p), 'label-primary': !open(p)}">
                     Open{{after(p.opens)?"ed":"s"}} {{ago(p.opens)}} - Close{{before(p.closes)?"s":"d"}}
                     {{ago(p.closes)}}
                 </span>
-                <h3 class="text-left" ng-class="{'text-white': !yetToOpen(p)}">{{p.title}}</h3>
-                <p>{{p.description}}</p>
+                    <h3 class="text-left" ng-class="{'text-black': !yetToOpen(p)}">{{p.title}}</h3>
+                    <p>{{p.description}}</p>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
     </div>
 </div>
