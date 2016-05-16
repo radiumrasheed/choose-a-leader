@@ -21,12 +21,13 @@ $headings-color: #111;
 $headings-font-family: Avenir, sans-serif;
 $headings-font-weight: bold;
 
-$brand-success: #22ae5f;
-$brand-primary: #1d7cf4;
-$brand-danger: #b30015;
-$brand-warning: #ffd66a;
-$brand-purple: #7b3980;
-$brand-green: #006933;
+$brand-success: #7bae8f;
+$brand-primary: #75acf4;
+$brand-danger: #b35562;
+$brand-warning: #ffa859;
+$brand-purple: #784c80;
+$brand-green: rgba(55, 109, 76, 0.73);
+
 $brand-brown: rgba(89, 44, 29, 0.96);
 
 $icon-font-size: 14px;
@@ -78,11 +79,7 @@ $white: #FFFFFF;
 
 body {
   padding-bottom: 20px;
-  background: repeating-linear-gradient(
-                  119.8deg,
-                  #e4e7ec, #e4e7ec 100px,
-                  rgba(0, 105, 51, 0.28) 100px,
-                  rgba(0, 105, 51, 0.32) 200px );
+  background-color: rgba(115, 137, 135, 0.29);
 }
 
 html { height: 100%; }
@@ -387,6 +384,13 @@ em {
 
 .btn-xlg {
   @include button-size($padding-large-vertical*1.5, $padding-large-horizontal*1.5, $font-size-large*2, $line-height-large*1.5, $border-radius-large);
+}
+
+.btn-success-outline {
+  color: #5cb85c;
+  background-color: transparent;
+  background-image: none;
+  border-color: #5cb85c;
 }
 
 .floating-button {

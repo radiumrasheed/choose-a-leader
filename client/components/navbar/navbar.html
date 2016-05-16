@@ -6,16 +6,18 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand"><img ng-src="assets/images/logo.png"> | <i class="fa fa-thumbs-up"></i>
-            elektor |
-            <strong> e-Voting Platform </strong></a>
+        <a class="navbar-brand">
+            <img ng-src="assets/images/logo.png"> |
+            <i class="fa fa-thumbs-up"></i>NBA
+            <strong> e-Voting Platform </strong>
+        </a>
     </div>
     <div>
         <ul class="nav navbar-nav">
             <!--<li ng-repeat="s in settings"><a>{{s.label}}: <b class="text-success">{{ago(s.value)}}</b></a></li>-->
         </ul>
     </div>
-    <div collapse="isCollapsed" class="pull-right navbar-collapse collapse" id="navbar-main">
+    <div collapse="isCollapsed" class="pull-right navbar-collapse collapse navbar-header" id="navbar-main">
         <ul class="nav navbar-nav">
             <li ng-show="!isGuest() && notAdmin()"><a ui-sref="dashboard">DASHBOARD</a></li>
             <!-- <li ng-show="!isGuest() && !notAdmin()"><a ui-sref="admin_dashboard">ADMIN DASHBOARD</a></li> -->

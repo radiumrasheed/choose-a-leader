@@ -55,16 +55,23 @@ angular.module 'elektorApp'
         $scope.selected[position][k] = k is candidate._id
         return
 
+    $scope.cancelChoice = (position) ->
+      $scope.ballot[position] = null
+      keys = _.keys $scope.selected[position]
+      _.each keys, (k) ->
+        $scope.selected[position][k] = false
+        return
+
     $scope.ballotFilled = ->
       keys = _.keys $scope.ballot
       filled = true
       _.each keys, (k) ->
-        if $scope.ballot[k] is undefined or $scope.ballot[k] is null or $scope.ballot[k] is '' then filled = false
-
+        if typeof $scope.ballot[k] is "object" then filled = false
+      console.info filled
       return filled
 
     $scope.showReceipt = ->
-      if $scope.ballotFilled()
+      if !$scope.ballotFilled()
         # Pre-process Receipt
         $scope.showingReceipt = true
 

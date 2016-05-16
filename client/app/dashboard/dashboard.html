@@ -2,7 +2,9 @@
 
 <div class="container dashboard">
     <div class="row">
-        <div class="col-md-3" menu></div>
+        <div class="col-md-3" menu>
+
+        </div>
 
         <div class="col-md-9">
             <div class="row">
@@ -16,12 +18,12 @@
                   <div class="panel-body">
                     <div class="row">
                       <div class="col-md-12">
-                        <div class="alert alert-success" role="alert">
+                        <div class="alert alert-info" role="alert">
                           <!--<h5 class="text-left text-uppercase">Platform Usage Information</h5>-->
                           <h5 class="text-center text-uppercase">How to vote in 3 Steps</h5>
-                          <p class="text-white text-left">   Go to Polls to see available polls.</p>
-                          <p class="text-white text-left">   Click on an open poll to see available positions.</p>
-                          <p class="text-white text-left">   Choose candidate and VOTE.</p>
+                          <p class="text-left">   Go to Polls to see available polls.</p>
+                          <p class=" text-left">   Click on an open poll to see available positions.</p>
+                          <p class=" text-left">   Choose candidate and VOTE.</p>
                         </div>
                       </div>
                     </div>
@@ -30,23 +32,27 @@
                         <div class="panel panel-success">
                           <div class="panel-heading">
                             <h2 class="panel-title text-uppercase">
-                              <i class="fa fa-calendar"></i> {{starts.label}}
+                              <i class="fa fa-calendar"></i>AVAILABLE POLLS
                             </h2>
                           </div>
                           <div class="panel-body">
-                            <h2>{{ago(starts.value)}}</h2>
-                          </div>
+                              <div ng-repeat="p in polls" >
+                                <a href="#" class="list-group-item" ng-click="showBallot(p)" ng-show="open(p)">{{p.title}}</a>
+                              </div>
+                            </div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="panel panel-success">
                           <div class="panel-heading">
                             <h2 class="panel-title text-uppercase">
-                              <i class="fa fa-calendar"></i> {{ends.label}}
+                              <i class="fa fa-calendar"></i> PASSED POLLS
                             </h2>
                           </div>
                           <div class="panel-body">
-                            <h2>{{ago(ends.value)}}</h2>
+                            <div ng-repeat="p in polls" >
+                              <a href="#" class="list-group-item" ng-click="showBallot(p)" ng-show="after(p.closes)">{{p.title}}</a>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -63,33 +69,12 @@
                       <!--</div>-->
                       <!--</div>-->
                     </div>
-                    <div class="row text-center">
-                      <div class="col-md-6">
-                        <div class="panel panel-success">
-                          <div class="panel-heading">
-                            <h2 class="panel-title text-uppercase">
-                              <i class="fa fa-info-circle"></i> My NBA Branch
-                            </h2>
-                          </div>
-                          <div class="panel-body">
-                            <h2>{{$user._member._branch.name}}</h2>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="panel panel-success">
-                          <div class="panel-heading">
-                            <h2 class="panel-title text-uppercase">
-                              <i class="fa fa-info-circle"></i> Enrollment Number
-                            </h2>
-                          </div>
-                          <div class="panel-body">
-                            <h2>{{$user._member.sc_number}}</h2>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                     <!--<h1>{{$user._member.firstName + " " + $user._member.surname}}</h1>-->
+                  </div>
+                  <div class="panel-footer">
+                    <div class="text-right">
+                      For Enquiries please contact the help center
+                    </div>
                   </div>
                 </div>
               </div>

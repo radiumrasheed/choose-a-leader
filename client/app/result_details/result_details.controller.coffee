@@ -18,11 +18,15 @@ angular.module 'elektorApp'
         $scope.standings()
       , 30000
     return
+    
   $scope.standings()
 
   $scope.chartData = (title, candidates) ->
+    console.info candidates
     chartObject =
-      type: "BarChart"
+      type: "ColumnChart"
+      options:
+        title: title
       data:
         cols: [
           {id: "t", label: "Topping", type: "string"}
@@ -36,9 +40,5 @@ angular.module 'elektorApp'
           { v: [c.candidate.surname, (c.candidate.firstName||c.candidate.othername) ].join ' ' }
           { v: c.count }
         ]
-
-    chartObject.options =
-      title: title
-      bars: 'horizontal'
 
     chartObject

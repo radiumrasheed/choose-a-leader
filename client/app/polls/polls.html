@@ -15,24 +15,28 @@
                 </div>
                 <div class="panel-body">
                   <div class="alert alert-info">
-                    <h5 class="text-center text-uppercase text-black">LEGEND</h5>
-                    <p class="text-left text-blue">
-                      Open Polls are labelled <i style="color: blue;">blue</i>  -
-                      Closed Polls are labelled <i style="color: red;">red</i>  -
-                      Polls Ahead are labelled <i style="color: orange;">orange</i>
+                    <p class="text-left">
+                      Open Polls are labelled <span class="label label-primary">blue</span>  -
+                      Closed Polls are labelled <span class="label label-danger">red</span>  -
+                      Polls Ahead are labelled <span class="label label-warning">yellow</span>
                     </p>
                   </div>
 
-                  <div class="alert" ng-repeat="p in polls" ng-click="showBallot(p)"
-                       ng-class="{' well hover': open(p), 'alert alert-danger hover': after(p.closes), 'alert alert-warning hover': yetToOpen(p)}">
-                <span class="label pull-right" ng-class="{'label-purple': open(p), 'label-primary': !open(p)}">
-                    Open{{after(p.opens)?"ed":"s"}} {{ago(p.opens)}} - Close{{before(p.closes)?"s":"d"}}
-                    {{ago(p.closes)}}
-                </span>
-                    <h3 class="text-left" ng-class="{'text-black': !yetToOpen(p)}">{{p.title}}</h3>
+                  <div class="panel well panel-info hover" ng-repeat="p in polls" ng-click="showBallot(p)">
+                    <span class="label pull-right" ng-class="
+                        {'label-primary': open(p), 'label-danger': after(p.closes), 'label-success': yetToOpen(p)}">
+                        Open{{after(p.opens)?"ed":"s"}} {{ago(p.opens)}} - Close{{before(p.closes)?"s":"d"}}
+                        {{ago(p.closes)}}
+                    </span>
+                    <h5 class="text-left"><i class="fa fa-flag-checkered pull-left" ng-show="p.national"></i> {{p.title}}</h5>
                     <p>{{p.description}}</p>
                   </div>
                 </div>
+              <div class="panel-footer">
+                  <div class="text-right">
+                      For Enquiries please contact the help center
+                  </div>
+              </div>
               </div>
             </div>
           </div>

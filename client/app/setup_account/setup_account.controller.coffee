@@ -1,7 +1,8 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'SetupAccountCtrl', ($scope, Auth, toastr, Utils, $state, $stateParams, Member) ->
+.controller 'SetupAccountCtrl', ($scope, Auth, toastr, Utils, $state, $stateParams, Member, $auth) ->
+  $auth.logout()
   $scope.showLast = false
   $scope.master = {}
   $scope.reset = ->
@@ -31,6 +32,19 @@ angular.module 'elektorApp'
 
   $scope.edit = ->
     $scope.showNext = false
+
+  $scope.step1 = ->
+    $scope.showLast = false
+    $scope.showNext = false
+
+  $scope.step2 = ->
+    $scope.showLast = false
+    $scope.showNext = true
+
+  $scope.step3 = ->
+    $scope.showNext = false
+    $scope.showLast = true
+
 
   $scope.changePassword = (theForm) ->
     if theForm.$valid
