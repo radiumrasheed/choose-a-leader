@@ -542,6 +542,7 @@ em {
 
 // Component styles are injected through grunt
 // injector
+@import 'assistant/assistant.scss';
 @import 'ballot_receipt/ballot_receipt.scss';
 @import 'ballots/ballots.scss';
 @import 'branch_request/branch_request.scss';

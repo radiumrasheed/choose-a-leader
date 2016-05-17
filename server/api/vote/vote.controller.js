@@ -76,7 +76,7 @@ exports.candidates = function (req, res) {
         "_id": "$_id",
         "votes": {
           "$push": {
-            "candidate": "$_id.candidates._id",
+            "candidate": "$_id.candi",
           }
         },
       }

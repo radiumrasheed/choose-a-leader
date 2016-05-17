@@ -32,6 +32,7 @@
     "morgan": "~1.0.0",
     "request": "^2.58.0",
     "satellizer": "^0.11.2",
+    "sendgrid": "^2.0.0",
     "serve-favicon": "~2.0.1",
     "throng": "2.0.1",
     "tough-cookie": "2.2.2"
