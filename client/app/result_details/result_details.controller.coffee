@@ -14,7 +14,6 @@ angular.module 'elektorApp'
     Vote.stats _poll: pollId
     , (results) ->
       $scope.results = results
-      console.info $scope.results
       $timeout ->
         $scope.standings()
       , 30000

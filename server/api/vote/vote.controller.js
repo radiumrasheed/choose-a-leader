@@ -65,33 +65,35 @@ exports.stats = function (req, res) {
 exports.candidates = function (req, res) {
   Position.aggregate([
     { "$match": { "_poll" : mongoose.mongo.ObjectID(req.query._poll) } },
-    /*{
+    {
       "$group": {
-        "_id": {
-          "_id": '$_id',
-          "candidates._id": "$candidates._id"
-        },
+        "_id": '$_id',
+        // "candidates._id": "$candidates._id"
       }
-    },*/
+    },
     {
       "$group": {
         "_id": "$_id",
-        /*"votes": {
+        "votes": {
           "$push": {
-            "candidate": "$_id.candidate",
+            "candidate": "$_id.candidates._id",
           }
-        },*/
+        },
       }
     },
     { "$sort": { "count": -1 } }
   ], function (err, data) {
     Member.populate(data, [{
-      "path": "votes.candidate",
+      "path": "votes.candidate._member",
       "select": "surname firstName middleName sc_number"
     }, {
       "path": "_id",
       "model": "Position",
       "select": "_id name code description candidates"
+    }, {
+      "path" : "votes.candidate._id",
+      "model" : "Position",
+      "select" : "_member _id code"
     }], function (err, populated) {
       return res.json(data);
     });
