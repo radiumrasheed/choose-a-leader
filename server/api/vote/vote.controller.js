@@ -51,13 +51,49 @@ exports.stats = function (req, res) {
   ], function (err, data) {
     Member.populate(data, [{
       "path": "votes.candidate",
-      "select": "surname firstName middleName othername sc_number"
+      "select": "surname firstName middleName sc_number"
     }, {
       "path": "_id",
       "model": "Position",
       "select": "_id name code description"
     }], function (err, populated) {
       return res.json(populated);
+    });
+  });
+};
+
+exports.candidates = function (req, res) {
+  Position.aggregate([
+    { "$match": { "_poll" : mongoose.mongo.ObjectID(req.query._poll) } },
+    /*{
+      "$group": {
+        "_id": {
+          "_id": '$_id',
+          "candidates._id": "$candidates._id"
+        },
+      }
+    },*/
+    {
+      "$group": {
+        "_id": "$_id",
+        /*"votes": {
+          "$push": {
+            "candidate": "$_id.candidate",
+          }
+        },*/
+      }
+    },
+    { "$sort": { "count": -1 } }
+  ], function (err, data) {
+    Member.populate(data, [{
+      "path": "votes.candidate",
+      "select": "surname firstName middleName sc_number"
+    }, {
+      "path": "_id",
+      "model": "Position",
+      "select": "_id name code description candidates"
+    }], function (err, populated) {
+      return res.json(data);
     });
   });
 };
@@ -129,16 +165,18 @@ exports.castVote = function (req, res) {
               candidateSignature = {};
 
           _.each(keys, function (k) {
-            candidateSignature[k] = req.body[k].code;
+            if (typeof(req.body[k]) == "object") {
+              candidateSignature[k] = req.body[k].code;
 
-            votes.push({
-              _position: k,
-              _member: req.user,
-              _poll: pollId,
-              candidate: req.body[k]._member._id,
-              voteDate: new Date(),
-              ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress
-            });
+              votes.push({
+                _position: k,
+                _member: req.user,
+                _poll: pollId,
+                candidate: req.body[k]._member._id,
+                voteDate: new Date(),
+                ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress
+              });
+            }
           });
 
           Vote.create(votes, function (err, docs) {

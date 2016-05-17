@@ -321,6 +321,7 @@ exports.confirmReset = function (req, res) {
 
 exports.changePassword = function (req, res) {
   if (req.body._id === undefined) {
+  	
     return res.status(400).json({message: 'Invalid password reset request.'});
   }
 

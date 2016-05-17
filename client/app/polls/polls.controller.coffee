@@ -11,7 +11,7 @@ angular.module 'elektorApp'
     else
       $scope.user = user
 
-      if user._member._branch is undefined or user._member._branch is null
+      if typeof user._member._branch is undefined or user._member._branch is null
         $auth.logout()
         $sessionStorage.tempMember = user._member
         $state.go "branch_request", id: user._member._id

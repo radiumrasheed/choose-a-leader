@@ -29,6 +29,20 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label class="col-md-2 control-label">Branch <span class="required">*</span></label>
+                                    <div class="col-md-4">
+                                        <input ng-disabled="true" class="form-control" ng-model="user._member._branch.name">
+                                    </div>
+                                    <label class="col-md-2 control-label">
+                                        Enrollment Number <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-4">
+                                        <input ng-disabled="!notAdmin()" class="form-control" ng-model="user._member.sc_number" ng-value="user._member.firstName || user._member.othername"
+                                               placeholder="First (Given) Name" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
                                     <label class="col-md-2 control-label">Title</label>
                                     <div class="col-md-4">
                                         <input class="form-control" ng-model="user._member.title"

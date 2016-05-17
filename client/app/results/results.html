@@ -16,14 +16,19 @@
               <div class="panel-body">
               <!--<pre>{{polls | json}}</pre>-->
 
-                <div class="alert alert-primary hover" ng-repeat="p in polls" ng-click="showResults(p)">
-                    <span class="label label-purple pull-right">
+                <div class="panel well panel-info hover" ng-repeat="p in polls" ng-click="showResults(p)">
+                    <span class="label label-primary pull-right">
                         Opened {{ago(p.opens)}} - Closed {{ago(p.closes)}}
                     </span>
-                    <h3 class="text-left text-white">{{p.title}}</h3>
+                    <h3 class="text-left"><i class="fa fa-2x fa-flag-checkered pull-left" ng-show="p.national"></i> {{p.title}}</h3>
                     <p class="text-left">{{p.description}}</p>
                 </div>
               </div>
+            <div class="panel-footer">
+                <div class="text-right">
+                    For Enquiries please contact the help center
+                </div>
+            </div>
             </div>
           </div>
         </div>
