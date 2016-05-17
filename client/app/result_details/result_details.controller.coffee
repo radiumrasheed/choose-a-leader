@@ -14,6 +14,7 @@ angular.module 'elektorApp'
     Vote.stats _poll: pollId
     , (results) ->
       $scope.results = results
+      console.info $scope.results
       $timeout ->
         $scope.standings()
       , 30000
@@ -22,7 +23,6 @@ angular.module 'elektorApp'
   $scope.standings()
 
   $scope.chartData = (title, candidates) ->
-    console.info candidates
     chartObject =
       type: "ColumnChart"
       options:
