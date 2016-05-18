@@ -51,6 +51,23 @@ function getUser(id, res) {
   });
 }
 
+function getUserFromUsername(id, res) {
+	User.findOne({"username" : "id"}).populate('_member').exec(function (err, user) {
+		if (err) {
+			return handleError(res, err);
+		}
+		if (!user) {
+			return res.send(404);
+		}
+		User.populate(user, {
+			path: '_member._branch',
+			model: 'Branch'
+		}, function (err, doc) {
+			return res.json(doc);
+		});
+	})
+}
+
 // Get list of users
 exports.index = function (req, res) {
   User.find(req.query, function (err, users) {
@@ -321,11 +338,13 @@ exports.confirmReset = function (req, res) {
 
 exports.changePassword = function (req, res) {
   if (req.body._id === undefined) {
-  	
-    return res.status(400).json({message: 'Invalid password reset request.'});
+  	/*var user_ = getUserFromUsername(req.body.username, res);
+  	req.body._id = user_._id;
+	console.log(req.body._id);*/
+	return res.status(400).json({message: 'Invalid password reset request.'});
   }
 
-  User.findById(req.body._id, '+password', function (err, theUser) {
+  User.findById(req.body._id , '+password', function (err, theUser) {
     if (err) {
       handleError(res, err);
     }

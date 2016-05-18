@@ -9,12 +9,14 @@
                     <h4>
                         <span class="text-uppercase text-white text-bold">Welcome to the NBA Election Portal</span>
                     </h4>
-                    <ol class="breadcrumb panel-info" style="margin-bottom: 5px; margin-right: 30px;">
-                        <li ng-click="step1()" class="pull-left"><a href="#">Confirm Phone Number</a></li>
-                        <!--<span class="arrow-right"></span>-->
-                        <li ng-click="step2()"><a href="#">Change Password</a></li>
-                        <li ng-click="step3()" class="pull-right">Get Voting Code</li>
-                    </ol>
+                    <div class="md">
+                        <div class="breadcrumb flat">
+                            <a ng-click="step1()" class="pull-left active" href="#">Confirm Phone Number</a>
+                            <!--<span class="arrow-right"></span>-->
+                            <a ng-click="step2()" ng-class="{active: !showNext()}" href="#">Change Password</a>
+                            <a ng-click="step3()" href="#">Get Voting Code</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -23,7 +25,7 @@
 
       <div class="center-form panel panel-green" ng-hide="showNext || showLast">
             <div class="panel-heading">
-                <div class="panel-title">
+                <div class="panel-title"><i class="fa fa-profile"></i>
                     Verify Your Account
                 </div>
             </div>
@@ -141,14 +143,15 @@
         <div class="panel-body">
           <br><br>
           <div class="row">
-            <form method="post" ng-submit="pwdForm.$valid && changePassword(pwdForm)" name="pwdForm" class="col-sm-6 col-xs-6 col-md-6 col-md-offset-3 col-sm-offset-3 m-t-10">
+            <form method="post" ng-submit="pwdForm.$valid && changePassword(pwdForm)" name="pwdForm"
+                  class="col-sm-6 col-xs-6 col-md-6 col-md-offset-3 col-sm-offset-3 m-t-10">
 
               <div class="alert alert-danger text-center" ng-show="formError">{{formError}}</div>
               <div class="alert alert-success text-center" ng-show="formSuccess">{{formSuccess}}</div>
 
                 <div class="form-group">
                     <input class="form-control" type="text"
-                           ng-model="u._id" ng-minlength="4"
+                           ng-model="u.username" ng-minlength="4"
                            placeholder="Enter Enrollment Number" required autofocus>
                 </div>
 

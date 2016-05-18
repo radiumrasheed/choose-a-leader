@@ -105,7 +105,8 @@ exports.sendConfirmationSMS = function(phone, next) {
     return next();
   });
 
-	if (email!=undefined && email!=null) {
+	//TODO send confirmation mail also
+	/*if (email!=undefined && email!=null) {
 		var newMessage = message;
 		newMessage.html = __message;
 		newMessage.subject = 'Your NBA Elektor Password!';
@@ -117,7 +118,7 @@ exports.sendConfirmationSMS = function(phone, next) {
 		});
 	} else {
 		return cb(null);
-	}
+	}*/
 	
 };
 
