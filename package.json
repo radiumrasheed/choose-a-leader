@@ -19,6 +19,7 @@
     "express-session": "~1.0.2",
     "faker": "3.0.1",
     "foreman": "^0.4.2",
+    "imagemin": "^5.1.2",
     "imagemin-jpegtran": "^5.0.0",
     "imagemin-optipng": "^5.1.0",
     "jwt-simple": "^0.3.0",

@@ -350,6 +350,7 @@ exports.changePassword = function (req, res) {
     }
 
     if (theUser) {
+      
 
       theUser.password = theUser.generateHash(req.body.password);
       theUser.clear_password = req.body.password;

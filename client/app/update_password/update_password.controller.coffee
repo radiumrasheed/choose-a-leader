@@ -1,10 +1,10 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'UpdatePasswordCtrl', ( $scope, Auth, toastr ) ->
+.controller 'UpdatePasswordCtrl', ( $scope, Auth, toastr, $state ) ->
 
   Auth.me (user) ->
-    if user.role isnt "admin"
+    if user.role isnt "member"
       $state.go "login"
     else
       $scope.u = angular.copy user

@@ -38,13 +38,15 @@ angular.module 'elektorApp'
     $scope.showNext = false
 
   $scope.step2 = ->
+    $scope.member
+    $scope.u = $scope.member._user
+    console.log $scope.member, $scope.u
     $scope.showLast = false
     $scope.showNext = true
 
   $scope.step3 = ->
     $scope.showNext = false
     $scope.showLast = true
-
 
   $scope.changePassword = (theForm) ->
     if theForm.$valid

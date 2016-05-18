@@ -46,7 +46,7 @@ exports.show = function(req, res) {
 
 // Get a single member for setup
 exports.showMember = function(req, res) {
-  Member.findById(req.query._member, function (err, member) {
+  Member.findById(req.query._member).populate('_user').exec( function (err, member) {
     if(err) { return handleError(res, err); }
     if(!member) { return res.send(404); }
     return res.json(member);
@@ -90,7 +90,7 @@ exports.createUser = function(req, res) {
   if (req.body._id) { delete req.body._id; } //delete the member_ID from the form
   if (req.body._user) { delete req.body._user; } //delete the me0mber.user_ID from the form
 
-  Member.findById(req.query.id, function (err, member) {
+  Member.findById(req.query.id).populate('_user').exec(function (err, member) {
     if (err) { return handleError(res, err); }
     if (!member) { return res.status(404).json({message: "No record found for specified Enrollment Number."}); }
 
@@ -146,9 +146,16 @@ exports.createUser = function(req, res) {
         }
       });
     }
+
 /*TODO := add check for setup-stage, if password is not changed go to step to step 2, if not confirmed, go to step 3 */
+	else if (member._user.changedPassword == false) {
+		console.log(member._user);
+		return res.status(403).json({message : "Please change your password"});
+	}
+
     else {
-      return res.status(409).json({
+		console.log(member._user);
+		return res.status(409).json({
         message: "User is already registered"
       });
     }

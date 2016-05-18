@@ -6,15 +6,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center" style="margin-top: 10px; margin-bottom: 10px">
-                    <h4>
+                    <h2>
                         <span class="text-uppercase text-white text-bold">Welcome to the NBA Election Portal</span>
-                    </h4>
+                    </h2>
                     <div class="md">
                         <div class="breadcrumb flat">
-                            <a ng-click="step1()" class="pull-left active" href="#">Confirm Phone Number</a>
-                            <!--<span class="arrow-right"></span>-->
-                            <a ng-click="step2()" ng-class="{active: !showNext()}" href="#">Change Password</a>
-                            <a ng-click="step3()" href="#">Get Voting Code</a>
+                            <a class="active" href="#">Confirm Phone Number</a>
+                            <a ng-class="{active: showNext || showLast}" href="#">Change Password</a>
+                            <a ng-class="{active: showLast}" href="#">Get Voting Code</a>
                         </div>
                     </div>
                 </div>
@@ -25,7 +24,7 @@
 
       <div class="center-form panel panel-green" ng-hide="showNext || showLast">
             <div class="panel-heading">
-                <div class="panel-title"><i class="fa fa-profile"></i>
+                <div class="panel-title"><i class="fa fa-unlock"></i>
                     Verify Your Account
                 </div>
             </div>
@@ -110,10 +109,10 @@
                     </div>
 
                 </form>
-
-                <div class="alert alert-warning text-white">
-                  <span class="required">Make sure you have this phone with you. You'll receive an SMS with your password shortly. </br>Please change it on the nexe phase!</span>
+                <div ng-hide="setupForm.$invalid || (setupForm.$valid && member.phone != phone_conf) || submitting" class="alert alert-info">
+                    <span class="required">Make sure you have this phone with you. You'll receive an SMS with your password shortly. </br>Please change it on the nexe phase!</span>
                 </div>
+
             </div>
             <div class="panel-footer">
                 <div class="row">
