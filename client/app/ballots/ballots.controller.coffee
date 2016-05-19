@@ -4,6 +4,10 @@ angular.module 'elektorApp'
 .controller 'BallotsCtrl', ($scope, Poll, $stateParams, Position, $state, $window, toastr, Vote, Setting, $rootScope, Auth, $auth, $sessionStorage, $log, $modal) ->
 
   $scope.showBallotPage = false
+  $scope.showNext = false;
+  $scope.showLast=false;
+  $scope.showtable=false
+  $scope.showDiv=true
 
   Auth.me (user) ->
     $scope.user = user
@@ -62,6 +66,12 @@ angular.module 'elektorApp'
         $scope.selected[position][k] = false
         return
 
+    $scope.setTableTrue = ->
+      $scope.showtable=true
+      $scope.showLast=true
+      $scope.showDiv=false
+
+
     $scope.ballotFilled = ->
       keys = _.keys $scope.ballot
       filled = true
@@ -70,6 +80,7 @@ angular.module 'elektorApp'
       return filled
 
     $scope.showReceipt = ->
+      $scope.showNext=true
       if !$scope.ballotFilled()
         # Pre-process Receipt
         $scope.showingReceipt = true
@@ -77,6 +88,10 @@ angular.module 'elektorApp'
     $scope.backToBallot = ->
       delete $scope.ballot["password"]
       delete $scope.ballot["accessCode"]
+      $scope.showNext=false
+      $scope.showLast=false
+      $scope.showtable=false
+      $scope.showDiv=true
   #    $window.location.href = $state.get('ballots').url
       $scope.showingReceipt = false
 
