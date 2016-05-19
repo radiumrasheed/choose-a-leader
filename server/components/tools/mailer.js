@@ -81,56 +81,116 @@ exports.sendDefaultPassword = function(phone, email, password, sc_number, next) 
   });
 };
 
-exports.sendVerificationSMS = function(phone, accessCode, next) {
-  var message = 'Your voting code is: '+ accessCode + '. DO NOT DELETE THIS SMS as You WILL NEED THIS CODE TO CAST' +
+exports.sendVerificationSMS = function(phone, email, accessCode, next) {
+  var __message = 'Your voting code is: '+ accessCode + '. DO NOT DELETE THIS SMS as You WILL NEED THIS CODE TO CAST' +
     ' YOUR VOTE';
-  var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
 
-  request('http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE, function(error, resp, body) {
+	async.parallel([
+		function (cb) {
+			var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
 
-    Sms.create({ to: phone, message: message });
+			request('http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+__message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE, function(error, resp, body) {
 
-    return next();
-  });
+				Sms.create({ to: phone, message: __message });
+
+				return cb(null);
+			});
+
+		},
+		function (cb) {
+			if (email!=undefined && email!=null) {
+				var newMessage = message;
+				newMessage.html = __message;
+				newMessage.subject = 'Your NBA Elector Voting Code';
+				newMessage.to.push(email);
+
+				sendMessage(newMessage, function(e){
+					console.log(e);
+					return cb(null);
+				});
+			} else {
+				return cb(null)
+			}
+		}
+	], function (err, results) {
+		console.log("Voting code sent as SMS and Email ", results);
+		return next();
+	});
 };
 
-exports.sendConfirmationSMS = function(phone, next) {
-  var message = 'Congratulations, Your NBA elector accreditation is complete. You can now login to the portal.';
+exports.sendConfirmationSMS = function(phone, email, next) {
+  var __message = 'Congratulations, Your NBA elector accreditation is complete. You can now login to the portal.';
   var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
 
-  request('http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE, function(error, resp, body) {
+	async.parallel([
+		function (cb) {
+			var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
 
-    Sms.create({ to: phone, message: message });
+			request('http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+__message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE, function(error, resp, body) {
 
-    return next();
-  });
+				Sms.create({ to: phone, message: __message });
 
-	//TODO send confirmation mail also
-	/*if (email!=undefined && email!=null) {
-		var newMessage = message;
-		newMessage.html = __message;
-		newMessage.subject = 'Your NBA Elektor Password!';
-		newMessage.to.push(email);
+				return cb(null);
+			});
+		},
+		function (cb) {
+			if (email!=undefined && email!=null) {
+				var newMessage = message;
+				newMessage.html = __message;
+				newMessage.subject = 'Congratulations! You are now eligible to vote.';
+				newMessage.to.push(email);
 
-		sendMessage(newMessage, function(e){
-			console.log(e);
-			return cb(null);
-		});
-	} else {
-		return cb(null);
-	}*/
-	
+				sendMessage(newMessage, function(e){
+					console.log(e);
+					return cb(null);
+				});
+			} else {
+				return cb(null)
+			}
+		}
+	], function (err, results) {
+		console.log("confirmed accreditation sent as SMS and Email ", results);
+		return next();
+	});
 };
 
-exports.sendBallotReceiptSMS = function(phone, code, signature, next) {
-  var message = 'Your votes have been received. This is your Receipt Code: '+ code + ' for this Poll. You can check how you voted' +
+exports.sendBallotReceiptSMS = function(phone, email, code, signature, next) {
+  var __message = 'Your votes have been received. This is your Receipt Code: '+ code + ' for this Poll. You can check how you voted' +
     ' with this. Your vote signature is: ' + signature;
-  var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
 
-  request('http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE, function(error, resp, body) {
+	async.parallel([
+		function (cb) {
+			var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
 
-    Sms.create({ to: phone, message: message });
+			request('http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+__message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE, function(error, resp, body) {
 
-    return next();
-  });
+				Sms.create({ to: phone, message: __message });
+
+				return cb(null);
+			});
+		},
+		function (cb) {
+			if (email!=undefined && email!=null) {
+				var newMessage = message;
+				newMessage.html = __message;
+				newMessage.subject = 'Vote Successful Casted!';
+				newMessage.to.push(email);
+
+				sendMessage(newMessage, function(e){
+					console.log(e);
+					return cb(null);
+				});
+			} else {
+				return cb(null)
+			}
+		}
+	], function (err, results) {
+		console.log("Ballot Receipt sent as SMS and Email ", results);
+		return next();
+	});
+
+
+
+
+
 };

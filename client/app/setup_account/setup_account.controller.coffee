@@ -40,7 +40,6 @@ angular.module 'elektorApp'
   $scope.step2 = ->
     $scope.member
     $scope.u = $scope.member._user
-    console.log $scope.member, $scope.u
     $scope.showLast = false
     $scope.showNext = true
 
@@ -60,6 +59,9 @@ angular.module 'elektorApp'
         $scope.password_cnf = null
         theForm.$setPristine()
         $scope.showNext = false
+#       send user object as $scope.master to confirm password
+        if $scope.master = {}
+          $scope.master = $scope.u
         $scope.showLast = true
 
       , (e) ->

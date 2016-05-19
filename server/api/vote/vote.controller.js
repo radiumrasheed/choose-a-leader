@@ -145,10 +145,15 @@ exports.castVote = function (req, res) {
     var poll = resp[0],
         user = resp[1];
 
+    var _usr = new String(user._member._branch);
+    var _pol = new String(poll._branch);
+    _usr = _usr.toLocaleLowerCase(_usr);
+    _pol = _pol.toLocaleLowerCase(_pol);
+
     if(!user) { return res.status(400).json({message: "User not found!"}); }
     if (user._member.verified!=1) { return res.status(400).json({message: "You do not have authorization to vote here."}); }
 
-    if (user._member._branch == poll._branch || !poll.national) {
+    if (_usr.toString() === _pol.toString() || poll.national) {
       // Verify Password
       user.validPassword(req.body.password, function(err, isMatch) {
         if (!isMatch) { return res.status(401).send({ message: 'Password Incorrect.' }); }
@@ -210,7 +215,7 @@ exports.castVote = function (req, res) {
 
                 Receipt.create(receipt, function (err, receipt) {
                   // Send Receipt Code to User
-                  mailer.sendBallotReceiptSMS(member.phoneNumber || member.phone, receipt.code, receipt.signature, function () {
+                  mailer.sendBallotReceiptSMS(member.phoneNumber || member.phone, member.email, receipt.code, receipt.signature, function () {
                     return res.json(receipt);
                   });
                 });

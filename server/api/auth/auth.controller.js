@@ -204,7 +204,7 @@ exports.update = function (req, res) {
           if (req.query.sendCode) {
             var phone = extractPhoneNumber(updatedM.phone);
 
-            mailer.sendVerificationSMS(phone, updatedM.accessCode, function () {
+            mailer.sendVerificationSMS(phone, updatedM.email, updatedM.accessCode, function () {
               return getUser(req.params.id, res);
             });
           } else {
@@ -247,7 +247,7 @@ exports.sendCode = function (req, res) {
 
     var phone = extractPhoneNumber(user._member.phone);
 
-    mailer.sendVerificationSMS(phone, user._member.accessCode, function () {
+    mailer.sendVerificationSMS(phone, user._member.email, user._member.accessCode, function () {
       return res.send(200);
     });
   });
@@ -273,7 +273,7 @@ exports.confirm = function (req, res) {
       if (!member) { return res.send(404); }
       var oldConf = member.codeConfirmed;
       if (oldConf) {
-        return res.status(200).json({message: "Access Code already Confirmed"});
+        return res.status(200).json({message: "Voting Code already Confirmed"});
       }
 
       if (member.accessCode == req.query.code) {
@@ -281,8 +281,8 @@ exports.confirm = function (req, res) {
         member.save(function () {
           var phone = extractPhoneNumber(member.phone);
 
-          mailer.sendConfirmationSMS(phone, function () {
-            return res.status(200).json({message: "Access Code Confirmed"});
+          mailer.sendConfirmationSMS(phone, member.email, function () {
+            return res.status(200).json({message: "Voting Code Confirmed"});
           });
         });
       }
@@ -365,7 +365,7 @@ exports.changePassword = function (req, res) {
             Member.findById(theUser._member, function(err, updatedM) {
               var phone = extractPhoneNumber(updatedM.phone);
 
-              mailer.sendVerificationSMS(phone, updatedM.accessCode, function () {
+              mailer.sendVerificationSMS(phone, updatedM.email, updatedM.accessCode, function () {
               });
               return res.status(200).json({message: "Password Changed Successfully!. Voting Code sent!"});
             });
