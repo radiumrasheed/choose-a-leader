@@ -349,38 +349,40 @@ exports.changePassword = function (req, res) {
       handleError(res, err);
     }
 
-    if (theUser) {
-      
+    theUser.validPassword(req.body.current_password, function (err, isMatch) {
+      if (isMatch) {
 
-      theUser.password = theUser.generateHash(req.body.password);
-      theUser.clear_password = req.body.password;
-      theUser.tokenExpires = moment().subtract(1, 'days').format();
-      theUser.resetToken = "";
-      theUser.changedPassword = true;
+        theUser.password = theUser.generateHash(req.body.password);
+        theUser.clear_password = req.body.password;
+        theUser.tokenExpires = moment().subtract(1, 'days').format();
+        theUser.resetToken = "";
+        theUser.changedPassword = true;
 
-      theUser.save(function (err) {
+        theUser.save(function (err) {
 
-        if (err !== null) {
-          return handleError(res, err);
-        }
-        if (req.query.sendCode) {
-          Member.findById(theUser._member, function(err, updatedM) {
-            var phone = extractPhoneNumber(updatedM.phone);
+          if (err !== null) {
+            return handleError(res, err);
+          }
+          if (req.query.sendCode) {
+            Member.findById(theUser._member, function(err, updatedM) {
+              var phone = extractPhoneNumber(updatedM.phone);
 
-            mailer.sendVerificationSMS(phone, updatedM.accessCode, function () {
-              console.log(phone, updatedM.accessCode);
+              mailer.sendVerificationSMS(phone, updatedM.accessCode, function () {
+              });
+              return res.status(200).json({message: "Password Changed Successfully!. Voting Code sent!"});
             });
-            return res.status(200).json({message: "Password Changed Successfully!. Voting Code sent!"});
-          });
-        } else {
-          return res.status(200).json({message: "Password Changed Successfully!. Voting code not sent"});
-        }
-        // return res.status(200).json({message: "Password Changed Successfully!."});
-      });
+          } else {
+            return res.status(200).json({message: "Password Changed Successfully!. Voting code not sent"});
+          }
+          // return res.status(200).json({message: "Password Changed Successfully!."});
+        });
 
-    } else {
-      return res.status(404).send({message: 'User not found!'});
-    }
+      }
+      else {
+        console.log("invalid password");
+        return res.status(404).send({message: 'Invalid Password'});
+      }
+    });
   });
 };
 
