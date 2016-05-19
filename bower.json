@@ -27,7 +27,8 @@
     "cloudinary_ng": "~1.0.0",
     "ng-file-upload": "^11.0.2",
     "angular-google-chart": "~0.1.0",
-    "angular-ellipsis": "~0.1.6"
+    "angular-ellipsis": "~0.1.6",
+    "web-icons": "*"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
