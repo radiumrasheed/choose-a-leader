@@ -1,6 +1,7 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
 <script type="text/ng-template" id="bioModalContent.html">
+
     <div class="modal-header">
         <h3 class="modal-title" ng-bind="bio._member.firstName||bio._member.othername + ' ' + bio._member.surname"></h3>
     </div>
@@ -22,6 +23,7 @@
 
     <div class="row">
         <div class="col-md-3" menu></div>
+
 
         <div class="col-md-9" ng-show="!showBallotPage">
 
@@ -58,20 +60,34 @@
                 <div class="panel-body">
 
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="alert alert-info">
-                                <h5 class="text-center text-uppercase">Ballot Casting Instructions</h5>
-                                <p>
-                                    Vote your preferred candidate in each category
-                                    Click submit to proceed
-                                    Confirm your vote with your password
-                                    Get your receipt code
-                                </p>
-                            </div>
-                        </div>
+                          <div class="col-md-12 text-center">
+
+                            <div class="pearls pearls-sm row">
+
+                                <div class="pearl col-xs-4" ng-class="{current: showNext== false&&showLast==false, done:showNext==true && (showLast==true||showLast==false)}">
+                                  <div class="pearl-icon"><i class="fa fa-user" aria-hidden="true"></i></div>
+                                  <!--<span class="pearl-number">1</span>-->
+                                  <span class="pearl-title">Select Your Candidtate(s)</span>
+                                </div>
+
+                                <div class="pearl col-xs-4" ng-class="{disabled: showNext==false && showLast==false,current:showNext==true && showLast==false,done:showNext==true && showLast==true}">
+                                  <div class="pearl-icon"><i class="fa fa-key" aria-hidden="true"></i></div>
+                                  <!--<span class="pearl-number">2</span>-->
+                                  <span class="pearl-title">Verify Your Selection</span>
+                                </div>
+
+                                <div class="pearl  col-xs-4" ng-class="{disabled: showNext== true && showLast==false,current:showNext==true && showLast==true}">
+                                  <div class="pearl-icon"><i class="fa fa-check" aria-hidden="true"></i></div>
+                                  <!--<span class="pearl-number">3</span>-->
+                                  <span class="pearl-title">Submission</span>
+                                </div>
+
+                              </div>
+
+                          </div>
                     </div>
 
-                    <div class="row" ng-hide="showingReceipt">
+                    <div class="row" style="margin-top: 20px" ng-hide="showingReceipt">
 
                         <div class="col-sm-12" ng-repeat="position in positions track by $index">
                             <div class="panel panel-green">
@@ -93,7 +109,7 @@
                                                     ng-model="ballot[position._id]" ng-value="candidate" />
                                         </div>
                                         <div class="col-md-2">
-                                            <img src="{{candidate.secure_url}}" class="img-circle pull-left" width="60px" height="60px">
+                                            <img src="{{candidate.secure_url}}" class="img-rounded pull-left" width="60px" height="60px">
                                         </div>
                                         <div ng-click="setChoice(position._id, candidate)" class="col-md-6 center-block">
                                             <div>
@@ -108,34 +124,10 @@
                                             <button href="#" class="pull-left btn btn-sm btn-primary btn-block" ng-click="open(candidate)" role="button">View
                                                 Profile</button>
                                         </div>
-<!--
-                                        <div class="panel panel-green ballot-panel"
-                                             ng-class="{selected: selected[position._id][candidate._id]}">
-                                            <div class="panel-heading">
-                                                <div class="panel-title link" data-ellipsis ng-click="open(candidate.bio)"
-                                                     ng-bind="candidate._member.firstName||candidate._member.othername + ' ' + candidate._member.surname">
-                                                </div>
-
-                                            </div>
-                                            <div ng-click="setChoice(position._id, candidate)" class="panel-body no-padding"
-                                                 style="background-image:url({{candidate.secure_url}});">
-                                                <div ng-click="setChoice(position._id, candidate)"></div>
-                                                <div class="printed"></div>
-                                            </div>
-                                            <div class="panel-footer btn-block">
-                                                <button class="btn btn-default btn-block" ng-click="setChoice(position._id, candidate)">
-                                                    <i class="fa fa-thumbs-up"></i>
-                                                    SELECT
-                                                </button>
-
-                                            </div>
-                                        </div>
--->
                                     </div>
-
                                 </div>
                                 <div class="panel-footer">
-                                    <div ng-show="ballot[position._id]" class="text-right text-bold h4">
+                                    <div ng-show="ballot[position._id]" class="text-right text-bold text-warning h4">
                                         YOU VOTED FOR {{(ballot[position._id]._member.firstName||ballot[position._id]._member.othername)+" "+ballot[position._id]._member.surname}}
                                     </div>
                                 </div>
@@ -160,9 +152,11 @@
                                     <div class="panel-title">
                                         <i class="fa fa-registered"></i> Ballot Receipt
                                     </div>
+
                                 </div>
                                 <div class="panel-body">
-                                    <table class="table table-striped table-hover table-bordered">
+                                  <div ng-show="showDiv" class="row text-center"><h4>Please Verify Your Selections</h4></div>
+                                    <table ng-show="!showtable" class="table table-striped table-hover table-bordered">
                                         <tr class="success">
                                             <th class="text-right text-bold">POSITION</th>
                                             <th class="text-bold">YOUR VOTE</th>
@@ -174,12 +168,14 @@
                                                 {{ballot[p._id]._member.surname}}
                                             </td>
                                         </tr>
+                                      <tr class="success ">
+                                        <td class="text-right"><label ng-click="backToBallot()" class="btn btn-danger"> Go Back</label></td>
+                                        <td><label ng-click="setTableTrue()" class="btn btn-primary"> Proceed To Submit</label></td></tr>
                                     </table>
                                     <hr>
-                                    <form name="ballotForm" class="form-horizontal">
+                                    <form name="ballotForm" ng-show="showtable" class="form-horizontal">
                                         <div class="alert alert-info">
-                                            In order to accept your vote, please enter your password and your VOTING CODE.
-                                            Your VOTING CODE was sent to you as an SMS when you registered.
+                                            In order to accept your vote, please enter your password.
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-3 col-md-offset-3 control-label">
@@ -188,16 +184,6 @@
                                             <div class="col-md-4">
                                                 <input type="password" name="password" ng-model="ballot.password"
                                                        placeholder="PASSWORD"
-                                                       class="form-control" required>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-3 col-md-offset-3 control-label">
-                                                VOTING CODE <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-4">
-                                                <input name="VOTINGCode" type="text" ng-model="ballot.VOTINGCode"
-                                                       placeholder="VOTING CODE"
                                                        class="form-control" required>
                                             </div>
                                         </div>
