@@ -154,7 +154,7 @@ exports.castVote = function (req, res) {
         if (!isMatch) { return res.status(401).send({ message: 'Password Incorrect.' }); }
 
         var member = user._member;
-        if (member.accessCode==req.body.accessCode && member.codeConfirmed) {
+        if (member.codeConfirmed) {
           var pollId = req.body._poll;
 
           // Build Vote Objects
@@ -217,7 +217,8 @@ exports.castVote = function (req, res) {
               });
             });
           });
-        } else {
+        }
+        else {
           return res.status(400).json({message: "You've not been accredited. Hence, you are not eligible to vote."});
         }
       });

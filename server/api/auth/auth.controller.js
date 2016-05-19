@@ -338,9 +338,6 @@ exports.confirmReset = function (req, res) {
 
 exports.changePassword = function (req, res) {
   if (req.body._id === undefined) {
-  	/*var user_ = getUserFromUsername(req.body.username, res);
-  	req.body._id = user_._id;
-	console.log(req.body._id);*/
 	return res.status(400).json({message: 'Invalid password reset request.'});
   }
 
@@ -357,6 +354,7 @@ exports.changePassword = function (req, res) {
         theUser.tokenExpires = moment().subtract(1, 'days').format();
         theUser.resetToken = "";
         theUser.changedPassword = true;
+        theUser.lastModified = new Date();
 
         theUser.save(function (err) {
 
@@ -379,7 +377,6 @@ exports.changePassword = function (req, res) {
 
       }
       else {
-        console.log("invalid password");
         return res.status(404).send({message: 'Invalid Password'});
       }
     });
@@ -425,7 +422,6 @@ exports.signIn = function (req, res) {
         return res.status(401).send({message: 'Wrong username and/or password.'});
       }
       res.header('changed_password', user.changedPassword);
-      // console.log(req.body.admin.toString());
       res.send({token: createJWT(user), role: user.role});
 
     });

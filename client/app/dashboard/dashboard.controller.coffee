@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'DashboardCtrl', ($scope, $rootScope, Auth, Utils, Setting, $state, Poll) ->
+.controller 'DashboardCtrl', ($scope, $rootScope, Auth, Utils, $state, Poll) ->
 
   Auth.me (user) ->
     if user.role isnt "member"
@@ -28,13 +28,13 @@ angular.module 'elektorApp'
 #        if $scope.open p then 
         $state.go "ballots", id: p._id
 
-      Setting.memberStats {}, (d) ->
+###      Setting.memberStats {}, (d) ->
         $scope.verified = _.find d[0], (i) -> i._id is 1
         $scope.unVerified = _.find d[0], (i) -> i._id is 0
 
         $scope.total = $scope.verified.count + $scope.unVerified.count
 
-        $scope.accredited = _.find d[1], (i) -> i._id
+        $scope.accredited = _.find d[1], (i) -> i._id###
 
 ###      Auth.me (user) ->
         $scope.user = user
