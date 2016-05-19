@@ -2,10 +2,16 @@
 
 <script type="text/ng-template" id="bioModalContent.html">
     <div class="modal-header">
-        <h3 class="modal-title">Candidates Profile</h3>
+        <h3 class="modal-title" ng-bind="bio._member.firstName||bio._member.othername + ' ' + bio._member.surname"></h3>
     </div>
     <div class="modal-body">
-        <p>{{ bio }}</p>
+        <div class="row">
+            <img src="{{ bio.secure_url }}" class="img-rounded pull-sm-left col-md-4" />
+            <div class="caption col-md-7 pull-right">
+                <p>{{ bio.bio }}</p>
+            </div>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button class="btn btn-warning" type="button" ng-click="cancel()">Okay</button>
@@ -79,16 +85,28 @@
                                 </div>
                                 <div class="panel-body ">
                                     <p>{{position.description}}</p>
-                                    <div style="margin-left: 15px; margin-right: 15px;" class="row well well-sm"
+                                    <div style="margin-left: 15px; margin-right: 15px;" class="ballot-panel show-grid row well well-sm"
+                                         ng-class="{'selected-div': selected[position._id][candidate._id]}"
                                          ng-repeat="candidate in position.candidates track by $index">
-                                        <div ng-click="setChoice(position._id, candidate)" class="col-xs-12 col-md-8">
-                                            <img src="{{candidate.secure_url}}" class="img-circle pull-left" width="60px" height="60px">
-                                            <a href="#" class="text-bold h4"
-                                               ng-bind="candidate._member.firstName||candidate._member.othername + ' ' + candidate._member.surname"></a>
+                                        <div class="col-md-1" style="padding-top:20px;">
+                                            <input  type="radio" ng-click="setChoice(position._id, candidate)"
+                                                    ng-model="ballot[position._id]" ng-value="candidate" />
                                         </div>
-                                        <div class="col-md-4">
-                                            <button href="#" class="pull-left btn btn-sm btn-primary " ng-click="open(candidate.bio)" role="button">View Profile</button>
-                                            <button class="pull-right btn btn-sm btn-success" type="button" ng-click="setChoice(position._id, candidate)">VOTE</button>
+                                        <div class="col-md-2">
+                                            <img src="{{candidate.secure_url}}" class="img-circle pull-left" width="60px" height="60px">
+                                        </div>
+                                        <div ng-click="setChoice(position._id, candidate)" class="col-md-6 center-block">
+                                            <div>
+                                                <a href="#" class="text-bold h4 text-center" style="line-height: 3.5em;"
+                                                   ng-bind="candidate._member.firstName||candidate._member.othername + ' ' + candidate._member.surname"></a>
+                                                <div class="printed pull-right" style="height: 50px;width: 50px;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 center-block">
+                                            <button ng-class="{disabled: selected[position._id][candidate._id]}" class="pull-right btn btn-sm btn-success btn-block" type="button" ng-click="setChoice(position._id, candidate)">VOTE
+                                            </button>
+                                            <button href="#" class="pull-left btn btn-sm btn-primary btn-block" ng-click="open(candidate)" role="button">View
+                                                Profile</button>
                                         </div>
 <!--
                                         <div class="panel panel-green ballot-panel"

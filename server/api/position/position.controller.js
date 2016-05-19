@@ -48,7 +48,12 @@ exports.ballot = function(req, res) {
     var poll = resp[0],
         user = resp[1];
 
-    if (user._member._branch == poll._branch || !poll.national) {
+    var _usr = new String(user._member._branch);
+    var _pol = new String(poll._branch);
+    _usr = _usr.toLocaleLowerCase(_usr);
+    _pol = _pol.toLocaleLowerCase(_pol);
+
+    if (_usr.toString() === _pol.toString() || poll.national) {
       Position.find(req.query).select('-candidates.photo').populate('candidates._member').exec(function (err, positions) {
         if(err) { return handleError(res, err); }
         return res.json(200, positions);

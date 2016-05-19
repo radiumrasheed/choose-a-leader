@@ -67,7 +67,6 @@ angular.module 'elektorApp'
       filled = true
       _.each keys, (k) ->
         if typeof $scope.ballot[k] is "object" then filled = false
-      console.info filled
       return filled
 
     $scope.showReceipt = ->
@@ -95,7 +94,7 @@ angular.module 'elektorApp'
         animation: $scope.animationsEnabled
         templateUrl: 'bioModalContent.html'
         controller: 'ModalInstanceCtrl'
-        size: ''
+        size: 'lg'
         resolve: bio: ->
           $scope.bio
           $scope.bio = bio
