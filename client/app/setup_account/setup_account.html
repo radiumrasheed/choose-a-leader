@@ -6,22 +6,48 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center" style="margin-top: 10px; margin-bottom: 10px">
-                    <h2>
+                  <h2><span class="text-uppercase text-white text-bold">Accreditation</span></h2>
+                    <h5>
                         <span class="text-uppercase text-white text-bold">Welcome to the NBA Election Portal</span>
-                    </h2>
-                    <div class="md">
-                        <div class="breadcrumb flat">
-                            <a class="active" href="#">Confirm Phone Number</a>
-                            <a ng-class="{active: showNext || showLast}" href="#">Change Password</a>
-                            <a ng-class="{active: showLast}" href="#">Get Voting Code</a>
-                        </div>
-                    </div>
+                    </h5>
+
+
                 </div>
             </div>
+
+        </div>
+
+    </div>
+  <div class="row text-center">
+    <h6>Please go through theses 3 steps for accreditation</h6>
+    <div calss="pearls pearls-lg row">
+        <div style="margin-top: 20px;">
+
+          <div class="pearl col-xs-4" ng-class="{current: showNext==false ||showLast==false, done:showNext==true&&showLast==false}">
+            <div class="pearl-icon"><i class="fa fa-user" aria-hidden="true"></i></div>
+            <!--<span class="pearl-number">1</span>-->
+            <span class="pearl-title">Confirm Phone Number</span>
+          </div>
+
+          <div class="pearl col-xs-4" ng-class="{disabled: showNext==false && showLast==false,current:showNext==true && showLast==false,done:showNext==true && showLast==true}">
+            <div class="pearl-icon"><i class="fa fa-key" aria-hidden="true"></i></div>
+            <!--<span class="pearl-number">2</span>-->
+            <span class="pearl-title">Change Password</span>
+          </div>
+
+          <div class="pearl  col-xs-4" ng-class="{disabled: showNext== true || showLast==false,current:showNext==true && showLast==true}">
+            <div class="pearl-icon"><i class="fa fa-check" aria-hidden="true"></i></div>
+            <!--<span class="pearl-number">3</span>-->
+            <span class="pearl-title">Get Voting Code</span>
+          </div>
+          <!--<a class="active" href="#">Confirm Phone Number</a>-->
+          <!--<a ng-class="{active: showNext || showLast}" href="#">Change Password</a>-->
+          <!--<a ng-class="{active: showLast}" href="#">Get Voting Code</a>-->
         </div>
     </div>
-    <div class="row">
 
+  </div>
+    <div class="row">
       <div class="center-form panel panel-green" ng-hide="showNext || showLast">
             <div class="panel-heading">
                 <div class="panel-title"><i class="fa fa-unlock"></i>
