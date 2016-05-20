@@ -370,7 +370,7 @@ exports.changePassword = function (req, res) {
               return res.status(200).json({message: "Password Changed Successfully!. Voting Code sent!"});
             });
           } else {
-            return res.status(200).json({message: "Password Changed Successfully!. Voting code not sent"});
+            return res.status(200).json({message: "Password Changed Successfully!"});
           }
           // return res.status(200).json({message: "Password Changed Successfully!."});
         });
