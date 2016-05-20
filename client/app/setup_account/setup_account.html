@@ -38,11 +38,8 @@
           <div class="pearl  col-xs-4" ng-class="{disabled: showNext== true || showLast==false,current:showNext==true && showLast==true}">
             <div class="pearl-icon"><i class="fa fa-check" aria-hidden="true"></i></div>
             <!--<span class="pearl-number">3</span>-->
-            <span class="pearl-title">Get Voting Code</span>
+            <span class="pearl-title">Get Verification Code</span>
           </div>
-          <!--<a class="active" href="#">Confirm Phone Number</a>-->
-          <!--<a ng-class="{active: showNext || showLast}" href="#">Change Password</a>-->
-          <!--<a ng-class="{active: showLast}" href="#">Get Voting Code</a>-->
         </div>
     </div>
 
@@ -221,20 +218,20 @@
       <div class="center-form panel panel-green" ng-show="showLast">
           <div class="panel-heading">
               <div class="panel-title">
-                  Confirm Voting Code
+                  Confirm Verification Code
               </div>
           </div>
           <div class="panel-body">
 
               <form name="accessForm" class="form-horizontal">
 
-                  <p class="alert alert-info">Enter the Voting Code that was sent to your phone number. If you didn't get the SMS, please <a ng-click="resendCode()"                                                                     ng-disabled="resendingCode" href="#" class="text-info">Click
+                  <p class="alert alert-info">Enter the Verification Code that was sent to your phone number. If you didn't get the SMS, please <a ng-click="resendCode()"                                                                     ng-disabled="resendingCode" href="#" class="text-info">Click
                           Here</a> to have it resent to you. </p>
 
                   <div class="form-group">
                       <div class="col-sm-6 col-sm-offset-3">
-                          <label class="control-label">Voting Code <span class="required">*</span> </label><br><br>
-                          <input type="text" maxlength="8" placeholder="Enter Voting Code"
+                          <label class="control-label">Verification Code <span class="required">*</span> </label><br><br>
+                          <input type="text" maxlength="8" placeholder="Enter Verification Code"
                                  class="form-control input-lg"
                                  ng-model="accessCode" required>
                       </div>

@@ -19,20 +19,7 @@ var message = {
   "fromname": 'NBA Elections 2016',
   "to": [],
   'replyto' : 'support@nba-agc.org'
-/*  "headers": {
-    "Reply-To": 'support@nba-agc.org'
-  },
-  "important": true,
-  "track_opens": true,
-  "track_clicks": true,
-  "view_content_link": true,
-  "tags": [
-    'e-voting'
-  ],
-  "subaccount": 'nba-agc',
-  "metadata": {
-    "website": 'www.nba-agc.org'
-  }*/
+
 };
 
 var sendMessage = function(message, callback) {
@@ -43,7 +30,8 @@ var sendMessage = function(message, callback) {
 
 exports.sendDefaultPassword = function(phone, email, password, sc_number, next) {
   var __message = 'Your username is: ' + sc_number + ' and your default password is: '+ password + '. Please change' +
-    ' it to get your voting code.';
+    ' it to get your Verification Code.';
+	var html_message = '<div style="margin:0; padding:0; font-family:Segoe UI,Segoe UI,Arial,Sans-Serif;"> <div style="margin:0; padding:0;"> <div style="max-width:600px; margin: 10px auto 0; background-color: #004600;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px"> <tbody> <tr> <td colspan="3" height="15"></td> </tr> <tr> <td width="20"></td> <td style="text-align: center;"> <a href="http://elektor.herokuapp.cam"> <img src="https://elektor.herokuapp.com/assets/images/51bcebe4.logo.png" > </a> </td> <td colspan="3"> <h3 align="center" valign="top" style="line-height:41px;font-size: 28px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: #FFFFFF; text-align:center; margin: 10px auto 0;"> NBA <strong> e-Voting Platform </strong> </h3> </td> </tr> <tr> <td colspan="3" height="15"></td> </tr> </tbody> </table> </div> <div style="max-width:600px; margin:0 auto; border-left: 1px solid #CCC; border-right: 1px solid #CCC; border-bottom: 1px solid #CCC; padding-bottom: 20px;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px;"> <tbody> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:36px;font-size:23px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: green;padding-right:15px;padding-left:0px"> </td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:19px;font-size:15px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;text-align: justify;color:#000000;padding-right:10px"> ' + __message + ' </td> </tr> <tr> <td height="50"></td> </tr> <tr> <td height="50"></td> </tr> <tr> <td height="30"></td> </tr> <tr> <td align="left" valign="top" style="line-height:19px;font-size:15px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;color:#000000;padding-right:10px">For support and enquiries, please call any of the following - Ayodeji Oni - <b>0803 345 2825</b>; Oti Edah, <b>0806 590 1348</b>. </td> </tr> <tr> <td height="50" style="border-bottom:1px solid #CCC;"></td> </tr> <tr> <td align="center" valign="top" style="padding-top:10px"> <table> <tbody> <tr> <td width="30%"><img style="max-width:100%" src="http://lawpavilionplus.com/img/logo.png"></td> <td style="line-height:19px;font-size:12px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;color:#4b4b4b;padding-right:10px; text-align:center;"><span style="color: #00CC39; font-weight:bold;">For Enquiries and Conference Information </span> Send emails to: support@nba-agc.org and registration@nba-agc.org</td> </tr> </tbody> </table> </td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> </tbody> </table> </div> </div> </div>';
 
   async.parallel([
     function (cb) {
@@ -63,8 +51,8 @@ exports.sendDefaultPassword = function(phone, email, password, sc_number, next) 
     function (cb) {
       if (email!=undefined && email!=null) {
         var newMessage = message;
-        newMessage.html = __message;
-        newMessage.subject = 'Your NBA Elektor Password!';
+        newMessage.html = html_message;
+        newMessage.subject = 'Your 2016 NBA Elector Password!';
         newMessage.to.push(email);
 
         sendMessage(newMessage, function(e){
@@ -82,8 +70,8 @@ exports.sendDefaultPassword = function(phone, email, password, sc_number, next) 
 };
 
 exports.sendVerificationSMS = function(phone, email, accessCode, next) {
-  var __message = 'Your voting code is: '+ accessCode + '. DO NOT DELETE THIS SMS as You WILL NEED THIS CODE TO CAST' +
-    ' YOUR VOTE';
+  var __message = 'Your Verification Code is: '+ accessCode + '. PLEASE KEEP THIS SMS as You WILL NEED THIS CODE INCASE OF FURTHER VERIFICATION.';
+	var html_message = '<div style="margin:0; padding:0; font-family:Segoe UI,Segoe UI,Arial,Sans-Serif;"> <div style="margin:0; padding:0;"> <div style="max-width:600px; margin: 10px auto 0; background-color: #004600;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px"> <tbody> <tr> <td colspan="3" height="15"></td> </tr> <tr> <td width="20"></td> <td style="text-align: center;"> <a href="http://elektor.herokuapp.cam"> <img src="https://elektor.herokuapp.com/assets/images/51bcebe4.logo.png" > </a> </td> <td colspan="3"> <h3 align="center" valign="top" style="line-height:41px;font-size: 28px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: #FFFFFF; text-align:center; margin: 10px auto 0;"> NBA <strong> e-Voting Platform </strong> </h3> </td> </tr> <tr> <td colspan="3" height="15"></td> </tr> </tbody> </table> </div> <div style="max-width:600px; margin:0 auto; border-left: 1px solid #CCC; border-right: 1px solid #CCC; border-bottom: 1px solid #CCC; padding-bottom: 20px;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px;"> <tbody> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:36px;font-size:23px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: green;padding-right:15px;padding-left:0px"> </td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:19px;font-size:15px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;text-align: justify;color:#000000;padding-right:10px"> ' + __message + ' </td> </tr> <tr> <td height="50"></td> </tr> <tr> <td height="50"></td> </tr> <tr> <td height="30"></td> </tr> <tr> <td align="left" valign="top" style="line-height:19px;font-size:15px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;color:#000000;padding-right:10px">For support and enquiries, please call any of the following - Ayodeji Oni - <b>0803 345 2825</b>; Oti Edah, <b>0806 590 1348</b>. </td> </tr> <tr> <td height="50" style="border-bottom:1px solid #CCC;"></td> </tr> <tr> <td align="center" valign="top" style="padding-top:10px"> <table> <tbody> <tr> <td width="30%"><img style="max-width:100%" src="http://lawpavilionplus.com/img/logo.png"></td> <td style="line-height:19px;font-size:12px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;color:#4b4b4b;padding-right:10px; text-align:center;"><span style="color: #00CC39; font-weight:bold;">For Enquiries and Conference Information </span> Send emails to: support@nba-agc.org and registration@nba-agc.org</td> </tr> </tbody> </table> </td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> </tbody> </table> </div> </div> </div>';
 
 	async.parallel([
 		function (cb) {
@@ -100,8 +88,9 @@ exports.sendVerificationSMS = function(phone, email, accessCode, next) {
 		function (cb) {
 			if (email!=undefined && email!=null) {
 				var newMessage = message;
-				newMessage.html = __message;
-				newMessage.subject = 'Your NBA Elector Voting Code';
+
+				newMessage.html = html_message;
+				newMessage.subject = 'Your NBA Elector Verification Code';
 				newMessage.to.push(email);
 
 				sendMessage(newMessage, function(e){
@@ -113,13 +102,14 @@ exports.sendVerificationSMS = function(phone, email, accessCode, next) {
 			}
 		}
 	], function (err, results) {
-		console.log("Voting code sent as SMS and Email ", results);
+		console.log("Verification Code sent as SMS and Email ", results);
 		return next();
 	});
 };
 
 exports.sendConfirmationSMS = function(phone, email, next) {
   var __message = 'Congratulations, Your NBA elector accreditation is complete. You can now login to the portal.';
+	var html_message = '<div style="margin:0; padding:0; font-family:Segoe UI,Segoe UI,Arial,Sans-Serif;"> <div style="margin:0; padding:0;"> <div style="max-width:600px; margin: 10px auto 0; background-color: #004600;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px"> <tbody> <tr> <td colspan="3" height="15"></td> </tr> <tr> <td width="20"></td> <td style="text-align: center;"> <a href="http://elektor.herokuapp.cam"> <img src="https://elektor.herokuapp.com/assets/images/51bcebe4.logo.png" > </a> </td> <td colspan="3"> <h3 align="center" valign="top" style="line-height:41px;font-size: 28px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: #FFFFFF; text-align:center; margin: 10px auto 0;"> NBA <strong> e-Voting Platform </strong> </h3> </td> </tr> <tr> <td colspan="3" height="15"></td> </tr> </tbody> </table> </div> <div style="max-width:600px; margin:0 auto; border-left: 1px solid #CCC; border-right: 1px solid #CCC; border-bottom: 1px solid #CCC; padding-bottom: 20px;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px;"> <tbody> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:36px;font-size:23px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: green;padding-right:15px;padding-left:0px"> </td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:19px;font-size:15px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;text-align: justify;color:#000000;padding-right:10px"> ' + __message + ' </td> </tr> <tr> <td height="50"></td> </tr> <tr> <td height="50"></td> </tr> <tr> <td height="30"></td> </tr> <tr> <td align="left" valign="top" style="line-height:19px;font-size:15px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;color:#000000;padding-right:10px">For support and enquiries, please call any of the following - Ayodeji Oni - <b>0803 345 2825</b>; Oti Edah, <b>0806 590 1348</b>. </td> </tr> <tr> <td height="50" style="border-bottom:1px solid #CCC;"></td> </tr> <tr> <td align="center" valign="top" style="padding-top:10px"> <table> <tbody> <tr> <td width="30%"><img style="max-width:100%" src="http://lawpavilionplus.com/img/logo.png"></td> <td style="line-height:19px;font-size:12px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;color:#4b4b4b;padding-right:10px; text-align:center;"><span style="color: #00CC39; font-weight:bold;">For Enquiries and Conference Information </span> Send emails to: support@nba-agc.org and registration@nba-agc.org</td> </tr> </tbody> </table> </td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> </tbody> </table> </div> </div> </div>';
   var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
 
 	async.parallel([
@@ -136,7 +126,7 @@ exports.sendConfirmationSMS = function(phone, email, next) {
 		function (cb) {
 			if (email!=undefined && email!=null) {
 				var newMessage = message;
-				newMessage.html = __message;
+				newMessage.html = html_message;
 				newMessage.subject = 'Congratulations! You are now eligible to vote.';
 				newMessage.to.push(email);
 
@@ -157,6 +147,7 @@ exports.sendConfirmationSMS = function(phone, email, next) {
 exports.sendBallotReceiptSMS = function(phone, email, code, signature, next) {
   var __message = 'Your votes have been received. This is your Receipt Code: '+ code + ' for this Poll. You can check how you voted' +
     ' with this. Your vote signature is: ' + signature;
+	var html_message = '<div style="margin:0; padding:0; font-family:Segoe UI,Segoe UI,Arial,Sans-Serif;"> <div style="margin:0; padding:0;"> <div style="max-width:600px; margin: 10px auto 0; background-color: #004600;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px"> <tbody> <tr> <td colspan="3" height="15"></td> </tr> <tr> <td width="20"></td> <td style="text-align: center;"> <a href="http://elektor.herokuapp.cam"> <img src="https://elektor.herokuapp.com/assets/images/51bcebe4.logo.png" > </a> </td> <td colspan="3"> <h3 align="center" valign="top" style="line-height:41px;font-size: 28px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: #FFFFFF; text-align:center; margin: 10px auto 0;"> NBA <strong> e-Voting Platform </strong> </h3> </td> </tr> <tr> <td colspan="3" height="15"></td> </tr> </tbody> </table> </div> <div style="max-width:600px; margin:0 auto; border-left: 1px solid #CCC; border-right: 1px solid #CCC; border-bottom: 1px solid #CCC; padding-bottom: 20px;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px;"> <tbody> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:36px;font-size:23px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: green;padding-right:15px;padding-left:0px"> </td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:19px;font-size:15px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;text-align: justify;color:#000000;padding-right:10px"> ' + __message + ' </td> </tr> <tr> <td height="50"></td> </tr> <tr> <td height="50"></td> </tr> <tr> <td height="30"></td> </tr> <tr> <td align="left" valign="top" style="line-height:19px;font-size:15px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;color:#000000;padding-right:10px">For support and enquiries, please call any of the following - Ayodeji Oni - <b>0803 345 2825</b>; Oti Edah, <b>0806 590 1348</b>. </td> </tr> <tr> <td height="50" style="border-bottom:1px solid #CCC;"></td> </tr> <tr> <td align="center" valign="top" style="padding-top:10px"> <table> <tbody> <tr> <td width="30%"><img style="max-width:100%" src="http://lawpavilionplus.com/img/logo.png"></td> <td style="line-height:19px;font-size:12px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;color:#4b4b4b;padding-right:10px; text-align:center;"><span style="color: #00CC39; font-weight:bold;">For Enquiries and Conference Information </span> Send emails to: support@nba-agc.org and registration@nba-agc.org</td> </tr> </tbody> </table> </td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> </tbody> </table> </div> </div> </div>';
 
 	async.parallel([
 		function (cb) {
@@ -172,7 +163,7 @@ exports.sendBallotReceiptSMS = function(phone, email, code, signature, next) {
 		function (cb) {
 			if (email!=undefined && email!=null) {
 				var newMessage = message;
-				newMessage.html = __message;
+				newMessage.html = html_message;
 				newMessage.subject = 'Vote Successful Casted!';
 				newMessage.to.push(email);
 

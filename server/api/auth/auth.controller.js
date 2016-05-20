@@ -273,7 +273,7 @@ exports.confirm = function (req, res) {
       if (!member) { return res.send(404); }
       var oldConf = member.codeConfirmed;
       if (oldConf) {
-        return res.status(200).json({message: "Voting Code already Confirmed"});
+        return res.status(200).json({message: "Verification Code already Confirmed"});
       }
 
       if (member.accessCode == req.query.code) {
@@ -282,7 +282,7 @@ exports.confirm = function (req, res) {
           var phone = extractPhoneNumber(member.phone);
 
           mailer.sendConfirmationSMS(phone, member.email, function () {
-            return res.status(200).json({message: "Voting Code Confirmed"});
+            return res.status(200).json({message: "Verification Code Confirmed"});
           });
         });
       }
@@ -367,7 +367,7 @@ exports.changePassword = function (req, res) {
 
               mailer.sendVerificationSMS(phone, updatedM.email, updatedM.accessCode, function () {
               });
-              return res.status(200).json({message: "Password Changed Successfully!. Voting Code sent!"});
+              return res.status(200).json({message: "Password Changed Successfully!. Verification Code sent!"});
             });
           } else {
             return res.status(200).json({message: "Password Changed Successfully!"});
