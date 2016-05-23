@@ -229,7 +229,7 @@ exports.sendSetupLink = function(phone, email, _id, name, next) {
 
 exports.sendDetailLink = function(phone, email, _id, name, next) {
 	//TODO: replace with valid link
-	var link = '#';
+	var link = 'https://elektor.herokuapp.com/pre_setup/' + _id + '/';
 	var __message = 'Welcome to NBA Election Portal, Kindly visit the link below to confirm your details in order to start the accreditation process. ' + 'https://elector.nba-agc.org/details_request';
 
 	var _message = 'Dear ' + name + ', <br><br> Welcome to the NBA ELECTION PORTAL We are in the process of accrediting all eligible voters. Kindly click on the link below to confirm your details in order to start the accreditation process. <br> <b> <a href="' + link + '"> <p>http://elektor.herokuapp.com/details_request</p> </a> <span style="color: #ff0000;">(This is just a sample link, not yet active) </span> </b> <br> <br> Warm Regards, <br> <b>Ken Mozia, SAN </b> <br> (Chairman, NBA Elections 2016 Committee)';
