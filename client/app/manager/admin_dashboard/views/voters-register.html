@@ -46,6 +46,12 @@
                   <span ng-show="sortType == 'accessCode' && sortReverse" class="fa fa-caret-down"></span>
                   <span ng-show="sortType == 'accessCode' && !sortReverse" class="fa fa-caret-up"></span>
                 </a></th>
+                <th>
+                    SEND LINK
+                </th>
+                <th>
+                    REQUEST
+                </th>
             </tr>
             <tr ng-repeat="m in members | orderBy:sortType:sortReverse | filter:searchVotersRegister track by $index">
                 <td>{{(currentPage-1)*perPage+$index+1}}.</td>
@@ -53,6 +59,16 @@
                 <td>{{m.sc_number}}</td>
                 <td>{{m.phone}}</td>
                 <td>{{m.accessCode}}</td>
+                <td>
+                    <button class="btn btn-xs btn-block btn-purple" ng-click="sendLink(m)">
+                        <i class="fa fa-pencil-square "></i> Send
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-xs btn-block btn-primary" ng-click="detailLink(m)">
+                        <i class="fa fa-pencil-square "></i> Request
+                    </button>
+                </td>
             </tr>
         </table>
 

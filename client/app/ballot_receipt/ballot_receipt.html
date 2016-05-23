@@ -35,6 +35,7 @@
                                 </div>
 
                             </form>
+
                             <hr>
 
                             <div class="alert text-center alert-primary" ng-show="votes.length">
@@ -42,28 +43,22 @@
                                 <p class="text-white">{{votes[0]._poll.description}}</p>
                             </div>
 
-                            <table class="table table-striped table-hover" ng-show="votes.length">
+                            <table class="table table-striped table-bordered table-hover" ng-show="votes.length">
                                 <tr>
-                                    <th class="text-right">BALLOT RECEIPT CODE</th>
-                                    <td class="text-left">{{code}}</td>
+                                    <th class="text-right success">POSITION</th>
+                                    <th class="success">YOUR VOTE</th>
                                 </tr>
-                                <tr>
-                                    <th class="text-right">VOTE DATE</th>
-                                    <td class="text-left" title="{{votes[0].voteDate}}">{{ago(votes[0].voteDate)}}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-right">POSITION</th>
-                                    <th>YOUR VOTE</th>
-                                </tr>
-                                <tr><td colspan="2"></td></tr>
-                                <tr><td colspan="2"></td></tr>
                                 <tr ng-repeat="v in votes">
-                                    <th class="text-right">{{v._position.name}}</th>
-                                    <td
-                                            class="text-left text-uppercase">{{v.candidate.firstName||v.candidate.othername}}
+                                    <th class="text-right h5">{{v._position.name}}</th>
+                                    <td class="text-left text-uppercase h5">{{v.candidate.firstName||v.candidate.othername}}
                                         {{v.candidate.surname}}</td>
                                 </tr>
                             </table>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6 text-left">Ballot Receipt Code: {{code}}</div>
+                                <div class="col-md-6 text-right">Vote date: {{ago(votes[0].voteDate)}}</div>
+                            </div>
                         </div>
                         <div class="panel-footer">
                             <div class="text-right">

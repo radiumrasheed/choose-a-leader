@@ -5,3 +5,6 @@ angular.module 'elektorApp'
   Auth.me (user) ->
     if user.role isnt "member"
       $state.go "login"
+
+.controller 'AccreditationCtrl', ($scope, $auth, $window, toastr, Auth) ->
+  

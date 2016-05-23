@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-warning" type="button" ng-click="cancel()">Okay</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">Close</button>
     </div>
 </script>
 
@@ -23,7 +23,6 @@
 
     <div class="row">
         <div class="col-md-3" menu></div>
-
 
         <div class="col-md-9" ng-show="!showBallotPage">
 
@@ -94,7 +93,7 @@
                                 <div class="panel-heading">
                                     <div class="panel-title">
                                         <i class="fa fa-star"></i> {{position.name}}
-                                        <button ng-show="ballot[position._id]" class="btn btn-xs btn-warning pull-right"
+                                        <button ng-show="ballot[position._id]" class="btn btn-xs btn-danger pull-right"
                                                 ng-click="cancelChoice(position._id, candidate)">Cancel Selection
                                         </button>
                                     </div>
@@ -168,7 +167,7 @@
                                                 {{ballot[p._id]._member.surname}}
                                             </td>
                                         </tr>
-                                      <tr class="success ">
+                                      <tr class="info ">
                                         <td class="text-right"><label ng-click="backToBallot()" class="btn btn-danger"> Go Back</label></td>
                                         <td><label ng-click="setTableTrue()" class="btn btn-primary"> Proceed To Submit</label></td></tr>
                                     </table>

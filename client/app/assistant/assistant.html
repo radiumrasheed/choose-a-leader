@@ -1,3 +1,4 @@
+
 <div ng-include="'components/navbar/navbar.html'"></div>
 
 <div class="container dashboard">
@@ -5,6 +6,7 @@
         <div class="col-md-3" menu></div>
 
         <div class="col-md-9">
+
             <div class="row">
                 <div class="col-sm-12">
                     <div class="panel panel-green">
@@ -12,21 +14,206 @@
                             <div class="panel-title"><i class="fa fa-question"></i> HOW TO VOTE</div>
                         </div>
                         <div class="panel-body">
-                            <div class="alert alert-info" role="alert">
-                                <!--<h5 class="text-left text-uppercase">Platform Usage Information</h5>-->
-                                <h5 class="text-center text-uppercase">How to vote in 3 Steps</h5>
-                                <p class="text-left">   Go to Polls to see available polls.</p>
-                                <p class=" text-left">   Click on an open poll to see available positions.</p>
-                                <p class=" text-left">   Choose candidate and VOTE.</p>
+                            <!--Import Google Icon Font-->
+                            <link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+                            <!--Import Multi Step Indicator css-->
+                            <link href="../../assets/css/gsi-step-indicator.min.css" rel="stylesheet" />
+
+                            <!--Import  Step Form Wizard css-->
+                            <link href="../../assets/css/tsf-step-form-wizard.min.css" rel="stylesheet" />
+                            <!--Import  demo css-->
+                            <link href="../../assets/css/demo.min.css" rel="stylesheet" />
+                            <!--Font Awesome-->
+                            <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">-->
+                            <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+
+                            <!--Plugin for validation-->
+                            <link href="../../assets/plugin/parsley/css/parsley.css" rel="stylesheet" />
+                            <style>
+                                @media only screen and (max-width: 480px) and (min-width: 317px) {
+                                    .gsi-step-indicator li .number {
+                                        display: inline-block;
+                                        font-size: 24px;
+                                    }
+                                }
+                            </style>
+
+                            <div class="demo-settings hide" data-open="true">
+                                <div class="settings-icon">
+                                    <a href="#" class="btn-setting"><i class="fa fa-2x fa-cogs"></i></a>
+                                    <a href="#" class="btn-remove"><i class="fa fa-2x fa-times"></i></a>
+                                </div>
+                                <div class="settings-main">
+                                    <label>Step effect</label>
+                                    <select class="form-control" id="stepEffect">
+                                        <option value="basic" selected="selected">basic</option>
+                                        <option value="bounce">bounce</option>
+                                        <option value="slideRightLeft">slideRightLeft</option>
+                                        <option value="slideLeftRight">slideLeftRight</option>
+
+                                        <option value="flip">flip</option>
+                                        <option value="transformation">transformation</option>
+                                        <option value="slideDownUp">slideDownUp</option>
+                                        <option value="slideUpDown">slideUpDown</option>
+                                    </select>
+                                    <br />
+                                    <label for="stepTransition">
+                                        Step transition <input type="checkbox" id="stepTransition" name="stepTransition" value="11" checked />
+                                    </label>
+                                    <br />
+                                    <label for="showButtons">
+                                        Show buttons <input type="checkbox" id="showButtons" name="showButtons" value="111" checked />
+                                    </label>
+                                    <br />
+                                    <label for="showStepNum">
+                                        Show stepNum <input type="checkbox" id="showStepNum" name="showStepNum" value="123" checked />
+                                    </label>
+
+
+                                </div>
                             </div>
-                            <div class="alert alert-info" role="alert">
-                                <!--<h5 class="text-left text-uppercase">Platform Usage Information</h5>-->
-                                <h5 class="text-center text-uppercase">How to get Accreditated</h5>
-                                <p class="text-left"> Check email for accreditation link.</p>
-                                <p class=" text-left">   Confirm phone number to get one time password</p>
-                                <p class=" text-left">   Change password to get Verification code</p>
-                                <p class="text-left">   Login with Enrollment Number and changed password</p>
+                            <!-- BEGIN STEP FORM WIZARD -->
+                            <div class="tsf-wizard tsf-wizard-1">
+                                <!-- BEGIN NAV STEP-->
+                                <div class="tsf-nav-step">
+                                    <!-- BEGIN STEP INDICATOR-->
+                                    <ul class="gsi-step-indicator triangle gsi-style-1 gsi-transition">
+                                        <li class="current" data-target="step-1">
+                                            <a href="#0">
+                                                <span class="number">1</span>
+                                <span class="desc">
+                                    <label>Go to Polls</label>
+                                    <span>Go to Polls to see available polls.</span>
+                                </span>
+                                            </a>
+                                        </li>
+                                        <li data-target="step-2">
+                                            <a href="#0">
+                                                <span class="number">2</span>
+                                <span class="desc">
+                                    <label>Click on an open poll</label>
+                                    <span>Click on an open poll to see available positions.</span>
+                                </span>
+                                            </a>
+                                        </li>
+                                        <li data-target="step-3">
+                                            <a href="#0">
+                                <span class="number">
+                                    3
+                                </span>
+                                <span class="desc">
+                                    <label>Vote</label>
+                                    <span>Choose candidate and VOTE.</span>
+                                </span>
+                                            </a>
+                                        </li>
+                                        <!--
+                                        <li data-target="step-4">
+                                            <a href="#0">
+                                                <span class="number">
+                                                    4
+                                                </span>
+                                                <span class="desc">
+                                                    <label>Agreement</label>
+                                                    <span>Our site policy</span>
+                                                </span>
+                                            </a>
+                                        </li>-->
+                                    </ul>
+                                    <!-- END STEP INDICATOR--->
+                                </div>
+                                <!-- END NAV STEP-->
+                                <!-- BEGIN STEP CONTAINER -->
+
+                                <div class="tsf-container">
+                                    <!-- BEGIN CONTENT-->
+                                    <div class="tsf-content">
+                                        <!-- BEGIN STEP 1-->
+                                        <div class="tsf-step step-1 active">
+                                            <fieldset>
+                                                <legend>Click on Polls On the Left Hand Navigation Bar.</legend>
+
+                                                <div class="row">
+                                                    <!-- BEGIN STEP CONTENT-->
+                                                    <form class="tsf-step-content">
+                                                        <div class="col-lg-9">
+
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            <center>
+                                                                <img src="../../assets/images/gotopolls.png" style="width: 70%; height: 70%" alt="" title="Click on Polls On the Left Hand Navigation Bar." />
+                                                            </center>
+                                                        </div>
+                                                    </form>
+                                                    <!-- END STEP CONTENT-->
+                                                </div>
+
+                                            </fieldset>
+                                        </div>
+                                        <!-- END STEP 1-->
+                                        <!-- BEGIN STEP 2-->
+                                        <div class=" tsf-step step-2 ">
+                                            <fieldset>
+                                                <legend>Click on an open poll to see available positions.</legend>
+                                                <!-- BEGIN STEP CONTENT-->
+                                                <form class="tsf-step-content">
+                                                    <center>
+                                                        <img src="../../assets/images/clickonpoll-1.png" style="width: 70%; height: 70%" alt="" title="Click on an open poll to see available positions" />
+                                                    </center>
+
+                                                </form>
+                                                <!-- END STEP CONTENT-->
+                                            </fieldset>
+                                        </div>
+                                        <!-- END STEP 2-->
+                                        <!-- BEGIN STEP 3-->
+                                        <div class=" tsf-step step-3 ">
+                                            <fieldset>
+                                                <legend>Choose candidate and VOTE.</legend>
+                                                <!-- BEGIN STEP CONTENT-->
+                                                <form class="tsf-step-content">
+                                                    <center>
+                                                        <img src="../../assets/images/vote-1.png" style="width: 70%; height: 70%" alt="" title="Choose Candidate And Vote." />
+                                                    </center>
+
+                                                </form>
+                                                <!-- END STEP CONTENT-->
+
+                                            </fieldset>
+                                        </div>
+                                        <!-- END STEP 3-->
+                                        <!-- BEGIN STEP 4-->
+
+                                        <!-- END STEP 4-->
+
+                                    </div>
+                                    <!-- END CONTENT-->
+                                    <!-- BEGIN CONTROLS-->
+                                    <div class="tsf-controls ">
+                                        <!-- BEGIN PREV BUTTTON-->
+                                        <button type="button" data-type="prev" class="pull-left btn btn-left tsf-wizard-btn">
+                                            <i class="fa fa-chevron-left"></i> PREV
+                                        </button>
+                                        <!-- END PREV BUTTTON-->
+                                        <!-- BEGIN NEXT BUTTTON-->
+                                        <button type="button" data-type="next" class="pull-right btn btn-right tsf-wizard-btn">
+                                            NEXT <i class="fa fa-chevron-right"></i>
+                                        </button>
+                                        <!-- END NEXT BUTTTON-->
+                                        <!-- BEGIN FINISH BUTTTON-->
+                                        <button type="button" data-type="finish" class="pull-right btn btn-right tsf-wizard-btn">
+                                            FINISH
+                                        </button>
+                                        <!-- END FINISH BUTTTON-->
+                                    </div>
+                                    <!-- END CONTROLS-->
+                                </div>
+                                <!-- END STEP CONTAINER -->
                             </div>
+                            <!-- END STEP FORM WIZARD -->
+                            <div class="clearfix"></div>
+
                         </div>
                         <div class="panel-footer">
                             <div class="text-right">
@@ -39,3 +226,57 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(function () {
+        pageLoadScript();
+    });
+    function pageLoadScript() {
+
+        _stepEffect = $('#stepEffect').val();
+        _style = 'style2';
+        _stepTransition = $('#stepTransition').is(':checked');
+        _showButtons = $('#showButtons').is(':checked');
+        _showStepNum = $('#showStepNum').is(':checked');
+
+
+
+        $('.tsf-wizard-1').tsfWizard({
+            stepEffect: _stepEffect,
+            stepStyle: _style,
+            navPosition: 'top',
+            stepTransition: _stepTransition,
+            showButtons: _showButtons,
+            showStepNum: _showStepNum,
+            height: 'auto'
+        });
+
+        $('.tsf-wizard-2').tsfWizard({
+            stepEffect: 'slideDownUp',
+            stepStyle: _style,
+            navPosition: 'right',
+            stepTransition: _stepTransition,
+            showButtons: _showButtons,
+            showStepNum: _showStepNum,
+            height: '300px'
+        });
+        $('.tsf-wizard-3').tsfWizard({
+            stepEffect: _stepEffect,
+            stepStyle: _style,
+            navPosition: 'left',
+            stepTransition: _stepTransition,
+            showButtons: _showButtons,
+            showStepNum: _showStepNum,
+            height: '300px'
+        });
+        $('.tsf-wizard-4').tsfWizard({
+            stepEffect: _stepEffect,
+            stepStyle: _style,
+            navPosition: 'bottom',
+            stepTransition: _stepTransition,
+            showButtons: _showButtons,
+            showStepNum: _showStepNum,
+            height: '300px'
+        });
+    }
+</script>

@@ -81,9 +81,9 @@ exports.createUser = function(req, res) {
 
   var sendPassword = function (member, user) {
     mailer.sendDefaultPassword(req.body.phone, member.email, user.clear_password, member.sc_number, function () {
-      return res.json({
+      return res.status(200).json({
         message: "Your password has been sent to the phone number and email address we have on file."
-      });
+      }, user);
     });
   }
 
@@ -159,6 +159,40 @@ exports.createUser = function(req, res) {
       });
     }
   });
+};
+
+//Gets a user and sends setup link as sms and mail
+exports.createLink = function(req, res) {
+	var sendLink = function (member) {
+		mailer.sendSetupLink(member.phone, member.email, member._id, member.surname + ' ' + member.firstName, function() {
+			return res.status(200).json({
+				message: "Setup link sent to member"
+			}, member);
+		});
+	}
+
+	Member.findById(req.query.id, function (err, member) {
+		if (err) { return handleError(res, err); }
+		if(!member) { return res.send(404); }
+		sendLink(member);
+	});
+};
+
+//Gets a user and sends detail request link as sms and mail
+exports.detailLink = function(req, res) {
+    var sendDetailsLink = function (member) {
+        mailer.sendDetailLink(member.phone, member.email, member._id, member.firstName + ' ' + member.surname, function() {
+            return res.json({
+                message: "Details request link sent to member"
+            }, member);
+        });
+    }
+
+    Member.findById(req.query.id, function (err, member) {
+        if (err) { return handleError(res, err); }
+        if(!member) { return res.send(404); }
+        sendDetailsLink(member);
+    });
 };
 
 function handleError(res, err) {

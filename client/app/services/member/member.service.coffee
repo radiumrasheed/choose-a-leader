@@ -15,6 +15,12 @@ angular.module 'elektorApp'
     retrievePassword:
       method:'POST'
       url: '/api/members/requestPassword'
+    createLink:
+      method: "GET"
+      url: '/api/members/createLink'
+    detailLink:
+      method: 'GET'
+      url: '/api/members/detailLink'
 
 
 .directive 'memberSelectPlugin', ( Member ) ->

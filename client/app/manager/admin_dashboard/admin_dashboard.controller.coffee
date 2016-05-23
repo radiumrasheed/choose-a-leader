@@ -257,7 +257,17 @@ angular.module 'elektorApp'
   $scope.pageChanged = ->
     $localStorage.votersRegisterPerPage = $scope.perPage
     $scope.load $scope.currentPage
-
+    
+  $scope.sendLink = (member) ->
+    if confirm "Are you sure"
+      Member.createLink id : member._id, (response) ->
+         alert "setup link sent to " + response.email
+        
+  $scope.detailLink = (member) ->
+    if confirm "Are you sure?"
+      Member.detailLink id : member._id, (member) ->
+        alert "details request link sent to " + member.email
+        
 .controller 'BURCtrl', ($scope, BranchRequest, toastr, $modal, Member) ->
   $scope.perPage = 10
   $scope.currentPage = 1
