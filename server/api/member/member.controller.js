@@ -83,7 +83,7 @@ exports.createUser = function(req, res) {
     mailer.sendDefaultPassword(req.body.phone, member.email, user.clear_password, member.sc_number, function () {
       return res.status(200).json({
         message: "Your password has been sent to the phone number and email address we have on file."
-      }, user);
+      });
     });
   }
 
@@ -165,9 +165,7 @@ exports.createUser = function(req, res) {
 exports.createLink = function(req, res) {
 	var sendLink = function (member) {
 		mailer.sendSetupLink(member.phone, member.email, member._id, member.surname + ' ' + member.firstName, function() {
-			return res.status(200).json({
-				message: "Setup link sent to member"
-			}, member);
+			return res.status(200).json(member);
 		});
 	}
 
@@ -182,9 +180,7 @@ exports.createLink = function(req, res) {
 exports.detailLink = function(req, res) {
     var sendDetailsLink = function (member) {
         mailer.sendDetailLink(member.phone, member.email, member._id, member.firstName + ' ' + member.surname, function() {
-            return res.json({
-                message: "Details request link sent to member"
-            }, member);
+            return res.status(200).json(member);
         });
     }
 
@@ -194,6 +190,7 @@ exports.detailLink = function(req, res) {
         sendDetailsLink(member);
     });
 };
+
 
 function handleError(res, err) {
     return res.send(500, err);
