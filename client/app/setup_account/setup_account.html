@@ -23,19 +23,19 @@
     <div calss="pearls pearls-lg row">
         <div style="margin-top: 20px;">
 
-          <div class="pearl col-xs-4" ng-class="{current: showNext==false ||showLast==false, done:showNext==true&&showLast==false}">
+          <div class="pearl col-xs-4" ng-class="{current: showNext==false ||showLast==false, done:showNext==true}">
             <div class="pearl-icon"><i class="fa fa-user" aria-hidden="true"></i></div>
             <!--<span class="pearl-number">1</span>-->
             <span class="pearl-title">Confirm Phone Number</span>
           </div>
 
-          <div class="pearl col-xs-4" ng-class="{disabled: showNext==false && showLast==false,current:showNext==true && showLast==false,done:showNext==true && showLast==true}">
+          <div class="pearl col-xs-4" ng-class="{disabled: showNext==false && showLast==false,current:showNext==true && showLast==false,done:showLast==true}">
             <div class="pearl-icon"><i class="fa fa-key" aria-hidden="true"></i></div>
             <!--<span class="pearl-number">2</span>-->
             <span class="pearl-title">Change Password</span>
           </div>
 
-          <div class="pearl  col-xs-4" ng-class="{disabled: showNext== true || showLast==false,current:showNext==true && showLast==true}">
+          <div class="pearl  col-xs-4" ng-class="{current:showLast==true}">
             <div class="pearl-icon"><i class="fa fa-check" aria-hidden="true"></i></div>
             <!--<span class="pearl-number">3</span>-->
             <span class="pearl-title">Get Verification Code</span>
@@ -215,7 +215,7 @@
       </div>
 
 
-      <div class="center-form panel panel-green" ng-show="showLast">
+      <div class="center-form panel panel-green" ng-show="showLast && confirmation == false">
           <div class="panel-heading">
               <div class="panel-title">
                   Confirm Verification Code
@@ -255,5 +255,23 @@
           </div>
       </div>
 
-    </div>
+<div class="container" ng-show="confirmation && submitting">
+        <div style="background: rgba(8, 84, 8, 0.73); margin-bottom: 10px">
+          <div class="row">
+            <div class="col-md-12 text-center" style="margin-top: 10px; margin-bottom: 10px">
+              <h2><span class="text-uppercase text-white text-bold">{{confirmationMessage}}</span></h2>
+              <h5>
+                <span class="text-uppercase text-white text-bold">This Page will Redirect to the Login in 5 seconds</span>
+              </h5>
+              <h3>OR</h3>
+              <h4>Click here to go to <label ng-click="dashboard()" class="text-white"><strong>Login</strong></label></h4>
+
+
+            </div>
+          </div>
+</div>
+        </div>
+
+      </div>
+
 </div>

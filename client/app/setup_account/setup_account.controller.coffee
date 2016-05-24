@@ -1,9 +1,10 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'SetupAccountCtrl', ($scope, Auth, toastr, Utils, $state, $stateParams, Member, $auth) ->
+.controller 'SetupAccountCtrl', ($scope,$timeout, Auth, toastr, Utils, $state, $stateParams, Member, $auth) ->
   $auth.logout()
   $scope.showLast = false
+  $scope.confirmation = false
   $scope.master = {}
   $scope.reset = ->
     Member.me  _member: $stateParams.id, (member) ->
@@ -44,7 +45,7 @@ angular.module 'elektorApp'
     $scope.showNext = true
 
   $scope.step3 = ->
-    $scope.showNext = false
+    $scope.showNext = true
     $scope.showLast = true
 
   $scope.changePassword = (theForm) ->
@@ -81,9 +82,16 @@ angular.module 'elektorApp'
   $scope.compareCode = (form) ->
     if form.$valid
       $scope.submitting = true
+      $scope.confirmation = true
       Auth.confirmCode id: $scope.master._id, code: $scope.accessCode, $scope.master, (response) ->
         toastr.success response.message
-        $state.go "dashboard"
+
+        $scope.confirmationMessage =response.message
+        $timeout(dashboard,5000)
       , (e) ->
         $scope.submitting = false
         toastr.error e.data.message
+
+
+  dashboard = ->
+    $state.go "dashboard"
