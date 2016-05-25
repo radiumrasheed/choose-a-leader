@@ -12,7 +12,7 @@
                 <div class="panel panel-default panel-green">
                   <div class="panel-heading">
                     <h1 class="panel-title text-uppercase">
-                      <i class="fa fa-dashboard"> </i>  Welcome Back, {{$user._member.title + " " + $user._member.firstName + " " + $user._member.surname}}
+                      <i class="fa fa-dashboard"> </i>  Welcome, {{$user._member.title + " " + $user._member.firstName + " " + $user._member.surname}}
                     </h1>
                   </div>
                   <div class="panel-body">
@@ -24,6 +24,38 @@
                           <p class="text-left">   Go to Polls to see available polls.</p>
                           <p class=" text-left">   Click on an open poll to see available positions.</p>
                           <p class=" text-left">   Choose candidate and VOTE.</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row text-center">
+                      <div class="col-md-10 col-md-offset-1">
+                        <div class="panel panel-success">
+                          <div class="panel-heading">
+                            <h2 class="panel-title text-uppercase">
+                              <i class="fa fa-user"></i>User's Profile
+                            </h2>
+                          </div>
+                          <div class="panel-body">
+                            <table class="col-md-10 col-xs-offset-1 text-center">
+                              <tr class="list-group-item">
+                                <td style="width: 50%" class="pull-left">Name</td>
+                                <td>{{$user._member.title + " " + $user._member.firstName + " " + $user._member.surname}}</td>
+                              </tr>
+                              <tr class=" list-group-item">
+                                <td style="width: 50%" class="pull-left">Enrollment Number</td>
+                                <td>{{$user._member.sc_number}}</td>
+                              </tr>
+                              <tr class=" list-group-item">
+                                <td style="width: 50%" class="pull-left">My Branch</td>
+                                <td>{{$user._member.branch}}</td>
+                              </tr>
+                              <tr class=" list-group-item">
+                                <td style="width: 50%" class="pull-left">Email Address</td>
+                                <td>{{$user._member.email}}</td>
+                              </tr>
+                            </table>
+
+                          </div>
                         </div>
                       </div>
                     </div>
