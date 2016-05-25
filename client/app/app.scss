@@ -89,6 +89,12 @@ em {
   text-decoration: underline;
 }
 
+@media (min-width: 1200px) {
+  .container {
+    width: 1270px;
+  } }
+
+
 .alphabet {
   cursor: pointer;
   font-size: 22px;

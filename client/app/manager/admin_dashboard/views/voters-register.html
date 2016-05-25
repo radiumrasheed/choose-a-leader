@@ -5,9 +5,9 @@
         </div>
 
     </div>
-    <select class="pull-right" ng-model="perPage" ng-options="item for item in pageSizes"
+        <select class="pull-right" ng-model="perPage" ng-options="item for item in pageSizes"
             ng-change="pageChanged()"></select>
-    <div class="panel-body no-padding">
+    <div class="panel-body ">
 
         <div class="text-center">
             <pagination first-text="First" last-text="Last" next-text="Next"
@@ -32,7 +32,7 @@
                   <span ng-show="sortType == 'surname' && !sortReverse" class="fa fa-caret-up"></span>
                 </a></th>
                 <th><a href="#" ng-click="sortType = 'sc_number' ; sortReverse = !sortReverse">
-                  ENROLLMENT NO.
+                  ENROLL NO.
                   <span ng-show="sortType == 'sc_number' && sortReverse" class="fa fa-caret-down"></span>
                   <span ng-show="sortType == 'sc_number' && !sortReverse" class="fa fa-caret-up"></span>
                 </a></th>

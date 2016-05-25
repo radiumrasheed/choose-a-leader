@@ -2,15 +2,50 @@
 
 
 angular.module 'elektorApp'
-.controller 'AdminDashboardCtrl', ($scope, $rootScope, Auth, $state) ->
-  Auth.me (response) ->
-    if response.role isnt "admin"
-      $state.go "dashboard"
-    else
+.controller 'AdminDashboardCtrl', ($scope, $rootScope, Auth, $state, Member) ->
+  Auth.me (usr) ->
+    $scope.usr = usr
+    if usr.role is "admin" || usr.role is "branch_admin"
       $scope.message = 'Hello'
-
+      
       $rootScope.$on "pollSettings", (e, data) ->
         $scope.settings = data
+
+      if usr.role is "branch_admin"
+        $rootScope.isBranchAdmin = true
+
+        Member.query
+          page: 1
+          perPage: 20
+          _branch: usr._member._branch._id
+        , (members, headers) ->
+          $scope.members = members
+          $scope.total = parseInt headers "total_found"
+        Member.query
+          page: 1
+          verified: true
+          perPage: 20
+          _branch: usr._member._branch._id
+        , (members, headers) ->
+          $scope.members = members
+          $scope.totalVerified = parseInt headers "total_found"
+      else
+        Member.query
+          page: 1
+          perPage: 20
+        , (members, headers) ->
+          $scope.members = members
+          $scope.total = parseInt headers "total_found"
+        Member.query
+          page: 1
+          verified: true
+          perPage: 20
+        , (members, headers) ->
+          $scope.members = members
+          $scope.totalVerified = parseInt headers "total_found"
+
+    else
+      $state.go "dashboard"
 
 .controller 'PositionsCtrl', ($scope, Position, toastr, $stateParams, Poll) ->
   pollId = $stateParams.id
@@ -93,7 +128,7 @@ angular.module 'elektorApp'
 
   $scope.chartData = (title, candidates) ->
     chartObject =
-      type: "BarChart"
+      type: "ColumnChart"
       data:
         cols: [
           {id: "t", label: "Topping", type: "string"}
@@ -185,21 +220,36 @@ angular.module 'elektorApp'
         toastr.success "Candidate Added Successfully!"
     else toastr.error "Error Saving Candidate Details"
 
-.controller 'MembersCtrl', ($scope, Member, $modal, toastr, $localStorage) ->
+.controller 'MembersCtrl', ($scope, Member, $modal, toastr, $localStorage, Auth) ->
+  $scope.sortType = "surname"
+  $scope.sortReverse = false
+  $scope.searchMembers = ""
   modal = null
   $scope.perPage = $localStorage.memberPerPage or 15
   $scope.currentPage = 1
   $scope.members = []
   $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
 
+
   $scope.load = (page) ->
-    Member.query
-      page: page
-      perPage: $scope.perPage
-    , (members, headers) ->
-      $scope.members = members
-      $scope.total = parseInt headers "total_found"
-      $scope.pages = Math.ceil($scope.total / $scope.perPage)
+    Auth.me (usr) ->
+      if usr.role is "branch_admin"
+        Member.query
+          page: page
+          perPage: $scope.perPage
+          _branch: usr._member._branch._id
+        , (members, headers) ->
+          $scope.members = members
+          $scope.total = parseInt headers "total_found"
+          $scope.pages = Math.ceil($scope.total / $scope.perPage)
+      else
+        Member.query
+          page: page
+          perPage: $scope.perPage
+        , (members, headers) ->
+          $scope.members = members
+          $scope.total = parseInt headers "total_found"
+          $scope.pages = Math.ceil($scope.total / $scope.perPage)
 
   $scope.load $scope.currentPage
 
@@ -234,7 +284,7 @@ angular.module 'elektorApp'
       , verified: 1, ->
         member.verified = 1
 
-.controller 'VotersRegisterCtrl', ($scope, Member, $localStorage) ->
+.controller 'VotersRegisterCtrl', ($scope, Member, $localStorage, Auth) ->
   $scope.sortType = "surname"
   $scope.sortReverse = false
   $scope.searchVotersRegister = ""
@@ -243,15 +293,27 @@ angular.module 'elektorApp'
   $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
 
   $scope.load = (page) ->
-    Member.query
-      page: page
-      verified: true
-      perPage: $scope.perPage
-    , (members, headers) ->
-      $scope.members = members
-      $scope.total = parseInt headers "total_found"
-      $scope.pages = Math.ceil($scope.total / $scope.perPage)
-
+    Auth.me (usr) ->
+      if usr.role is "branch_admin"
+        Member.query
+          page: page
+          verified: true
+          perPage: $scope.perPage
+          _branch: usr._member._branch._id
+        , (members, headers) ->
+          $scope.members = members
+          $scope.total = parseInt headers "total_found"
+          $scope.pages = Math.ceil($scope.total / $scope.perPage)
+      else
+        Member.query
+          page: page
+          verified: true
+          perPage: $scope.perPage
+        , (members, headers) ->
+          $scope.members = members
+          $scope.total = parseInt headers "total_found"
+          $scope.pages = Math.ceil($scope.total / $scope.perPage)
+          
   $scope.load $scope.currentPage
 
   $scope.pageChanged = ->
@@ -268,102 +330,109 @@ angular.module 'elektorApp'
       Member.detailLink id : member._id, (member) ->
         alert "details request link sent to " + member.email
         
-.controller 'BURCtrl', ($scope, BranchRequest, toastr, $modal, Member) ->
-  $scope.perPage = 10
-  $scope.currentPage = 1
+.controller 'BURCtrl', ($scope, BranchRequest, toastr, $modal, Member, $rootScope, $state) ->
+  if $rootScope.$user.role is 'branch_admin'
+    $state.go "admin_dashboard"
+  else
+    $scope.perPage = 10
+    $scope.currentPage = 1
 
-  modal = null
-  $scope.new_branch = null
+    modal = null
+    $scope.new_branch = null
 
-  $scope.closeModal = ->
-    modal.dismiss()
+    $scope.closeModal = ->
+      modal.dismiss()
 
-  $scope.load = (page) ->
-    BranchRequest.query
-      page: page
-      resolved: false
-      perPage: $scope.perPage
-    , (requests, headers) ->
-      $scope.requests = requests
-      $scope.total = parseInt headers "total_found"
-      $scope.pages = Math.ceil($scope.total / $scope.perPage)
+    $scope.load = (page) ->
+      BranchRequest.query
+        page: page
+        resolved: false
+        perPage: $scope.perPage
+      , (requests, headers) ->
+        $scope.requests = requests
+        $scope.total = parseInt headers "total_found"
+        $scope.pages = Math.ceil($scope.total / $scope.perPage)
 
-  $scope.load $scope.currentPage
-
-  $scope.pageChanged = ->
     $scope.load $scope.currentPage
 
-  $scope.fixRecord = (record, index) ->
-    $scope.selectedRecord = angular.copy record
-    $scope.selectedIndex = index
+    $scope.pageChanged = ->
+      $scope.load $scope.currentPage
 
-    modal = $modal.open
-      templateUrl: "app/manager/admin_dashboard/views/fix-record.html"
-      backdrop: "static"
-      scope: $scope
+    $scope.fixRecord = (record, index) ->
+      $scope.selectedRecord = angular.copy record
+      $scope.selectedIndex = index
 
-  $scope.submitFix = (theForm, new_branch) ->
-    if theForm.$valid and confirm "Are you sure? Change to #{new_branch}?"
-      Member.update
-        id: $scope.selectedRecord._member._id
-      , _branch: new_branch, ->
-        BranchRequest.update
-          id: $scope.selectedRecord._id
-        , resolved: true, ->
-          $scope.closeModal()
+      modal = $modal.open
+        templateUrl: "app/manager/admin_dashboard/views/fix-record.html"
+        backdrop: "static"
+        scope: $scope
 
-          $scope.selectedRecord = null
-          $scope.selectedIndex = null
-          $scope.load $scope.currentPage
+    $scope.submitFix = (theForm, new_branch) ->
+      if theForm.$valid and confirm "Are you sure? Change to #{new_branch}?"
+        Member.update
+          id: $scope.selectedRecord._member._id
+        , _branch: new_branch, ->
+          BranchRequest.update
+            id: $scope.selectedRecord._id
+          , resolved: true, ->
+            $scope.closeModal()
 
-  $scope.deleteRecord = (r, $index) ->
-    if confirm "Are you sure?"
-      BranchRequest.delete id: r._id, ->
-        $scope.requests.splice $index, 1
-        $scope.total -= 1
+            $scope.selectedRecord = null
+            $scope.selectedIndex = null
+            $scope.load $scope.currentPage
 
-.controller 'BranchesCtrl', ($scope, Branch, $localStorage) ->
-  $scope.perPage = $localStorage.branchPerPage or 15
-  $scope.currentPage = 1
-  $scope.branches = []
+    $scope.deleteRecord = (r, $index) ->
+      if confirm "Are you sure?"
+        BranchRequest.delete id: r._id, ->
+          $scope.requests.splice $index, 1
+          $scope.total -= 1
 
-  $scope.sortType = "name"
-  $scope.sortReverse = false
-  $scope.searchBranch = ""
+.controller 'BranchesCtrl', ($scope, Branch, $localStorage, $rootScope, $state) ->
+  if $rootScope.$user.role is 'branch_admin'
+    $state.go "admin_dashboard"
 
-  $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
+  else
+    $scope.perPage = $localStorage.branchPerPage or 15
+    $scope.currentPage = 1
+    $scope.branches = []
 
-  $scope.load = (page) ->
-    Branch.query
-      page: page
-      perPage: $scope.perPage
-    , (branches, headers) ->
-      $scope.branches = branches
-      $scope.total = parseInt headers "total_found"
-      $scope.pages = Math.ceil($scope.total / $scope.perPage)
+    $scope.sortType = "name"
+    $scope.sortReverse = false
+    $scope.searchBranch = ""
 
-  $scope.load $scope.currentPage
+    $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
 
-  $scope.pageChanged = ->
-    $localStorage.branchPerPage = $scope.perPage
+    $scope.load = (page) ->
+      Branch.query
+        page: page
+        perPage: $scope.perPage
+      , (branches, headers) ->
+        $scope.branches = branches
+        $scope.total = parseInt headers "total_found"
+        $scope.pages = Math.ceil($scope.total / $scope.perPage)
+
     $scope.load $scope.currentPage
 
-  $scope.hasSelected = ->
-    $scope.branches.length and (_.filter $scope.branches, (b) -> b.selected).length > 1
+    $scope.pageChanged = ->
+      $localStorage.branchPerPage = $scope.perPage
+      $scope.load $scope.currentPage
 
-  $scope.mergeSelected = ->
-    newName = prompt "Please enter new name for merged branches: "
-    if newName isnt null and newName.trim() isnt ""
-      selectedBranches = _.pluck (_.filter $scope.branches, (b) -> b.selected), "_id"
-      Branch.merge
-        ids: selectedBranches
-        name: newName
-      , (branch) ->
-        _.remove $scope.branches, (b) -> (selectedBranches.indexOf b._id) isnt -1
-        $scope.branches.push branch
+    $scope.hasSelected = ->
+      $scope.branches.length and (_.filter $scope.branches, (b) -> b.selected).length > 1
+
+    $scope.mergeSelected = ->
+      newName = prompt "Please enter new name for merged branches: "
+      if newName isnt null and newName.trim() isnt ""
+        selectedBranches = _.pluck (_.filter $scope.branches, (b) -> b.selected), "_id"
+        Branch.merge
+          ids: selectedBranches
+          name: newName
+        , (branch) ->
+          _.remove $scope.branches, (b) -> (selectedBranches.indexOf b._id) isnt -1
+          $scope.branches.push branch
 
 #Rasheed made changes to support delete
-.controller 'PollsCtrl', ($scope, Poll, $modal, $timeout, toastr) ->
+.controller 'PollsCtrl', ($scope, Auth, Poll, $modal, $timeout, toastr, $rootScope) ->
   $scope.perPage = 15
   $scope.currentPage = 1
 
@@ -371,13 +440,26 @@ angular.module 'elektorApp'
   modal = undefined
 
   $scope.load = (page) ->
-    Poll.query
-      page: page
-      perPage: $scope.perPage
-    , (polls, headers) ->
-      $scope.polls = polls
-      $scope.total = parseInt headers "total_found"
-      $scope.pages = Math.ceil($scope.total / $scope.perPage)
+    Auth.me (user) ->
+      if user.role is "branch_admin"
+        $scope._branch = user._member._branch._id
+        Poll.query
+          page: page
+          perPage: $scope.perPage
+          _branch: $scope._branch
+          national: false
+        , (polls, headers) ->
+          $scope.polls = polls
+          $scope.total = parseInt headers "total_found"
+          $scope.pages = Math.ceil($scope.total / $scope.perPage)
+      else
+        Poll.query
+          page: page
+          perPage: $scope.perPage
+        , (polls, headers) ->
+          $scope.polls = polls
+          $scope.total = parseInt headers "total_found"
+          $scope.pages = Math.ceil($scope.total / $scope.perPage)
 
   $scope.load $scope.currentPage
 
@@ -385,10 +467,18 @@ angular.module 'elektorApp'
     $scope.load $scope.currentPage
 
   $scope.newPoll = ->
-    modal = $modal.open
-      templateUrl: "app/manager/admin_dashboard/views/new-poll.html"
-      backdrop: "static"
-      scope: $scope
+    if $rootScope.isBranchAdmin
+      $scope.poll._branch = $rootScope._branchOfAdmin._id
+      $scope.poll._branchName = $rootScope._branchOfAdmin.name
+      modal = $modal.open
+        templateUrl: "app/manager/admin_dashboard/views/new-poll.html"
+        backdrop: "static"
+        scope: $scope
+    else
+      modal = $modal.open
+        templateUrl: "app/manager/admin_dashboard/views/new-poll.html"
+        backdrop: "static"
+        scope: $scope
 
   $scope.edit = (poll) ->
     $scope.poll = poll

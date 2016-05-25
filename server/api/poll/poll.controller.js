@@ -14,10 +14,18 @@ function showPoll(id, res) {
 
 // Get list of polls
 exports.index = function(req, res) {
-  Poll.find({deleted: false}).populate('_branch').paginate((req.query.page || 1), (req.query.perPage || 25), function (err, polls, total) {
-    res.header('total_found', total);
-    return res.json(polls);
-  });
+  if (req.query._branch && req.query.national) {
+    Poll.find({deleted: false, _branch: req.query._branch, national: req.query.national}).populate('_branch').paginate((req.query.page || 1), (req.query.perPage || 25), function (err, polls, total) {
+      res.header('total_found', total);
+      return res.json(polls);
+    });
+  }
+  else {
+    Poll.find({deleted: false}).populate('_branch').paginate((req.query.page || 1), (req.query.perPage || 25), function (err, polls, total) {
+      res.header('total_found', total);
+      return res.json(polls);
+    });
+  }
 };
 
 // Get list of polls available to a user

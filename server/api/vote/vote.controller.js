@@ -51,7 +51,7 @@ exports.stats = function (req, res) {
   ], function (err, data) {
     Member.populate(data, [{
       "path": "votes.candidate",
-      "select": "surname firstName middleName sc_number"
+      "select": "surname firstName middleName othername sc_number"
     }, {
       "path": "_id",
       "model": "Position",

@@ -12,7 +12,11 @@ angular.module 'elektorApp'
     !$auth.isAuthenticated()
 
   $scope.notAdmin = ->
-    $rootScope.$user.role isnt 'admin'
+    if $rootScope.$user?
+      $rootScope.$user.role isnt 'admin' && $rootScope.$user.role isnt 'branch_admin'
+
+  $scope.isBranchAdmin = ->
+    $rootScope.isBranchAdmin
 
   $scope.isCollapsed = true
 

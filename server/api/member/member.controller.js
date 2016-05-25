@@ -28,6 +28,9 @@ exports.index = function(req, res) {
     if (req.query.name) {
         condition["$or"] = [ { 'surname': { $regex: n_sn }},  { 'middleName': { $regex: n_sn }},  { 'othername': { $regex: n_sn }}, { 'firstName': { $regex: n_sn }} ];
     }
+	if (req.query._branch) {
+		condition["$and"] = [ {'_branch' : req.query._branch} ];
+	}
 
     Member.find(condition).paginate((req.query.page || 1), (req.query.perPage || 25), function (err, members, total) {
         res.header('total_found', total);
@@ -85,7 +88,7 @@ exports.createUser = function(req, res) {
         message: "Your password has been sent to the phone number and email address we have on file."
       });
     });
-  }
+  };
 
   if (req.body._id) { delete req.body._id; } //delete the member_ID from the form
   if (req.body._user) { delete req.body._user; } //delete the me0mber.user_ID from the form
@@ -167,7 +170,7 @@ exports.createLink = function(req, res) {
 		mailer.sendSetupLink(member.phone, member.email, member._id, member.surname + ' ' + member.firstName, function() {
 			return res.status(200).json(member);
 		});
-	}
+	};
 
 	Member.findById(req.query.id, function (err, member) {
 		if (err) { return handleError(res, err); }
@@ -182,7 +185,7 @@ exports.detailLink = function(req, res) {
         mailer.sendDetailLink(member.phone, member.email, member._id, member.firstName + ' ' + member.surname, function() {
             return res.status(200).json(member);
         });
-    }
+    };
 
     Member.findById(req.query.id, function (err, member) {
         if (err) { return handleError(res, err); }

@@ -7,79 +7,80 @@
             <div class="panel panel-green">
                 <div class="panel-heading">
                     <div class="panel-title">
-                        <i class="fa fa-users"></i> ADMIN DASHBOARD
+                        <i class="fa fa-users"></i> ADMIN DASHBOARD <span ng-show="isBranchAdmin"> FOR {{ _branchOfAdmin.name }} BRANCH</span>
                     </div>
                 </div>
-            </div>
-            <div class="panel-body stats no-padding">
-                <div class="col-md-12">
-                    <div class="alert alert-info">
-                        <h5 class="text-left text-uppercase">Platform Usage Information</h5>
-                        <p class="text-white text-justify"></p>
-                    </div>
-                </div>
-                <div class="col-md-4" ng-repeat="s in settings">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            <h2 class="panel-title text-uppercase">
-                                <i class="fa fa-calendar"></i> {{s.label}}
-                            </h2>
-                        </div>
-                        <div class="panel-body">
-                            <h2>{{s.type=='binary'?s.value:ago(s.value)}}</h2>
+                <div class="panel panel-body stats">
+                    <div class="col-lg-12">
+                        <div class="alert alert-info">
+                            <h5 class="text-left text-uppercase">Welcome to the Admin Dashboard</h5>
+                            <p class=" text-justify">You can manage polls, members and branches</p>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            <h2 class="panel-title text-uppercase">
-                                <i class="fa fa-dashboard"></i> Open Positions
-                            </h2>
-                        </div>
-                        <div class="panel-body">
-                            <h2>14</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            <h2 class="panel-title text-uppercase">
-                                <i class="fa fa-info-circle"></i> Number of members
-                            </h2>
-                        </div>
-                        <div class="panel-body">
-                            <h2>14,789</h2>
+<!--
+                    <div class="col-md-4 col-lg-6" ng-repeat="s in settings">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h2 class="panel-title text-uppercase">
+                                    <i class="fa fa-calendar"></i> {{s.label}}
+                                </h2>
+                            </div>
+                            <div class="panel-body">
+                                <h2>{{s.type=='binary'?s.value:ago(s.value)}}</h2>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            <h2 class="panel-title text-uppercase">
-                                <i class="fa fa-info-circle"></i> Accredited Members
-                            </h2>
-                        </div>
-                        <div class="panel-body">
-                            <h2>11,237</h2>
+-->
+                    <div class="col-md-4 col-lg-6">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h2 class="panel-title text-uppercase">
+                                    <i class="fa fa-info-circle"></i> Administrator's Email
+                                </h2>
+                            </div>
+                            <div class="panel-body">
+                                <h3>{{ usr.email }}</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            <h2 class="panel-title text-uppercase">
-                                <i class="fa fa-thumbs-up"></i> Votes Cast
-                            </h2>
+                    <div class="col-md-4 col-lg-6" ng-show="isBranchAdmin">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h2 class="panel-title text-uppercase">
+                                    <i class="fa fa-info-circle"></i> Branch Name
+                                </h2>
+                            </div>
+                            <div class="panel-body">
+                                <h2>{{ _branchOfAdmin.name }}</h2>
+                            </div>
                         </div>
-                        <div class="panel-body">
-                            <h2>0</h2>
+                    </div>
+                    <div class="col-md-4 col-lg-6">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h2 class="panel-title text-uppercase">
+                                    <i class="fa fa-info-circle"></i> All members
+                                </h2>
+                            </div>
+                            <div class="panel-body">
+                                <h2>{{total}}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-6">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h2 class="panel-title text-uppercase">
+                                    <i class="fa fa-info-circle"></i> Accredited Members
+                                </h2>
+                            </div>
+                            <div class="panel-body">
+                                <h2>{{ totalVerified }}</h2>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="panel-footer text-left"></div>
     </div>
 </div>

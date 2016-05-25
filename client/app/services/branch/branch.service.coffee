@@ -27,8 +27,8 @@ angular.module 'elektorApp'
       dropdownCssClass: "bigdrop"
       escapeMarkup: (m) -> m
       initSelection: (element, callback) ->
-        console.log element
-        alert "Called"
+        ###console.log element
+        alert "Called"###
         data =
           name: element.val()
           state: element.data "state"

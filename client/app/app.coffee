@@ -49,6 +49,7 @@ angular.module 'elektorApp', [
     else if user._member.verified isnt 1
       $auth.logout()
       $state.go "unconfirmed"
+#    else if user._member.email is "" or user._member.email is undefined or not user._member.codeConfirmed then $window.location.href = "/setup/''+user._mem"
     else if user._member.email is "" or user._member.email is undefined or not user._member.codeConfirmed then $state.go "setup_account"
 
 .config ( $stateProvider, $urlRouterProvider, $locationProvider, $authProvider, $httpProvider, cloudinaryProvider ) ->
