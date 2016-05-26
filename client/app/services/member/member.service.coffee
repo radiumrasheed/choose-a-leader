@@ -15,6 +15,9 @@ angular.module 'elektorApp'
     retrievePassword:
       method:'POST'
       url: '/api/members/requestPassword'
+    getMember:
+      method: "POST"
+      url: '/api/members/getmember'
     createLink:
       method: "GET"
       url: '/api/members/createLink'

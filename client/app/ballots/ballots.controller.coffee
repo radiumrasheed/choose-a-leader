@@ -98,7 +98,7 @@ angular.module 'elektorApp'
     $scope.submitBallot = (form) ->
       if form.$valid
         Vote.submitBallot $scope.ballot, ->
-          toastr.success "Congratulations, your have successfully voted"
+          toastr.success "Ballot Cast Successfully"
           $state.go "ballot_receipt"
         , (err) ->
           toastr.error err.data.message

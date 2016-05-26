@@ -1,5 +1,49 @@
 <div ng-include="'components/navbar/navbar.html'" xmlns="http://www.w3.org/1999/html"></div>
 
+<script type="text/ng-template" id="bioModalContent.html">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 ng-show="bio.length>=1" class="modal-title">Click on your name to Select your info</h4>
+        <h6 ng-show="bio.length<1" class="modal-title">We are sorry but we do not have a record for you,
+          please try to input your name correctly in order of you Surname and FirstName, If not please Fill the
+          form below correctly.</h6>
+      </div>
+      <div class="modal-body">
+        <div class="text-center" ng-show="bio.length<1">
+          <button ng-click="cancel()" class="btn btn-lg btn-success">Go Back</button>
+        </div>
+        <div ng-show="bio.length>=1" class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>
+                Name
+              </th>
+              <th>
+                Call Number
+              </th>
+              <th>
+                Year Called
+              </th>
+            </tr>
+            </thead>
+            <tr style="cursor:pointer" ng-click="member.data = users; setData()"
+                ng-repeat="users in bio">
+              <td class="success">{{users.surname+' '+users.firstName}}</td>
+              <td class="warning">{{users.sc_number}}</td>
+              <td class="danger">{{users.yearCalled}}</td>
+            </tr>
+          </table>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+
+      </div>
+    </div>
+</script>
+
+
 <div class="container" id="pre_setup">
 
     <div style="background: rgba(55, 109, 76, 0.73); margin-bottom: 10px" class="hidden-print ng-scope">
@@ -31,12 +75,30 @@
                 <form name="preSetupForm" class="form-horizontal">
 
                     <div class="form-group">
-                        <label class="col-sm-5 control-label">Name <span class="required">*</span> </label>
+                        <label class="col-sm-5 control-label">Surname <span class="required">*</span> </label>
                         <div class="col-sm-7">
-                            <input readonly type="text" class="form-control"
-                                    value="{{member.firstName+' '+member.surname}}" required>
+                            <input ng-change="showModal()" ng-model-options="{updateOn: 'blur'}" type="text"
+                                   class="form-control"
+                                   placeholder="Surname" ng-model="person.surname" required>
                         </div>
                     </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-5 control-label">FirstName<span class="required">*</span> </label>
+                    <div class="col-sm-7">
+                      <input ng-change="showModal()" ng-model-options="{updateOn: 'blur'}" type="text"
+                             placeholder="FirstName" class="form-control"
+                             ng-model="person.firstName"  required>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-5 control-label">MiddleName </label>
+                    <div class="col-sm-7">
+                      <input type="text" placeholder="MiddleName" class="form-control"
+                             ng-model="person.middleName">
+                    </div>
+                  </div>
 
                     <div class="form-group">
                         <label class="col-sm-5 control-label">Enrollment Number <span class="required">*</span> </label>
@@ -49,7 +111,7 @@
                     <div class="form-group">
                         <label class="col-sm-5 control-label">NBA Branch <span class="required">*</span> </label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control" ng-model="person.branch"
+                            <input readonly type="text" class="form-control" value="{{member._branch.name}}"
                                    placeholder="Branch" required>
                         </div>
                     </div>
@@ -89,4 +151,92 @@
                 <p>We'll get back to you shortly</p>
             </div>
     </div>
+
+
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Click on your name to Select your info</h4>
+        </div>
+        <div class="modal-body">
+          <div ng-show="memberss.length>=1" class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th>
+                  Name
+                </th>
+                <th>
+                  Call Number
+                </th>
+                <th>
+                  Year Called
+                </th>
+              </tr>
+              </thead>
+              <tr style="cursor:pointer" ng-click="member.data = users; setData()"
+                  ng-repeat="users in memberss">
+                <td class="success">{{users.name}}</td>
+                <td class="warning">{{users.nbaId}}</td>
+                <td class="danger">{{users.yearCalled}}</td>
+              </tr>
+            </table>
+          </div>
+          <!--<div ng-show="memberss.length===0" class="row">-->
+            <!--<p class="text-center text-white help-block label-danger">-->
+              <!--<strong>Name Not found</strong>, Please check your Surname and FirstName, if it's correct.-->
+              <!--If this persist, it may be that your name does not exist in our database, Please Input you Details below, If you do not have yur SCN you can still proceed.-->
+            <!--</p>-->
+            <!--<form method="post" name="memberForm">-->
+              <!--<div class="form-group col-md-5 col-md-offset-3">-->
+                <!--<label for="name">FullName <span class="required">*</span> </label>-->
+                <!--<input class="form-control" type="text" name="name" id="name"-->
+                       <!--ng-model="newuser.name" placeholder="Input Your Name as it Appears on your Call To Bar Name"-->
+                       <!--required>-->
+                                <!--<span class="help-block label label-danger"-->
+                                      <!--ng-show="memberForm.name.$dirty && memberForm.name.$error.required">Please Enter Your Full Call To Bar Name</span>-->
+              <!--</div>-->
+
+              <!--<div class="form-group col-md-5 col-md-offset-3">-->
+                <!--<label for="year">Year of Call to Bar</label>-->
+                <!--<select class="form-control" name="year" id="year" ng-model="newuser.yearCalled"-->
+                        <!--required>-->
+                  <!--<option ng-repeat=" y in membersYears"-->
+                          <!--value="{{y}}">{{y}}-->
+                  <!--</option>-->
+                <!--</select>-->
+              <!--</div>-->
+              <!--<div class="form-group col-md-5 col-md-offset-3">-->
+                <!--<label for="scn">Supreme Court Number </label>-->
+                <!--<input class="form-control" type="text" name="scn" id="scn"-->
+                       <!--ng-model="newuser.nbaId" placeholder="Please input your Supreme court number">-->
+              <!--</div>-->
+              <!--<div class="form-group col-md-5 col-md-offset-3">-->
+                <!--<div class="col-sm-6 col-xs-6">-->
+                  <!--<button type="submit"-->
+                          <!--class="btn btn-block btn-danger" data-dismiss="modal"><i-->
+                    <!--class="fa fa-play"></i>-->
+                    <!--Cancel <i class="fa fa-check"></i>-->
+                  <!--</button>-->
+                <!--</div>-->
+
+                <!--<div class="col-sm-6 col-xs-6">-->
+                  <!--<button type="submit" ng-disabled="memberForm.$invalid"-->
+                          <!--class="btn btn-block btn-success"-->
+                          <!--ng-click="doSave(memberForm)"><i-->
+                    <!--class="fa fa-play"></i>-->
+                    <!--NEXT <i class="fa fa-check"></i>-->
+                  <!--</button>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</form>-->
+          <!--</div>-->
+        </div>
+        <div class="modal-footer">
+
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

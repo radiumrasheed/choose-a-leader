@@ -127,6 +127,25 @@ exports.receipt = function (req, res) {
   });
 };
 
+// exports.receipt = function (req, res) {
+//   Receipt.find({
+//     _member: req.user
+//   }, function (err, receipt) {
+//     var data = [];
+//     _.each(receipt,function (r) {
+//       Vote.find({
+//         _id: { $in: r._votes },
+//         _member: req.user
+//       }).populate('candidate _position _poll').exec(function (err, votes) {
+//         console.log(votes);
+//
+//         //return res.json(votes);
+//       });
+//     });
+//     // console.log(data);
+//   });
+// };
+
 exports.castVote = function (req, res) {
   async.parallel([
     function (_cb) {
