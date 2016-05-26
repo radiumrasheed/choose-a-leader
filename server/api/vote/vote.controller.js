@@ -113,31 +113,58 @@ exports.results = function(req, res) {
 };
 
 exports.receipt = function (req, res) {
-  Receipt.findOne({
-    code: req.query.code,
+  Receipt.find({
+    // code: req.query.code,
     _member: req.user
-  }, function (err, receipt) {
-
-    Vote.find({
-      _id: { $in: receipt._votes },
-      _member: req.user
-    }).populate('candidate _position _poll').exec(function (err, votes) {
-      return res.json(votes);
-    });
+  })
+    .populate('_votes')
+    .exec(function (err, data) {
+      Vote.populate(data, [{
+        "path": "_votes.candidate",
+        "model": "Member"
+        // "select": "surname firstName middleName othername sc_number"
+      }, {
+        "path": "_votes._position",
+        "model": "Position"
+        // "select": "surname firstName middleName othername sc_number"
+      }, {
+        "path": "_votes._poll",
+        "model": "Poll"
+        // "select": "_id name code description"
+      }, {
+        "path": "_votes._position.candidates._member",
+        // "model": "Poll",
+        // "select": "_id name code description"
+      }], function (err, populated) {
+        return res.json(populated);
+      });
+      // Vote
+      //   .populate('_votes._member')
+      //   .populate('_votes._poll')
+      //   .populate('_votes._position')
+      //   .populate('_votes._position.candidates._member')
+      // return res.json(receipts);
+    // Vote.find({
+    //   _id: { $in: receipt._votes },
+    //   _member: req.user
+    // }).populate('candidate _position _poll').exec(function (err, votes) {
+    //   return res.json(votes);
+    // });
   });
 };
 
 // exports.receipt = function (req, res) {
+//   var i =1;
 //   Receipt.find({
 //     _member: req.user
 //   }, function (err, receipt) {
-//     var data = [];
 //     _.each(receipt,function (r) {
 //       Vote.find({
 //         _id: { $in: r._votes },
 //         _member: req.user
 //       }).populate('candidate _position _poll').exec(function (err, votes) {
-//         console.log(votes);
+//
+//         console.log({'node':votes});
 //
 //         //return res.json(votes);
 //       });

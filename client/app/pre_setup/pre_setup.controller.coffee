@@ -12,7 +12,7 @@ angular.module 'elektorApp'
   $scope.person = {}
 
   $scope.submit = (theForm) ->
-    if theForm.$valids
+    if theForm.$valid
       $scope.submitting = true
       $scope.person.branch = $scope.member._branch.name
 #      $scope.person.fullname = $scope.member.surname+' '+$scope.member.firstName
@@ -40,7 +40,8 @@ angular.module 'elektorApp'
         .then( (result) ->
           $scope.open($scope.memberss)
           )
-
+  $scope.dashboard = ->
+    $state.go "dashboard"
 
 
   $scope.doLookup = ->

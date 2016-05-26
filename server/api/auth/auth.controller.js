@@ -282,7 +282,8 @@ exports.confirm = function (req, res) {
           var phone = extractPhoneNumber(member.phone);
 
           mailer.sendConfirmationSMS(phone, member.email, function () {
-            return res.status(200).json({message: "Verification Code Confirmed"});
+            return res.status(200).json({message: "CONGRATULATIONS. You have been accredited!" +
+            " Confirmed"});
           });
         });
       }

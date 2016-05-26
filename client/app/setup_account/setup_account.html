@@ -132,8 +132,15 @@
                     </div>
 
                 </form>
-                <div ng-hide="setupForm.$invalid || (setupForm.$valid && member.phone != phone_conf) || submitting" class="alert alert-info">
-                    <span class="required">Make sure you have this phone with you. You'll receive an SMS with your password shortly. </br>Please change it on the nexe phase!</span>
+                <div ng-hide="setupForm.$invalid || (setupForm.$valid && member.phone != phone_conf) || submitting"
+                     style="margin-bottom: 0px;"
+                     class="alert text-center alert-info">
+                    <span style="color:darkblue;" class=" required"><strong>Congrats, you've verified your
+                      account, just two
+                      more
+                      stages to go!</strong> <br>Your username and password will be sent to your phone/email shortly. Please make sure you have your phone with you, then click on Get
+                      Password
+                      button below to proceed.</span>
                 </div>
 
             </div>
@@ -152,7 +159,11 @@
                     </div>
                 </div>
                 <div class="row" style="padding-top: 2em;">
-                    <p class="text-center">Already have a password?, <a href="#" ng-click="step2()"> please change it.</a></p>
+                    <p class="text-center">Already have a password?, <a href="#" style="color:darkblue;"
+                                                                        ng-click="step2()">
+                      Please
+                      click
+                      here to change it.</a></p>
                 </div>
             </div>
         </div>
@@ -225,8 +236,8 @@
 
               <form name="accessForm" class="form-horizontal">
 
-                  <p class="alert alert-info">Enter the Verification Code that was sent to your phone number. If you didn't get the SMS, please <a ng-click="resendCode()"                                                                     ng-disabled="resendingCode" href="#" class="text-info">Click
-                          Here</a> to have it resent to you. </p>
+                  <p class="alert alert-info">Thank you for your patience. To conclude your accreditation, please enter the Verification Code that was sent to your phone number or email. If you didn't get the message, please <a ng-click="resendCode()"                                                                     ng-disabled="resendingCode" href="#" class="text-primary"><strong>Click
+                          Here</strong></a> to resend it to you. </p>
 
                   <div class="form-group">
                       <div class="col-sm-6 col-sm-offset-3">
@@ -260,11 +271,8 @@
           <div class="row">
             <div class="col-md-12 text-center" style="margin-top: 10px; margin-bottom: 10px">
               <h2><span class="text-uppercase text-white text-bold">{{confirmationMessage}}</span></h2>
-              <h5>
-                <span class="text-uppercase text-white text-bold">This Page will Redirect to the Login in 5 seconds</span>
-              </h5>
-              <h3>OR</h3>
-              <h4>Click here to go to <label ng-click="dashboard()" class="text-white"><strong>Login</strong></label></h4>
+
+              <h4><label ng-click="dashboard()" class="text-white"><strong>Click here to Login</strong></label></h4>
 
 
             </div>
