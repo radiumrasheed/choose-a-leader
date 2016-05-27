@@ -87,7 +87,11 @@
                     <div class="col-sm-8">
                         <b class="text-uppercase"> {{c._member.firstName || c._member.othername}} {{c._member
                             .surname}}</b><br>
-                        <small>{{c.bio}}</small>
+                        <details>
+                            <summary>Bio</summary>
+                            <small>{{c.bio}}</small>
+                        </details>
+
                     </div>
                   <a class="btn btn-xs btn-danger pull-right" ng-click="deleteCandidate(c, $index)">
                     <i class="fa fa-trash"></i>

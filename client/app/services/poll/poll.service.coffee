@@ -13,3 +13,8 @@ angular.module 'elektorApp'
       method: "GET"
       isArray: true
       url: "api/polls/published_polls"
+      
+    positionsDetailed:
+      method: "GET"
+      isArray: true
+      url: "api/polls/positions/:id"

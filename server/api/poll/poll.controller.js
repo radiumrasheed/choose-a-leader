@@ -1,7 +1,8 @@
 'use strict';
 
 var _ = require('lodash');
-var Poll = require('./poll.model');
+var Poll = require('./poll.model'),
+    Position = require('../position/position.model');
 require('mongoose-pagination');
 
 function showPoll(id, res) {
@@ -11,6 +12,12 @@ function showPoll(id, res) {
     return res.json(poll);
   });
 }
+
+exports.pollPositionsFull = function (req, res) {
+  Position.find({ _poll: req.params.id } ).populate('candidates._member').exec(function (err, positions) {
+    return res.json(positions);
+  })
+};
 
 // Get list of polls
 exports.index = function(req, res) {

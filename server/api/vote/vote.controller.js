@@ -50,6 +50,27 @@ exports.stats = function (req, res) {
     { "$sort": { "count": -1 } }
   ], function (err, data) {
     Member.populate(data, [{
+      "path": "votes.candidate votes.member",
+      "select": "surname firstName middleName othername sc_number"
+    }, {
+      "path": "_id",
+      "model": "Position",
+      "select": "_id name code description"
+    }], function (err, populated) {
+      return res.json(populated);
+    });
+  });
+};
+
+//to be merged with exports.stats to populate the branch
+exports.positionStats = function (req, res) {
+  Position.aggregate([
+    { "$match" : { "_poll" : mongoose.mongo.ObjectID(req.query._poll) } },
+    { "$unwind" : "$candidates" },
+    { "$group" : { "_id" : { "position": '$_id', "candidates" : "$candidates._member" } } },
+    { "$group" : { "_id" : "$_id.position", "votes" : { "$push" : { "candidate": "$_id.candidates" } } } }
+  ], function (err, data) {
+    Member.populate(data, [{
       "path": "votes.candidate",
       "select": "surname firstName middleName othername sc_number"
     }, {
@@ -62,43 +83,55 @@ exports.stats = function (req, res) {
   });
 };
 
-exports.candidates = function (req, res) {
-  Position.aggregate([
-    { "$match": { "_poll" : mongoose.mongo.ObjectID(req.query._poll) } },
-    {
-      "$group": {
-        "_id": '$_id',
-        // "candidates._id": "$candidates._id"
-      }
-    },
-    {
-      "$group": {
-        "_id": "$_id",
-        "votes": {
-          "$push": {
-            "candidate": "$_id.candi",
-          }
-        },
-      }
-    },
-    { "$sort": { "count": -1 } }
-  ], function (err, data) {
-    Member.populate(data, [{
-      "path": "votes.candidate._member",
-      "select": "surname firstName middleName sc_number"
-    }, {
-      "path": "_id",
-      "model": "Position",
-      "select": "_id name code description candidates"
-    }, {
-      "path" : "votes.candidate._id",
-      "model" : "Position",
-      "select" : "_member _id code"
-    }], function (err, populated) {
-      return res.json(data);
-    });
+exports.getPositions = function (req, res) {
+  Position.findById(req.query.id).populate("candidates").exec( function (err, position) {
+    if (err) { return handleError(res, err); }
+    if (!position) { return res.status(401).json({message : "Position not found"}); }
+    return res.json(position);
   });
 };
+
+exports.statsByMembers = function(req, res) {
+  // Vote.aggregate([
+  //   { "$match": { "_poll" : mongoose.mongo.ObjectID(req.query._poll), "_position" : mongoose.mongo.ObjectID(req.query._position) } },
+  //   { "$lookup": { 'from' : 'Positions', 'local' } },
+  //   { "$group": { "_id": { "_member": '$_member', "candidate": '$candidate'} } },
+  //   { "$group": { "_id": "$_id.candidate", "votes": { "$push": { "member": "$_id._member"} } } }
+  // ], function (err, data) {
+  //   Member.populate(data, [{
+  //     "path": "_id",
+  //     "select": "surname firstName middleName othername sc_number"
+  //   },
+  //     {
+  //     "path": "votes.member",
+  //     "model": "Auth",
+  //     "select": "username"
+  //   }], function (err, votesByMembers) {
+  //     return res.json(votesByMembers);
+  //   });
+  // });
+};
+
+//TODO API for getting stats by branches
+/*exports.statsByBranches = function (req, res) {
+  Vote.aggregate([
+    { "$match": { "_poll" : mongoose.mongo.ObjectID(req.query._poll), "_position" : mongoose.mongo.ObjectID(req.query._position) } },
+    { "$group": { "_id": { "_member": '$_member', "candidate": '$candidate'} } },
+    { "$group": { "_id": "$_id.candidate", "votes": { "$push": { "member": "$_id._member"} } } }
+  ], function (err, data) {
+    Member.populate(data, [{
+      "path": "_id",
+      "select": "surname firstName middleName othername sc_number"
+    }, 
+      {
+      "path": "votes.member",
+      "model": "Auth",
+      "select": "username"
+    }], function (err, votesByBranches) {
+      return res.json(votesByBranches);
+    });
+  });
+};*/
 
 // Get list of votes for a Position
 exports.results = function(req, res) {

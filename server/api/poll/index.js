@@ -10,6 +10,7 @@ router.use(sessionSec);
 router.get('/', controller.index);
 router.get('/user_polls', controller.user_polls);
 router.get('/published_polls', controller.published_polls);
+router.get('/positions/:id', controller.pollPositionsFull);
 router.get('/:id', controller.show);
 router.post('/', controller.create);
 router.put('/:id', controller.update);
