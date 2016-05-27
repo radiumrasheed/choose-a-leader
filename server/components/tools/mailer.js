@@ -54,7 +54,7 @@ exports.sendDefaultPassword = function(phone, email, password, sc_number, next) 
         var newMessage = message;
         newMessage.html = html_message;
         newMessage.subject = 'Your 2016 NBA Elector Password!';
-        newMessage.to.push(email);
+        newMessage.to = [email];
 
         sendMessage(newMessage, function(e){
           console.log(e);
@@ -93,7 +93,7 @@ exports.sendVerificationSMS = function(phone, email, accessCode, next) {
 
 				newMessage.html = html_message;
 				newMessage.subject = 'Your NBA Elector Verification Code';
-				newMessage.to.push(email);
+				newMessage.to = [email];
 
 				sendMessage(newMessage, function(e){
 					console.log(e);
@@ -131,7 +131,7 @@ exports.sendConfirmationSMS = function(phone, email, next) {
 				var newMessage = message;
 				newMessage.html = html_message;
 				newMessage.subject = 'Congratulations! You are now eligible to vote.';
-				newMessage.to.push(email);
+				newMessage.to = [email];
 
 				sendMessage(newMessage, function(e){
 					console.log(e);
@@ -170,7 +170,7 @@ exports.sendBallotReceiptSMS = function(phone, email, code, signature, next) {
 				var newMessage = message;
 				newMessage.html = html_message;
 				newMessage.subject = 'Vote Successful Casted!';
-				newMessage.to.push(email);
+				newMessage.to = [email];
 
 				sendMessage(newMessage, function(e){
 					console.log(e);
@@ -211,7 +211,7 @@ exports.sendSetupLink = function(phone, email, _id, name, next) {
 				var newMessage = message;
 				newMessage.html = html_message;
 				newMessage.subject = 'Welcome to NBA Election Portal.';
-				newMessage.to.push(email);
+				newMessage.to = [email];
 
 				sendMessage(newMessage, function(e){
 					console.log(e);
@@ -256,7 +256,7 @@ exports.sendDetailLink = function(phone, email, _id, name, next) {
 				var newMessage = message;
 				newMessage.html = html_message;
 				newMessage.subject = 'Welcome to NBA Election Portal';
-				newMessage.to.push(email);
+				newMessage.to = [email];
 
 				sendMessage(newMessage, function(e){
 					console.log(e);

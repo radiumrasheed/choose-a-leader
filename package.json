@@ -23,7 +23,7 @@
     "imagemin-jpegtran": "^5.0.0",
     "imagemin-optipng": "^5.1.0",
     "jwt-simple": "^0.3.0",
-    "lodash": "~2.4.1",
+    "lodash": "^2.4.2",
     "mandrill-api": "1.0.45",
     "method-override": "~1.0.0",
     "moment": "^2.10.3",
