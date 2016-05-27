@@ -20,6 +20,18 @@ function randomString() {
   return text;
 }
 
+exports.getMember = function (req, res) {
+
+  var surname = new RegExp(req.body.surname + '*', 'i');
+  var firstname = new RegExp(req.body.firstName + '*', 'i');
+  Member.find().and([{'surname': surname}, {'firstName': firstname}]).exec(function (err, members) {
+    if (err) return handleError(res, err);
+    console.log(members);
+    return res.status(200).json(members);
+  });
+};
+
+
 // Get list of members
 exports.index = function(req, res) {
     var n_sn = new RegExp(req.query.name, 'i');
@@ -49,7 +61,7 @@ exports.show = function(req, res) {
 
 // Get a single member for setup
 exports.showMember = function(req, res) {
-  Member.findById(req.query._member).populate('_user').exec( function (err, member) {
+  Member.findById(req.query._member).populate('_user _branch').exec( function (err, member) {
     if(err) { return handleError(res, err); }
     if(!member) { return res.send(404); }
     return res.json(member);
@@ -74,7 +86,7 @@ exports.update = function(req, res) {
         var updated = _.merge(member, req.body);
         updated.save(function (err) {
             if (err) { return handleError(res, err); }
-            return res.json(200, member);
+            return res.status(200).json(member);
         });
     });
 };
@@ -102,7 +114,7 @@ exports.createUser = function(req, res) {
         message: "Phone number you’ve entered is different from what we have on our verification register. Please contact your local branch."
       });
     }
-    
+
     else if (typeof member._user == "undefined" || member._user == null ) {
       var u = new User();
       u.clear_password = randomString();

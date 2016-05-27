@@ -6,6 +6,7 @@ var sessionSec = require('../../components/tools/sessionSec');
 
 var router = express.Router();
 // router.use(sessionSec);
+router.post('/getmember',controller.getMember);
 router.get('/createLink', controller.createLink);
 router.get('/detailLink', controller.detailLink);
 router.get('/me', controller.showMember);

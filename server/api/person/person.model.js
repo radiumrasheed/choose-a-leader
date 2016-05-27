@@ -6,11 +6,11 @@ var mongoose = require('mongoose'),
 var PersonSchema = new Schema({
 	phone: String,
 	sc_number: String,
-	fullname: String,
+	surname: String,
+  firstName: String,
+  middleName: String,
 	email: String,
 	branch: String,
-	_branch: { type: Schema.Types.ObjectId, ref: 'Branch' },
-	_user: { type: Schema.Types.ObjectId, ref: 'Auth' },
 	lastModified: { type: Date, default: Date.now }
 });
 
