@@ -44,7 +44,7 @@ exports.stats = function (req, res) {
             "count": "$voteCount"
           }
         },
-        "count": { "$sum": "$voteCount" }
+        "total_count": { "$sum": "$voteCount" }
       }
     },
     { "$sort": { "count": -1 } }
@@ -62,58 +62,28 @@ exports.stats = function (req, res) {
   });
 };
 
-//to be merged with exports.stats to populate the branch
-exports.positionStats = function (req, res) {
-  Position.aggregate([
-    { "$match" : { "_poll" : mongoose.mongo.ObjectID(req.query._poll) } },
-    { "$unwind" : "$candidates" },
-    { "$group" : { "_id" : { "position": '$_id', "candidates" : "$candidates._member" } } },
-    { "$group" : { "_id" : "$_id.position", "votes" : { "$push" : { "candidate": "$_id.candidates" } } } }
+exports.statsByMembers = function(req, res) {
+  Vote.aggregate([
+    { "$match": { "_poll" : mongoose.mongo.ObjectID(req.query._poll), "_position" : mongoose.mongo.ObjectID(req.query._position) } },
+    { "$group": { "_id": { "_member": '$_member', "candidate": '$candidate'} } },
+    { "$group": { "_id": "$_id.candidate", "votes": { "$push": { "member": "$_id._member"} } } }
   ], function (err, data) {
     Member.populate(data, [{
-      "path": "votes.candidate",
-      "select": "surname firstName middleName othername sc_number"
-    }, {
       "path": "_id",
-      "model": "Position",
-      "select": "_id name code description"
-    }], function (err, populated) {
-      return res.json(populated);
+      "select": "surname firstName middleName othername sc_number"
+    },
+      {
+      "path": "votes.member",
+      "model": "Auth",
+      "select": "username"
+    }], function (err, votesByMembers) {
+      return res.json(votesByMembers);
     });
   });
 };
 
-exports.getPositions = function (req, res) {
-  Position.findById(req.query.id).populate("candidates").exec( function (err, position) {
-    if (err) { return handleError(res, err); }
-    if (!position) { return res.status(401).json({message : "Position not found"}); }
-    return res.json(position);
-  });
-};
-
-exports.statsByMembers = function(req, res) {
-  // Vote.aggregate([
-  //   { "$match": { "_poll" : mongoose.mongo.ObjectID(req.query._poll), "_position" : mongoose.mongo.ObjectID(req.query._position) } },
-  //   { "$lookup": { 'from' : 'Positions', 'local' } },
-  //   { "$group": { "_id": { "_member": '$_member', "candidate": '$candidate'} } },
-  //   { "$group": { "_id": "$_id.candidate", "votes": { "$push": { "member": "$_id._member"} } } }
-  // ], function (err, data) {
-  //   Member.populate(data, [{
-  //     "path": "_id",
-  //     "select": "surname firstName middleName othername sc_number"
-  //   },
-  //     {
-  //     "path": "votes.member",
-  //     "model": "Auth",
-  //     "select": "username"
-  //   }], function (err, votesByMembers) {
-  //     return res.json(votesByMembers);
-  //   });
-  // });
-};
-
 //TODO API for getting stats by branches
-/*exports.statsByBranches = function (req, res) {
+exports.statsByBranches = function (req, res) {
   Vote.aggregate([
     { "$match": { "_poll" : mongoose.mongo.ObjectID(req.query._poll), "_position" : mongoose.mongo.ObjectID(req.query._position) } },
     { "$group": { "_id": { "_member": '$_member', "candidate": '$candidate'} } },
@@ -126,12 +96,13 @@ exports.statsByMembers = function(req, res) {
       {
       "path": "votes.member",
       "model": "Auth",
-      "select": "username"
+      "select": "username _member"
     }], function (err, votesByBranches) {
       return res.json(votesByBranches);
     });
+
   });
-};*/
+};
 
 // Get list of votes for a Position
 exports.results = function(req, res) {

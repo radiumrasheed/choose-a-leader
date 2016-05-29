@@ -107,6 +107,24 @@ angular.module 'elektorApp'
     $scope.positions = positions
     $scope.standings()
 
+  $scope.positionDetails = (p) ->
+    $scope.showPositionSummary = true
+    console.log p._id._id
+    $scope.standingsByMembers = ->
+      Vote.statsByMembers
+        _poll: pollId
+        _position: p._id._id
+      , (resultsByMembers) ->
+        console.log resultsByMembers, "ok"
+        $scope.resultsByMembers = resultsByMembers
+        $rootScope.$broadcast "positionResults", resultsByMembers
+#        $timeout ->
+#          $scope.standingsByMembers()
+#        , 30000
+      return
+    return
+
+
   Poll.get id: pollId, (poll) ->
     $scope.poll = poll
     if $scope.poll.national
@@ -149,9 +167,8 @@ angular.module 'elektorApp'
       _.each results, (position, _index) ->
         pId = position._id._id
         realPosition = _.find $scope.positions, (p) -> p._id is pId
-
         _.each realPosition.candidates, (c) ->
-          voteResult = _.find position.votes, (v) -> v.candidate._id is c._id
+          voteResult = _.find position.votes, (v) -> v.candidate._id is c._member._id
           if not voteResult?
             results[_index].votes.push
               candidate: c._member
@@ -164,8 +181,7 @@ angular.module 'elektorApp'
       , 30000
     return
 
-#  $scope.standings()
-
+    
   $scope.chartData = (title, candidates) ->
     chartObject =
       type: "ColumnChart"

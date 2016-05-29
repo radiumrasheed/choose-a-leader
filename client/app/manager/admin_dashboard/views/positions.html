@@ -7,8 +7,82 @@
                     <span class="pull-right label label-info">{{poll._branch.name}}</span>
                 </div>
             </div>
-            <div class="panel-body">{{poll.description}}</div>
+            <div class="panel-body">
+                {{poll.description}}
+                <div class="row">
+                    <div class="col-md-6" ng-class="{'col-md-12': !collapse, 'col-md-6': collapse}">
+                        <div class="panel panel-green">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <i class="fa fa-list"></i> CONTESTED POSITIONS
+                                    <button class="btn btn-xs btn-primary pull-right" ng-click="newPosition()"><i
+                                            class="fa fa-plus-square"></i> Add New
+                                        Position</button>
+                                </div>
+                            </div>
+                            <div class="panel-body ">
+
+                                <form name="positionForm" class="form-horizontal pad-10" ng-show="showPositionForm">
+                                    <div class="alert alert-success text-white">
+                                        All fields marked <span class="required">*</span> are required.
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label">Title <span class="required">*</span></label>
+                                        <div class="col-md-8">
+                                            <input type="text" ng-model="position.name" placeholder="Title" class="form-control"
+                                                   required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label">Description <span class="required">*</span></label>
+                                        <div class="col-md-8">
+                            <textarea type="text" ng-model="position.description" placeholder="Position Description"
+                                      class="form-control"
+                                      required></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-8 col-md-offset-4">
+                                            <button type="button" class="btn btn-sm btn-danger"
+                                                    ng-click="hideForm()">
+                                                <i class="fa fa-times"></i> CANCEL
+                                            </button>
+                                            <button class="btn btn-default btn-sm"
+                                                    ng-click="positionForm.$valid && submit(positionForm)"
+                                                    type="submit"
+                                                    ng-disabled="positionForm.$invalid"><i class="fa fa-check-square"></i> {{position._id ? "Save Changes": "Create Position" }}</button>
+                                        </div>
+                                    </div>
+
+                                </form>
+
+                                <ul class="list-group m-t-10">
+                                    <li class="list-group-item" ng-repeat="p in positions track by $index">
+                                        <a ui-sref=".candidates({position_id: p._id})" ng-click="collapse=true">{{p.code}} - {{p
+                                            .name}}</a>
+                                        <a class="btn btn-xs btn-warning" ng-click="editPosition(p)">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-xs btn-danger pull-right" ng-click="deletePosition(p, $index)">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                            </div>
+                            <div class="panel-footer text-left">
+                                Number of Positions: {{positions.length}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" ui-view></div>
+                </div>
+            </div>
             <div class="panel-footer text-left">
+                <a class="btn btn-sm btn-info" ui-sref="admin_dashboard.polls">Back to polls</a>
                 Opens: {{ago(poll.opens)}}
                 <span class="pull-right">Closes: {{ago(poll.closes)}}</span>
             </div>
@@ -16,75 +90,4 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-6" ng-class="{'col-md-12': !collapse, 'col-md-6': collapse}">
-        <div class="panel panel-green">
-            <div class="panel-heading">
-                <div class="panel-title">
-                    <i class="fa fa-list"></i> CONTESTED POSITIONS
-                    <button class="btn btn-xs btn-primary pull-right" ng-click="newPosition()"><i
-                            class="fa fa-plus-square"></i> Add New
-                        Position</button>
-                </div>
-            </div>
-            <div class="panel-body no-padding">
 
-                <form name="positionForm" class="form-horizontal pad-10" ng-show="showPositionForm">
-                    <div class="alert alert-success text-white">
-                        All fields marked <span class="required">*</span> are required.
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Title <span class="required">*</span></label>
-                        <div class="col-md-8">
-                            <input type="text" ng-model="position.name" placeholder="Title" class="form-control"
-                                   required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Description <span class="required">*</span></label>
-                        <div class="col-md-8">
-                            <textarea type="text" ng-model="position.description" placeholder="Position Description"
-                                   class="form-control"
-                                   required></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-8 col-md-offset-4">
-                            <button type="button" class="btn btn-sm btn-danger"
-                                    ng-click="hideForm()">
-                                <i class="fa fa-times"></i> CANCEL
-                            </button>
-                            <button class="btn btn-default btn-sm"
-                                    ng-click="positionForm.$valid && submit(positionForm)"
-                                    type="submit"
-                                    ng-disabled="positionForm.$invalid"><i class="fa fa-check-square"></i> {{position._id ? "Save Changes": "Create Position" }}</button>
-                        </div>
-                    </div>
-
-                </form>
-
-                <ul class="list-group m-t-10">
-                    <li class="list-group-item" ng-repeat="p in positions track by $index">
-                        <a ui-sref=".candidates({position_id: p._id})" ng-click="collapse=true">{{p.code}} - {{p
-                            .name}}</a>
-                        <a class="btn btn-xs btn-warning" ng-click="editPosition(p)">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                        <a class="btn btn-xs btn-danger pull-right" ng-click="deletePosition(p, $index)">
-                          <i class="fa fa-trash"></i>
-                        </a>
-                    </li>
-                </ul>
-
-            </div>
-
-            <div class="panel-footer text-left">
-                Number of Positions: {{positions.length}}
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6" ui-view></div>
-</div>

@@ -6,9 +6,8 @@ var sessionSec = require('../../components/tools/sessionSec');
 
 var router = express.Router();
 router.get('/stats', controller.stats);
-router.get('/positionStats', controller.positionStats);
-router.get('/getPositions', controller.getPositions);
 router.get('/statsByMembers', controller.statsByMembers);
+router.get('/statsByBranches', controller.statsByBranches);
 
 router.use(sessionSec);
 

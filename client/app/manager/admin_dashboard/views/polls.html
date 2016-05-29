@@ -28,8 +28,8 @@
                 <th>DELETE</th>
             </tr>
             <tr ng-repeat="p in polls track by $index">
-                <td class="text-right">{{(currentPage-1)*perPage+$index+1}}.</td>
-                <td>{{p.title}}<br><small><em>{{p.description}}</em></small></td>
+                <td class="text-right"><i class="fa fa-bookmark pull-left" title="Poll published" ng-show="p.published"></i> {{ (currentPage-1)*perPage+$index+1}}.</td>
+                <td>{{p.title }}  <br><small><em>{{p.description}}</em></small></td>
                 <td>{{ago(p.opens)}}</td>
                 <td>{{ago(p.closes)}}</td>
                 <td>{{p._branch.name || "NATIONAL" }}<br>
