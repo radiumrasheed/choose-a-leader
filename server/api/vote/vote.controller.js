@@ -122,7 +122,7 @@ exports.statsByMembers = function(req, res) {
     Member.populate(data, [{
       "path": "_id",
       "select": "surname firstName middleName othername sc_number"
-    }, 
+    },
       {
       "path": "votes.member",
       "model": "Auth",

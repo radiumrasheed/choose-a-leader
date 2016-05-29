@@ -12,53 +12,51 @@
                             <div class="panel-title"><i class="fa fa-registered"></i> BALLOT RECEIPTS</div>
                         </div>
                         <div class="panel-body">
-                            <form name="recForm" class="form-horizontal">
-                                <div class="alert alert-info">
-                                    Enter a Receipt Code for a particular poll below to see how you've Voted in that poll.
-                                </div>
+                          <button ng-disabled="" ng-click="submit()"
+                                  class="btn btn-block btn-default"><i
+                            class="fa fa-check-square"></i>
+                            Show Receipt
+                          </button>
+                      <br>
 
-                                <div class="form-group">
-                                    <label class="col-md-offset-1 col-md-3 control-label">Receipt Code: <span
-                                            class="required">*</span>
-                                    </label>
-                                    <div class="col-md-4">
-                                        <input class="form-control" ng-model="code"
-                                               placeholder="Enter Receipt Code Here" required>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button ng-disabled="" ng-click="submit()"
-                                                class="btn btn-block btn-default"><i
-                                                class="fa fa-check-square"></i>
-                                            Show Receipt
-                                        </button>
-                                    </div>
-                                </div>
+                      <div ng-repeat="receipt in receipts.slice().reverse()">
+                        <!--<div class="alert text-center alert-primary" ng-show="votes.length">-->
+                        <!--<h4 class="text-uppercase">{{votes[0]._poll.title}}</h4>-->
+                        <!--<p class="text-white">{{votes[0]._poll.description}}</p>-->
+                        <!--</div>-->
 
-                            </form>
+                      <div  class="panel row col-md-10 col-md-offset-1" ng-class-odd="'panel-info'"
+                            ng-class-even="'panel-primary'"
+                            ng-show="receipts.length">
+                        <div class="panel-heading">
+                          <div class="panel-title"><i class="fa fa-briefcase"></i>  POLL TITLE  :
+                            {{receipt._votes[0]._poll
+                            .title}}</div>
+                        </div>
+                        <div class="col-md-8 col-md-offset-2 panel-body">
+                          <table class=" table table-striped table-bordered table-hover" >
+                            <tr>
+                              <th class="text-right success">POSITION</th>
+                              <th class="success">YOUR CANDIDATE</th>
+                            </tr>
+                            <tr ng-repeat="vote in receipt._votes">
+                              <th class="text-right h5">{{vote._position.name}}</th>
+                              <td class="text-left text-uppercase h5">{{vote.candidate.firstName||vote.candidate.othername}}
+                                {{vote.candidate.surname}}</td>
+                            </tr>
+                          </table>
 
-                            <hr>
 
-                            <div class="alert text-center alert-primary" ng-show="votes.length">
-                                <h4 class="text-uppercase">{{votes[0]._poll.title}}</h4>
-                                <p class="text-white">{{votes[0]._poll.description}}</p>
-                            </div>
+                          <div class="row">
+                            <div class="col-md-6 text-left">Ballot Receipt Code: {{receipt.code}}</div>
+                            <div class="col-md-6 text-right">Vote date: {{ago(receipt.receiptDate)}}</div>
+                          </div>
+                        </div>
 
-                            <table class="table table-striped table-bordered table-hover" ng-show="votes.length">
-                                <tr>
-                                    <th class="text-right success">POSITION</th>
-                                    <th class="success">YOUR VOTE</th>
-                                </tr>
-                                <tr ng-repeat="v in votes">
-                                    <th class="text-right h5">{{v._position.name}}</th>
-                                    <td class="text-left text-uppercase h5">{{v.candidate.firstName||v.candidate.othername}}
-                                        {{v.candidate.surname}}</td>
-                                </tr>
-                            </table>
-                            <hr>
-                            <div class="row">
-                                <div class="col-md-6 text-left">Ballot Receipt Code: {{code}}</div>
-                                <div class="col-md-6 text-right">Vote date: {{ago(votes[0].voteDate)}}</div>
-                            </div>
+                      </div>
+
+                      </div>
+
                         </div>
                         <div class="panel-footer">
                             <div class="text-right">For Enquiries please contact <address><a href="mailto:nbapolls-2016@nigerianbar.org.ng?Subject=Ballot%20Receipt%20Enquires">
