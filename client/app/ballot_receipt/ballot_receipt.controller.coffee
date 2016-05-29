@@ -6,9 +6,6 @@ angular.module 'elektorApp'
     if response.role isnt "member"
       $state.go "login"
     else
-#      $scope.submit = ->
-#        Vote.receipt code: $scope.code, (rec) ->
-#          $scope.votes = rec
       $scope.submit = ->
         Vote.receipt (rec) ->
-          $scope.votes = rec
+          $scope.receipts = rec

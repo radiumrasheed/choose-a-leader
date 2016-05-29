@@ -93,9 +93,7 @@
                                 <div class="panel-heading">
                                     <div class="panel-title">
                                         <i class="fa fa-star"></i> {{position.name}}
-                                        <button ng-show="ballot[position._id]" class="btn btn-xs btn-danger pull-right"
-                                                ng-click="cancelChoice(position._id, candidate)">Cancel Selection
-                                        </button>
+
                                     </div>
                                 </div>
                                 <div class="panel-body ">
@@ -126,7 +124,10 @@
                                     </div>
                                 </div>
                                 <div class="panel-footer">
-                                    <div ng-show="ballot[position._id]" class="text-right text-bold text-warning h4">
+                                  <button ng-show="ballot[position._id]" class="btn btn-xs btn-danger pull-left"
+                                          ng-click="cancelChoice(position._id, candidate)">Cancel Selection
+                                  </button>
+                                    <div ng-show="ballot[position._id]" class="text-right  text-bold text-primary h4">
                                         YOU VOTED FOR {{(ballot[position._id]._member.firstName||ballot[position._id]._member.othername)+" "+ballot[position._id]._member.surname}}
                                     </div>
                                 </div>

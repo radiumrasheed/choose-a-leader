@@ -53,13 +53,13 @@
                         <tbody ng-repeat="p in results">
                             <tr>
                                 <td rowspan="{{p.votes.length}}"><a href="#" ng-click="">{{p._id.name}}</a></td>
-                                <td>{{p.votes[0].candidate.surname+' '+(p.votes[0].candidate.firstName||p.votes[0].candidate.otherName)}}</td>
+                                <td>{{p.votes[0].candidate.surname+' '+(p.votes[0].candidate.firstName||p.votes[0].candidate.othername)}}</td>
                                 <td>{{p.votes[0].count}}</td>
                                 <td rowspan="{{p.votes.length}}">{{p.total_count}}</td>
                                 <td rowspan="{{p.votes.length}}">{{total}}</td>
                             </tr>
                             <tr ng-repeat="c in p.votes" ng-if="$index > 0">
-                                <td>{{c.candidate.surname+' '+(c.candidate.firstName||c.candidate.otherName)}}</td>
+                                <td>{{c.candidate.surname+' '+(c.candidate.firstName||c.candidate.othername)}}</td>
                                 <td>{{c.count}}</td>
                             </tr>
                         </tbody>

@@ -3,14 +3,22 @@
 <script type="text/ng-template" id="bioModalContent.html">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 ng-show="bio.length>=1" class="modal-title">Click on your name to Select your info</h4>
-        <h6 ng-show="bio.length<1" class="modal-title">We are sorry but we do not have a record for you,
-          please try to input your name correctly in order of you Surname and FirstName, If not please Fill the
-          form below correctly.</h6>
+        <h4 ng-show="bio.length>=1" class="modal-title">Please click on your name from the list below to retrieve your
+          Supreme Court Enrollment Number.</h4>
+
       </div>
       <div class="modal-body">
+        <h5 ng-show="bio.length<1" style="color:red" class="modal-title">Unfortunately, we can't seem
+          to
+          find your
+          record on our
+          database, in order to auto-fill your Enrollment Number.
+          Please try to input your name correctly, Surname first, followed by FirstName. Otherwise, kindly fill in
+          your enrollment number.
+          .</h5>
+        <br>
         <div class="text-center" ng-show="bio.length<1">
-          <button ng-click="cancel()" class="btn btn-lg btn-success">Go Back</button>
+          <button ng-click="cancel()" class="btn btn-sm btn-success">Go Back</button>
         </div>
         <div ng-show="bio.length>=1" class="table-responsive">
           <table class="table table-hover">
@@ -20,18 +28,20 @@
                 Name
               </th>
               <th>
-                Call Number
+                Enrollment Number
               </th>
               <th>
-                Year Called
+                Year Of Call
               </th>
             </tr>
             </thead>
             <tr style="cursor:pointer" ng-click="member.data = users; setData()"
                 ng-repeat="users in bio">
               <td class="success">{{users.surname+' '+users.firstName}}</td>
-              <td class="warning">{{users.sc_number}}</td>
-              <td class="danger">{{users.yearCalled}}</td>
+              <td >{{users.sc_number}}</td>
+              <td class="success">{{users.yearCalled}}</td>
+              <td class="text-center"><button ng-click="member.data = users; setData()" class="btn btn-sm btn-success">
+                Select</button></td>
             </tr>
           </table>
         </div>
@@ -68,8 +78,11 @@
                 </div>
             </div>
             <div class="panel-body">
-                <div class="alert alert-info">
-                    Confirm your phone number to progress with setup
+                <div style="color:darkblue" class="alert alert-info">
+                    This account is identified with <strong>{{member._branch.name}} Branch</strong>. Please fill the
+                  form
+                  below to
+                  confirm your contact details, in order to process your accreditation.
                 </div>
 
                 <form name="preSetupForm" class="form-horizontal">
@@ -120,7 +133,9 @@
                       <label class="col-sm-5 control-label">Email <span class="required">*</span> </label>
                       <div class="col-sm-7">
                         <input  type="email" placeholder="EMAIL" class="form-control"
-                               ng-model="person.email">
+                               ng-model="person.email" required>
+                        <span ng-show="person.email.$dirty && person.email.$error.required"
+                              class="alert alert-danger">Please enter your correct email address.</span>
                       </div>
                     </div>
 
@@ -146,9 +161,11 @@
                 </div>
             </div>
       </div>
-            <div class="jumbotron" ng-show="done">
-                <h1>Thank you!</h1>
-                <p>We'll get back to you shortly</p>
+            <div class=" text-center jumbotron" ng-show="done">
+                <h4>Thank You! You have successfully completed the pre-accreditation process.</h4>
+                <p>Upon confirmation of your records, a link will be sent to your email to start your accreditation
+                  process.</p>
+              <button ng-click="dashboard()" class="btn btn-sm btn-info">OK</button>
             </div>
     </div>
 

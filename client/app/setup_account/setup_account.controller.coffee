@@ -87,7 +87,6 @@ angular.module 'elektorApp'
         toastr.success response.message
 
         $scope.confirmationMessage =response.message
-        $timeout(dashboard,5000)
       , (e) ->
         $scope.submitting = false
         toastr.error e.data.message
