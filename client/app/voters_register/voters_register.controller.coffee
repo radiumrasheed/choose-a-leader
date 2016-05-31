@@ -15,11 +15,13 @@ angular.module 'elektorApp'
 
 
   $scope.load = (page) ->
-        Voters_Register.branchDetails
-          page: page
-          perPage: $scope.perPage
-        , (members, headers) ->
+    Voters_Register.branchDetails
+      page: page
+      perPage: $scope.perPage
+      branchCode: $scope.selectedItem
+      , (members, headers) ->
           $scope.members = members
+          console.log members
           $scope.total = parseInt headers "total_found"
           $scope.pages = Math.ceil($scope.total / $scope.perPage)
 
