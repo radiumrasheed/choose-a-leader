@@ -26,17 +26,14 @@ exports.stats = function (req, res) {
 
   Vote.aggregate([
     { "$match": { "_poll" : mongoose.mongo.ObjectID(req.query._poll) } },
-    {
-      "$group": {
+    { "$group": {
         "_id": {
           "_position": '$_position',
           "candidate": '$candidate'
         },
         "voteCount": { "$sum": 1 }
-      }
-    },
-    {
-      "$group": {
+      } },
+    { "$group": {
         "_id": "$_id._position",
         "votes": {
           "$push": {
@@ -45,17 +42,16 @@ exports.stats = function (req, res) {
           }
         },
         "total_count": { "$sum": "$voteCount" }
-      }
-    },
-    { "$sort": { "count": -1 } }
+      } }
   ], function (err, data) {
     Member.populate(data, [{
-      "path": "votes.candidate votes.member",
+      "path": "votes.candidate",
       "select": "surname firstName middleName othername sc_number"
     }, {
       "path": "_id",
+      "options" : { "limit" : 1 },
       "model": "Position",
-      "select": "_id name code description"
+      "select": "_id name code index"
     }], function (err, populated) {
       return res.json(populated);
     });
@@ -82,10 +78,10 @@ exports.statsByMembers = function(req, res) {
   });
 };
 
-//TODO API for getting stats by branches
 exports.statsByBranches = function (req, res) {
   Vote.aggregate([
     { "$match": { "_poll" : mongoose.mongo.ObjectID(req.query._poll), "_position" : mongoose.mongo.ObjectID(req.query._position) } },
+    // { "$lookup" : {} }
     { "$group": { "_id": { "_member": '$_member', "candidate": '$candidate'} } },
     { "$group": { "_id": "$_id.candidate", "votes": { "$push": { "member": "$_id._member"} } } }
   ], function (err, data) {

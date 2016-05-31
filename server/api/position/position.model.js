@@ -17,7 +17,8 @@ var PositionSchema = new Schema({
     code: String
   }],
   _poll: { type: Schema.Types.ObjectId, ref: 'Poll' },
-  votes: Number
+  votes: Number,
+  index: Number
 });
 
 module.exports = mongoose.model('Position', PositionSchema);

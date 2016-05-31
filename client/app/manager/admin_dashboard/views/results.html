@@ -1,3 +1,57 @@
+<script type="text/ng-template" id="resultModalContent.html">
+
+    <div class="modal-header">
+        <h3 class="modal-title">Position Result By Branches</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 table-responsive">
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                    <tr class="success">
+                        <th class="text-center text-bold">BRANCHES</th>
+                        <th class="text-center text-bold" width="370px">CANDIDATES</th>
+                        <th class="text-center text-bold">VOTES CAST</th>
+                        <th class="text-center text-bold">TOTAL VOTES CAST</th>
+                        <th class="text-center text-bold">ELIGIBLE VOTERS</th>
+                    </tr>
+                    </thead>
+                    <tbody ng-repeat="p in results">
+                    <tr>
+                        <td rowspan="{{p.votes.length}}"><a href="#" ng-click="open(p._id._id)">{{p._id.name}}</a></td>
+                        <td>{{p.votes[0].candidate.surname+' '+(p.votes[0].candidate.firstName||p.votes[0].candidate.othername)}}</td>
+                        <td>{{p.votes[0].count}}</td>
+                        <td rowspan="{{p.votes.length}}">{{p.total_count}}</td>
+                        <td rowspan="{{p.votes.length}}">{{total}}</td>
+                    </tr>
+                    <tr ng-repeat="c in p.votes" ng-if="$index > 0">
+                        <td>{{c.candidate.surname+' '+(c.candidate.firstName||c.candidate.othername)}}</td>
+                        <td>{{c.count}}</td>
+                    </tr>
+                    </tbody>
+
+                    <!--<tr ng-repeat="p in results">-->
+                    <!--<th class="text-right" rowspan="2"><a href="#" ng-click="positionDetails(p)">{{p._id.name}}</a></th>-->
+                    <!--&lt;!&ndash;<th class="">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<tr data-ng-repeat="c in p.votes">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<td class="text-success">{{c.candidate._id}}</td>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</th>&ndash;&gt;-->
+                    <!--&lt;!&ndash;&lt;!&ndash;<th class="" >{{p.count}}</th>&ndash;&gt;&ndash;&gt;-->
+                    <!--&lt;!&ndash;<th class="" rowspan="p.count">{{total}}</th>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<th class="" rowspan="p.count">{{p.votes.length}}</th>&ndash;&gt;-->
+                    <!--</tr>-->
+                </table>
+            </div>
+
+        </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" type="button" ng-click="cancel()">Close</button>
+    </div>
+</script>
+
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-green">
@@ -52,7 +106,7 @@
                         </thead>
                         <tbody ng-repeat="p in results">
                             <tr>
-                                <td rowspan="{{p.votes.length}}"><a href="#" ng-click="">{{p._id.name}}</a></td>
+                                <td rowspan="{{p.votes.length}}"><a href="#" ng-click="open(p._id._id)">{{p._id.name}}</a></td>
                                 <td>{{p.votes[0].candidate.surname+' '+(p.votes[0].candidate.firstName||p.votes[0].candidate.othername)}}</td>
                                 <td>{{p.votes[0].count}}</td>
                                 <td rowspan="{{p.votes.length}}">{{p.total_count}}</td>

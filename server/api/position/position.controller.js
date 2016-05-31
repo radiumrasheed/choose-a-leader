@@ -21,7 +21,7 @@ function randString() {
 
 // Get list of positions
 exports.index = function(req, res) {
-  Position.find(req.query, '-candidates', function (err, positions) {
+  Position.find(req.query, '-candidates').sort({"index" : 1}).exec(function (err, positions) {
     if(err) { return handleError(res, err); }
     return res.json(200, positions);
   });
@@ -54,7 +54,7 @@ exports.ballot = function(req, res) {
     _pol = _pol.toLocaleLowerCase(_pol);
 
     if (_usr.toString() === _pol.toString() || poll.national) {
-      Position.find(req.query).select('-candidates.photo').populate('candidates._member').exec(function (err, positions) {
+      Position.find(req.query).select('-candidates.photo').populate('candidates._member').sort({ "index" : 1 }).exec(function (err, positions) {
         if(err) { return handleError(res, err); }
         return res.json(200, positions);
       });

@@ -58,6 +58,7 @@ angular.module 'elektorApp'
       _poll: pollId
       name: null
       description: null
+      index : null
 
   $scope.newPosition = ->
     $scope.showPositionForm = true
@@ -95,7 +96,7 @@ angular.module 'elektorApp'
           $scope.hideForm()
     else toastr.error "Please fill the form appropriately"
 
-.controller 'ResultsCtrl', ($scope, Vote, $timeout, $rootScope, Setting, toastr, $stateParams, Poll, Member) ->
+.controller 'ResultsCtrl', ($scope, Vote, $timeout, $rootScope, Setting, toastr, $stateParams, Poll, Member, $modal) ->
   $scope.customizer = (objValue, srcValue) ->
     if _.isArray(objValue)
       return objValue.concat(srcValue)
@@ -173,7 +174,9 @@ angular.module 'elektorApp'
             results[_index].votes.push
               candidate: c._member
               count: 0
+        results[_index].votes = _.sortBy(position.votes, 'count').reverse()
 
+      console.log results
       $scope.results = results
       $rootScope.$broadcast "pollResults", results
       $timeout ->
@@ -181,6 +184,22 @@ angular.module 'elektorApp'
       , 30000
     return
 
+  $scope.open = (bio) ->
+    modalInstance = $modal.open(
+      animation: $scope.animationsEnabled
+      templateUrl: 'resultModalContent.html'
+      controller: 'ModalInstanceCtrl'
+      size: 'lg'
+      resolve: bio: ->
+        $scope.bio
+        $scope.bio = bio
+    )
+    modalInstance.result.then ((pos) ->
+      $scope.selected = pos
+      return
+    ), ->
+      return
+    return
     
   $scope.chartData = (title, candidates) ->
     chartObject =
