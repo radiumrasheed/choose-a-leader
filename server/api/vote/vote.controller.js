@@ -49,7 +49,7 @@ exports.stats = function (req, res) {
       "select": "surname firstName middleName othername sc_number"
     }, {
       "path": "_id",
-      "options" : { "limit" : 1 },
+      "options" : { "sort" : { 'index' : 1 } },
       "model": "Position",
       "select": "_id name code index"
     }], function (err, populated) {
@@ -81,7 +81,7 @@ exports.statsByMembers = function(req, res) {
 exports.statsByBranches = function (req, res) {
   Vote.aggregate([
     { "$match": { "_poll" : mongoose.mongo.ObjectID(req.query._poll), "_position" : mongoose.mongo.ObjectID(req.query._position) } },
-    // { "$lookup" : {} }
+    // { "$lookup" : { "from" : "Branches", "localField" : ""} }
     { "$group": { "_id": { "_member": '$_member', "candidate": '$candidate'} } },
     { "$group": { "_id": "$_id.candidate", "votes": { "$push": { "member": "$_id._member"} } } }
   ], function (err, data) {
@@ -222,6 +222,7 @@ exports.castVote = function (req, res) {
               candidateSignature[k] = req.body[k].code;
 
               votes.push({
+                _branch: member._branch,
                 _position: k,
                 _member: req.user,
                 _poll: pollId,
@@ -246,6 +247,9 @@ exports.castVote = function (req, res) {
               Position.find({ _id: { $in: keys } }, function (err, signatures) {
                 var signature = "";
                 _.each(signatures, function (s) {
+                  if (typeof(candidateSignature[s._id]) === 'undefined') {
+                    candidateSignature[s._id] = '0';
+                  }
                   signature += s.code + ":" + candidateSignature[s._id]+";";
                 });
 

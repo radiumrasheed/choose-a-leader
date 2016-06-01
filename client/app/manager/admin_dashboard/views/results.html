@@ -104,7 +104,7 @@
                                 <th class="text-center text-bold">ELIGIBLE VOTERS</th>
                             </tr>
                         </thead>
-                        <tbody ng-repeat="p in results">
+                        <tbody ng-repeat="p in results | orderBy:sortType">
                             <tr>
                                 <td rowspan="{{p.votes.length}}"><a href="#" ng-click="open(p._id._id)">{{p._id.name}}</a></td>
                                 <td>{{p.votes[0].candidate.surname+' '+(p.votes[0].candidate.firstName||p.votes[0].candidate.othername)}}</td>

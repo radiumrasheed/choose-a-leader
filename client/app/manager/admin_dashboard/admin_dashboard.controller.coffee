@@ -97,6 +97,8 @@ angular.module 'elektorApp'
     else toastr.error "Please fill the form appropriately"
 
 .controller 'ResultsCtrl', ($scope, Vote, $timeout, $rootScope, Setting, toastr, $stateParams, Poll, Member, $modal) ->
+  $scope.sortType = "_id.index"
+
   $scope.customizer = (objValue, srcValue) ->
     if _.isArray(objValue)
       return objValue.concat(srcValue)
