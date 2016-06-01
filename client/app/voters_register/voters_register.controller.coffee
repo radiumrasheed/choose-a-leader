@@ -21,7 +21,6 @@ angular.module 'elektorApp'
       branchCode: $scope.selectedItem
       , (members, headers) ->
           $scope.members = members
-          console.log members
           $scope.total = parseInt headers "total_found"
           $scope.pages = Math.ceil($scope.total / $scope.perPage)
 

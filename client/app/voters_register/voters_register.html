@@ -19,7 +19,80 @@
          <select  ng-options="branch as branch for branch in branchData" class="form-control" ng-change="pageChanged()" ng-model="selectedItem" id="branch"
                   ng-required="true">
        </div>
+        <div class="row col-md-6 alert alert-danger">Please Kindly Note  That <strong><b>NV</b></strong> Means You Are <strong><b>Not Verified</b></strong>
+        </div>
         <br><br>
+        <div class="row col-md-12">
+          <!--<select class="pull-right" ng-model="perPage" ng-options="item for item in pageSizes"-->
+          <!--ng-change="pageChanged()"></select>-->
+
+          <div class="panel-body">
+
+            <div class="text-center">
+              <pagination first-text="First" last-text="Last" next-text="Next"
+                          previous-text="Previous"
+                          boundary-links="true"
+                          items-per-page="perPage"
+                          class="centered-pager"
+                          ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+            </div>
+
+            <!--<div class="form-group ">-->
+            <!--<div class="input-group">-->
+            <!--<div class="input-group-addon"><i class="fa fa-search"></i></div>-->
+            <!--<input type="text" class="form-control" placeholder="Filter Members" ng-model="searchMembers">-->
+            <!--</div>-->
+            <!--</div>-->
+            <table class="table table-striped table-condensed table-hover">
+              <tr>
+                <th>S/N.</th>
+                <th><a href="#" >
+                  Name
+                </a>
+                </th>
+                <th class="text-center"><a href="#" >
+                  Phone.
+                </a>
+                </th>
+                <th><a href="#">
+                  Email
+                </a>
+                </th>
+                <th><a href="#">
+                  Remarks
+                </a>
+                </th>
+                <!--<th>ACCESS CODE</th>-->
+                <th/>
+                <th/>
+              </tr>
+              <tr ng-repeat="m in members | orderBy:sortType:sortReverse | filter:searchMembers track by $index">
+                <td>{{(currentPage-1)*perPage+$index+1}}. <i class="fa fa-check-square text-success"
+                                                             ng-show="m.verified==1"></i> </td>
+                <td>{{m.fullname}}</td>
+                <td ng-class="m.mobileNumber=='INVALID MOBILE'? 'danger':'success'" class="text-center">{{m.mobileNumber}}</td>
+                <td ng-class="m.email=='NOT AVAILABLE'? 'danger':'success'">{{m.email}}</td>
+                <td ng-class="m.verifiedStatus=='NV' ? 'danger':'success'">{{m.verifiedStatus}}</td>
+                <!--<td>{{m.accessCode}}</td>-->
+              </tr>
+            </table>
+
+            <div class="text-center">
+              <pagination first-text="First" last-text="Last" next-text="Next"
+                          previous-text="Previous"
+                          boundary-links="true"
+                          items-per-page="perPage"
+                          class="centered-pager"
+                          ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+            </div>
+
+          </div>
+
+          <div class="panel-footer text-left">
+            <b>Number of Members: {{total}}</b>
+          </div>
+        </div>
+
       </div>
       <div class="panel-footer">
         <div class="text-left">
@@ -29,7 +102,6 @@
     </div>
 
     <!--start of table-->
-    <div class="panel panel-green">
       <!--<div class="panel-heading">-->
         <!--<div class="panel-title">-->
           <!--<i class="fa fa-users"></i> ALL MEMBERS <span ng-show="total">({{total}})</span>-->
@@ -37,76 +109,9 @@
         <!--</div>-->
 
       <!--</div>-->
-      <select class="pull-right" ng-model="perPage" ng-options="item for item in pageSizes"
-              ng-change="pageChanged()"></select>
 
-      <div class="panel-body">
-
-        <div class="text-center">
-          <pagination first-text="First" last-text="Last" next-text="Next"
-                      previous-text="Previous"
-                      boundary-links="true"
-                      items-per-page="perPage"
-                      class="centered-pager"
-                      ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
-        </div>
-
-        <!--<div class="form-group ">-->
-          <!--<div class="input-group">-->
-            <!--<div class="input-group-addon"><i class="fa fa-search"></i></div>-->
-            <!--<input type="text" class="form-control" placeholder="Filter Members" ng-model="searchMembers">-->
-          <!--</div>-->
-        <!--</div>-->
-        <table class="table table-striped table-condensed table-hover">
-          <tr>
-            <th>S/N.</th>
-            <th><a href="#" >
-              Name
-              </a>
-            </th>
-            <th class="text-center"><a href="#" >
-              Phone.
-              </a>
-            </th>
-            <th><a href="#">
-            Email
-            </a>
-          </th>
-            <th><a href="#">
-              Remarks
-             </a>
-            </th>
-            <!--<th>ACCESS CODE</th>-->
-            <th/>
-            <th/>
-          </tr>
-          <tr ng-repeat="m in members | orderBy:sortType:sortReverse | filter:searchMembers track by $index">
-            <td>{{(currentPage-1)*perPage+$index+1}}. <i class="fa fa-check-square text-success"
-                                                         ng-show="m.verified==1"></i> </td>
-            <td>{{m.fullname}}</td>
-            <td ng-class="m.mobileNumber=='INVALID MOBILE'? 'danger':'success'" class="text-center">{{m.mobileNumber}}</td>
-            <td ng-class="m.email=='NOT AVAILABLE'? 'danger':'success'">{{m.email}}</td>
-            <td ng-class="m.verifiedStatus=='NV' ? 'danger':'success'">{{m.verifiedStatus}}</td>
-            <!--<td>{{m.accessCode}}</td>-->
-          </tr>
-        </table>
-
-        <div class="text-center">
-          <pagination first-text="First" last-text="Last" next-text="Next"
-                      previous-text="Previous"
-                      boundary-links="true"
-                      items-per-page="perPage"
-                      class="centered-pager"
-                      ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
-        </div>
-
-      </div>
-
-      <div class="panel-footer text-left">
-        <b>Number of Members: {{total}}</b>
-      </div>
     </div>
     <!--End of table-->
 
   </div>
-</div>
+
