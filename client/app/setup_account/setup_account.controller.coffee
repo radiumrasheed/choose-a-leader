@@ -40,6 +40,7 @@ angular.module 'elektorApp'
 
   $scope.step2 = ->
     $scope.member
+    $scope.jumped = true
     $scope.u = $scope.member._user
     $scope.showLast = false
     $scope.showNext = true
