@@ -45,7 +45,6 @@ exports.showMember = function(req, res) {
 exports.create = function(req, res) {
 	Person.create(req.body, function(err, person) {
 		if(err) { return handleError(res, err); }
-		console.log(person, err);
 		return res.json(201, person);
 	});
 };

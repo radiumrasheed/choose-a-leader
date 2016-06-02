@@ -22,8 +22,8 @@ function randomString() {
 
 exports.getMember = function (req, res) {
 
-  var surname = new RegExp(req.body.surname + '*', 'i');
-  var firstname = new RegExp(req.body.firstName + '*', 'i');
+  var surname = new RegExp(req.body.updatedSurname + '*', 'i');
+  var firstname = new RegExp(req.body.updatedFirstName + '*', 'i');
   Member.find().and([{'surname': surname}, {'firstName': firstname}]).exec(function (err, members) {
     if (err) return handleError(res, err);
     console.log(members);

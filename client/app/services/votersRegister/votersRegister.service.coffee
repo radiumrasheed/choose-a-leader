@@ -12,3 +12,9 @@ angular.module 'elektorApp'
       method: 'POST'
       isArray: true
       url: '/api/votersReg/details'
+    me:
+      url: '/api/votersReg/me'
+      method: 'GET'
+    saveData:
+      method: 'POST'
+      url: '/api/votersReg/save'

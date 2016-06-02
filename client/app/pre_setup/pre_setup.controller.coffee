@@ -1,29 +1,31 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'PreSetupCtrl', ($scope, toastr,$http, Utils, $state, $stateParams, Member, Person, $auth, $modal, $log) ->
+.controller 'PreSetupCtrl', ($scope, toastr,$http, Utils, $state, $stateParams,Voters_Register, Member, Person, $auth, $modal, $log) ->
   $auth.logout()
 
   $scope.done = false
 
-  Member.me  _member: $stateParams.id, (member) ->
+  Voters_Register.me _id:$stateParams.id, (member) ->
     $scope.member = member
+
+
+#  Member.me  _member: $stateParams.id, (member) ->
+#    $scope.member = member
 
   $scope.person = {}
 
   $scope.submit = (theForm) ->
     if theForm.$valid
       $scope.submitting = true
-      $scope.person.branch = $scope.member._branch.name
-#      $scope.person.fullname = $scope.member.surname+' '+$scope.member.firstName
-      console.log $scope.person
-
-      person = new Person $scope.person
-      person.$save().then (p) ->
-        console.log p
-      $scope.submitting = false
-      $scope.done = true
-      toastr.success "Update Successful"
+      $scope.person._id = $scope.member._id
+#      $scope.person.branch = $scope.member.branchCode
+##      $scope.person.fullname = $scope.member.surname+' '+$scope.member.firstName
+#      console.log $scope.person
+      Voters_Register.saveData $scope.person, ->
+        $scope.submitting = false
+        $scope.done = true
+        toastr.success "Update Successful"
       , (e)  ->
         $scope.submitting = false
         toastr.error e.data.message
@@ -31,7 +33,6 @@ angular.module 'elektorApp'
       toastr.error "Please fill the form appropriately before submitting"
 
   $scope.$on 'eventName', (event, data) ->
-    console.log data
     $scope.person.sc_number = data.sc_number;
 
   $scope.showModal = ->

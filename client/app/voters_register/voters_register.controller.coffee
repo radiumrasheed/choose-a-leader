@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'RegisterCtrl', ($scope,Voters_Register, $localStorage) ->
+.controller 'RegisterCtrl', ($scope,Voters_Register,$window, $localStorage) ->
   Voters_Register.branches (data)->
     $scope.branchData = data
 
@@ -29,3 +29,6 @@ angular.module 'elektorApp'
   $scope.pageChanged = ->
     $localStorage.memberPerPage = $scope.perPage
     $scope.load $scope.currentPage
+
+  $scope.update = (id) ->
+    $window.location.href = '/pre_setup/'+id+'/'

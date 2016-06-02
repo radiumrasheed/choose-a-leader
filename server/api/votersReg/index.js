@@ -5,7 +5,9 @@ var controller = require('./votersReg.controller');
 
 var router = express.Router();
 
+router.get('/me', controller.getMe);
 router.post('/', controller.index);
 router.post('/details', controller.details);
+router.post('/save', controller.update);
 
 module.exports = router;

@@ -15,19 +15,19 @@ exports.index = function(req, res) {
 // Get list of branches with details
 exports.details = function(req, res) {
 
-  VotersReg.find({branchCode: req.body.branchCode}).paginate((req.body.page || 1), (req.body.perPage || 25), function (err, members, total) {
+  VotersReg.find({branchCode: req.body.branchCode}).sort('fullname').paginate((req.body.page || 1), (req.body.perPage || 25), function (err, members, total) {
     res.header('total_found', total);
     return res.json(members);
   });
 };
-// // Get a single state
-// exports.show = function(req, res) {
-//   State.findById(req.params.id, function (err, state) {
-//     if(err) { return handleError(res, err); }
-//     if(!state) { return res.send(404); }
-//     return res.json(state);
-//   });
-// };
+// Get a single member
+exports.getMe = function(req, res) {
+  VotersReg.findById(req.query._id, function (err, member) {
+    if(err) { return handleError(res, err); }
+    if(!member) { return res.send(404); }
+    return res.json(member);
+  });
+};
 
 // // Creates a new state in the DB.
 // exports.create = function(req, res) {
@@ -37,19 +37,20 @@ exports.details = function(req, res) {
 //   });
 // };
 
-// // Updates an existing state in the DB.
-// exports.update = function(req, res) {
-//   if(req.body._id) { delete req.body._id; }
-//   State.findById(req.params.id, function (err, state) {
-//     if (err) { return handleError(res, err); }
-//     if(!state) { return res.send(404); }
-//     var updated = _.merge(state, req.body);
-//     updated.save(function (err) {
-//       if (err) { return handleError(res, err); }
-//       return res.json(200, state);
-//     });
-//   });
-// };
+// Updates an existing state in the DB.
+exports.update = function(req, res) {
+  VotersReg.findById(req.body._id, function (err, details) {
+    if (err) { return handleError(res, err); }
+    if(!details) { return res.send(404); }
+    var updated = _.merge(details, req.body);
+    updated.save(function (err) {
+      if (err) { return handleError(res, err); }
+      console.log(details);
+      return res.json(200, details);
+
+    });
+  });
+};
 
 
 function handleError(res, err) {
