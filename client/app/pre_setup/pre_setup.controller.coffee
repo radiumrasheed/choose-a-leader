@@ -87,7 +87,7 @@ angular.module 'elektorApp'
 
   $scope.setData = ->
     $scope.user.name = $scope.member.data.surname+' '+$scope.member.data.firstName
-    $scope.user.sc_number = $scope.member.data.sc_number
+    $scope.user.sc_number = $scope.member.data.scNumber
     $rootScope.$broadcast 'eventName', $scope.user
     $scope.cancel()
 

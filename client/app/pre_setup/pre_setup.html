@@ -37,8 +37,8 @@
             </thead>
             <tr style="cursor:pointer" ng-click="member.data = users; setData()"
                 ng-repeat="users in bio">
-              <td class="success">{{users.surname+' '+users.firstName}}</td>
-              <td >{{users.sc_number}}</td>
+              <td class="success">{{users.fullname}}</td>
+              <td >{{users.scNumber}}</td>
               <td class="success">{{users.yearCalled}}</td>
               <td class="text-center"><button ng-click="member.data = users; setData()" class="btn btn-sm btn-success">
                 Select</button></td>
