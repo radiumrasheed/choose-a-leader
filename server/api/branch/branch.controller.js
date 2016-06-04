@@ -22,6 +22,16 @@ exports.index = function (req, res) {
     });
 };
 
+// Get list of branches for branches
+exports.allBranches = function (req, res) {
+    Branch.find().sort('name').exec( function (err, branches) {
+        if (err) {
+            return handleError(res, err);
+        }
+        return res.json(branches);
+    });
+};
+
 // Get a single branch
 exports.show = function (req, res) {
     Branch.findById(req.params.id, function (err, branch) {

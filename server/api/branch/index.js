@@ -6,11 +6,13 @@ var controller = require('./branch.controller');
 var router = express.Router();
 
 router.get('/', controller.index);
+router.get('/getBranches', controller.allBranches);
 router.get('/:id', controller.show);
 router.post('/', controller.create);
 router.post('/merge', controller.merge);
 router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
+
 
 module.exports = router;

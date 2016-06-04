@@ -5,6 +5,10 @@ angular.module 'elektorApp'
 
   pollId = $stateParams.id
 
+  Poll.positionsDetailed id : pollId, (positions)  ->
+    $scope.positions = positions
+    $scope.standings()
+
   Poll.get id: pollId, (poll) ->
     $scope.poll = poll
     if not poll.published then $state.go "results"
@@ -13,12 +17,27 @@ angular.module 'elektorApp'
   $scope.standings = ->
     Vote.stats _poll: pollId
     , (results) ->
+#      $scope.results = results
+
+      _.each results, (position, _index) ->
+        pId = position._id._id
+        realPosition = _.find $scope.positions, (p) -> p._id is pId
+        _.each realPosition.candidates, (c) ->
+          voteResult = _.find position.votes, (v) -> v.candidate._id is c._member._id
+          if not voteResult?
+            results[_index].votes.push
+              candidate: c._member
+              count: 0
+        results[_index].votes = _.sortBy(position.votes, 'count').reverse()
+
       $scope.results = results
+      $rootScope.$broadcast "pollResults", results
       $timeout ->
         $scope.standings()
       , 30000
     return
-    
+
+
   $scope.standings()
 
   $scope.chartData = (title, candidates) ->

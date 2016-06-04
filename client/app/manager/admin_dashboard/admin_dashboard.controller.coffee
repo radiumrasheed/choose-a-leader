@@ -96,37 +96,14 @@ angular.module 'elektorApp'
           $scope.hideForm()
     else toastr.error "Please fill the form appropriately"
 
-.controller 'ResultsCtrl', ($scope, Vote, $timeout, $rootScope, Setting, toastr, $stateParams, Poll, Member, $modal) ->
+.controller 'ResultsCtrl', ($scope, Vote, $timeout, $rootScope, Setting, toastr, $stateParams, Poll, Member, $modal, Branch) ->
   $scope.sortType = "_id.index"
-
-  $scope.customizer = (objValue, srcValue) ->
-    if _.isArray(objValue)
-      return objValue.concat(srcValue)
-    return
 
   pollId = $stateParams.id
 
   Poll.positionsDetailed id : pollId, (positions)  ->
     $scope.positions = positions
     $scope.standings()
-
-  $scope.positionDetails = (p) ->
-    $scope.showPositionSummary = true
-    console.log p._id._id
-    $scope.standingsByMembers = ->
-      Vote.statsByMembers
-        _poll: pollId
-        _position: p._id._id
-      , (resultsByMembers) ->
-        console.log resultsByMembers, "ok"
-        $scope.resultsByMembers = resultsByMembers
-        $rootScope.$broadcast "positionResults", resultsByMembers
-#        $timeout ->
-#          $scope.standingsByMembers()
-#        , 30000
-      return
-    return
-
 
   Poll.get id: pollId, (poll) ->
     $scope.poll = poll
@@ -163,10 +140,7 @@ angular.module 'elektorApp'
 
   # Fetch Poll Results Every 30 Seconds
   $scope.standings = ->
-    Vote.stats _poll: pollId
-    , (results) ->
-#      $scope.results = results
-
+    Vote.stats _poll: pollId, (results) ->
       _.each results, (position, _index) ->
         pId = position._id._id
         realPosition = _.find $scope.positions, (p) -> p._id is pId
@@ -178,7 +152,6 @@ angular.module 'elektorApp'
               count: 0
         results[_index].votes = _.sortBy(position.votes, 'count').reverse()
 
-      console.log results
       $scope.results = results
       $rootScope.$broadcast "pollResults", results
       $timeout ->
@@ -193,8 +166,25 @@ angular.module 'elektorApp'
       controller: 'ModalInstanceCtrl'
       size: 'lg'
       resolve: bio: ->
-        $scope.bio
-        $scope.bio = bio
+        Vote.statsByBranches _poll: pollId, _position: bio, (resultsByBranches) ->
+          Branch.branchesDetailed (branches) ->
+            $scope.branches = branches
+            _.each resultsByBranches, (position, _index) ->
+              _.each position.votes, (brancheInfo, __index) ->
+                _.each $scope.branches, (rb) ->
+                  cc = _.find position.votes, (d) -> d.branch._id is rb._id
+                  if not cc?
+                    position.votes.push
+                      branch: rb
+                      count: 0
+              i = 0
+              _.each position.votes, (br, ind) ->
+                position.votes[ind].name = br.branch.name
+                position.votes[ind].index = i++
+                return
+              return
+            resultsByBranches
+          return
     )
     modalInstance.result.then ((pos) ->
       $scope.selected = pos

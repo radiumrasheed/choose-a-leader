@@ -8,7 +8,7 @@ var VoteSchema = new Schema({
   candidate: { type: Schema.Types.ObjectId, ref: 'Member' },
   _position: { type: Schema.Types.ObjectId, ref: 'Position' },
   _poll: { type: Schema.Types.ObjectId, ref: 'Poll' },
-  _barnch: { type: Schema.Types.ObjectId, ref: 'Branch' },
+  _branch: { type: Schema.Types.ObjectId, ref: 'Branch' },
   ipAddress: String,
   voteDate: { type: Date, default: Date.now }
 });

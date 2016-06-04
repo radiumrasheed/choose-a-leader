@@ -58,6 +58,7 @@ exports.stats = function (req, res) {
   });
 };
 
+//not yet used
 exports.statsByMembers = function(req, res) {
   Vote.aggregate([
     { "$match": { "_poll" : mongoose.mongo.ObjectID(req.query._poll), "_position" : mongoose.mongo.ObjectID(req.query._position) } },
@@ -78,21 +79,21 @@ exports.statsByMembers = function(req, res) {
   });
 };
 
+//get list of votes according to branches
 exports.statsByBranches = function (req, res) {
   Vote.aggregate([
     { "$match": { "_poll" : mongoose.mongo.ObjectID(req.query._poll), "_position" : mongoose.mongo.ObjectID(req.query._position) } },
-    // { "$lookup" : { "from" : "Branches", "localField" : ""} }
-    { "$group": { "_id": { "_member": '$_member', "candidate": '$candidate'} } },
-    { "$group": { "_id": "$_id.candidate", "votes": { "$push": { "member": "$_id._member"} } } }
+    { "$group": { "_id": { "_branch": '$_branch', "candidate": '$candidate'}, "voteCount" : { "$sum" : 1 } } },
+    { "$group": { "_id": "$_id.candidate", "votes": { "$push": { "branch": "$_id._branch", "count": "$voteCount" } }, "total_count" : { "$sum" : "$voteCount" } } }
   ], function (err, data) {
     Member.populate(data, [{
       "path": "_id",
       "select": "surname firstName middleName othername sc_number"
     },
       {
-      "path": "votes.member",
-      "model": "Auth",
-      "select": "username _member"
+      "path": "votes.branch",
+      "model": "Branch",
+      "select": "_id name state"
     }], function (err, votesByBranches) {
       return res.json(votesByBranches);
     });

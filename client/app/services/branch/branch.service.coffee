@@ -7,6 +7,10 @@ angular.module 'elektorApp'
     merge:
       method: "POST"
       url: "api/branches/merge"
+    branchesDetailed:
+      method: "GET"
+      isArray: true
+      url: "api/branches/getBranches"
 
 .directive 'branchSelectPlugin', ( Branch ) ->
   restrict: 'A'
