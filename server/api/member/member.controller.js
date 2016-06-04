@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var Member = require('./member.model');
+var Lawyer = require('./Lawyer.model');
 var  User = require('../auth/auth.model');
 var Branch = require('../branch/branch.model');
 
@@ -24,7 +25,7 @@ exports.getMember = function (req, res) {
 
   var surname = new RegExp(req.body.updatedSurname + '*', 'i');
   var firstname = new RegExp(req.body.updatedFirstName + '*', 'i');
-  Member.find().and([{'surname': surname}, {'firstName': firstname}]).exec(function (err, members) {
+  Lawyer.find().and([{'fullname': surname}, {'fullname': firstname}]).exec(function (err, members) {
     if (err) return handleError(res, err);
     console.log(members);
     return res.status(200).json(members);

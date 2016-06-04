@@ -79,7 +79,7 @@
             </div>
             <div class="panel-body">
                 <div style="color:darkblue" class="alert alert-info">
-                    This account is identified with <strong>{{member._branch.name}} Branch</strong>. Please fill the
+                    This account is identified with <strong>{{member.branchCode}}</strong>. Please fill the
                   form
                   below to
                   confirm your contact details, in order to process your accreditation.
@@ -90,7 +90,7 @@
                     <div class="form-group">
                         <label class="col-sm-5 control-label">Surname <span class="required">*</span> </label>
                         <div class="col-sm-7">
-                            <input ng-change="showModal()" ng-model-options="{updateOn: 'blur'}" type="text"
+                            <input ng-change="person.sc_number=''" type="text"
                                    class="form-control"
                                    placeholder="Surname" ng-model="person.updatedSurname" required>
                         </div>
@@ -99,7 +99,7 @@
                   <div class="form-group">
                     <label class="col-sm-5 control-label">FirstName<span class="required">*</span> </label>
                     <div class="col-sm-7">
-                      <input ng-change="showModal()" ng-model-options="{updateOn: 'blur'}" type="text"
+                      <input  type="text" ng-change="person.sc_number=''"
                              placeholder="FirstName" class="form-control"
                              ng-model="person.updatedFirstName"  required>
                     </div>
@@ -116,8 +116,8 @@
                     <div class="form-group">
                         <label class="col-sm-5 control-label">Enrollment Number <span class="required">*</span> </label>
                         <div class="col-sm-7">
-                            <input  type="text" class="form-control" ng-model="person.sc_number"
-                                   placeholder="Enrollment Number" required>
+                            <input  type="text" id="sc_number" class="form-control" ng-model="person.sc_number"
+                                   placeholder="Enrollment Number" ng-focus="showModal()" required>
                         </div>
                     </div>
 
