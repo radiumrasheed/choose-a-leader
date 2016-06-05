@@ -19,6 +19,7 @@ angular.module 'elektorApp'
     if theForm.$valid
       $scope.submitting = true
       $scope.person._id = $scope.member._id
+      $scope.person.updated = true
 #      $scope.person.branch = $scope.member.branchCode
 ##      $scope.person.fullname = $scope.member.surname+' '+$scope.member.firstName
 #      console.log $scope.person

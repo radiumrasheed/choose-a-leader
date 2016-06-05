@@ -27,7 +27,6 @@ exports.getMember = function (req, res) {
   var firstname = new RegExp(req.body.updatedFirstName + '*', 'i');
   Lawyer.find().and([{'fullname': surname}, {'fullname': firstname}]).exec(function (err, members) {
     if (err) return handleError(res, err);
-    console.log(members);
     return res.status(200).json(members);
   });
 };
