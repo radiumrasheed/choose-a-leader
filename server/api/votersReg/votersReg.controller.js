@@ -15,7 +15,7 @@ exports.index = function(req, res) {
 // Get list of branches with details
 exports.details = function(req, res) {
 
-  VotersReg.find({branchCode: req.body.branchCode}).sort('fullname').paginate((req.body.page || 1), (req.body.perPage || 25), function (err, members, total) {
+  VotersReg.find({branchCode: req.body.branchCode,}).sort('fullname').paginate((req.body.page || 1), (req.body.perPage || 25), function (err, members, total) {
     res.header('total_found', total);
     return res.json(members);
   });
