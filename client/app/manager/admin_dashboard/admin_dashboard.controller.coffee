@@ -166,6 +166,7 @@ angular.module 'elektorApp'
       controller: 'ModalInstanceCtrl'
       size: 'lg'
       resolve: bio: ->
+#        Its MAGIC!!! I was high on coffee - - just leave it, it works
         Vote.statsByBranches _poll: pollId, _position: bio, (resultsByBranches) ->
           Branch.branchesDetailed (branches) ->
             $scope.branches = branches
@@ -177,6 +178,10 @@ angular.module 'elektorApp'
                     position.votes.push
                       branch: rb
                       count: 0
+              _.each position.votes, (pv, en) ->
+                position.votes[en].name = pv.branch.name
+                return
+              resultsByBranches[_index].votes = _.sortBy(position.votes, 'name')
               i = 0
               _.each position.votes, (br, ind) ->
                 position.votes[ind].name = br.branch.name

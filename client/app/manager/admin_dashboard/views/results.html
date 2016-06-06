@@ -16,7 +16,7 @@
                     <tbody >
                         <tr ng-repeat="b in bio[0].votes track by b.branch.name" >
                             <td >{{b.name}}</td>
-                            <td ng-repeat="v in bio">{{ v.votes[b.index].count }}</td>
+                            <td ng-repeat="v in bio" class="text-center">{{ v.votes[b.index].count }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -86,13 +86,13 @@
                             <tr>
                                 <td rowspan="{{p.votes.length}}"><a href="#" ng-click="poll.national ? open(p._id._id) : ''">{{p._id.name}}</a></td>
                                 <td>{{p.votes[0].candidate.surname+' '+(p.votes[0].candidate.firstName||p.votes[0].candidate.othername)}}</td>
-                                <td>{{p.votes[0].count}}</td>
-                                <td rowspan="{{p.votes.length}}">{{p.total_count}}</td>
-                                <td rowspan="{{p.votes.length}}">{{total}}</td>
+                                <td class="text-center">{{p.votes[0].count}}</td>
+                                <td rowspan="{{p.votes.length}}" class="text-center">{{p.total_count}}</td>
+                                <td rowspan="{{p.votes.length}}" class="text-center">{{total}}</td>
                             </tr>
                             <tr ng-repeat="c in p.votes" ng-if="$index > 0">
                                 <td>{{c.candidate.surname+' '+(c.candidate.firstName||c.candidate.othername)}}</td>
-                                <td>{{c.count}}</td>
+                                <td class="text-center">{{c.count}}</td>
                             </tr>
                         </tbody>
                     </table>
