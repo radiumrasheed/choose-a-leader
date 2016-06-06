@@ -19,6 +19,7 @@ angular.module 'elektorApp'
     if theForm.$valid
       $scope.submitting = true
       $scope.person._id = $scope.member._id
+      $scope.person.updated = true
 #      $scope.person.branch = $scope.member.branchCode
 ##      $scope.person.fullname = $scope.member.surname+' '+$scope.member.firstName
 #      console.log $scope.person
@@ -36,14 +37,13 @@ angular.module 'elektorApp'
     $scope.person.sc_number = data.sc_number;
 
   $scope.showModal = ->
-    if $scope.person.surname.length >=3 and $scope.person.firstName.length >= 3
+    if $scope.person.updatedSurname.length >=3 and $scope.person.updatedFirstName.length >= 3
         $scope.doLookup()
         .then( (result) ->
           $scope.open($scope.memberss)
           )
   $scope.dashboard = ->
     $state.go "dashboard"
-
 
   $scope.doLookup = ->
     return $http.post('/api/members/getmember', $scope.person).success (members) ->
@@ -88,9 +88,8 @@ angular.module 'elektorApp'
 
   $scope.setData = ->
     $scope.user.name = $scope.member.data.surname+' '+$scope.member.data.firstName
-    $scope.user.sc_number = $scope.member.data.sc_number
+    $scope.user.sc_number = $scope.member.data.scNumber
     $rootScope.$broadcast 'eventName', $scope.user
-    console.log $scope.user
     $scope.cancel()
 
 

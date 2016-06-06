@@ -14,7 +14,8 @@ var StateSchema = new Schema({
   updatedFirstName:String,
   updatedMiddleName:String,
   updatedEmail:String,
-  updatedPhone:String
+  updatedPhone:String,
+  updated:Boolean
 });
 
 module.exports = mongoose.model('VotersReg', StateSchema, 'VotersRegister');

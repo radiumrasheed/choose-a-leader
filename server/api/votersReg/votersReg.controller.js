@@ -45,7 +45,6 @@ exports.update = function(req, res) {
     var updated = _.merge(details, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
-      console.log(details);
       return res.json(200, details);
 
     });
