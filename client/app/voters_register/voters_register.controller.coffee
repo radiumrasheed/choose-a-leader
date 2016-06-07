@@ -15,16 +15,27 @@ angular.module 'elektorApp'
 
 
   $scope.load = (page) ->
-    if $scope.searchMembers is '' or $scope.searchMembers.length >= 3
+    if $scope.searchMembers is ''
       Voters_Register.branchDetails
         page: page
         perPage: $scope.perPage
         branchCode: $scope.selectedItem
-        search: $scope.searchMembers
         , (members, headers) ->
             $scope.members = members
+            $scope.searchHeader = false
             $scope.total = parseInt headers "total_found"
             $scope.pages = Math.ceil($scope.total / $scope.perPage)
+    else
+      Voters_Register.searchDetails
+        page: page
+        perPage: $scope.perPage
+        branchCode: $scope.selectedItem
+        search: $scope.searchMembers
+      , (members, headers) ->
+          $scope.members = members
+          $scope.total = parseInt headers "total_found"
+          $scope.searchHeader = true
+          $scope.pages = Math.ceil($scope.total / $scope.perPage)
 
   $scope.load $scope.currentPage
 
