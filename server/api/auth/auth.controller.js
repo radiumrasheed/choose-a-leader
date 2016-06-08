@@ -101,9 +101,9 @@ exports.create = function (req, res) {
  */
 exports.requestPassword = function (req, res) {
   var sendPassword = function (member, user) {
-    mailer.sendDefaultPassword(req.body.phone, member.email, user.clear_password, member.sc_number, function () {
+    mailer.sendPassword(req.body.phone, member.email, user.clear_password, member.sc_number, function () {
       return res.json({
-        message: "Your password has been sent to the phone number and email address we have on file."
+        message: "Your password has been sent to your phone number and email address."
       });
     });
   };

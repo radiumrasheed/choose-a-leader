@@ -70,6 +70,47 @@ exports.sendDefaultPassword = function(phone, email, password, sc_number, next) 
   });
 };
 
+exports.sendPassword = function(phone, email, password, sc_number, next) {
+  var __message = 'Your current password is: '+ password + '. You are advised to delete this message immediately and also change your password.';
+	var _message = 'You have requested for you password <br> <br> Your password is: <b>'+ password + '</b>. <br> <br> You are advised to delete this mail immediately and also change your password.<br> <br> <br> <br> <small>If you did not request for your password, please contact our support team.</small>';
+	var html_message = '<div style="margin:0; padding:0; font-family:Segoe UI,Segoe UI,Arial,Sans-Serif;"> <div style="margin:0; padding:0;"> <div style="max-width:600px; margin: 10px auto 0; background-color: #004600;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px"> <tbody> <tr> <td colspan="3" height="15"></td> </tr> <tr> <td width="20"></td> <td style="text-align: center;"> <a href="https://election.nba-agc.org"> <img src="https://election.nba-agc.org/assets/images/51bcebe4.logo.png"> </a> </td> <td colspan="3"> <h3 align="center" valign="top" style="line-height:41px;font-size: 28px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: #FFFFFF; text-align:center; margin: -12px auto 0;"> NBA <strong> e-Voting Portal </strong> </h3> </td> </tr> <tr> <td colspan="3" height="15"></td> </tr> </tbody> </table> </div> <div style="max-width:600px; margin:0 auto; border-left: 1px solid #CCC; border-right: 1px solid #CCC; border-bottom: 1px solid #CCC; padding-bottom: 20px;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px;"> <tbody> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:36px;font-size:23px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: green;padding-right:15px;padding-left:0px"></td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:19px;font-size:15px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;text-align: justify;color:#000000;padding-right:10px"> ' + _message + ' </td> </tr> <tr> <td height="50" style="border-bottom:1px solid #CCC;"></td> </tr> <tr> <td align="center" valign="top" style="padding-top:10px"> <table> <tbody> <tr> <td style="line-height:19px;font-size:12px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;color:#4b4b4b;padding-right:10px; text-align:center;"> <span style="color: #00CC39; font-weight:bold;">For enquiries,  </span> please call OTI EDAH on +2348033830679 or send emails to: nbapolls-2016@nigerianbar.org.ng</td> </tr> </tbody> </table> </td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> </tbody> </table> </div> </div> </div>';
+
+  async.parallel([
+    function (cb) {
+      var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
+
+      var url = 'http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+__message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE;
+
+      console.log("SMS request URL: " + url);
+
+      request(url, function(error, resp, body) {
+
+        Sms.create({ to: phone, message: __message });
+
+        return cb(null);
+      });
+    },
+    function (cb) {
+      if (email!=undefined && email!=null) {
+        var newMessage = message;
+        newMessage.html = html_message;
+        newMessage.subject = 'NBA 2016 Election Portal - Password Request';
+        newMessage.to = [email];
+
+        sendMessage(newMessage, function(e){
+          console.log(e);
+          return cb(null);
+        });
+      } else {
+        return cb(null)
+      }
+    }
+  ], function (err, results) {
+    console.log("Key sent as SMS and Email ", results);
+    return next();
+  });
+};
+
 exports.sendVerificationSMS = function(phone, email, accessCode, next) {
   var __message = 'Your Verification Code is: '+ accessCode + '. PLEASE KEEP THIS SMS as You WILL NEED THIS CODE INCASE OF FURTHER VERIFICATION.';
 	var _message = 'Your Verification Code is: <b>'+ accessCode + '</b>. PLEASE KEEP THIS MAIL as You WILL NEED THIS CODE INCASE OF FURTHER VERIFICATION.';

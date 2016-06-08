@@ -33,6 +33,7 @@ var userSchema = new Schema({
         type: String,
         default: 'member'
     },
+    superAdmin: { type: Boolean, default: false },
     _member: { type: Schema.Types.ObjectId, ref: 'Member' },
     lastLogin: Date,
     lastModified: {

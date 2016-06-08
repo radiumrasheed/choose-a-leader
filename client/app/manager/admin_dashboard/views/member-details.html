@@ -1,0 +1,70 @@
+<div class="modal-header">
+    <h4>
+        {{selectedMember.surname}} {{selectedMember.middleName}} {{selectedMember.firstName}}
+        <button class="btn btn-xs btn-danger pull-right" ng-click="closeModal()"><i class="fa fa-times"></i></button>
+    </h4>
+</div>
+<div class="modal-body">
+    <table>
+    </table>
+    <form name="memberForm" class="form form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Enrollment. Number</label>
+            <label class="col-sm-8">
+                {{selectedMember.sc_number}}
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">NBA Branch </label>
+            <label class="col-sm-8">
+                {{selectedMember.branch}}
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Title</label>
+            <label class="col-sm-8">
+                {{selectedMember.title}}
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">First Name </label>
+            <label class="col-sm-8">
+                {{selectedMember.firstName || selectedMember.othername}}
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Surname</label>
+            <label class="col-sm-8">
+                {{selectedMember.surname}}
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Middle Name </label>
+            <label class="col-sm-8">
+                {{selectedMember.middleName}}
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Email</label>
+            <label class="col-sm-8">
+                {{selectedMember.email}}
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Phone Number </label>
+            <label class="col-sm-8">
+                {{selectedMember.phone}}
+            </label>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger pull-right" ng-click="closeModal()"><i class="fa fa-times"></i> Close</button>
+</div>

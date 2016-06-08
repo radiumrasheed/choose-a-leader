@@ -1,7 +1,9 @@
 <script type="text/ng-template" id="resultModalContent.html">
 
     <div class="modal-header">
+        <button class="btn btn-xs btn-danger pull-right" ng-click="cancel()"><i class="fa fa-times"></i></button>
         <h3 class="modal-title">Position Result By Branches</h3>
+
     </div>
     <div class="modal-body">
         <div class="row">
@@ -10,13 +12,24 @@
                     <thead>
                     <tr class="success">
                         <th class="text-center text-bold" width="370px">BRANCHES</th>
-                        <th class="text-center text-capitalize" ng-repeat="c in bio">{{ c._id.surname+' '+(c._id.firstName||c._id.othername) }}</th>
+                        <th class="text-center text-capitalize" ng-repeat="c in bio">
+                            <a href="#" ng-click="sortType_ = 'count' ; sortReverse = !sortReverse">
+                                {{ c._id.surname+' '+(c._id.firstName||c._id.othername) }}
+                                <span ng-show="sortType_ == 'count' && sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType_ == 'count' && !sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+                        <!--<th class="text-center text-capitalize">-->
+                            <!--TOTAL BRANCH VOTES-->
+                        <!--</th>-->
                     </tr>
                     </thead>
                     <tbody >
                         <tr ng-repeat="b in bio[0].votes track by b.branch.name" >
+                        <!--<tr ng-repeat="b in bio[0].votes | orderBy:sortType_:sortReverse track by b.branch.name" >-->
                             <td >{{b.name}}</td>
-                            <td ng-repeat="v in bio" class="text-center">{{ v.votes[b.index].count }}</td>
+                            <td ng-repeat="v in bio" class="text-center">{{v.votes[b.index].count}}</td>
+                            <!--<td class="text-center">{{}}</td>-->
                         </tr>
                     </tbody>
                 </table>

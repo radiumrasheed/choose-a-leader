@@ -30,6 +30,8 @@ angular.module 'elektorApp'
           $scope.members = members
           $scope.totalVerified = parseInt headers "total_found"
       else
+        if usr.superAdmin is true
+          $scope.superAdmin = true
         Member.query
           page: 1
           perPage: 20
@@ -168,6 +170,7 @@ angular.module 'elektorApp'
       resolve: bio: ->
 #        Its MAGIC!!! I was high on coffee - - just leave it, it works
         Vote.statsByBranches _poll: pollId, _position: bio, (resultsByBranches) ->
+          $scope.sortType_ = null
           Branch.branchesDetailed (branches) ->
             $scope.branches = branches
             _.each resultsByBranches, (position, _index) ->
@@ -290,6 +293,10 @@ angular.module 'elektorApp'
     else toastr.error "Error Saving Candidate Details"
 
 .controller 'MembersCtrl', ($scope, Member, $modal, toastr, $localStorage, Auth) ->
+  Auth.me (usr) ->
+    if usr.superAdmin is true
+      $scope.superAdmin = true
+
   $scope.sortType = "surname"
   $scope.sortReverse = false
   $scope.searchMembers = ""
@@ -332,10 +339,16 @@ angular.module 'elektorApp'
       $scope.selectedMember.firstName = member.othername?.split(" ")?[0]
       $scope.selectedMember.middleName = member.othername?.split(" ")?[1]
 
-    modal = $modal.open
-      templateUrl: "app/manager/admin_dashboard/views/member-form.html"
-      scope: $scope
-      backdrop: 'static'
+    if $scope.superAdmin is true
+      modal = $modal.open
+        templateUrl: "app/manager/admin_dashboard/views/member-form.html"
+        scope: $scope
+        backdrop: 'static'
+    else
+      modal = $modal.open
+        templateUrl: "app/manager/admin_dashboard/views/member-details.html"
+        scope: $scope
+        backdrop: 'static'
 
   $scope.closeModal = ->
     $scope.selectedMember = null
@@ -456,11 +469,15 @@ angular.module 'elektorApp'
           $scope.requests.splice $index, 1
           $scope.total -= 1
 
-.controller 'BranchesCtrl', ($scope, Branch, $localStorage, $rootScope, $state) ->
+.controller 'BranchesCtrl', ($scope, Branch, $localStorage, $rootScope, $state, Auth) ->
   if $rootScope.$user.role is 'branch_admin'
     $state.go "admin_dashboard"
 
   else
+    Auth.me (usr) ->
+      if usr.superAdmin is true
+        $scope.superAdmin = true
+
     $scope.perPage = $localStorage.branchPerPage or 15
     $scope.currentPage = 1
     $scope.branches = []
