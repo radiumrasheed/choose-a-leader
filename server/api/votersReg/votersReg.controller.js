@@ -7,15 +7,51 @@ var VotersReg = require('./votersReg.model');
 exports.index = function(req, res) {
   VotersReg.find().distinct('branchCode',function (err, branches) {
     if(err) { return handleError(res, err); }
+    branches.sort();
     return res.json(200, branches);
   });
 };
 
+//search for people in a branch
+exports.searchDetails = function(req, res) {
+  var search = req.body.search;
+  var arr = search.split(' ');
 
+  var firstName = new RegExp(arr[0] + '*', 'i');
+
+  VotersReg.find({ branchCode:req.body.branchCode , fullname: firstName}).sort('fullname').paginate((req.body.page || 1), (req.body.perPage || 25), function (err, members, total) {
+    var index, len;
+    for (index = 0, len = members.length; index < len; ++index) {
+      var email = members[index].email;
+      var phone = members[index].mobileNumber;
+      if(email!='NOT AVAILABLE') {
+        var end = email.indexOf('@');
+        members[index].email = email.replace(email.substring(0, end), '*********');
+      }
+      if(phone!='INVALID MOBILE'){
+        members[index].mobileNumber = phone.replace(phone.substring(0, 6), '*******');
+      }
+    }
+    res.header('total_found', total);
+    return res.json(members);
+  });
+};
 // Get list of branches with details
 exports.details = function(req, res) {
 
   VotersReg.find({branchCode: req.body.branchCode}).sort('fullname').paginate((req.body.page || 1), (req.body.perPage || 25), function (err, members, total) {
+    var index, len;
+    for (index = 0, len = members.length; index < len; ++index) {
+      var email = members[index].email;
+      var phone = members[index].mobileNumber;
+      if(email!='NOT AVAILABLE') {
+        var end = email.indexOf('@');
+        members[index].email = email.replace(email.substring(0, end), '*********');
+      }
+      if(phone!='INVALID MOBILE'){
+        members[index].mobileNumber = phone.replace(phone.substring(0, 6), '*******');
+      }
+    }
     res.header('total_found', total);
     return res.json(members);
   });
