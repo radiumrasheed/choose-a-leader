@@ -23,8 +23,9 @@ var message = {
 };
 
 var sendMessage = function(message, callback) {
-  sendgrid.send(message, function(result) {
-    callback(result);
+  sendgrid.send(message, function(err, json) {
+	if (err) { return console.error(err); }
+	return callback(json);
   });
 };
 
@@ -40,13 +41,10 @@ exports.sendDefaultPassword = function(phone, email, password, sc_number, next) 
 
       var url = 'http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+__message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE;
 
-      console.log("SMS request URL: " + url);
-
-      request(url, function(error, resp, body) {
-
-        Sms.create({ to: phone, message: __message });
-
-        return cb(null);
+      request(url, function(err, res, body) {
+		if (err) { return console.error(err); }
+		Sms.create({ to: phone, message: __message });
+		return cb(null, body);
       });
     },
     function (cb) {
@@ -56,16 +54,16 @@ exports.sendDefaultPassword = function(phone, email, password, sc_number, next) 
         newMessage.subject = 'Your 2016 NBA Elector Password!';
         newMessage.to = [email];
 
-        sendMessage(newMessage, function(e){
-          console.log(e);
-          return cb(null);
+        sendMessage(newMessage, function(res){
+			return cb(null, res);
         });
       } else {
-        return cb(null)
+        return cb(null, 'INVALID EMAIL - EMAIL NOT SENT');
       }
     }
   ], function (err, results) {
-    console.log("Key sent as SMS and Email ", results);
+	if (err) { return console.error(err); }
+	console.info("Key sent as SMS and Email ", results);
     return next();
   });
 };
@@ -84,10 +82,10 @@ exports.sendPassword = function(phone, email, password, sc_number, next) {
       console.log("SMS request URL: " + url);
 
       request(url, function(error, resp, body) {
-
+		if (error) { return console.error(error); }
         Sms.create({ to: phone, message: __message });
 
-        return cb(null);
+        return cb(null, body);
       });
     },
     function (cb) {
@@ -97,16 +95,15 @@ exports.sendPassword = function(phone, email, password, sc_number, next) {
         newMessage.subject = 'NBA 2016 Election Portal - Password Request';
         newMessage.to = [email];
 
-        sendMessage(newMessage, function(e){
-          console.log(e);
-          return cb(null);
+        sendMessage(newMessage, function(res){
+          return cb(null, res);
         });
       } else {
-        return cb(null)
+        return cb(null, 'INVALID LOGIN - EMAIL NOT SENT')
       }
     }
   ], function (err, results) {
-    console.log("Key sent as SMS and Email ", results);
+    console.info("Key sent as SMS and Email ", results);
     return next();
   });
 };
@@ -120,11 +117,11 @@ exports.sendVerificationSMS = function(phone, email, accessCode, next) {
 		function (cb) {
 			var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
 
-			request('http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+__message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE, function(error, resp, body) {
-
+			request('http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+__message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE, function(error, res, body) {
+				if (error) { return console.error(error); }
 				Sms.create({ to: phone, message: __message });
 
-				return cb(null);
+				return cb(null, body);
 			});
 
 		},
@@ -136,16 +133,15 @@ exports.sendVerificationSMS = function(phone, email, accessCode, next) {
 				newMessage.subject = 'Your NBA Elector Verification Code';
 				newMessage.to = [email];
 
-				sendMessage(newMessage, function(e){
-					console.log(e);
-					return cb(null);
+				sendMessage(newMessage, function(res){
+					return cb(null, res);
 				});
 			} else {
-				return cb(null)
+				return cb(null, 'INVALID EMAIL - EMAIL NOT SENT')
 			}
 		}
 	], function (err, results) {
-		console.log("Verification Code sent as SMS and Email ", results);
+		console.info("Verification Code sent as SMS and Email ", results);
 		return next();
 	});
 };
@@ -161,10 +157,10 @@ exports.sendConfirmationSMS = function(phone, email, next) {
 			var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
 
 			request('http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+__message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE, function(error, resp, body) {
-
+				if (error) { return console.log(error); }
 				Sms.create({ to: phone, message: __message });
 
-				return cb(null);
+				return cb(null, body);
 			});
 		},
 		function (cb) {
@@ -174,16 +170,15 @@ exports.sendConfirmationSMS = function(phone, email, next) {
 				newMessage.subject = 'Congratulations! You are now eligible to vote.';
 				newMessage.to = [email];
 
-				sendMessage(newMessage, function(e){
-					console.log(e);
-					return cb(null);
+				sendMessage(newMessage, function(res){
+					return cb(null, res);
 				});
 			} else {
-				return cb(null)
+				return cb(null, 'INVALID EMAIL - EMAIL NOT SENT')
 			}
 		}
 	], function (err, results) {
-		console.log("confirmed accreditation sent as SMS and Email ", results);
+		console.info("confirmed accreditation sent as SMS and Email ", results);
 		return next();
 	});
 };
@@ -201,10 +196,10 @@ exports.sendBallotReceiptSMS = function(phone, email, code, signature, next) {
 			var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
 
 			request('http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+__message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE, function(error, resp, body) {
-
+				if (error) { return console.error(error); }
 				Sms.create({ to: phone, message: __message });
 
-				return cb(null);
+				return cb(null, body);
 			});
 		},
 		function (cb) {
@@ -214,16 +209,15 @@ exports.sendBallotReceiptSMS = function(phone, email, code, signature, next) {
 				newMessage.subject = 'Vote Successful Casted!';
 				newMessage.to = [email];
 
-				sendMessage(newMessage, function(e){
-					console.log(e);
-					return cb(null);
+				sendMessage(newMessage, function(res){
+					return cb(null, res);
 				});
 			} else {
-				return cb(null)
+				return cb(null, 'INVALID EMAIL - EMAIL NOT SENT')
 			}
 		}
 	], function (err, results) {
-		console.log("Ballot Receipt sent as SMS and Email ", results);
+		console.info("Ballot Receipt sent as SMS and Email ", results);
 		return next();
 	});
 };
@@ -241,11 +235,11 @@ exports.sendSetupLink = function(phone, email, _id, name, next) {
 		function (cb) {
 			var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
 
-			request('http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+__message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE, function(error, resp, body) {
-
+		request('http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+__message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE, function(error, res, body) {
+				if (error) { return console.error(error); }
 				Sms.create({ to: phone, message: __message });
 
-				return cb(null);
+				return cb(null, body);
 			});
 		},
 		function (cb) {
@@ -255,16 +249,15 @@ exports.sendSetupLink = function(phone, email, _id, name, next) {
 				newMessage.subject = 'Welcome to NBA Election Portal.';
 				newMessage.to = [email];
 
-				sendMessage(newMessage, function(e){
-					console.log(e);
-					return cb(null);
+				sendMessage(newMessage, function(res){
+					return cb(null, res);
 				});
 			} else {
-				return cb(null)
+				return cb(null, 'INVALID LOGIN - EMAIL NOT SENT')
 			}
 		}
 	], function (err, results) {
-		console.log("accreditation link sent as SMS and Email ", results);
+		console.info("accreditation link sent as SMS and Email ", results);
 		return next();
 	});
 };
@@ -287,10 +280,10 @@ exports.sendDetailLink = function(phone, email, _id, name, next) {
 			var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
 
 			request('http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+__message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE, function(error, resp, body) {
-
+				if (error) { return console.error(error); }
 				Sms.create({ to: phone, message: __message });
 
-				return cb(null);
+				return cb(null, body);
 			});
 		},
 		function (cb) {
@@ -300,16 +293,15 @@ exports.sendDetailLink = function(phone, email, _id, name, next) {
 				newMessage.subject = 'Welcome to NBA Election Portal';
 				newMessage.to = [email];
 
-				sendMessage(newMessage, function(e){
-					console.log(e);
-					return cb(null);
+				sendMessage(newMessage, function(res){
+					return cb(null, res);
 				});
 			} else {
-				return cb(null)
+				return cb(null, 'INVALID LOGIN - EMAIL NOT SENT');
 			}
 		}
 	], function (err, results) {
-		console.log("detail request link sent as SMS and Email ", results);
+		console.info("detail request link sent as SMS and Email ", results);
 		return next();
 	});
 };

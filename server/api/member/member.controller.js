@@ -96,9 +96,7 @@ exports.createUser = function(req, res) {
 
   var sendPassword = function (member, user) {
     mailer.sendDefaultPassword(req.body.phone, member.email, user.clear_password, member.sc_number, function () {
-      return res.status(200).json({
-        message: "Your password has been sent to the phone number and email address we have on file."
-      });
+      return res.status(200).json(user);
     });
   };
 
@@ -154,7 +152,6 @@ exports.createUser = function(req, res) {
               }
               else {
                 sendPassword(member, u);
-                return res.json(200, u);
               }
             });
           });

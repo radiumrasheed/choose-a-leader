@@ -16,3 +16,20 @@
     }
   }
 }
+
+.nav {
+  padding-left: 0;
+  /* margin-bottom:0; */
+  list-style: none;
+}
+
+.nav > li {
+  position: relative;
+  display: block;
+}
+
+.nav > li > a {
+  position: relative;
+  display: block;
+  padding: 10px 15px
+}
