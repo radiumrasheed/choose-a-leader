@@ -15,6 +15,7 @@ var StateSchema = new Schema({
   updatedMiddleName:String,
   updatedEmail:String,
   updatedPhone:String,
+  updatedTime: String,
   updated:Boolean
 });
 

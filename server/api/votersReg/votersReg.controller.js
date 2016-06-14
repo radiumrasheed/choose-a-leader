@@ -1,11 +1,12 @@
 'use strict';
 
 var _ = require('lodash');
-var VotersReg = require('./votersReg.model');
+var VotersReg = require('./votersReg.model'),
+  Branches = require('../branch/branch.model');
 
 // Get list of branches
 exports.index = function(req, res) {
-  VotersReg.find().distinct('branchCode',function (err, branches) {
+  Branches.find().distinct('name',function (err, branches) {
     if(err) { return handleError(res, err); }
     branches.sort();
     return res.json(200, branches);
@@ -17,7 +18,7 @@ exports.searchDetails = function(req, res) {
   var search = req.body.search;
   var arr = search.split(' ');
 
-  var firstName = new RegExp(arr[0] + '*', 'i');
+  var firstName = new RegExp(arr[0] + '+', 'i');
 
   VotersReg.find({ branchCode:req.body.branchCode , fullname: firstName}).sort('fullname').paginate((req.body.page || 1), (req.body.perPage || 25), function (err, members, total) {
     var index, len;
