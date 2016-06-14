@@ -9,7 +9,7 @@ var StateSchema = new Schema({
   email: String,
   verifiedStatus:String,
   branchCode:String,
-  sc_number:String,
+  updatedScNumber:String,
   updatedSurname:String,
   updatedFirstName:String,
   updatedMiddleName:String,

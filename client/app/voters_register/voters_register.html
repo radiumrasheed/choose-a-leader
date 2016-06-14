@@ -28,7 +28,7 @@
        <div class="row col-md-12">
          <i class="fa fa-home"></i>
          <label for="branch">NBA Branch <span class="required">*</span></label>
-         <select  ng-options="branch as branch for branch in branchData" class="form-control" ng-change="searchMembers='';currentPage=1; pageChanged();" ng-model="selectedItem" id="branch"
+         <select  ng-options="branch as branch for branch in branchData" class="form-control" ng-change="noData =false; searchMembers='';currentPage=1; pageChanged();" ng-model="selectedItem" id="branch"
                   ng-required="true">
            <option value="">-- Please Select Your Branch --</option>
          </select>
@@ -68,7 +68,7 @@
             <div ng-show="searchHeader" class="row col-md-12 col-lg-12 col-sm-12 col-xs-12">
               <p class="alert alert-info">Your search returned {{total}} name(s) from {{selectedItem}}</p>
             </div>
-            <div  ng-show="!members.length && selectedItem && searchMembers==''"
+            <div  ng-show="noData && selectedItem"
                  class=" text-center alert alert-danger">
               <p>Branch Dues List Not Yet Received</p>
             </div>
