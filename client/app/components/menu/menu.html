@@ -1,19 +1,19 @@
 <div class="panel panel-green hidden-xs">
     <div class="panel-heading" >
-        <h2 class="panel-title text-uppercase text-left" >
-            <i  class="fa fa-list m-r-15" data-toggle="collapse" data-target="#collapseExample"></i> Welcome
-        </h2>
+        <h3 class="panel-title text-uppercase text-left" >
+            <i  class="fa fa-list m-r-15" data-toggle="collapse" data-target="#collapseExample"></i> Menu
+        </h3>
     </div>
     <div class="panel-body no-padding panel-collapse collapse in" id="collapseExample">
         <ul class="list-group text-left side-menu">
 
             <li class="list-group-item">
-                <a ui-sref="dashboard"><i class="fa fa-home"></i> Home</a>
+                <a ui-sref="dashboard"> <i class="fa fa-home"></i>Home</a>
             </li>
             <li class="list-group-item">
                 <a ui-sref="assistant"><i class="fa fa-question"></i> How to vote</a>
             </li>
-            <li class="list-group-item ">
+            <li class="list-group-item">
                 <a ui-sref="profile"><i class="fa fa-user"></i> My Profile</a>
             </li>
             <!--<li class="list-group-item">-->
@@ -40,19 +40,18 @@
 
 <div class="panel panel-green visible-xs" ng-init="isCollapsed=true">
     <div class="panel-heading">
-        <button aria-controls="menu_bar" data-target="#menu_bar" class="btn btn-link text-white btn-sm pull-right" type="button" ng-click="isCollapsed = !isCollapsed">
-            <span class="sr-only">Toggle navigation</span>
-            <i class="fa fa-list"></i>
-        </button>
-        <h2 class="panel-title">MENU</h2>
+        <h3 class="panel-title text-uppercase text-left" ng-click="isCollapsed = !isCollapsed">
+            <i  class="fa fa-list m-r-15" data-toggle="collapse" data-target="#menu_bar"></i> Menu
+        </h3>
     </div>
     <div id="menu_bar" class="navbar-collapse collapse in" collapse="isCollapsed" area-expanded="true">
+<!--
         <ul class="nav navbar-nav">
-            <li class="active">
+            <li >
                 <a ui-sref="dashboard"><i class="fa fa-home"></i> Home</a>
             </li>
             <li >
-                <a ui-sref="assistant"><i class="fa fa-question"></i> How to vote</a>
+                <a ui-sref="assistant"><i class="fa fa-question"></i> How to Vote</a>
             </li>
             <li >
                 <a ui-sref="profile"><i class="fa fa-user"></i> My Profile</a>
@@ -71,5 +70,37 @@
                 <a ui-sref="update_password"><i class="fa fa-key"></i> Change Password</a>
             </li>
         </ul>
+-->
+        <ul class="list-group text-left side-menu">
+
+            <li class="list-group-item">
+                <a ui-sref="dashboard"> <i class="fa fa-home"></i>Home</a>
+            </li>
+            <li class="list-group-item">
+                <a ui-sref="assistant"><i class="fa fa-question"></i> How to vote</a>
+            </li>
+            <li class="list-group-item">
+                <a ui-sref="profile"><i class="fa fa-user"></i> My Profile</a>
+            </li>
+            <!--<li class="list-group-item">-->
+            <!--<a ui-sref="dashboard"><i class="fa fa-check-square"></i> Accreditation</a>-->
+            <!--</li>-->
+            <li class="list-group-item">
+                <a ui-sref="polls"><i class="fa fa-thumbs-o-up"></i> Polls</a>
+            </li>
+            <!--<li class="list-group-item">-->
+            <!--<a ui-sref="ballots"><i class="fa fa-thumbs-o-up"></i> Cast Votes</a>-->
+            <!--</li>-->
+            <li class="list-group-item">
+                <a ui-sref="results"><i class="fa fa-check-square"></i> Poll Results</a>
+            </li>
+            <li class="list-group-item">
+                <a ui-sref="ballot_receipt"><i class="fa fa-registered"></i> Ballot Receipt</a>
+            </li>
+            <li class="list-group-item">
+                <a ui-sref="update_password"><i class="fa fa-key"></i> Change Password</a>
+            </li>
+        </ul>
+
     </div>
 </div>

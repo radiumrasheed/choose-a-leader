@@ -8,6 +8,8 @@ angular.module 'elektorApp'
   $scope.master = {}
   $scope.reset = ->
     Member.me  _member: $stateParams.id, (member) ->
+      if member.accredited is true
+        $state.go "login"
       $scope.member = member
 #      $scope.member.firstName = angular.copy $scope.member.othername
 
