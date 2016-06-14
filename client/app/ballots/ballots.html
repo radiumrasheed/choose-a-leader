@@ -128,7 +128,7 @@
                                           ng-click="cancelChoice(position._id, candidate)">Cancel Selection
                                   </button>
                                     <div ng-show="ballot[position._id]" class="text-right  text-bold text-primary h4">
-                                        YOU VOTED FOR {{(ballot[position._id]._member.firstName||ballot[position._id]._member.othername)+" "+ballot[position._id]._member.surname}}
+                                        You voted for {{(ballot[position._id]._member.firstName||ballot[position._id]._member.othername)+" "+ballot[position._id]._member.surname}}
                                     </div>
                                 </div>
                             </div>
@@ -155,17 +155,17 @@
 
                                 </div>
                                 <div class="panel-body">
-                                  <div ng-show="showDiv" class="row text-center"><h4>Please Verify Your Selections</h4></div>
+                                  <div ng-show="showDiv" class="row text-center"><h4>Please verify your selections. If okay, Proceed, otherwise go back to amend selections </h4></div>
                                     <table ng-show="!showtable" class="table table-striped table-hover table-bordered">
                                         <tr class="success">
-                                            <th class="text-right text-bold">POSITION</th>
-                                            <th class="text-bold">YOUR VOTE</th>
+                                            <th class="text-right h4 text-bold">POSITION</th>
+                                            <th class="text-bold h4">YOUR VOTE</th>
                                         </tr>
                                         <tr ng-repeat="p in positions">
                                             <th class="text-right">{{p.name}}</th>
-                                            <td
-                                                    class="text-uppercase">{{ballot[p._id]._member.firstName||ballot[p._id]._member.othername}}
-                                                {{ballot[p._id]._member.surname}}
+                                            <td ng-if="ballot[p._id]" class="text-uppercase">{{((ballot[p._id]._member.firstName||ballot[p._id]._member.othername)+' '+ballot[p._id]._member.surname)}}
+                                            </td>
+                                            <td ng-if="!ballot[p._id]" class="text-lowercase text-danger">- no vote -
                                             </td>
                                         </tr>
                                       <tr class="info ">
@@ -174,8 +174,9 @@
                                     </table>
                                     <hr>
                                     <form name="ballotForm" ng-show="showtable" class="form-horizontal">
-                                        <div class="alert alert-info">
-                                            In order to accept your vote, please enter your password.
+                                        <div class="alert alert-info text-center h7">
+                                            <p>To finally confirm this action is from the User logged in, kindly enter your password again.</p>
+                                            <p>Please note, You can't go back or undo this action.</p>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-3 col-md-offset-3 control-label">

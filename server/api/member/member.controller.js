@@ -138,6 +138,7 @@ exports.createUser = function(req, res) {
             }
             member._branch = branch._id;
             member._user = u._id;
+            member.accredited = true;
             member.title = req.body.title;
             member.lastModified = new Date();
             if (member.accessCode == undefined || member.accessCode == '') {

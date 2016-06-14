@@ -333,6 +333,15 @@ angular.module 'elektorApp'
     $localStorage.memberPerPage = $scope.perPage
     $scope.load $scope.currentPage
 
+  $scope.addMember = () ->
+    console.log "hhh"
+#    $scope.member = {}
+    if $scope.superAdmin is true
+      modal = $modal.open
+        templateUrl: "app/manager/admin_dashboard/views/new-member-form.html"
+        scope: $scope
+        backdrop: 'static'
+        
   $scope.editMember = (member) ->
     $scope.selectedMember = member
     if member.othername?

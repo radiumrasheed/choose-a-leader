@@ -13,16 +13,16 @@
                 <div class="panel panel-body stats">
                     <div class="col-lg-12">
                         <div class="alert alert-info">
-                            <h5 class="text-left text-uppercase">Welcome to the Admin Dashboard</h5>
+                            <h4 class="text-left text-uppercase">Welcome to the Admin Dashboard</h4>
                             <p class=" text-justify">You can manage polls, members and branches</p>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-6">
                         <div class="panel panel-success">
                             <div class="panel-heading">
-                                <h2 class="panel-title text-uppercase">
+                                <h4 class="panel-title text-uppercase">
                                     <i class="fa fa-info-circle"></i> Administrator
-                                </h2>
+                                </h4>
                             </div>
                             <div class="panel-body">
                                 <h3>{{ usr._member.surname+' '+(usr._member.firstName || usr._member.othernames) }}</h3>
@@ -32,9 +32,9 @@
                     <div class="col-md-4 col-lg-6">
                         <div class="panel panel-success">
                             <div class="panel-heading">
-                                <h2 class="panel-title text-uppercase">
+                                <h4 class="panel-title text-uppercase">
                                     <i class="fa fa-info-circle"></i> Administrator's Email
-                                </h2>
+                                </h4>
                             </div>
                             <div class="panel-body">
                                 <h3>{{ usr.email }}</h3>
@@ -44,36 +44,36 @@
                     <div class="col-md-4 col-lg-6" ng-show="isBranchAdmin">
                         <div class="panel panel-success">
                             <div class="panel-heading">
-                                <h2 class="panel-title text-uppercase">
+                                <h4 class="panel-title text-uppercase">
                                     <i class="fa fa-info-circle"></i> Branch Name
-                                </h2>
+                                </h4>
                             </div>
                             <div class="panel-body">
-                                <h2>{{ _branchOfAdmin.name }}</h2>
+                                <h3>{{ _branchOfAdmin.name }}</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-6">
                         <div class="panel panel-success">
                             <div class="panel-heading">
-                                <h2 class="panel-title text-uppercase">
+                                <h4 class="panel-title text-uppercase">
                                     <i class="fa fa-info-circle"></i> All members
-                                </h2>
+                                </h4>
                             </div>
                             <div class="panel-body">
-                                <h2>{{total}}</h2>
+                                <h3>{{total}}</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-6">
                         <div class="panel panel-success">
                             <div class="panel-heading">
-                                <h2 class="panel-title text-uppercase">
+                                <h4 class="panel-title text-uppercase">
                                     <i class="fa fa-info-circle"></i> Accredited Members
-                                </h2>
+                                </h4>
                             </div>
                             <div class="panel-body">
-                                <h2>{{ totalVerified }}</h2>
+                                <h3>{{ totalVerified }}</h3>
                             </div>
                         </div>
                     </div>

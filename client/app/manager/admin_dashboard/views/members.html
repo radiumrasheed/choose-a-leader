@@ -2,7 +2,9 @@
     <div class="panel-heading">
         <div class="panel-title">
             <i class="fa fa-users"></i> ALL MEMBERS <span ng-show="total">({{total}})</span>
-
+            <button ng-if="superAdmin" class="btn btn-xs btn-primary pull-right" ng-click="addMember()">
+                <i class="fa fa-pencil-square "></i> Add Member
+            </button>
         </div>
 
     </div>
