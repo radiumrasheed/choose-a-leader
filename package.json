@@ -22,6 +22,7 @@
     "imagemin": "^5.1.2",
     "imagemin-jpegtran": "^5.0.0",
     "imagemin-optipng": "^5.1.0",
+    "jspdf": "^1.2.61",
     "jwt-simple": "^0.3.0",
     "lodash": "^2.4.2",
     "mandrill-api": "1.0.45",
@@ -36,7 +37,8 @@
     "sendgrid": "^2.0.0",
     "serve-favicon": "~2.0.1",
     "throng": "2.0.1",
-    "tough-cookie": "2.2.2"
+    "tough-cookie": "2.2.2",
+    "vex-js": "^2.3.4"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

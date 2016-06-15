@@ -3,10 +3,20 @@
     <div class="modal-header">
         <button class="btn btn-xs btn-danger pull-right" ng-click="cancel()"><i class="fa fa-times"></i></button>
         <h3 class="modal-title">Position Result By Branches</h3>
-
+        <button class="pull-left btn btn-primary btn-sm" ng-click="PrintElem('#resultsByBranches')">Print</button>
     </div>
     <div class="modal-body">
-        <div class="row">
+        <div class="row" id="resultsByBranches">
+            <div class="center">
+                <div class="center">
+                    <div style="margin:auto 0;border:thin solid white;text-align:center;">
+                        <div class="center">
+                            <img src="../../../../assets/images/nba_logo.jpg" width="220" height="185" width="220px" height="185px"/>
+                            <h3 STYLE="color: #00B22D;line-height: 18px;">NIGERIAN BAR ASSOCIATION 2016 VOTERS' REGISTER -</h3>
+                        </div>
+                    </div>
+                </di>
+            </div>
             <div class="col-md-12">
                 <table class="table table-striped table-hover table-bordered">
                     <thead>
@@ -57,6 +67,7 @@
                 <div class="col-md-12">
                     <p>{{poll.description}}<button class="btn btn-sm btn-primary pull-right" ng-show="closed()" ng-click="makePublic()">Publish Results</button></p>
                     <br>
+                    <button class="pull-right btn btn-primary btn-sm" ng-click="PrintElem('#results')">Print</button>
                 </div>
 <!--
                 <div class="col-md-12">
@@ -83,8 +94,17 @@
                     </div>
                 </div>
 -->
-                <div class="col-md-12 table-responsive">
-                    <div class="title text-bold h3 text-center">Poll Summary</div>
+                <div id="results" class="center print table-responsive" style="background-color: white !important;">
+                    <div class="center">
+                        <div class="center">
+                            <div style="margin:auto 0;border:thin solid white;text-align:center;">
+                                <div class="center">
+                                    <img src="../../../../assets/images/nba_logo.jpg" width="220" height="185" width="220px" height="185px"/>
+                                    <h3 STYLE="color: #00B22D;line-height: 18px;">NIGERIAN BAR ASSOCIATION 2016 ELECTION RESULT - {{poll.title}}</h3>
+                                </div>
+                            </div>
+                            </di>
+                        </div>
                     <table class="table table-striped table-hover table-bordered">
                         <thead>
                             <tr class="success">

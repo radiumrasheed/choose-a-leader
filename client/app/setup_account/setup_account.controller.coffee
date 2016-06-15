@@ -11,7 +11,9 @@ angular.module 'elektorApp'
       if member.accredited is true
         $state.go "login"
       $scope.member = member
+#      if $scope.member.
 #      $scope.member.firstName = angular.copy $scope.member.othername
+
 
   $scope.reset()
 
