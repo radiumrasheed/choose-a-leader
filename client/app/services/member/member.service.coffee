@@ -4,6 +4,9 @@ angular.module 'elektorApp'
 .service 'Member', ($resource)->
   # AngularJS will instantiate a singleton by calling 'new' on this function
   $resource '/api/members/:id', null,
+    createNewMember:
+      url: 'api/members/newMember'
+      method: "POST"
     createUser:
       url: 'api/members/createUser'
       method: "PUT"

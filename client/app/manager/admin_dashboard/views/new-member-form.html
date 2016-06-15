@@ -84,7 +84,7 @@
     </form>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-disabled="newMemberForm.$invalid" type="submit" ng-click="newMemberForm.$valid && createMember()">
+    <button class="btn btn-primary" ng-disabled="newMemberForm.$invalid" type="submit" ng-click="newMemberForm.$valid && newMember(newMemberForm)">
         <i class="fa fa-save m-r-10"></i> Save Changes</button>
     <button class="btn btn-danger pull-left" ng-click="closeModal()"><i class="fa fa-times"></i> Cancel</button>
 </div>

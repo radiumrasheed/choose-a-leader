@@ -355,9 +355,8 @@ angular.module 'elektorApp'
     $localStorage.memberPerPage = $scope.perPage
     $scope.load $scope.currentPage
 
-  $scope.addMember = () ->
-    console.log "hhh"
-#    $scope.member = {}
+  $scope.addMember = ->
+    $scope.member = {}
     if $scope.superAdmin is true
       modal = $modal.open
         templateUrl: "app/manager/admin_dashboard/views/new-member-form.html"
@@ -388,6 +387,11 @@ angular.module 'elektorApp'
   $scope.updateMember = ->
     Member.update id: $scope.selectedMember._id, $scope.selectedMember, ->
       toastr.success "Member Data Updated"
+      $scope.closeModal()
+      
+  $scope.newMember = (form) ->
+    Member.createNewMember $scope.member, (m) ->
+      toastr.success "New Member Data Updated"
       $scope.closeModal()
 
   $scope.verify = (member) ->
