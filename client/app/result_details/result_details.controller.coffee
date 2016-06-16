@@ -2,6 +2,7 @@
 
 angular.module 'elektorApp'
 .controller 'ResultDetailsCtrl', ( $scope, Vote, $timeout, $rootScope, toastr, $stateParams, Poll ) ->
+  $scope.sortType = "_id.index"
 
   pollId = $stateParams.id
 
@@ -15,10 +16,7 @@ angular.module 'elektorApp'
 
   # Fetch Poll Results Every 30 Seconds
   $scope.standings = ->
-    Vote.stats _poll: pollId
-    , (results) ->
-#      $scope.results = results
-
+    Vote.stats _poll: pollId, (results) ->
       _.each results, (position, _index) ->
         pId = position._id._id
         realPosition = _.find $scope.positions, (p) -> p._id is pId
@@ -36,9 +34,6 @@ angular.module 'elektorApp'
         $scope.standings()
       , 30000
     return
-
-
-  $scope.standings()
 
   $scope.chartData = (title, candidates) ->
     chartObject =

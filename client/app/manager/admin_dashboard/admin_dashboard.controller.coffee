@@ -222,7 +222,23 @@ angular.module 'elektorApp'
     ), ->
       return
     return
-    
+
+  $scope.printPdf = ->
+    console.log "tt"
+
+    doc = new jsPDF
+
+    # We'll make our own renderer to skip this editor
+#    specialElementHandlers = '#editor': (element, renderer) ->
+#      true
+    # All units are in the set measurement for the document
+    # This can be changed to "pt" (points), "mm" (Default), "cm", "in"
+    doc.fromHTML $('#results').get(0), 15, 15,
+      'width': 170
+#      'elementHandlers': specialElementHandlers
+    doc.save 'result.pdf'
+
+
   $scope.chartData = (title, candidates) ->
     chartObject =
       type: "ColumnChart"
