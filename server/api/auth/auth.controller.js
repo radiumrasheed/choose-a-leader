@@ -273,7 +273,7 @@ exports.confirm = function (req, res) {
       if (!member) { return res.send(404); }
       var oldConf = member.codeConfirmed;
       if (oldConf) {
-        return res.status(200).json({message: "Verification Code already Confirmed"});
+        return res.status(200).json({message: "Accreditation Code already Confirmed"});
       }
 
       if (member.accessCode == req.query.code) {
@@ -368,7 +368,7 @@ exports.changePassword = function (req, res) {
 
               mailer.sendVerificationSMS(phone, updatedM.email, updatedM.accessCode, function () {
               });
-              return res.status(200).json({message: "Password Changed Successfully!. Verification Code sent!"});
+              return res.status(200).json({message: "Password Changed Successfully!. Accreditation Code sent!"});
             });
           } else {
             return res.status(200).json({message: "Password Changed Successfully!"});

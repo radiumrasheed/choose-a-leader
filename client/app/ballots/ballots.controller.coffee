@@ -60,7 +60,7 @@ angular.module 'elektorApp'
         return
 
     $scope.cancelChoice = (position) ->
-      $scope.ballot[position] = null
+      $scope.ballot[position] = ''
       keys = _.keys $scope.selected[position]
       _.each keys, (k) ->
         $scope.selected[position][k] = false
