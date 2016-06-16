@@ -37,7 +37,8 @@ angular.module 'elektorApp'
       minimumInputLength: 3
       allowClear: true
       query: (options) ->
-        options.branch = scope.$parent.$parent._branchOfAdmin._id
+        if scope.$parent.$parent._branchOfAdmin?
+          options.branch = scope.$parent.$parent._branchOfAdmin._id
         Member.query name:options.term, _branch:options.branch, (branches) ->
           options.callback
             more:false
