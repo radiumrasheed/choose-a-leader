@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
 
 var MemberSchema = new Schema({
   title: String,
-  firstName: String, 
+  firstName: String,
   middleName: String,
   surname: String,
   othername: String,
@@ -25,7 +25,7 @@ var MemberSchema = new Schema({
   codeConfirmed: Boolean,
   branch: String,
   verified: Number,
-  setupLink_sent: Boolean,
+  setupLink_sent: {type:Boolean, default:false},
   accredited: Boolean,
   _branch: { type: Schema.Types.ObjectId, ref: 'Branch' },
   _user: { type: Schema.Types.ObjectId, ref: 'Auth' },
