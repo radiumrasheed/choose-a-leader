@@ -222,9 +222,9 @@ exports.sendBallotReceiptSMS = function(phone, email, code, signature, next) {
 
 exports.sendSetupLink = function(phone, email, _id, name, next) {
 	var link = 'https://election.nba-agc.org/setup/' + _id + '/';
-	var __message = 'Welcome to NBA 2016 Election Portal, please visit the link below to begin accreditation .' + link;
+	var __message = 'Welcome to NBA 2016 e-Voting Portal, please visit the link below to begin accreditation .' + link;
 
-	var _message = 'Dear ' + name + ', <br><br> Welcome to the NBA 2016 ELECTION PORTAL <br> <br> Please visit the link below to begin accreditation <br> <b> <a href="' + link + '"> <p>https://election.nba-agc.org/setup</p> </a> </b> <br>';
+	var _message = 'Dear ' + name + ', <br><br> Welcome to the NBA 2016 e-VOTING PORTAL <br> <br> Please visit the link below to begin accreditation <br> <b> <a href="' + link + '"> <p>https://election.nba-agc.org/setup</p> </a> </b> <br>';
 
 	var html_message = '<div style="margin:0; padding:0; font-family:Segoe UI,Segoe UI,Arial,Sans-Serif;"> <div style="margin:0; padding:0;"> <div style="max-width:600px; margin: 10px auto 0; background-color: #004600;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px"> <tbody> <tr> <td colspan="3" height="15"></td> </tr> <tr> <td width="20"></td> <td style="text-align: center;"> <a href="https://election.nba-agc.org"> <img src="https://election.nba-agc.org/assets/images/51bcebe4.logo.png"> </a> </td> <td colspan="3"> <h3 align="center" valign="top" style="line-height:41px;font-size: 28px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: #FFFFFF; text-align:center; margin: -12px auto 0;"> NBA <strong> e-Voting Portal </strong> </h3> </td> </tr> <tr> <td colspan="3" height="15"></td> </tr> </tbody> </table> </div> <div style="max-width:600px; margin:0 auto; border-left: 1px solid #CCC; border-right: 1px solid #CCC; border-bottom: 1px solid #CCC; padding-bottom: 20px;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px;"> <tbody> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:36px;font-size:23px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: green;padding-right:15px;padding-left:0px"></td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:19px;font-size:15px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;text-align: justify;color:#000000;padding-right:10px"> ' + _message + ' </td> </tr> <tr> <td height="50" style="border-bottom:1px solid #CCC;"></td> </tr> <tr> <td align="center" valign="top" style="padding-top:10px"> <table> <tbody> <tr> <td style="line-height:19px;font-size:12px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;color:#4b4b4b;padding-right:10px; text-align:center;"> <span style="color: #00CC39; font-weight:bold;">For enquiries,  </span> please call OTI EDAH on +2348033830679 or send emails to: nbapolls-2016@nigerianbar.org.ng</td> </tr> </tbody> </table> </td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> </tbody> </table> </div> </div> </div>';
 	var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
@@ -244,7 +244,7 @@ exports.sendSetupLink = function(phone, email, _id, name, next) {
 			if (email!=undefined && email!=null) {
 				var newMessage = message;
 				newMessage.html = html_message;
-				newMessage.subject = 'Welcome to the NBA 2016 Election Portal.';
+				newMessage.subject = 'Welcome to the NBA 2016 e-Voting Portal.';
 				newMessage.to = [email];
 
 				sendMessage(newMessage, function(res){
@@ -263,12 +263,12 @@ exports.sendSetupLink = function(phone, email, _id, name, next) {
 exports.sendDetailLink = function(phone, email, _id, name, next) {
 	//TODO: replace with valid link
 	var link = 'https://election.nba-agc.org/pre_setup/' + _id + '/';
-	var __message = 'Welcome to NBA 2016 Election Portal, Kindly visit the link below to confirm your details in order to start the accreditation process. ' + link;
+	var __message = 'Welcome to NBA 2016 e-Voting Portal, Kindly visit the link below to confirm your details in order to start the accreditation process. ' + link;
 /*
 	var __message = 'Sir, please find sample title: NBA-2016';
 */
 
-	var _message = 'Dear ' + name + ', <br><br> Welcome to the NBA ELECTION PORTAL We are in the process of accrediting all eligible voters. Kindly click on the link below to confirm your details in order to start the accreditation process. <br> <b> <a href="' + link + '"> <p>https://election.nba-agc.org/pre_setup</p> </a> </b> <br> <br> Warm Regards, <br> <b>Ken Mozia, SAN </b> <br> (Chairman, NBA Elections 2016 Committee) <br> <b>Email: ken.mozia@nigerianbar.org.ng</b>';
+	var _message = 'Dear ' + name + ', <br><br> Welcome to the NBA e-Voting PORTAL We are in the process of accrediting all eligible voters. Kindly click on the link below to confirm your details in order to start the accreditation process. <br> <b> <a href="' + link + '"> <p>https://election.nba-agc.org/pre_setup</p> </a> </b> <br> <br> Warm Regards, <br> <b>Ken Mozia, SAN </b> <br> (Chairman, NBA Elections 2016 Committee) <br> <b>Email: ken.mozia@nigerianbar.org.ng</b>';
 
 	var html_message = '<div style="margin:0; padding:0; font-family:Segoe UI,Segoe UI,Arial,Sans-Serif;"> <div style="margin:0; padding:0;"> <div style="max-width:600px; margin: 10px auto 0; background-color: #004600;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px"> <tbody> <tr> <td colspan="3" height="15"></td> </tr> <tr> <td width="20"></td> <td style="text-align: center;"> <a href="https://election.nba-agc.org"> <img src="https://election.nba-agc.org/assets/images/51bcebe4.logo.png"> </a> </td> <td colspan="3"> <h3 align="center" valign="top" style="line-height:41px;font-size: 28px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: #FFFFFF; text-align:center; margin: -12px auto 0;"> NBA <strong> e-Voting Portal </strong> </h3> </td> </tr> <tr> <td colspan="3" height="15"></td> </tr> </tbody> </table> </div> <div style="max-width:600px; margin:0 auto; border-left: 1px solid #CCC; border-right: 1px solid #CCC; border-bottom: 1px solid #CCC; padding-bottom: 20px;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px;"> <tbody> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:36px;font-size:23px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: green;padding-right:15px;padding-left:0px"></td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:19px;font-size:15px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;text-align: justify;color:#000000;padding-right:10px"> ' + _message + ' </td> </tr> <tr> <td height="50" style="border-bottom:1px solid #CCC;"></td> </tr> <tr> <td align="center" valign="top" style="padding-top:10px"> <table> <tbody> <tr> <td style="line-height:19px;font-size:12px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;color:#4b4b4b;padding-right:10px; text-align:center;"> <span style="color: #00CC39; font-weight:bold;">For enquiries,  </span> please call OTI EDAH on +2348033830679 or send emails to: nbapolls-2016@nigerianbar.org.ng</td> </tr> </tbody> </table> </td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> </tbody> </table> </div> </div> </div>';
 	var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
@@ -288,7 +288,7 @@ exports.sendDetailLink = function(phone, email, _id, name, next) {
 			if (email!=undefined && email!=null) {
 				var newMessage = message;
 				newMessage.html = html_message;
-				newMessage.subject = 'Welcome to the NBA 2016 Election Portal';
+				newMessage.subject = 'Welcome to the NBA 2016 e-Voting Portal';
 				newMessage.to = [email];
 
 				sendMessage(newMessage, function(res){
