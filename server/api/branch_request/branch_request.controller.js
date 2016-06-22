@@ -6,7 +6,7 @@ require('mongoose-pagination');
 
 // Get list of branch_requests
 exports.index = function(req, res) {
-  var condition = req.query.resolved == undefined ? {} : {
+  var condition = req.query.resolved === undefined ? {} : {
     resolved: req.query.resolved
   };
   condition.deleted = false;
