@@ -53,8 +53,8 @@
             </div>
 
             <div  ng-show="noData && selectedItem"
-                 class=" text-center alert alert-danger">
-              <p>Branch Dues List Not Yet Received</p>
+                 class=" text-center alert alert-info">
+              <p>No Data to Confirm in this Branch yet</p>
             </div>
             <table ng-show="members.length"
                    class="table table-striped table-bordered table-condensed table-responsive table-hover">
@@ -64,8 +64,13 @@
                   Name
                 </a>
                 </th>
+                <th>Updated Name</th>
                 <th class="text-center"><a href="#" >
-                  Phone.
+                  Phone
+                </a>
+                </th>
+                <th class="text-center"><a href="#" >
+                  Updated Phone
                 </a>
                 </th>
                 <th><a href="#">
@@ -73,30 +78,25 @@
                 </a>
                 </th>
                 <th><a href="#">
-                  Remarks
+                  Updated Email
                 </a>
                 </th>
                 <th>Action</th>
 
               </tr>
               <tr ng-repeat="m in members track by $index">
-                <td>{{(currentPage-1)*perPage+$index+1}}. <i class="fa fa-check-square text-success"
-                                                             ng-show="m.verified==1"></i> </td>
+                <td>{{(currentPage-1)*perPage+$index+1}}. </td>
                 <td>{{m.fullname}}</td>
-                <td ng-class="m.mobileNumber=='INVALID MOBILE'? 'danger':'success'" class="text-center">{{m.mobileNumber}}</td>
-                <td ng-class="m.email=='NOT AVAILABLE'? 'danger':'success'">{{m.email}}</td>
-                <td ng-hide="m.updated" ng-class="m.verifiedStatus=='NV' || m.scNumber=='NE'? 'danger':'success'">
-                  <label ng-show="m.scNumber=='NE' && m.verifiedStatus!='NV'">{{m.scNumber}}</label>
-                  <label ng-show="m.scNumber!='NE' && m.verifiedStatus=='NV'">{{m.verifiedStatus}}</label>
-                  <label ng-show="m.scNumber=='NE' && m.verifiedStatus=='NV'">{{m.scNumber+' | '+m.verifiedStatus}}</label>
+                <td>{{m.updatedFirstName+' '+m.updatedMiddleName+' '+m.updatedSurname}}</td>
+                <td class="success">{{m.mobileNumber}}</td>
+                <td class="success">{{m.updatedPhone}}</td>
+                <td class="danger">{{m.email}}</td>
+                <td class="danger">{{m.updatedEmail}}</td>
+
+                <td>
+                  <i class="fa fa-check fa-2x text-success" ng-show="m.confirmed"></i>
+                  <button class="btn btn-sm btn-info" ng-hide="m.confirmed" ng-click="update(m, $index)">Confirm</button>
                 </td>
-                <td ng-show="m.updated" ng-class="m.verifiedStatus=='NV'? 'danger':'success'">
-                  <label ng-show="m.verifiedStatus=='NV'">{{m.verifiedStatus}}</label>
-                </td>
-                <td><label ng-show="m.updated" class="btn btn-sm btn-success">Details Updated</label>
-                  <button
-                  class="btn btn-sm btn-info" ng-hide="m.updated" ng-click="update(m._id)">Update
-                </button></td>
                 <!--<td>{{m.accessCode}}</td>-->
               </tr>
             </table>

@@ -9,14 +9,15 @@ var StateSchema = new Schema({
   email: String,
   verifiedStatus:String,
   branchCode:String,
-  updatedScNumber:String,
+  updatedsc_umber:String,
   updatedSurname:String,
   updatedFirstName:String,
   updatedMiddleName:String,
   updatedEmail:String,
   updatedPhone:String,
   updatedTime: String,
-  updated:Boolean
+  updated:Boolean,
+  confirmed:Boolean
 });
 
 module.exports = mongoose.model('VotersReg', StateSchema, 'VotersRegister');

@@ -1,10 +1,8 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'ConfirmRegisterCtrl', ($scope,Voters_Register,$window, $localStorage) ->
-  $scope.data = {}
-  $scope.data.confirm = true
-  Voters_Register.branches $scope.data, (data)->
+.controller 'ConfirmRegisterCtrl', ($scope,Voters_Register,toastr,Member,$window, $localStorage) ->
+  Voters_Register.branches  (data)->
     $scope.branchData = data
 
   $scope.searchMembers = ""
@@ -19,6 +17,7 @@ angular.module 'elektorApp'
       Voters_Register.branchDetails
         page: page
         perPage: $scope.perPage
+        confirm: true
         branchCode: $scope.selectedItem
         , (members, headers) ->
             $scope.members = members
@@ -27,17 +26,6 @@ angular.module 'elektorApp'
             $scope.searchHeader = false
             $scope.total = parseInt headers "total_found"
             $scope.pages = Math.ceil($scope.total / $scope.perPage)
-    else
-      Voters_Register.searchDetails
-        page: page
-        perPage: $scope.perPage
-        branchCode: $scope.selectedItem
-        search: $scope.searchMembers
-      , (members, headers) ->
-          $scope.members = members
-          $scope.total = parseInt headers "total_found"
-          $scope.searchHeader = true
-          $scope.pages = Math.ceil($scope.total / $scope.perPage)
 
   $scope.load $scope.currentPage
 
@@ -45,5 +33,23 @@ angular.module 'elektorApp'
     $localStorage.memberPerPage = $scope.perPage
     $scope.load $scope.currentPage
 
-  $scope.update = (id) ->
-    $window.location.href = '/pre_setup/'+id+'/'
+  $scope.update = (data,index) ->
+    user = {}
+    user.firstName = data.updatedFirstName
+    user.middlename = data.updatedMiddleName
+    user.surname = data.updatedSurname
+    user.sc_number = data.updatedsc_number
+    user.phone = data.updatedPhone
+    user.email = data.updatedEmail
+    user.verified = 1
+    user.branch = data.branchCode
+    Member.createNewMember user,(newMember) ->
+      if newMember
+        data.confirmed = true
+        Voters_Register.saveData data, (memb) ->
+          if memb.confirmed
+            $scope.members[index].confirmed = memb.confirmed
+            toastr.success 'Voter was confirmed successfully'
+          else toastr.error 'Voter was confirmed but not updated'
+      else toastr.error 'Voter was not Confirmed'
+
