@@ -23,6 +23,9 @@
         <a ui-sref=".voters_register" class="btn btn-block btn-lg">
             <i class="fa fa-group"></i> VOTERS REGISTER
         </a>
+      <a ui-sref="confirm_register" class="btn btn-block btn-lg" ng-hide="isBranchAdmin">
+        <i class="fa fa-group"></i> CONFIRM VOTERS <span class="badge" style="background-color: red">{{VotersToConfirm}}</span>
+      </a>
         <a ui-sref=".members" class="btn btn-block btn-lg">
             <i class="fa fa-group"></i> MEMBERS
         </a>

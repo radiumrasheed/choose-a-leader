@@ -41,7 +41,7 @@ agenda.define('Send Accreditation Link To All Members', function (job, done) {
 	)
 });
 
-agenda.every('minute', 'Send Accreditation Link To All Members');
+//agenda.every('minute', 'Send Accreditation Link To All Members');
 
 
 exports.start = function () {

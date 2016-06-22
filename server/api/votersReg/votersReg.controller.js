@@ -13,6 +13,13 @@ exports.index = function(req, res) {
   });
 };
 
+exports.getCount = function(req, res) {
+  VotersReg.count({confirmed:false, updated:true},function (err, count) {
+    if(err) { return handleError(res, err); }
+    return res.json(200,{count:count});
+  });
+};
+
 //search for people in a branch
 exports.searchDetails = function(req, res) {
   var search = req.body.search;
@@ -39,23 +46,31 @@ exports.searchDetails = function(req, res) {
 };
 // Get list of branches with details
 exports.details = function(req, res) {
+    if (req.body.confirm){
+    VotersReg.find({branchCode: req.body.branchCode,confirmed:false, updated:true}).sort('fullname').paginate((req.body.page || 1), (req.body.perPage || 25), function (err, members, total) {
+      res.header('total_found', total);
+      return res.json(members);
+    });
+  }
+  else {
+    VotersReg.find({branchCode: req.body.branchCode}).sort('fullname').paginate((req.body.page || 1), (req.body.perPage || 25), function (err, members, total) {
+      var index, len;
+      for (index = 0, len = members.length; index < len; ++index) {
+        var email = members[index].email;
+        var phone = members[index].mobileNumber;
+        if(email!='NOT AVAILABLE') {
+          var end = email.indexOf('@');
+          members[index].email = email.replace(email.substring(0, end), '*********');
+        }
+        if(phone!='INVALID MOBILE'){
+          members[index].mobileNumber = phone.replace(phone.substring(0, 6), '*******');
+        }
+      }
+      res.header('total_found', total);
+      return res.json(members);
+    });
+  }
 
-  VotersReg.find({branchCode: req.body.branchCode}).sort('fullname').paginate((req.body.page || 1), (req.body.perPage || 25), function (err, members, total) {
-    var index, len;
-    for (index = 0, len = members.length; index < len; ++index) {
-      var email = members[index].email;
-      var phone = members[index].mobileNumber;
-      if(email!='NOT AVAILABLE') {
-        var end = email.indexOf('@');
-        members[index].email = email.replace(email.substring(0, end), '*********');
-      }
-      if(phone!='INVALID MOBILE'){
-        members[index].mobileNumber = phone.replace(phone.substring(0, 6), '*******');
-      }
-    }
-    res.header('total_found', total);
-    return res.json(members);
-  });
 };
 // Get a single member
 exports.getMe = function(req, res) {

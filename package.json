@@ -28,7 +28,7 @@
     "mandrill-api": "1.0.45",
     "method-override": "~1.0.0",
     "moment": "^2.10.3",
-    "mongodb": "^1.4.4",
+    "mongodb": "^1.4.40",
     "mongoose": "~3.8.8",
     "mongoose-pagination": "1.0.0",
     "monk": "^1.0.1",

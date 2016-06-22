@@ -22,3 +22,6 @@ angular.module 'elektorApp'
     saveData:
       method: 'POST'
       url: '/api/votersReg/save'
+    getCount:
+      method: 'GET'
+      url: '/api/votersReg/getCount'

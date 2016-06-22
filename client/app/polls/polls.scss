@@ -1,7 +1,11 @@
 .polls {
-  margin: 70px auto;
+  margin: 5% auto;
 
   .hover {
     cursor: pointer;
   }
+}
+
+@media (max-width: 1000px) {
+  margin: 15% auto;
 }
