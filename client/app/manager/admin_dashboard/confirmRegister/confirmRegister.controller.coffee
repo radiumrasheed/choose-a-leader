@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'ConfirmRegisterCtrl', ($scope,$state,AuthVoters_Register,toastr,Member,$window, $localStorage) ->
+.controller 'ConfirmRegisterCtrl', ($scope,$state,Auth,Voters_Register,toastr,Member,$window, $localStorage) ->
   Auth.me (usr) ->
     if usr.role is 'admin' and usr.superAdmin is true
       Voters_Register.branches  (data)->
