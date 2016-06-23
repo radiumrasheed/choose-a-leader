@@ -9,6 +9,7 @@ exports.index = function(req, res) {
   Branches.find().distinct('name',function (err, branches) {
     if(err) { return handleError(res, err); }
     branches.sort();
+    branches.shift();
     return res.json(200, branches);
   });
 };
