@@ -25,3 +25,6 @@ angular.module 'elektorApp'
     getCount:
       method: 'GET'
       url: '/api/votersReg/getCount'
+    getUpdate:
+      method: 'GET'
+      url: '/api/votersReg/getUpdate'

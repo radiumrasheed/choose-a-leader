@@ -21,8 +21,12 @@
           <p><b>3. </b> Confirmation of details will be done branch by branch. so select a branch and confirm each
             users of the branch that meets the criteria above</p>
           <br>
-
         </div>
+        <div class="row col-md-12 alert-success" style="margin-bottom: 20px">
+          <p>Number of branches that have been updated: {{branchSize}}</p>
+          <a ng-repeat="branch in updatedBranches">{{branch}}, </a>
+        </div>
+
        <div class="row col-md-12">
          <i class="fa fa-home"></i>
          <label for="branch">NBA Branch <span class="required">*</span></label>
