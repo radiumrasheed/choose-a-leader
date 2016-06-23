@@ -4,6 +4,9 @@ angular.module 'elektorApp'
 .controller 'ConfirmRegisterCtrl', ($scope,$state,Auth,Voters_Register,toastr,Member,$window, $localStorage) ->
   Auth.me (usr) ->
     if usr.role is 'admin' and usr.superAdmin is true
+      Voters_Register.getUpdate (data)->
+        $scope.updatedBranches = data.data
+        $scope.branchSize = data.size
       Voters_Register.branches  (data)->
         $scope.branchData = data
 
@@ -38,7 +41,7 @@ angular.module 'elektorApp'
       $scope.update = (data,index) ->
         user = {}
         user.firstName = data.updatedFirstName
-        user.middlename = data.updatedMiddleName
+        user.middleName = data.updatedMiddleName
         user.surname = data.updatedSurname
         user.sc_number = data.updatedsc_number
         user.phone = data.updatedPhone

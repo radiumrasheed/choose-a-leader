@@ -20,6 +20,15 @@ exports.getCount = function(req, res) {
   });
 };
 
+
+exports.getUpdatedBranches = function (req,res) {
+  VotersReg.find({updated:true, confirmed:false}).distinct('branchCode', function (err,branches) {
+    return res.send(200,{
+      data:branches,
+      size:branches.length
+    })
+  });
+};
 //search for people in a branch
 exports.searchDetails = function(req, res) {
   var search = req.body.search;
