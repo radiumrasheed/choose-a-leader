@@ -36,7 +36,7 @@ exports.getMember = function (req, res) {
 exports.index = function(req, res) {
     var n_sn = new RegExp(req.query.name, 'i');
 
-    var condition = req.query.verified == undefined ? {} : { verified: 1 };
+    var condition = req.query.verified === undefined ? {} : {verified: 1};
     if (req.query.name) {
         condition["$or"] = [ { 'surname': { $regex: n_sn }},  { 'middleName': { $regex: n_sn }},  { 'othername': { $regex: n_sn }}, { 'firstName': { $regex: n_sn }} ];
     }
@@ -107,13 +107,13 @@ exports.createUser = function(req, res) {
     if (err) { return handleError(res, err); }
     if (!member) { return res.status(404).json({message: "No record found for specified Enrollment Number."}); }
 
-    if (member.phone.indexOf(req.body.phone) == -1) {
+      if (member.phone.indexOf(req.body.phone) === -1) {
       return res.status(400).json({
         message: "Phone number you’ve entered is different from what we have on our verification register. Please contact your local branch."
       });
     }
 
-    else if (typeof member._user == "undefined" || member._user == null ) {
+      else if (typeof member._user === "undefined" || member._user === null) {
       var u = new User();
       u.clear_password = randomString();
       u.password = u.generateHash(u.clear_password);
@@ -141,7 +141,7 @@ exports.createUser = function(req, res) {
             member.accredited = true;
             member.title = req.body.title;
             member.lastModified = new Date();
-            if (member.accessCode == undefined || member.accessCode == '') {
+              if (member.accessCode === undefined || member.accessCode === '') {
               member.accessCode = User.randomString(8);
             }
             member.save(function (err) {
@@ -161,7 +161,7 @@ exports.createUser = function(req, res) {
     }
 
 /*TODO := add check for setup-stage, if password is not changed go to step to step 2, if not confirmed, go to step 3 */
-	else if (member._user.changedPassword == false) {
+      else if (member._user.changedPassword === false) {
 		return res.status(404).json({message : "Please change your password"});
 	}
 

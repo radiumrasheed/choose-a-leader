@@ -29,7 +29,7 @@ exports.index = function(req, res) {
 
 // Get list of positions and candidates
 exports.ballot = function(req, res) {
-  if (req.query._poll == undefined) return res.json([]);
+  if (req.query._poll === undefined) return res.json([]);
 
   async.parallel([
       function (_cb) {
@@ -70,7 +70,7 @@ exports.photo = function (req, res) {
     'candidates._id': req.params.id
   }).exec(function (err, pos) {
     var candidate = _.find(pos.candidates, function (c) {
-      return c._id == req.params.id;
+      return c._id === req.params.id;
     });
 
     var photo = candidate.photo;
@@ -130,7 +130,7 @@ exports.addCandidate = function(req, res) {
     if(!position) { return res.send(404); }
 
     var exists = _.find(position.candidates, (function (c) {
-      return c._member == req.body._member;
+      return c._member === req.body._member;
     }));
 
     if (exists!=null) { return showPosition(position._id, res); }

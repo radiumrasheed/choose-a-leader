@@ -103,7 +103,7 @@ exports.statsByBranches = function (req, res) {
 
 // Get list of votes for a Position
 exports.results = function(req, res) {
-  if (req.role=='admin') {
+  if (req.role === 'admin') {
     Vote.find({ _position: req.params.id }, function (err, votes) {
       if(err) { return handleError(res, err); }
       return res.json(200, votes);
@@ -219,7 +219,7 @@ exports.castVote = function (req, res) {
               candidateSignature = {};
 
           _.each(keys, function (k) {
-            if (typeof(req.body[k]) == "object") {
+            if (typeof(req.body[k]) === "object") {
               candidateSignature[k] = req.body[k].code;
 
               votes.push({

@@ -118,7 +118,7 @@ exports.requestPassword = function (req, res) {
       return res.status(400).json({message: "No record found for specified Enrollment Number."});
     }
 
-    if (member.phone.indexOf(req.body.phone) == -1) {
+    if (member.phone.indexOf(req.body.phone) === -1) {
       return res.status(400).json({message: "Phone number you’ve entered is different from what we have on our verification register. Please contact your local branch."});
     } else {
       // Generate User account (if it doesn't exist)
@@ -193,7 +193,7 @@ exports.update = function (req, res) {
         updatedM.lastModified = new Date();
 
         // Generate AccessCode (if empty)
-        if (updatedM.accessCode == undefined || updatedM.accessCode == '') {
+        if (updatedM.accessCode === undefined || updatedM.accessCode === '') {
           updatedM.accessCode = User.randomString(8);
         }
 
@@ -241,7 +241,7 @@ exports.sendCode = function (req, res) {
       return res.send(404);
     }
 
-    if (user._member.accessCode == undefined || user._member.accessCode == '' || user._member.accessCode == null) {
+    if (user._member.accessCode === undefined || user._member.accessCode === '' || user._member.accessCode === null) {
       return res.status(400).json({message: "Please setup account first."});
     }
 
@@ -276,7 +276,7 @@ exports.confirm = function (req, res) {
         return res.status(200).json({message: "Accreditation Code already Confirmed"});
       }
 
-      if (member.accessCode == req.query.code) {
+      if (member.accessCode === req.query.code) {
         member.codeConfirmed = true;
         member.save(function () {
           var phone = extractPhoneNumber(member.phone);
