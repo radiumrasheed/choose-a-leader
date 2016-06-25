@@ -17,6 +17,5 @@ router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 router.put('/publish/:id', controller.publish);
-router.get('/published_result/:id', controller.publishedResult);
 
 module.exports = router;
