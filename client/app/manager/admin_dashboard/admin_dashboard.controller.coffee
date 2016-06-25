@@ -157,8 +157,10 @@ angular.module 'elektorApp'
       Poll.update
         id: pollId
       , published: true, ->
-        $scope.poll.published = true
-        toastr.success "Results have been published"
+        Poll.publishPoll id: pollId, $scope.results, ->
+          $scope.poll.result = $scope.results
+          $scope.poll.published = true
+          toastr.success "Results have been published"
     else
       toastr.info "Results have already been published"
 
@@ -237,7 +239,6 @@ angular.module 'elektorApp'
       'width': 170
 #      'elementHandlers': specialElementHandlers
     doc.save 'result.pdf'
-
 
   $scope.chartData = (title, candidates) ->
     chartObject =

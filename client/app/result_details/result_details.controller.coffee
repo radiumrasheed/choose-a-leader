@@ -16,24 +16,12 @@ angular.module 'elektorApp'
 
   # Fetch Poll Results Every 30 Seconds
   $scope.standings = ->
-    Vote.stats _poll: pollId, (results) ->
-      _.each results, (position, _index) ->
-        pId = position._id._id
-        realPosition = _.find $scope.positions, (p) -> p._id is pId
-        _.each realPosition.candidates, (c) ->
-          voteResult = _.find position.votes, (v) -> v.candidate._id is c._member._id
-          if not voteResult?
-            results[_index].votes.push
-              candidate: c._member
-              count: 0
-        results[_index].votes = _.sortBy(position.votes, 'count').reverse()
-
-      $scope.results = results
-      $rootScope.$broadcast "pollResults", results
-      $timeout ->
-        $scope.standings()
-      , 30000
-    return
+    $scope.results = $scope.poll.result
+    $rootScope.$broadcast "pollResults", $scope.results
+    $timeout ->
+      $scope.standings()
+    , 30000
+  return
 
   $scope.chartData = (title, candidates) ->
     chartObject =

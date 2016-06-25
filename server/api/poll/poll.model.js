@@ -13,7 +13,8 @@ var PollSchema = new Schema({
   _branch: { type: Schema.Types.ObjectId, ref: 'Branch' },
   deleted: { type:Boolean, default: false },
   updatedBy: { type: Schema.Types.ObjectId, ref: 'Auth' },
-  updated: Date
+	updated: Date,
+	result: {type: [Schema.Types.Mixed]}
 });
 
 module.exports = mongoose.model('Poll', PollSchema);

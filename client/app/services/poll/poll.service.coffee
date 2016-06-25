@@ -17,3 +17,6 @@ angular.module 'elektorApp'
       method: "GET"
       isArray: true
       url: "api/polls/positions/:id"
+    publishPoll:
+      method: "PUT"
+      url: "api/polls/publish/:id"

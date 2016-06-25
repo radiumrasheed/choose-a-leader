@@ -101,6 +101,36 @@ exports.destroy = function(req, res) {
   });
 };
 
+// Publish a poll in the DB.
+exports.publish = function (req, res) {
+	if (req.body._id) {
+		delete req.body._id;
+	}
+	if (typeof req.body._branch != "string") {
+		delete req.body._branch;
+	}
+
+	Poll.findById(req.params.id, function (err, poll) {
+		if (err) {
+			return handleError(res, err);
+		}
+		if (!poll) {
+			return res.send(404);
+		}
+
+		poll.result = req.body
+		poll.updatedBy = req.user;
+		poll.updated = new Date();
+
+		poll.save(function (err) {
+			if (err) {
+				return handleError(res, err);
+			}
+			return showPoll(poll._id, res);
+		});
+	});
+};
+
 function handleError(res, err) {
   return res.send(500, err);
 }

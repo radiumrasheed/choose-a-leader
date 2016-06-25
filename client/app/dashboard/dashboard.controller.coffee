@@ -2,7 +2,6 @@
 
 angular.module 'elektorApp'
 .controller 'DashboardCtrl', ($scope, $rootScope, Auth, Utils, $state, Poll) ->
-
   Auth.me (user) ->
     if user.role isnt "member"
       $state.go "login"
@@ -27,15 +26,3 @@ angular.module 'elektorApp'
       $scope.showBallot = (p) ->
 #        if $scope.open p then 
         $state.go "ballots", id: p._id
-
-###      Setting.memberStats {}, (d) ->
-        $scope.verified = _.find d[0], (i) -> i._id is 1
-        $scope.unVerified = _.find d[0], (i) -> i._id is 0
-
-        $scope.total = $scope.verified.count + $scope.unVerified.count
-
-        $scope.accredited = _.find d[1], (i) -> i._id###
-
-###      Auth.me (user) ->
-        $scope.user = user
-        Utils.userIsSetup user###
