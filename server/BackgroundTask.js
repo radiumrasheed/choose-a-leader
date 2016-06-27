@@ -3,14 +3,16 @@
  */
 'use strict';
 var Agenda = require('agenda');
+var CronJob = require('cron').CronJob;
 var _ = require('lodash');
 var mailer = require('./components/tools/mailer');
 var config = require('./config/environment');
 var Member = require('./api/member/member.model');
 
-var agenda = new Agenda({db: {address: config.mongo.uri}});
+// var agenda = new Agenda({db: {address: config.mongo.uri}});
 
-agenda.define('Send Accreditation Link To All Members', function (job, done) {
+/*
+ agenda.define('Send Accreditation Link To 50 Members', function (job, done) {
 	console.log("1");
 	Member.find({setupLink_sent: false}).limit(50).exec(
 		function (err, allMembers) {
@@ -40,10 +42,14 @@ agenda.define('Send Accreditation Link To All Members', function (job, done) {
 		}
 	)
 });
+ */
 
-//agenda.every('minute', 'Send Accreditation Link To All Members');
+//agenda.every('minute', 'Send Accreditation Link To 50 Members');
 
-
-exports.start = function () {
-	agenda.start();
-}
+// var job = new CronJob({
+// 	cronTime
+// })
+//
+// exports.start = function () {
+// 	// agenda.start();
+// }

@@ -29,9 +29,9 @@
                                     <span ng-show="sortType_ == 'count' && !sortReverse" class="fa fa-caret-up"></span>
                                 </a>
                             </th>
-<!--
-                            <th class="text-center text-capitalize">TOTAL BRANCH VOTES</th>
--->
+                            <!--
+                                                        <th class="text-center text-capitalize">TOTAL BRANCH VOTES</th>
+                            -->
                         </tr>
                         </thead>
                         <tbody>
@@ -121,8 +121,9 @@
                             <tbody ng-repeat="p in results | orderBy:sortType">
                             <tr>
                                 <td rowspan="{{p.votes.length}}"><a class="h6" href="#" ng-click="poll.national ? open(p._id._id) : ''">{{p._id.name}}</a></td>
-                                <td class="h6">{{p.votes[0].candidate.surname+' '+(p.votes[0].candidate.firstName||p.votes[0].candidate.othername)}} <i
-                                        class="fa fa-trophy fa-2x pull-right" style="color: #e5c100;"></i></td>
+                                <td class="h6">{{p.votes[0].candidate.surname+' '+(p.votes[0].candidate.firstName||p.votes[0].candidate.othername)}}
+                                    <i ng-if="p.votes[0].count !== p.votes[1].count" class="fa fa-trophy fa-2x pull-right" style="color: #e5c100;"></i>
+                                </td>
                                 <td class="text-center">{{p.votes[0].count}}</td>
                                 <td rowspan="{{p.votes.length}}" class="text-center">{{p.total_count}}</td>
                                 <td rowspan="{{p.votes.length}}" class="text-center">{{total}}</td>
