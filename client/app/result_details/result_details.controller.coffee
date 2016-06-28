@@ -6,13 +6,10 @@ angular.module 'elektorApp'
 
   pollId = $stateParams.id
 
-  Poll.positionsDetailed id : pollId, (positions)  ->
-    $scope.positions = positions
-    $scope.standings()
-
   Poll.get id: pollId, (poll) ->
     $scope.poll = poll
     if not poll.published then $state.go "results"
+    $scope.standings()
 
   # Fetch Poll Results Every 30 Seconds
   $scope.standings = ->
@@ -21,7 +18,6 @@ angular.module 'elektorApp'
     $timeout ->
       $scope.standings()
     , 30000
-  return
 
   $scope.chartData = (title, candidates) ->
     chartObject =

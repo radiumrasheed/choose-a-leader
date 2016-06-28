@@ -21,36 +21,50 @@
         <ul class="nav navbar-nav">
             <li><a ui-sref="voters_register"><i class="icon glyphicon-certificate"></i> Voters Register</a></li>
             <li ng-show="!isGuest() && notAdmin()"><a ui-sref="dashboard"><i class="icon glyphicon-dashboard"></i> Dashboard</a></li>
-            <!-- <li ng-show="!isGuest() && !notAdmin()"><a ui-sref="admin_dashboard">ADMIN DASHBOARD</a></li>
-            <li ng-hide="isGuest || notAdmin()"><a ui-sref="admin_dashboard">DASHBOARD</a></li>-->
+            <li ng-show="!isGuest() && isAnyAdmin()"><a ui-sref="admin_dashboard"><i class="icon glyphicon-dashboard"></i> Admin Dashboard</a></li>
             <li ng-show="isGuest()"><a ui-sref="login"><i class="icon glyphicon-lock"></i> Login</a></li>
-            <!--<li ng-show="isGuest()"><a ui-sref="admin_login">Admin Panel</a></li>
 
             <li class="dropdown" ng-hide="isGuest()">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><i
-            class="icon glyphicon-cog"></i> SETTINGS
-            <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-            <li ng-hide="notAdmin()"><a ui-sref="users">USER ACCOUNTS</a></li>
-
-            <li><a>CHANGE PASSWORD</a></li>
-            </ul>
-            </li>-->
-
-            <li ng-hide="isGuest()"><a ng-click="logout()" class="btn-link"> <i class="glyphicon glyphicon-off"></i>
-                Logout
-                <span ng-hide="isGuest()">
-                    ({{$user._member.firstName + " " + $user._member.surname}}
-                    <span ng-show="isBranchAdmin() && !notAdmin()">
-                    Branch Administrator
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                    <i class="icon glyphicon-user"></i>
+                    <span ng-hide="isGuest()">
+                        {{$user._member.firstName + " " + $user._member.surname}}
+                        <span ng-show="isBranchAdmin() && !notAdmin()">
+                        Branch Administrator
+                        </span>
+                        <span ng-show="!notAdmin() && !isBranchAdmin()">
+                        Administrator
+                        </span>
                     </span>
-                    <span ng-show="!notAdmin() && !isBranchAdmin()">
-                    Administrator
-                    </span>
-                    )
-                </span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a ui-sref="update_password"><i class="glyphicon glyphicon-eye-close"></i> Change Password</a></li>
+                    <li ng-hide="isGuest()">
+                        <a ng-click="logout()" class="btn-link">
+                            <i class="glyphicon glyphicon-off"></i>
+                            Logout
+                        </a>
+                    </li>
+                </ul>
+            </li>
 
-            </a></li>
+            <!--
+                        <li ng-hide="isGuest()"><a ng-click="logout()" class="btn-link"> <i class="glyphicon glyphicon-off"></i>
+                            Logout
+                            <span ng-hide="isGuest()">
+                                ({{$user._member.firstName + " " + $user._member.surname}}
+                                <span ng-show="isBranchAdmin() && !notAdmin()">
+                                Branch Administrator
+                                </span>
+                                <span ng-show="!notAdmin() && !isBranchAdmin()">
+                                Administrator
+                                </span>
+                                )
+                            </span>
+
+                        </a></li>
+            -->
         </ul>
     </div>
 </div>
