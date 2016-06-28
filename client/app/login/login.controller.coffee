@@ -1,10 +1,13 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'LoginCtrl', ($scope, $auth, $window, toastr, Auth, $rootScope) ->
+.controller 'LoginCtrl', ($scope, $auth, $window, toastr, Auth, $rootScope, $state) ->
   $scope.login = ->
     $scope.formError = null
     $scope.submitting = true
+
+    $scope.adminLogin = ->
+      $state.go 'admin_login'
 
     $auth.login
       username: $scope.username

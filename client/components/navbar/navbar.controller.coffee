@@ -11,6 +11,10 @@ angular.module 'elektorApp'
   $scope.isGuest = ->
     !$auth.isAuthenticated()
 
+  $scope.isAnyAdmin = ->
+    if $rootScope.$user?
+      $rootScope.$user.role is 'admin' || $rootScope.$user.role is 'branch_admin'
+
   $scope.notAdmin = ->
     if $rootScope.$user?
       $rootScope.$user.role isnt 'admin' && $rootScope.$user.role isnt 'branch_admin'

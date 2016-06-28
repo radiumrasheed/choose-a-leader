@@ -17,8 +17,9 @@ function showPoll(id, res) {
 	});
 }
 
+// Get all positions in a poll
 exports.pollPositionsFull = function (req, res) {
-	Position.find({_poll: req.params.id}).populate('candidates._member').exec(function (err, positions) {
+	Position.find({_poll: req.params.id}, function (err, positions) {
 		if (err) {
 			return handleError(res, err);
 		}
