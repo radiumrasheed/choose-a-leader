@@ -6,8 +6,5 @@ public
 client/bower_components
 dist
 /server/config/local.env.js
-<<<<<<< HEAD
 newrelic_agent.log
 npm-debug.log
-=======
->>>>>>> 6c5019bb27000fc37c95c975c9968bf263d42b8b
