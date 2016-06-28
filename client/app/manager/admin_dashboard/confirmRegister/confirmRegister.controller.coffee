@@ -43,7 +43,7 @@ angular.module 'elektorApp'
         user.firstName = data.updatedFirstName
         user.middleName = data.updatedMiddleName
         user.surname = data.updatedSurname
-        user.sc_number = data.updatedsc_number
+        user.sc_number = data.sc_number
         user.phone = data.updatedPhone
         user.email = data.updatedEmail
         user.verified = 1
