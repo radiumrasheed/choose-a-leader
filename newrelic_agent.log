@@ -12,3 +12,14 @@
 {"v":0,"level":30,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1858,"time":"2016-06-27T17:36:39.867Z","msg":"Connected to collector-147.newrelic.com:443 with agent run ID 108752892899673401.","component":"collector_api"}
 {"v":0,"level":30,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1859,"time":"2016-06-27T17:36:44.382Z","msg":"Reporting to: https://rpm.newrelic.com/accounts/1365904/applications/24485966","component":"new_relic_response"}
 {"v":0,"level":30,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1859,"time":"2016-06-27T17:36:44.383Z","msg":"Connected to collector-147.newrelic.com:443 with agent run ID 108753004568823391.","component":"collector_api"}
+{"v":0,"level":30,"name":"newrelic","hostname":"ubuntu","pid":10687,"time":"2016-06-28T14:22:51.428Z","msg":"Starting New Relic for Node.js connection process."}
+{"v":0,"level":30,"name":"newrelic","hostname":"ubuntu","pid":10687,"time":"2016-06-28T14:22:59.272Z","msg":"Reporting to: https://rpm.newrelic.com/accounts/1365904/applications/24485966","component":"new_relic_response"}
+{"v":0,"level":30,"name":"newrelic","hostname":"ubuntu","pid":10687,"time":"2016-06-28T14:22:59.273Z","msg":"Connected to collector-147.newrelic.com:443 with agent run ID 110124976042499641.","component":"collector_api"}
+{"v":0,"level":30,"name":"newrelic","hostname":"ubuntu","pid":10706,"time":"2016-06-28T14:22:55.148Z","msg":"Starting New Relic for Node.js connection process."}
+{"v":0,"level":40,"name":"newrelic","hostname":"ubuntu","pid":10706,"time":"2016-06-28T14:23:06.477Z","msg":"Unrecognized version undefined of Express detected; not instrumenting","component":"express"}
+{"v":0,"level":30,"name":"newrelic","hostname":"ubuntu","pid":10706,"time":"2016-06-28T14:23:25.964Z","msg":"Reporting to: https://rpm.newrelic.com/accounts/1365904/applications/24485966","component":"new_relic_response"}
+{"v":0,"level":30,"name":"newrelic","hostname":"ubuntu","pid":10706,"time":"2016-06-28T14:23:25.965Z","msg":"Connected to collector-147.newrelic.com:443 with agent run ID 110125229445572365.","component":"collector_api"}
+{"v":0,"level":30,"name":"newrelic","hostname":"ubuntu","pid":10876,"time":"2016-06-28T14:23:46.497Z","msg":"Starting New Relic for Node.js connection process."}
+{"v":0,"level":40,"name":"newrelic","hostname":"ubuntu","pid":10876,"time":"2016-06-28T14:23:58.569Z","msg":"Unrecognized version undefined of Express detected; not instrumenting","component":"express"}
+{"v":0,"level":30,"name":"newrelic","hostname":"ubuntu","pid":10876,"time":"2016-06-28T14:24:06.120Z","msg":"Reporting to: https://rpm.newrelic.com/accounts/1365904/applications/24485966","component":"new_relic_response"}
+{"v":0,"level":30,"name":"newrelic","hostname":"ubuntu","pid":10876,"time":"2016-06-28T14:24:06.121Z","msg":"Connected to collector-147.newrelic.com:443 with agent run ID 110125229445575842.","component":"collector_api"}
