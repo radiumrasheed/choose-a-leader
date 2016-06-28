@@ -1,0 +1,14 @@
+{"v":0,"level":30,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1565,"time":"2016-06-27T16:09:20.556Z","msg":"Starting New Relic for Node.js connection process."}
+{"v":0,"level":30,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1566,"time":"2016-06-27T16:09:24.091Z","msg":"Starting New Relic for Node.js connection process."}
+{"v":0,"level":40,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1566,"time":"2016-06-27T16:09:29.482Z","msg":"Unrecognized version undefined of Express detected; not instrumenting","component":"express"}
+{"v":0,"level":30,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1565,"time":"2016-06-27T16:09:33.153Z","msg":"Reporting to: https://rpm.newrelic.com/accounts/1365904/applications/24485966","component":"new_relic_response"}
+{"v":0,"level":30,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1565,"time":"2016-06-27T16:09:33.154Z","msg":"Connected to collector-147.newrelic.com:443 with agent run ID 108752892899227256.","component":"collector_api"}
+{"v":0,"level":30,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1566,"time":"2016-06-27T16:09:39.653Z","msg":"Reporting to: https://rpm.newrelic.com/accounts/1365904/applications/24485966","component":"new_relic_response"}
+{"v":0,"level":30,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1566,"time":"2016-06-27T16:09:39.654Z","msg":"Connected to collector-147.newrelic.com:443 with agent run ID 108753004568377435.","component":"collector_api"}
+{"v":0,"level":30,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1858,"time":"2016-06-27T17:36:24.902Z","msg":"Starting New Relic for Node.js connection process."}
+{"v":0,"level":30,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1859,"time":"2016-06-27T17:36:28.592Z","msg":"Starting New Relic for Node.js connection process."}
+{"v":0,"level":40,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1859,"time":"2016-06-27T17:36:34.567Z","msg":"Unrecognized version undefined of Express detected; not instrumenting","component":"express"}
+{"v":0,"level":30,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1858,"time":"2016-06-27T17:36:39.865Z","msg":"Reporting to: https://rpm.newrelic.com/accounts/1365904/applications/24485966","component":"new_relic_response"}
+{"v":0,"level":30,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1858,"time":"2016-06-27T17:36:39.867Z","msg":"Connected to collector-147.newrelic.com:443 with agent run ID 108752892899673401.","component":"collector_api"}
+{"v":0,"level":30,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1859,"time":"2016-06-27T17:36:44.382Z","msg":"Reporting to: https://rpm.newrelic.com/accounts/1365904/applications/24485966","component":"new_relic_response"}
+{"v":0,"level":30,"name":"newrelic","hostname":"Tofades-Mac.local","pid":1859,"time":"2016-06-27T17:36:44.383Z","msg":"Connected to collector-147.newrelic.com:443 with agent run ID 108753004568823391.","component":"collector_api"}
