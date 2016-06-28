@@ -158,7 +158,7 @@ exports.publish = function (req, res) {
 			return res.send(404);
 		}
 
-		poll.result = req.body
+		poll.result = req.body;
 		poll.updatedBy = req.user;
 		poll.updated = new Date();
 

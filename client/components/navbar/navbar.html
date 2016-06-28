@@ -21,7 +21,8 @@
         <ul class="nav navbar-nav">
             <li><a ui-sref="voters_register"><i class="icon glyphicon-certificate"></i> Voters Register</a></li>
             <li ng-show="!isGuest() && notAdmin()"><a ui-sref="dashboard"><i class="icon glyphicon-dashboard"></i> Dashboard</a></li>
-            <li ng-show="!isGuest() && isAnyAdmin()"><a ui-sref="admin_dashboard"><i class="icon glyphicon-dashboard"></i> Admin Dashboard</a></li>
+            <li ng-show="!isGuest() && isAnyAdmin()"><a ui-sref="admin_dashboard"><i
+                    class="icon glyphicon-dashboard"></i> Admin Dashboard</a></li>
             <li ng-show="isGuest()"><a ui-sref="login"><i class="icon glyphicon-lock"></i> Login</a></li>
 
             <li class="dropdown" ng-hide="isGuest()">
@@ -39,7 +40,8 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a ui-sref="update_password"><i class="glyphicon glyphicon-eye-close"></i> Change Password</a></li>
+                    <li><a ui-sref="update_password"><i class="glyphicon glyphicon-eye-close"></i> Change Password</a>
+                    </li>
                     <li ng-hide="isGuest()">
                         <a ng-click="logout()" class="btn-link">
                             <i class="glyphicon glyphicon-off"></i>
