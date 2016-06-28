@@ -19,7 +19,7 @@ angular.module 'elektorApp'
         toastr.success 'Login Successful!'
         if r.headers "changed_password" isnt "true" then $window.location.href = "/change_password"
 #        else if r.body.role "Admin"
-        else $window.location.href = '/'
+        else $window.location.href = '/dashboard'
 
     , (e) ->
       $scope.submitting = false
