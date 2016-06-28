@@ -9,7 +9,6 @@ angular.module 'elektorApp'
   Voters_Register.me _id: $stateParams.id, (member) ->
     $scope.member = member
 
-  $scope.search = {}
   #  Member.me  _member: $stateParams.id, (member) ->
   #    $scope.member = member
 
@@ -37,9 +36,13 @@ angular.module 'elektorApp'
   $scope.$on 'eventName', (event, data) ->
     $scope.person.sc_number = data.sc_number;
 
-  $scope.innerSearch = ->
+  $scope.Search = ->
+    console.log $scope.search
     $scope.search.rank = 1
-    $scope.showModal()
+    $scope.doLookup()
+    .then((result) ->
+      $scope.open($scope.memberss)
+    )
 
   $scope.showModal = ->
     $scope.doLookup()
@@ -51,21 +54,13 @@ angular.module 'elektorApp'
     $state.go "dashboard"
 
   $scope.doLookup = ->
-    if not $scope.person.rank? and $scope.search.rank isnt 1
       if $scope.person.updatedSurname.length >= 3 and $scope.person.updatedFirstName.length >= 3
         return $http.post('/api/members/getmember', $scope.person).success (members) ->
           $scope.memberss = []
           if members
             $scope.memberss.push.apply $scope.memberss, members
           return
-    if $scope.search.rank is 1
-      if $scope.search.searchSurname.length >= 3 and $scope.search.searchFirstName.length >= 3
-        return $http.post('/api/members/getmember', $scope.search).success (members) ->
-          $scope.memberss = []
-          if members
-            $scope.memberss.push.apply $scope.memberss, members
-          return
-      $scope.search = 0
+
 
   #modal instance for members
   $scope.open = (bio) ->
@@ -93,11 +88,24 @@ angular.module 'elektorApp'
     $scope.animationsEnabled = !$scope.animationsEnabled
     return
 
-.controller 'ModalInstanceCtrl', ($scope, $modalInstance, bio, $rootScope) ->
+.controller 'ModalInstanceCtrl', ($scope, $modalInstance,$http,bio, $rootScope) ->
   $scope.bio = bio
 
   $scope.member = {}
   $scope.user = {}
+  $scope.search = {}
+
+  $scope.show = true;
+
+  $scope.doLookup = ->
+    if $scope.search.updatedSurname.length >= 3 and $scope.search.updatedFirstName.length >= 3
+        return $http.post('/api/members/getmember', $scope.search).success (members) ->
+          $scope.memberss = []
+          if members
+            $scope.memberss.push.apply $scope.memberss, members
+            $scope.bio = $scope.memberss
+            console.log $scope.memberss
+          return
 
 
   $scope.setData = ->
