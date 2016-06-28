@@ -3,19 +3,45 @@
 <script type="text/ng-template" id="bioModalContent.html">
     <div class="modal-content">
         <div class="modal-header">
+            <button class="btn btn-xs btn-danger pull-right" ng-click="cancel()"><i class="fa fa-times"></i></button>
             <h4 ng-show="bio.length>=1" class="modal-title">Please click on your name from the list below to retrieve your
                 Supreme Court Enrollment Number.</h4>
 
         </div>
         <div class="modal-body">
-            <h5 ng-show="bio.length<1" style="color:red" class="modal-title">Unfortunately, we can't seem
-                to
-                find your
-                record on our
-                database, in order to auto-fill your Enrollment Number.
-                Please try to input your name correctly, Surname first, followed by FirstName. Otherwise, kindly fill in
-                your enrollment number.
-                .</h5>
+            <h5 ng-show="bio.length<1" style="color:red" class="modal-title">Unfortunately, no record found for the provided names
+                Please try to input your name as it appears on your Call to Bar , Surname first, followed by FirstName. Otherwise, kindly fill in your enrollment number.
+            </h5>
+
+            <form name="preSetupForm_temp" class="form-horizontal">
+                <div class="form-group">
+                    <label class=" control-label">Surname <span class="required">*</span> </label>
+                    <div class="">
+                        <input ng-change="person.sc_number=''" type="text"
+                               class="form-control"
+                               placeholder="Surname" ng-model="search.searchSurname" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class=" control-label">FirstName<span class="required">*</span> </label>
+                    <div class="">
+                        <input type="text" ng-change="person.sc_number=''"
+                               placeholder="FirstName" class="form-control"
+                               ng-model="search.searchFirstName" required>
+                    </div>
+                </div>
+                <div class="col-sm-12 center">
+                    <button class="btn btn-default btn-block"
+                            ng-disabled="preSetupForm.$invalid || submitting"
+                            ng-click="innerSearch()"><i
+                            class="fa fa-search"></i> Search
+                    </button>
+                </div>
+            </form>
+
+            <br>
+            <br>
             <br>
             <div class="text-center" ng-show="bio.length<1">
                 <button ng-click="cancel()" class="btn btn-sm btn-success">Go Back</button>
