@@ -9,40 +9,50 @@
 
         </div>
         <div class="modal-body">
-            <h5 ng-show="bio.length<1" style="color:red" class="modal-title">Unfortunately, no record found for the provided names
-                Please try to input your name as it appears on your Call to Bar , Surname first, followed by FirstName. Otherwise, kindly fill in your enrollment number.
-            </h5>
+            <div ng-show="bio.length<1">
+                <h5 ng-show="bio.length<1" class="modal-title alert alert-danger">Unfortunately, no record found for the provided name, if your name has changed after
+                    your Call To Bar
+                    Please input your name as it appears on your Call to Bar , Surname first, followed by FirstName To
+                    retrieve your scNumber.
+                </h5>
 
-            <form name="preSetupForm_temp" class="form-horizontal">
-                <div class="form-group">
-                    <label class=" control-label">Surname <span class="required">*</span> </label>
-                    <div class="">
-                        <input ng-change="person.sc_number=''" type="text"
-                               class="form-control"
-                               placeholder="Surname" ng-model="search.searchSurname" required>
+                <form name="preSetupForm_temp">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label class=" control-label">Surname <span class="required">*</span> </label>
+                            <div class="">
+                                <input ng-change="person.sc_number=''" type="text"
+                                       class="form-control"
+                                       placeholder="Surname" ng-model="search.updatedSurname" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label class=" control-label">FirstName<span class="required">*</span> </label>
+                            <div class="">
+                                <input type="text" ng-change="person.sc_number=''"
+                                       placeholder="FirstName" class="form-control"
+                                       ng-model="search.updatedFirstName" required>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class=" control-label">FirstName<span class="required">*</span> </label>
-                    <div class="">
-                        <input type="text" ng-change="person.sc_number=''"
-                               placeholder="FirstName" class="form-control"
-                               ng-model="search.searchFirstName" required>
+                    <div class="col-sm-12 center">
+                        <button class="btn btn-default btn-block"
+                                ng-disabled="preSetupForm_temp.$invalid"
+                                ng-click="doLookup()"><i
+                                class="fa fa-search"></i> Search
+                        </button>
                     </div>
-                </div>
-                <div class="col-sm-12 center">
-                    <button class="btn btn-default btn-block"
-                            ng-disabled="preSetupForm.$invalid || submitting"
-                            ng-click="innerSearch()"><i
-                            class="fa fa-search"></i> Search
-                    </button>
-                </div>
-            </form>
+                </form>
 
+            </div>
             <br>
             <br>
             <br>
+            <div ng-show="bio.length>=1">
+                <button class="btn btn-sm btn-danger" ng-click="show=false; bio=[]">I want to search again</button>
+            </div>
             <div class="text-center" ng-show="bio.length<1">
                 <button ng-click="cancel()" class="btn btn-sm btn-success">Go Back</button>
             </div>
@@ -120,25 +130,31 @@
                         <label class="col-sm-5 control-label">Surname <span class="required">*</span> </label>
                         <div class="col-sm-7">
                             <input ng-change="person.sc_number=''" type="text"
-                                   class="form-control"
-                                   placeholder="Surname" ng-model="person.updatedSurname" required>
+                                   class="form-control" name="updatedSurname"
+                                   placeholder="Surname" minlength="3" ng-model="person.updatedSurname" required>
+                            <span ng-show="preSetupForm.updatedSurname.$invalid && preSetupForm.updatedSurname.$dirty" class="help-block">
+                                Name too short</span>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-5 control-label">FirstName<span class="required">*</span> </label>
                         <div class="col-sm-7">
-                            <input type="text" ng-change="person.sc_number=''"
+                            <input type="text" ng-change="person.sc_number=''" name="updatedFirstName"
                                    placeholder="FirstName" class="form-control"
-                                   ng-model="person.updatedFirstName" required>
+                                   ng-model="person.updatedFirstName" minlength="3" required>
+                            <span ng-show="preSetupForm.updatedFirstName.$invalid && preSetupForm.updatedFirstName.$dirty" class="help-block">
+                                Name too short</span>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-5 control-label">MiddleName </label>
                         <div class="col-sm-7">
-                            <input type="text" placeholder="MiddleName" class="form-control"
+                            <input type="text" placeholder="MiddleName" name="updatedMiddleName" minlength="3" class="form-control"
                                    ng-model="person.updatedMiddleName">
+                            <span ng-show="preSetupForm.updatedMiddleName.$invalid && preSetupForm.updatedMiddleName.$dirty" class="help-block">
+                                Name too short</span>
                         </div>
                     </div>
 
@@ -161,18 +177,20 @@
                     <div class="form-group">
                         <label class="col-sm-5 control-label">Email <span class="required">*</span> </label>
                         <div class="col-sm-7">
-                            <input type="email" placeholder="EMAIL" class="form-control"
-                                   ng-model="person.updatedEmail" required>
-                        <span ng-show="person.email.$dirty && person.email.$error.required"
-                              class="alert alert-danger">Please enter your correct email address.</span>
+                            <input type="email" placeholder="EMAIL" class="form-control" name="updatedEmail" title="email address"
+                                   ng-model="person.updatedEmail" pattern="^\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b" required>
+                            <span ng-show="preSetupForm.updatedEmail.$invalid && preSetupForm.updatedEmail.$dirty" class="help-block">
+                                Please enter a valid email address</span>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-5 control-label">Phone Number <span class="required">*</span> </label>
                         <div class="col-sm-7">
-                            <input type="tel" placeholder="PHONE NUMBER" class="form-control"
-                                   ng-model="person.updatedPhone" required>
+                            <input type="tel" pattern="^0\d{10}$" placeholder="Phone (e.g 08012345678)" class="form-control" name="updatedPhone"
+                                   title="phone number" ng-model="person.updatedPhone" minlength="11" maxlength="11" required>
+                            <span ng-show="preSetupForm.updatedPhone.$invalid && preSetupForm.updatedPhone.$dirty" class="help-block">
+                                Please enter phone in a valid format - e.g 08012345678</span>
                         </div>
                     </div>
 

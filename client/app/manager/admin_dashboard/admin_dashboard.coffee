@@ -56,3 +56,8 @@ angular.module 'elektorApp'
     url: 'branch_updates/'
     templateUrl: 'app/manager/admin_dashboard/views/branch-updates.html'
     controller: 'BURCtrl'
+    
+  .state 'admin_dashboard.update_admin_password',
+    url: 'update_password/'
+    templateUrl: 'app/manager/admin_dashboard/views/update-password.html'
+    controller: 'PasswordCtrl'

@@ -40,10 +40,10 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a ui-sref="update_password"><i class="glyphicon glyphicon-eye-close"></i> Change Password</a>
-                    </li>
+                    <li ng-if="notAdmin()"><a ui-sref="update_password"><i class="glyphicon glyphicon-eye-close"></i> Change Password</a></li>
+                    <li ng-if="isAnyAdmin()"><a ui-sref=".update_admin_password"><i class="glyphicon glyphicon-eye-close"></i> Change Password</a></li>
                     <li ng-hide="isGuest()">
-                        <a ng-click="logout()" class="btn-link">
+                        <a ng-click="logout()" href="#">
                             <i class="glyphicon glyphicon-off"></i>
                             Logout
                         </a>
