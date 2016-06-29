@@ -8,10 +8,6 @@ var redis = require('redis'),
     config = require('../../config/environment'),
     redisClient = redis.createClient(config.redis.uri);
 
-function closeRedis() {
-  // redisClient.quit();
-}
-
 // Get list of branches
 exports.index = function(req, res) {
   var key = "branch-list";
@@ -34,7 +30,6 @@ exports.index = function(req, res) {
     else {
       if (response == 1) {
         redisClient.get(key, function (err, branches) {
-          closeRedis();
           return res.json(JSON.parse(branches));
         });
       } else {
