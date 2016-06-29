@@ -19,7 +19,7 @@ exports.index = function(req, res) {
       branches.shift();
       
       // Write to Cache
-      redisClient.set(key, JSON.stringify(branches), function (e) { closeRedis(); });
+      redisClient.set(key, JSON.stringify(branches), function (e) {  });
       
       return res.json(200, branches);
     });
@@ -93,6 +93,8 @@ exports.searchDetails = function(req, res) {
 
         // Write to Cache
         redisClient.hmset([rKey, "members", JSON.stringify(members), "total", total]);
+        redisClient.expire(rKey, 1800);
+
         return sendData(total, members);
       });
     }
@@ -150,6 +152,7 @@ exports.details = function(req, res) {
           }
           // Write to Cache
           redisClient.hmset([mRKey, "members", JSON.stringify(members), "total", total]);
+          redisClient.expire(mRKey, 1800);
 
           return sendData(total, members);
         });
