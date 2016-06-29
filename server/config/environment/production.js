@@ -19,5 +19,8 @@ module.exports = {
             process.env.MONGOHQ_URL ||
             process.env.OPENSHIFT_MONGODB_DB_URL+process.env.OPENSHIFT_APP_NAME ||
             'mongodb://elektor:graceLIMITED12@candidate.18.mongolayer.com:11252,candidate.19.mongolayer.com:11126/elektor?replicaSet=set-55770081cd1daa7d940009df'
+  },
+  redis: {
+    uri: process.env.REDIS_URL
   }
 };
