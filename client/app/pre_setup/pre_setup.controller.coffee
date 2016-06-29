@@ -88,7 +88,7 @@ angular.module 'elektorApp'
     $scope.animationsEnabled = !$scope.animationsEnabled
     return
 
-.controller 'ModalInstanceCtrl', ($scope, $modalInstance,$http,bio, $rootScope) ->
+.controller 'ModalInstanceCtrl', ($scope, $modalInstance, $http, bio, $rootScope) ->
   $scope.bio = bio
 
   $scope.member = {}
@@ -99,13 +99,13 @@ angular.module 'elektorApp'
 
   $scope.doLookup = ->
     if $scope.search.updatedSurname.length >= 3 and $scope.search.updatedFirstName.length >= 3
-        return $http.post('/api/members/getmember', $scope.search).success (members) ->
-          $scope.memberss = []
-          if members
-            $scope.memberss.push.apply $scope.memberss, members
-            $scope.bio = $scope.memberss
-            console.log $scope.memberss
-          return
+      return $http.post('/api/members/getmember', $scope.search).success (members) ->
+        $scope.memberss = []
+        if members
+          $scope.memberss.push.apply $scope.memberss, members
+          $scope.bio = $scope.memberss
+          console.log $scope.memberss
+        return
 
 
   $scope.setData = ->

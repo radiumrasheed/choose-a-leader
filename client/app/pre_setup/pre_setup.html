@@ -9,34 +9,35 @@
 
         </div>
         <div class="modal-body">
-          <div ng-show="bio.length<1">
-            <h5 ng-show="bio.length<1"  class="modal-title alert alert-danger">Unfortunately, no record found for the provided name, if your name has changed after your Call To Bar
-                Please input your name as it appears on your Call to Bar , Surname first, followed by FirstName To
-              retrieve your scNumber.
+            <div ng-show="bio.length<1">
+                <h5 ng-show="bio.length<1" class="modal-title alert alert-danger">Unfortunately, no record found for the provided name, if your name has changed after
+                    your Call To Bar
+                    Please input your name as it appears on your Call to Bar , Surname first, followed by FirstName To
+                    retrieve your scNumber.
             </h5>
 
-            <form name="preSetupForm_temp">
-              <div class="row">
-                <div class="col-md-6 form-group">
-                  <label class=" control-label">Surname <span class="required">*</span> </label>
-                  <div class="">
-                    <input ng-change="person.sc_number=''" type="text"
-                           class="form-control"
-                           placeholder="Surname" ng-model="search.updatedSurname" required>
-                  </div>
+                <form name="preSetupForm_temp">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label class=" control-label">Surname <span class="required">*</span> </label>
+                            <div class="">
+                                <input ng-change="person.sc_number=''" type="text"
+                                       class="form-control"
+                                       placeholder="Surname" ng-model="search.updatedSurname" required>
+                            </div>
                 </div>
 
-                <div class="col-md-6 form-group">
-                  <label class=" control-label">FirstName<span class="required">*</span> </label>
-                  <div class="">
-                    <input type="text" ng-change="person.sc_number=''"
-                           placeholder="FirstName" class="form-control"
-                           ng-model="search.updatedFirstName" required>
-                  </div>
+                        <div class="col-md-6 form-group">
+                            <label class=" control-label">FirstName<span class="required">*</span> </label>
+                            <div class="">
+                                <input type="text" ng-change="person.sc_number=''"
+                                       placeholder="FirstName" class="form-control"
+                                       ng-model="search.updatedFirstName" required>
+                            </div>
                 </div>
-              </div>
+                    </div>
 
-                <div class="col-sm-12 center">
+                    <div class="col-sm-12 center">
                     <button class="btn btn-default btn-block"
                             ng-disabled="preSetupForm_temp.$invalid"
                             ng-click="doLookup()"><i
@@ -45,12 +46,13 @@
                 </div>
             </form>
 
-      </div>
+            </div>
             <br>
             <br>
             <br>
-          <div ng-show="bio.length>=1">
-            <button class="btn btn-sm btn-danger" ng-click="show=false; bio=[]">I want to search again</button></div>
+            <div ng-show="bio.length>=1">
+                <button class="btn btn-sm btn-danger" ng-click="show=false; bio=[]">I want to search again</button>
+            </div>
             <div class="text-center" ng-show="bio.length<1">
                 <button ng-click="cancel()" class="btn btn-sm btn-success">Go Back</button>
             </div>

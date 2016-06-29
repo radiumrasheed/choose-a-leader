@@ -6,9 +6,6 @@ angular.module 'elektorApp'
     $scope.formError = null
     $scope.submitting = true
 
-    $scope.adminLogin = ->
-      $state.go 'admin_login'
-
     $auth.login
       username: $scope.username
       password: $scope.password
@@ -25,3 +22,6 @@ angular.module 'elektorApp'
       $scope.submitting = false
       toastr.error e.data.message
       $scope.formError = e.data.message
+
+  $scope.adminLogin = ->
+    $state.go 'admin_login'
