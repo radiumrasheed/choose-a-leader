@@ -20,11 +20,14 @@
                     <p><b>2. </b> If your name is not on the list, but you paid your Bar Practising Fee and Branch Dues as and when due, kindly contact your Branch
                         Chairman with your proof of payment or contact the National Electoral Committee on 0803 383 0679
                         or send email to nbapolls-2016@nigerianbar.org.ng</p>
-                    <p><b>3. </b> Please ensure you update your details on or before Thursday, 30th June 2016</p>
+                  <div ng-hide="true"><p><b>3. </b> Please ensure you update your details on or before Thursday, 30th
+                    June
+                    2016</p>
                     <br>
                     <p><b>Please Note:</b><br><strong><b>"NV"</b></strong> - Means Your Verification Details is yet
-                        to be available.<br><b>"NE"</b> - Means your Enrollment Number is not yet specified on our
-                        database<strong><b></b></strong></p>
+                      to be available.<br><b>"NE"</b> - Means your Enrollment Number is not yet specified on our
+                      database<strong><b></b></strong></p></div>
+
                 </div>
                 <div class="row ">
                     <div class="row">
@@ -95,10 +98,10 @@
                                     Email
                                 </a>
                                 </th>
-                                <th><a href="#">
-                                    Remarks
-                                </a>
-                                </th>
+                                <!--<th><a href="#">-->
+                                    <!--Remarks-->
+                                <!--</a>-->
+                                <!--</th>-->
                                 <th>Action</th>
 
                             </tr>
@@ -108,14 +111,14 @@
                                 <td>{{m.fullname}}</td>
                                 <td ng-class="m.mobileNumber=='INVALID MOBILE'? 'danger':'success'" class="text-center">{{m.mobileNumber}}</td>
                                 <td ng-class="m.email=='NOT AVAILABLE'? 'danger':'success'">{{m.email}}</td>
-                                <td ng-hide="m.updated" ng-class="m.verifiedStatus=='NV' || m.scNumber=='NE'? 'danger':'success'">
-                                    <label ng-show="m.scNumber=='NE' && m.verifiedStatus!='NV'">{{m.scNumber}}</label>
-                                    <label ng-show="m.scNumber!='NE' && m.verifiedStatus=='NV'">{{m.verifiedStatus}}</label>
-                                    <label ng-show="m.scNumber=='NE' && m.verifiedStatus=='NV'">{{m.scNumber+' | '+m.verifiedStatus}}</label>
-                                </td>
-                                <td ng-show="m.updated" ng-class="m.verifiedStatus=='NV'? 'danger':'success'">
-                                    <label ng-show="m.verifiedStatus=='NV'">{{m.verifiedStatus}}</label>
-                                </td>
+                                <!--<td ng-hide="m.updated" ng-class="m.verifiedStatus=='NV' || m.scNumber=='NE'? 'danger':'success'">-->
+                                    <!--<label ng-show="m.scNumber=='NE' && m.verifiedStatus!='NV'">{{m.scNumber}}</label>-->
+                                    <!--<label ng-show="m.scNumber!='NE' && m.verifiedStatus=='NV'">{{m.verifiedStatus}}</label>-->
+                                    <!--<label ng-show="m.scNumber=='NE' && m.verifiedStatus=='NV'">{{m.scNumber+' | '+m.verifiedStatus}}</label>-->
+                                <!--</td>-->
+                                <!--<td ng-show="m.updated" ng-class="m.verifiedStatus=='NV'? 'danger':'success'">-->
+                                    <!--<label ng-show="m.verifiedStatus=='NV'">{{m.verifiedStatus}}</label>-->
+                                <!--</td>-->
                                 <td><label ng-show="m.updated" class="btn btn-sm btn-success">Details Updated</label>
                                     <button
                                             class="btn btn-sm btn-info" ng-hide="m.updated" ng-click="update(m._id)">Update
