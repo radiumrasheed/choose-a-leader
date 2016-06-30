@@ -418,10 +418,10 @@ angular.module 'elektorApp'
       , verified: 1, ->
         member.verified = 1
 
-.controller 'VotersRegisterCtrl', ($scope, Member, $localStorage, Auth) ->
+.controller 'VerifiedRegisterCtrl', ($scope, Member, $localStorage, Auth) ->
   $scope.sortType = "surname"
   $scope.sortReverse = false
-  $scope.searchVotersRegister = ""
+  $scope.searchVerifiedRegister = ""
   $scope.perPage = $localStorage.votersRegisterPerPage or 15
   $scope.currentPage = 1
   $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]

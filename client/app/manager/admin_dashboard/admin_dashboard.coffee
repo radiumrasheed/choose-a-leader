@@ -12,10 +12,10 @@ angular.module 'elektorApp'
     templateUrl: 'app/manager/admin_dashboard/views/settings.html'
     controller: 'PollSettingsCtrl'
 
-  .state 'admin_dashboard.voters_register',
-    url: 'voters_register/'
-    templateUrl: 'app/manager/admin_dashboard/views/voters-register.html'
-    controller: 'VotersRegisterCtrl'
+  .state 'admin_dashboard.verified_register',
+    url: 'verified_register/'
+    templateUrl: 'app/manager/admin_dashboard/views/verified-register.html'
+    controller: 'VerifiedRegisterCtrl'
 
   .state 'admin_dashboard.members',
     url: 'members/'
