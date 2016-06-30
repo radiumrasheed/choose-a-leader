@@ -5,7 +5,7 @@
     </h4>
 </div>
 <div class="modal-body">
-    <form name="newMemberForm" ng-submit="newMemberForm.$valid && updateMember()" class="form form-horizontal">
+    <form name="newMemberForm" ng-submit="newMemberForm.$valid && saveNewMember(newMemberForm)" class="form form-horizontal">
         <div class="form-group">
             <label class="col-sm-4 control-label">Enrollment. Number</label>
             <div class="col-sm-8">
@@ -84,7 +84,7 @@
     </form>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-disabled="newMemberForm.$invalid" type="submit" ng-click="newMemberForm.$valid && newMember(newMemberForm)">
+    <button class="btn btn-primary" ng-disabled="newMemberForm.$invalid" type="submit" ng-click="newMemberForm.$valid && saveNewMember(newMemberForm)">
         <i class="fa fa-save m-r-10"></i> Save Changes</button>
     <button class="btn btn-danger pull-left" ng-click="closeModal()"><i class="fa fa-times"></i> Cancel</button>
 </div>

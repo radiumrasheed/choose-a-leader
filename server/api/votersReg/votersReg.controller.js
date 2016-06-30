@@ -46,7 +46,6 @@ exports.getCount = function(req, res) {
   });
 };
 
-
 exports.getUpdatedBranches = function (req,res) {
   VotersReg.find({updated:true, confirmed:false}).distinct('branchCode', function (err,branches) {
     return res.send(200,{
@@ -55,6 +54,7 @@ exports.getUpdatedBranches = function (req,res) {
     })
   });
 };
+
 //search for people in a branch
 exports.searchDetails = function(req, res) {
   var search = req.body.search;
@@ -101,7 +101,7 @@ exports.searchDetails = function(req, res) {
   });
 };
 
-// Get list of branches with details
+// Get list of branches with details with hidden modified data
 exports.details = function(req, res) {
   var pageNo = req.body.page || 1,
      perPage = req.body.perPage || 25;
@@ -170,15 +170,15 @@ exports.getMe = function(req, res) {
   });
 };
 
-// // Creates a new state in the DB.
-// exports.create = function(req, res) {
-//   State.create(req.body, function(err, state) {
-//     if(err) { return handleError(res, err); }
-//     return res.json(201, state);
-//   });
-// };
+/* Creates a new state in the DB.
+exports.create = function(req, res) {
+  State.create(req.body, function(err, state) {
+    if(err) { return handleError(res, err); }
+    return res.json(201, state);
+  });
+};*/
 
-// Updates an existing state in the DB.
+// Updates an existing member in the voters register document
 exports.update = function(req, res) {
   VotersReg.findById(req.body._id, function (err, details) {
     if (err) { return handleError(res, err); }
@@ -187,11 +187,41 @@ exports.update = function(req, res) {
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, details);
-
     });
   });
 };
 
+// Creates a new member in the voters register DB.
+exports.create = function(req, res) {
+  VotersReg.create(req.body, function(err, member) {
+    if(err) { return handleError(res, err); }
+    return res.json(201, member);
+  });
+};
+
+exports.branchMembers = function(req, res) {
+  var pageNo = req.body.page || 1,
+      perPage = req.body.perPage || 25;
+
+  function sendData(total, members) {
+    res.header('total_found', total);
+    return res.json(members);
+  }
+
+  if (req.body.confirm) {
+
+      VotersReg.find({branchCode: req.body.branchCode,confirmed:false, updated:true}).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
+        return sendData(total, members);
+      });
+
+  } else {
+
+    VotersReg.find({branchCode: req.body.branchCode}).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
+      return sendData(total, members);
+    });
+
+  }
+};
 
 function handleError(res, err) {
   return res.send(500, err);

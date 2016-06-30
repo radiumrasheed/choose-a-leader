@@ -406,7 +406,7 @@ angular.module 'elektorApp'
       toastr.success "Member Data Updated"
       $scope.closeModal()
       
-  $scope.newMember = (form) ->
+  $scope.saveNewMember = (form) ->
     Member.createNewMember $scope.member, (m) ->
       toastr.success "New Member Data Updated"
       $scope.closeModal()
@@ -422,7 +422,7 @@ angular.module 'elektorApp'
   $scope.sortType = "surname"
   $scope.sortReverse = false
   $scope.searchVerifiedRegister = ""
-  $scope.perPage = $localStorage.votersRegisterPerPage or 15
+  $scope.perPage = $localStorage.verifiedRegisterPerPage or 15
   $scope.currentPage = 1
   $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
 
@@ -451,7 +451,7 @@ angular.module 'elektorApp'
   $scope.load $scope.currentPage
 
   $scope.pageChanged = ->
-    $localStorage.votersRegisterPerPage = $scope.perPage
+    $localStorage.verifiedRegisterPerPage = $scope.perPage
     $scope.load $scope.currentPage
     
   $scope.sendLink = (member) ->
@@ -569,7 +569,6 @@ angular.module 'elektorApp'
           _.remove $scope.branches, (b) -> (selectedBranches.indexOf b._id) isnt -1
           $scope.branches.push branch
 
-#Rasheed made changes to support delete
 .controller 'PollsCtrl', ($scope, Auth, Poll, $modal, $timeout, toastr, $rootScope) ->
   $scope.perPage = 15
   $scope.currentPage = 1
@@ -756,3 +755,77 @@ angular.module 'elektorApp'
           toastr.error e.data.message
       else
         $scope.formError = "All fields are required"
+
+.controller 'VotersRegisterCtrl', ($scope, VotersRegister, Auth, $localStorage, $state, toastr, $modal) ->
+  Auth.me (usr) ->
+    if usr.superAdmin is true
+      $scope.superAdmin = true
+
+      VotersRegister.branches (data) ->
+        $scope.branchData = data
+
+      modal = null
+      $scope.sortType = "fullname"
+      $scope.sortReverse = false
+      $scope.searchVotersRegister = ""
+      $scope.perPage = $localStorage.votersRegisterPerPage or 15
+      $scope.currentPage = 1
+      $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
+
+      $scope.load = (page) ->
+        VotersRegister.branchDetails
+          page: page
+          branchCode: $scope.selectedItem
+          perPage: $scope.perPage
+        , (voters_register, headers) ->
+          $scope.voters_register = voters_register
+          $scope.total = parseInt headers "total_found"
+          $scope.pages = Math.ceil($scope.total / $scope.perPage)
+
+      $scope.load $scope.currentPage
+
+      $scope.pageChanged = ->
+        $localStorage.votersRegisterPerPage = $scope.perPage
+        $scope.load $scope.currentPage
+
+      $scope.addMemberVR = ->
+        $scope.member = {}
+        modal = $modal.open
+          templateUrl: "app/manager/admin_dashboard/views/new-voters-register-form.html"
+          scope: $scope
+          backdrop: 'static'
+
+      $scope.editMemberVR = (member) ->
+        $scope.selectedMember = member
+        if member.othername?
+          $scope.selectedMember.firstName = member.othername?.split(" ")?[0]
+          $scope.selectedMember.middleName = member.othername?.split(" ")?[1]
+
+        modal = $modal.open
+          templateUrl: "app/manager/admin_dashboard/views/voters-register-form.html"
+          scope: $scope
+          backdrop: 'static'
+
+      $scope.closeModal = ->
+        $scope.selectedMember = null
+        modal.dismiss()
+
+      $scope.updateMemberVR = ->
+        $scope.temp = {}
+        if $scope.selectedMember.mobileNumber is ''
+          $scope.selectedMember.mobileNumber = 'INVALID MOBILE'
+        if $scope.selectedMember.email is ''
+          $scope.selectedMember.email = 'NOT AVAILABLE'
+        $scope.selectedMember.modifiedBy = usr.username
+        VotersRegister.saveData id: $scope.selectedMember._id, $scope.selectedMember, ->
+          toastr.success "Member Data Updated"
+          $scope.closeModal()
+
+      $scope.saveNewMemberVR = (form) ->
+        VotersRegister.create $scope.member, (m) ->
+          toastr.success "New Member Data Created"
+          $scope.closeModal()
+      
+          
+    else
+      $state.go "admin_dashboard"

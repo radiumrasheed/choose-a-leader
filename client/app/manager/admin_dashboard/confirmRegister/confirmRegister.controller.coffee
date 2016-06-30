@@ -1,13 +1,13 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'ConfirmRegisterCtrl', ($scope,$state,Auth,Voters_Register,toastr,Member,$window, $localStorage) ->
+.controller 'ConfirmRegisterCtrl', ($scope, $state, Auth, VotersRegister, toastr, Member, $window, $localStorage) ->
   Auth.me (usr) ->
     if usr.role is 'admin' and usr.superAdmin is true
-      Voters_Register.getUpdate (data)->
+      VotersRegister.getUpdate (data)->
         $scope.updatedBranches = data.data
         $scope.branchSize = data.size
-      Voters_Register.branches  (data)->
+      VotersRegister.branches  (data)->
         $scope.branchData = data
 
       $scope.searchMembers = ""
@@ -19,7 +19,7 @@ angular.module 'elektorApp'
 
       $scope.load = (page) ->
         if $scope.searchMembers is ''
-          Voters_Register.branchDetails
+          VotersRegister.branchDetails
             page: page
             perPage: $scope.perPage
             confirm: true
@@ -51,10 +51,11 @@ angular.module 'elektorApp'
         Member.createNewMember user,(newMember) ->
           if newMember
             data.confirmed = true
-            Voters_Register.saveData data, (memb) ->
+            VotersRegister.saveData data, (memb) ->
               if memb.confirmed
                 $scope.members[index].confirmed = memb.confirmed
                 toastr.success 'Voter was confirmed successfully'
               else toastr.error 'Voter was confirmed but not updated'
           else toastr.error 'Voter was not Confirmed'
+
     else $state.go "dashboard"

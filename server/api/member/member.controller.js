@@ -48,7 +48,6 @@ exports.getMember = function (req, res) {
   });
 };
 
-
 // Get list of members
 exports.index = function(req, res) {
     var n_sn = new RegExp(req.query.name, 'i');

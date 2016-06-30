@@ -1,12 +1,12 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'PreSetupCtrl', ($scope, toastr, $http, Utils, $state, $stateParams, Voters_Register, Member, Person, $auth, $modal, $log) ->
+.controller 'PreSetupCtrl', ($scope, toastr, $http, Utils, $state, $stateParams, VotersRegister, Member, Person, $auth, $modal, $log) ->
   $auth.logout()
 
   $scope.done = false
 
-  Voters_Register.me _id: $stateParams.id, (member) ->
+  VotersRegister.me _id: $stateParams.id, (member) ->
     $scope.member = member
 
   #  Member.me  _member: $stateParams.id, (member) ->
@@ -23,7 +23,7 @@ angular.module 'elektorApp'
       #      $scope.person.branch = $scope.member.branchCode
       ##      $scope.person.fullname = $scope.member.surname+' '+$scope.member.firstName
       #      console.log $scope.person
-      Voters_Register.saveData $scope.person, ->
+      VotersRegister.saveData $scope.person, ->
         $scope.submitting = false
         $scope.done = true
         toastr.success "Update Successful"
