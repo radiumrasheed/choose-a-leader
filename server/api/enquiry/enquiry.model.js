@@ -9,6 +9,7 @@ var EnquirySchema = new Schema({
   title: String,
   message: String,
   timeSent: String,
+  name: String,
   resolved: { type: Boolean, default: false }
 });
 
