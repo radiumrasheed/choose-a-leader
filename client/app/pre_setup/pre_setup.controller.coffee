@@ -45,21 +45,22 @@ angular.module 'elektorApp'
     )
 
   $scope.showModal = ->
-    $scope.doLookup()
-    .then((result) ->
-      $scope.open($scope.memberss)
-    )
+    if $scope.person.updatedSurname? and $scope.person.updatedFirstName?
+      $scope.doLookup().then((result) ->
+        $scope.open($scope.memberss)
+      )
 
   $scope.dashboard = ->
     $state.go "dashboard"
 
   $scope.doLookup = ->
-      if $scope.person.updatedSurname.length >= 3 and $scope.person.updatedFirstName.length >= 3
-        return $http.post('/api/members/getmember', $scope.person).success (members) ->
-          $scope.memberss = []
-          if members
-            $scope.memberss.push.apply $scope.memberss, members
-          return
+    if $scope.person.updatedSurname.length >= 3 and $scope.person.updatedFirstName.length >= 3
+      return $http.post('/api/members/getmember', $scope.person).success (members) ->
+        $scope.memberss = []
+        if members
+          $scope.memberss.push.apply $scope.memberss, members
+        return
+
 
 
   #modal instance for members
