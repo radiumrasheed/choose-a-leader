@@ -1,0 +1,108 @@
+<div ng-include="'components/navbar/navbar.html'" xmlns="http://www.w3.org/1999/html"></div>
+
+<div class="container setup_account" id="setup_account">
+
+  <div style="background: #004600; margin-bottom: 10px" class="col-md-12">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center" style="margin-top: 10px; margin-bottom: 10px">
+          <h2><span class="text-uppercase text-white text-bold">Enquiries</span></h2>
+          <h5>
+            <span class="text-uppercase text-white text-bold">E-Voting Enquiries Form</span>
+          </h5>
+
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="row text-center">
+
+  </div>
+  <div class="row">
+    <div class="col-md-offset-2 col-md-8 panel panel-green no-padding">
+      <div class="panel-heading">
+        <div class="panel-title"><i class="fa fa-question-circle"></i>
+          Please fill the form and submit your enquiries or complaints
+        </div>
+      </div>
+      <div class="panel-body">
+        <form name="enquiryForm" class="form-horizontal">
+
+          <div class="form-group">
+            <label class="col-sm-5 control-label">Email Address <span class="required">*</span> </label>
+            <div class="col-sm-7">
+              <input type="email" class="form-control" placeholder="Valid Email address"
+                     ng-model="enquiry.email" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-5 control-label">Phone Number <span class="required">*</span> </label>
+            <div class="col-sm-7">
+              <input type="number" class="form-control" placeholder="Your Valid Phone Number"
+                     ng-model="enquiry.phone" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-5 control-label">Subject<span class="required">*</span></label>
+            <div class="col-sm-7">
+              <input type="text" class="form-control" placeholder=""
+                     ng-model="enquiry.title" autofocus>
+            </div>
+          </div>
+
+
+
+
+          <div class="form-group">
+            <label class="col-sm-5 control-label">Message<span class="required">*</span>
+            </label>
+            <div class=col-sm-7>
+              <textarea rows="10" ng-model="enquiry.message" class="form-control"
+                        placeholder="Your Message here"></textarea>
+            </div>
+          </div>
+
+        </form>
+        <!--<div ng-hide="setupForm.$invalid || (setupForm.$valid && member.phone != phone_conf) || submitting"-->
+             <!--style="margin-bottom: 0px;"-->
+             <!--class="alert text-center alert-info">-->
+          <!--<span style="color:darkblue;" class=" required"> Please ensure you have your phone with you. Your username and password will be sent to your phone and email shortly after you click on the <strong>Get Password</strong>  Button below.</span>-->
+        <!--</div>-->
+
+      </div>
+      <div class="panel-footer">
+        <div class="row col-md-offset-3">
+          <div class="col-sm-3 col-md-3 ">
+            <button class="btn btn-danger btn-block" type="reset" ng-disabled="!enquiryForm.$dirty"
+                    ng-click="reset() && enquiryForm.$setPristine()"> <i
+              class="fa fa-times"></i> RESET</button>
+          </div>
+          <div class="col-sm-4 col-md-4">
+            <button class="btn btn-default btn-block"
+                    ng-disabled="enquiryForm.$invalid || (enquiryForm.$valid && member.phone != phone_conf) || submitting"
+                    ng-click="submit(enquiryForm)"><i
+              class="fa fa-check"></i>Submit Enquiries</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" ng-show="confirmation && submitting">
+      <div style="background: rgba(8, 84, 8, 0.73); margin-bottom: 10px">
+        <div class="row">
+          <div class="col-md-12 text-center" style="margin-top: 10px; margin-bottom: 10px">
+            <h2><span class="text-uppercase text-white text-bold">{{confirmationMessage}}</span></h2>
+            <h4><a ui-sref="login" ><label class="text-white"><strong>Click here to Login</strong></label></a></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

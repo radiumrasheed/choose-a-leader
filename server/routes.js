@@ -48,7 +48,8 @@ module.exports = function(app) {
   // });
 
 
-  // Insert routes below
+  // Insert routes below\
+  app.use('/api/enquiry', require('./api/enquiry'));
   app.use('/api/votersReg', require('./api/votersReg'));
   app.use('/api/branch_requests', require('./api/branch_request'));
   app.use('/api/polls', require('./api/poll'));
