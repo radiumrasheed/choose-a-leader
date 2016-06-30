@@ -9,5 +9,8 @@ module.exports = {
     // uri: 'mongodb://localhost/elektor-dev'
   },
 
-  seedDB: true
+  seedDB: true,
+  redis: {
+    uri: "redis://localhost"
+  }
 };
