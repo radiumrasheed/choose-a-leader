@@ -2,45 +2,22 @@
 
 var _ = require('lodash');
 var VotersReg = require('./votersReg.model'),
+  mailer = require('../../components/tools/mailer'),
     Branches = require('../branch/branch.model');
 
-var redis = require('redis'),
-    config = require('../../config/environment'),
-    redisClient = redis.createClient(config.redis.uri);
+// var redis = require('redis'),
+//     config = require('../../config/environment'),
+//     redisClient = redis.createClient(config.redis.uri);
 
 // Get list of branches
 exports.index = function (req, res) {
-    var key = "branch-list";
+    Branches.find().distinct('name', function (err, branches) {
+        if (err) { return handleError(res, err); }
 
-    function doDefault() {
-        Branches.find().distinct('name', function (err, branches) {
-            if (err) {
-                return handleError(res, err);
-            }
-            branches.sort();
-            branches.shift();
+        branches.sort();
+        branches.shift();
 
-            // Write to Cache
-            redisClient.set(key, JSON.stringify(branches), function (e) {
-            });
-
-            return res.json(200, branches);
-        });
-    }
-
-    redisClient.exists(key, function (err, response) {
-        if (err) {
-            return doDefault()
-        }
-        else {
-            if (response == 1) {
-                redisClient.get(key, function (err, branches) {
-                    return res.json(JSON.parse(branches));
-                });
-            } else {
-                return doDefault();
-            }
-        }
+        return res.json(200, branches);
     });
 };
 
@@ -71,43 +48,31 @@ exports.searchDetails = function (req, res) {
 
     var firstName = new RegExp(arr[0] + '+', 'i');
 
-    var rKey = ["search-details", pageNo, perPage, search].join('-').replace(' ', '_');
+    // var rKey = ["search-details", pageNo, perPage, search].join('-').replace(' ', '_');
 
     function sendData(total, members) {
         res.header('total_found', total);
         return res.json(members);
     }
 
-    redisClient.exists(rKey, function (err, v) {
-        if (v == 1) {
-            redisClient.hgetall(rkey, function (err, resArray) {
-                return sendData(resArray.total, JSON.parse(resArray.members));
-            });
-        } else {
-            VotersReg.find({
-                branchCode: req.body.branchCode,
-                fullname: firstName
-            }).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
-                var index, len;
-                for (index = 0, len = members.length; index < len; ++index) {
-                    var email = members[index].email;
-                    var phone = members[index].mobileNumber;
-                    if (email != 'NOT AVAILABLE') {
-                        var end = email.indexOf('@');
-                        members[index].email = email.replace(email.substring(0, end), '*********');
-                    }
-                    if (phone != 'INVALID MOBILE') {
-                        members[index].mobileNumber = phone.replace(phone.substring(0, 6), '*******');
-                    }
-                }
-
-                // Write to Cache
-                redisClient.hmset([rKey, "members", JSON.stringify(members), "total", total]);
-                redisClient.expire(rKey, 120);
-
-                return sendData(total, members);
-            });
+    VotersReg.find({
+        branchCode: req.body.branchCode,
+        fullname: firstName
+    }).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
+        var index, len;
+        for (index = 0, len = members.length; index < len; ++index) {
+            var email = members[index].email;
+            var phone = members[index].mobileNumber;
+            if (email != 'NOT AVAILABLE') {
+                var end = email.indexOf('@');
+                members[index].email = email.replace(email.substring(0, end), '*********');
+            }
+            if (phone != 'INVALID MOBILE') {
+                members[index].mobileNumber = phone.replace(phone.substring(0, 6), '*******');
+            }
         }
+
+        return sendData(total, members);
     });
 };
 
@@ -115,82 +80,57 @@ exports.searchDetails = function (req, res) {
 exports.details = function (req, res) {
     var pageNo = req.body.page || 1,
         perPage = req.body.perPage || 25;
-
     function sendData(total, members) {
         res.header('total_found', total);
         return res.json(members);
     }
 
     if (req.body.confirm) {
-        var rKey = ["confirm-true", req.body.branchCode, pageNo, perPage].join('-').replace(' ', '_');
+        VotersReg.find({
+            branchCode: req.body.branchCode,
+            confirmed: false,
+            updated: true
+        }).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
+            // Write to Cache
+            var index, len;
+            for (index = 0, len = members.length; index < len; ++index) {
+                var phone = members[index].updatedPhone;
+                 phone=   phone.indexOf("+") == '+' ? phone.replace(phone.indexOf("+"),""): phone;
+                 phone=   phone.indexOf("234") == 234 ? phone.replace(phone.indexOf("234"),"0") : phone;
+                 phone=   phone.indexOf("0") == 0 ? phone.replace(phone.indexOf("0"),""): phone;
+                members[index].updatedPhone = phone;
+                if (members[index].updatedPhone == members[index].mobileNumber){
+                  members[index].phoneIsMatch = true;
+                }
+                else{
+                  members[index].phoneIsMatch = false;
+                }
 
-        redisClient.exists(rKey, function (err, v) {
-            if (v == 1) {
-                redisClient.hgetall(rkey, function (err, resArray) {
-                    return sendData(resArray.total, JSON.parse(resArray.members));
-                });
-            } else {
-                VotersReg.find({
-                    branchCode: req.body.branchCode,
-                    confirmed: false,
-                    updated: true
-                }).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
-                    // Write to Cache
-                    var index, len;
-                    for (index = 0, len = members.length; index < len; ++index) {
-                    var phone = members[index].updatedPhone;
-                    if (phone.indexOf("+") == '+') {phone.replace(phone.indexOf("+"),"")}
-                    if (phone.indexOf("234") == 234) {phone.replace(phone.indexOf("234"),"0")}
-                    if (phone.indexOf("0") == 0) {phone.replace(phone.indexOf("0"),"")}
-
-                    members[index].updatedPhone = phone;
-                    if (members[index].updatedPhone == members[index].mobileNumber){
-                      members[index].phoneIsMatch = true;
-                    }
-                    else{members[index].phoneIsMatch = false;}
-
-                    if (members[index].email == members[index].updatedEmail){
-                      members[index].emailIsMatch = true;
-                    }
-                    else {
-                      members[index].emailIsMatch = false;
-                    }
-                  }
-                    redisClient.hmset([rKey, "members", JSON.stringify(members), "total", total]);
-                    return sendData(total, members);
-                });
+                if (members[index].email.toLowerCase() == members[index].updatedEmail.toLowerCase()){
+                  members[index].emailIsMatch = true;
+                }
+                else {
+                  members[index].emailIsMatch = false;
+                }
             }
+            return sendData(total, members);
         });
-
     } else {
-        var mRKey = ["confirm-false", req.body.branchCode, pageNo, perPage].join('-').replace(' ', '_');
-
-        redisClient.exists(mRKey, function (err, v) {
-            if (v == 1) {
-                redisClient.hgetall(mRKey, function (err, resArray) {
-                    return sendData(resArray.total, JSON.parse(resArray.members));
-                });
-            } else {
-                VotersReg.find({branchCode: req.body.branchCode}).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
-                    var index, len;
-                    for (index = 0, len = members.length; index < len; ++index) {
-                        var email = members[index].email;
-                        var phone = members[index].mobileNumber;
-                        if (email != 'NOT AVAILABLE') {
-                            var end = email.indexOf('@');
-                            members[index].email = email.replace(email.substring(0, end), '*********');
-                        }
-                        if (phone != 'INVALID MOBILE') {
-                            members[index].mobileNumber = phone.replace(phone.substring(0, 6), '*******');
-                        }
-                    }
-                    // Write to Cache
-                    redisClient.hmset([mRKey, "members", JSON.stringify(members), "total", total]);
-                    redisClient.expire(mRKey, 120);
-
-                    return sendData(total, members);
-                });
+        VotersReg.find({branchCode: req.body.branchCode}).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
+            var index, len;
+            for (index = 0, len = members.length; index < len; ++index) {
+                var email = members[index].email;
+                var phone = members[index].mobileNumber;
+                if (email != 'NOT AVAILABLE') {
+                    var end = email.indexOf('@');
+                    members[index].email = email.replace(email.substring(0, end), '*********');
+                }
+                if (phone != 'INVALID MOBILE') {
+                    members[index].mobileNumber = phone.replace(phone.substring(0, 6), '*******');
+                }
             }
+
+            return sendData(total, members);
         });
     }
 };
@@ -225,8 +165,19 @@ exports.update = function (req, res) {
         if (!details) {
             return res.send(404);
         }
+
+        if(req.body.con)
+        {
+          var message;
+
+          if (req.body.messageToPhone){}
+          if (req.body.messageToEmail){}
+          if (req.body.messageToBoth){}
+            mailer.sendUpdatedRecords();
+        }
         if (req.body.prevModifiedBy && req.body.prevModifiedDate) {
             //save previous data if data is being modified
+            delete details.prevDataModified;
             req.body.prevDataModified = {
                 'fullname': details.fullname,
                 'branchCode': details.branchCode,

@@ -30,26 +30,30 @@
 
                 </div>
                 <div class="row ">
-                    <div class="row">
-                        <div class="pull-left">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="col-md-3 col-xs-12 col-sm-6">
                             <i class="fa fa-home"></i>
                             <label for="branch">NBA Branch <span class="required">*</span></label>
                         </div>
 
-                        <div class="pull-right">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select ng-options="branch as branch for branch in branchData" class="form-control"
+                                    ng-change="noData =false; searchMembers='';currentPage=1; pageChanged();" ng-model="selectedItem" id="branch"
+                                    ng-required="true">
+                                <option value="">-- Please Select Your Branch --</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 col-xs-12 col-sm-6">
+                            <br class="visible-xs">
                             <i class="fa fa-users"></i>
                             <label for="items">Names Per Page</label>
                             <select id="items" ng-model="perPage" ng-options="item for item in pageSizes"
                                     ng-change="pageChanged()"></select>
                         </div>
                     </div>
-
-                    <select ng-options="branch as branch for branch in branchData" class="form-control" style="margin: auto; width: 60%;"
-                            ng-change="noData =false; searchMembers='';currentPage=1; pageChanged();" ng-model="selectedItem" id="branch"
-                            ng-required="true">
-                        <option value="">-- Please Select Your Branch --</option>
-                    </select>
                 </div>
+
                 <div class="row ">
                     <div class="panel-body">
 
@@ -63,17 +67,21 @@
                                         num-pages="pages"></pagination>
                         </div>
                         <div class="row" ng-show="selectedItem">
-                            <div class="form-group col-md-10 col-lg-10 col-sm-10 col-xs-10">
+                            <div class="form-group col-md-10 col-lg-10 col-sm-12 col-xs-12 col-md-offset-1">
                                 <div class="input-group">
                                     <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                                    <input type="text" class="form-control" placeholder="Search Members By Surname"
+                                    <input type="text" class="form-control input-lg"
+                                           placeholder="Search Members By Surname"
                                            ng-model="searchMembers">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-lg btn-success" ng-click="pageChanged()">Search</button>
+                                    </div>
 
                                 </div>
                             </div>
-                            <div class="form-group col-md-1 col-lg-1 col-sm-1 col-xs-1">
-                                <button class="btn btn-sm btn-success" ng-click="pageChanged()">Search</button>
-                            </div>
+                            <!--<div class="form-group col-md-1 col-lg-1 col-sm-1 col-xs-1">-->
+                                <!--<button class="btn btn-sm btn-success" ng-click="pageChanged()">Search</button>-->
+                            <!--</div>-->
                         </div>
                         <div ng-show="searchHeader" class="row col-md-12 col-lg-12 col-sm-12 col-xs-12">
                             <p class="alert alert-info">Your search returned {{total}} name(s) from {{selectedItem}}</p>
