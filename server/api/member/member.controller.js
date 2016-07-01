@@ -8,9 +8,9 @@ var Branch = require('../branch/branch.model');
 require('mongoose-pagination');
 var mailer = require('../../components/tools/mailer');
 
-var redis = require('redis'),
-  config = require('../../config/environment'),
-  redisClient = redis.createClient(config.redis.uri);
+// var redis = require('redis'),
+//   config = require('../../config/environment'),
+//   redisClient = redis.createClient(config.redis.uri);
 
 function randomString() {
   var text = "";
@@ -24,28 +24,29 @@ function randomString() {
 }
 
 exports.getMember = function (req, res) {
-  var key = ["member-detail", req.body.updatedSurname, req.body.updatedFirstName].join('-');
+  // var key = ["member-detail", req.body.updatedSurname, req.body.updatedFirstName].join('-');
 
   function doDefault() {
     var surname = new RegExp(req.body.updatedSurname + '*', 'i');
     var firstname = new RegExp(req.body.updatedFirstName + '*', 'i');
     Lawyer.find().and([{'fullname': surname}, {'fullname': firstname}]).exec(function (err, members) {
       if (err) return handleError(res, err);
-      redisClient.set(key, JSON.stringify(members));
-      redisClient.expire(key, 120);
+      // redisClient.set(key, JSON.stringify(members));
+      // redisClient.expire(key, 120);
 
       return res.status(200).json(members);
     });
   }
 
-  redisClient.exists(key, function (e, v) {
-    if (v == 1) {
-      redisClient.get(key, function (err, val) {
-        if (err) { return doDefault(); }
-        return res.json(JSON.parse(val));
-      });
-    } else { return doDefault(); }
-  });
+  doDefault();
+  // redisClient.exists(key, function (e, v) {
+  //   if (v == 1) {
+  //     redisClient.get(key, function (err, val) {
+  //       if (err) { return doDefault(); }
+  //       return res.json(JSON.parse(val));
+  //     });
+  //   } else { return doDefault(); }
+  // });
 };
 
 // Get list of members
