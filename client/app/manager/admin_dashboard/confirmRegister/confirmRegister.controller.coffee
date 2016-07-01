@@ -48,8 +48,22 @@ angular.module 'elektorApp'
         user.email = data.updatedEmail
         user.verified = 1
         user.branch = data.branchCode
+
+
+
         Member.createNewMember user,(newMember) ->
           if newMember
+            if data.phoneIsMatch is true and data.emailIsMatch is false
+              user.messagetoEmail = "Your Details Have been Updated successfully and your this email: "+data.updatedEmail+" has
+ been added to your NBA E-voting Portal Account, thank you for updating your records"
+
+            if data.phoneIsMatch is false and data.emailIsMatch is true
+              user.messageToPhone = "Your Details Have been Updated successfully and your this Phone Number: "+data.updatedPhone+" has
+ been added to your NBA E-voting Portal Account, thank you for updating your records"
+
+            if data.phoneIsMatch is true and data.emailIsMatch is true
+              user.messageToSend = "Your Details Have been Updated successfully and your this email "+data.emailIsMatch+"  and Phone Number: "+data.updatedPhone+" has been added to your NBA E-voting Portal Account, thank you for updating your
+ records"
             data.confirmed = true
             Voters_Register.saveData data, (memb) ->
               if memb.confirmed

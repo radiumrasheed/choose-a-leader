@@ -15,10 +15,10 @@ var moment = require('moment'),
 var message = {
   "html": '',
   "subject": '',
-  "from": 'nbapolls-2016@nba-agc.org',
+  "from": 'elections@nba-agc.org',
   "fromname": 'NBA Elections 2016',
   "to": [],
-  'replyto' : 'nbapolls-2016@nigerianbar.org.ng'
+  'replyto' : 'elections@nigerianbar.org.ng'
 
 };
 
