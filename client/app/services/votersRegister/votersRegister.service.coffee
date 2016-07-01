@@ -31,3 +31,11 @@ angular.module 'elektorApp'
     create:
       method: 'POST'
       url: '/api/votersReg/create'
+    branchMembers:
+      method: 'POST'
+      isArray: true
+      url: '/api/votersReg/branchMembers'
+    checkVotersName:
+      method: 'POST'
+      isArray: true
+      url: '/api/votersReg/checkVotersName'

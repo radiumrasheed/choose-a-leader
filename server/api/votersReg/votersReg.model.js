@@ -20,7 +20,11 @@ var StateSchema = new Schema({
   updated:Boolean,
   confirmed:Boolean,
   confirmedBy: { type: Schema.Types.ObjectId, ref: 'Auth' },
-  modifiedBy: String
+  prevModifiedBy: String,
+  prevModifiedDate: Date,
+  prevDataModified: {type: Schema.Types.Mixed },
+  createdBy: String,
+  createdDate: Date
 });
 
 module.exports = mongoose.model('VotersReg', StateSchema, 'VotersRegister');

@@ -6,6 +6,16 @@
 </div>
 <div class="modal-body">
     <form name="newVRForm" ng-submit="newVRForm.$valid && saveNewMemberVR(newVRForm)" class="form form-horizontal">
+
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">NBA Branch<span class="required">*</span> </label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" placeholder="NBA Local Branch" branch-select-plugin-type-two="Select Branch"
+                       ng-model="member.branchCode" required>
+            </div>
+        </div>
+
         <div class="form-group">
             <label class="col-sm-4 control-label">Enrollment. Number</label>
             <div class="col-sm-8">
@@ -15,43 +25,45 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-4 control-label">NBA Branch <span class="required">*</span> </label>
+            <label class="col-sm-4 control-label">First Name <span class="required">*</span> </label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" placeholder="NBA Local Branch" branch-select-plugin-type-two="Select Branch"
-                       ng-model="member.branchCode" required autofocus>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-4 control-label">Full Name <span class="required">*</span> </label>
-            <div class="col-sm-8">
-                <input type="text" placeholder="FULLNAME" class="form-control"
-                       ng-model="member.fullname"
-                       ng-value="member.fullname"
+                <input type="text" placeholder="FIRST NAME" class="form-control"
+                       ng-model="member.firstName" name="firstName"
+                       ng-value="member.firstName" minlength="3" ng-change="newVRForm.surname.$setPristine()"
                        required>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-4 control-label">Email <span class="required">*</span> </label>
+            <label class="col-sm-4 control-label">Surname <span class="required">*</span> </label>
             <div class="col-sm-8">
-                <input type="email" placeholder="EMAIL ADDRESS" class="form-control"
+                <input type="text" placeholder="SURNAME" class="form-control" name="surname" minlength="3"
+                       ng-model="member.surname" ng-blur="checkName()"
+                       ng-value="member.surname" ng-disabled="newVRForm.firstName.$pristine && newVRForm.firstName.$valid"
+                       required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Email </label>
+            <div class="col-sm-8">
+                <input type="text" placeholder="EMAIL ADDRESS" class="form-control"
                        ng-model="member.email" >
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-4 control-label">Phone Number <span class="required">*</span> </label>
+            <label class="col-sm-4 control-label">Phone Number </label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" name="phone"
-                       ng-model="member.mobileNumber" placeholder="Phone Number" ng-minlength="11"
-                       ui-us-phone-number required>
+                       ng-model="member.mobileNumber" placeholder="Phone Number"
+                       >
             </div>
         </div>
     </form>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-disabled="newVRForm.$invalid" type="submit" ng-click="newVRForm.$valid && saveNewMemberVR(newVRForm)">
+    <button class="btn btn-primary" ng-disabled="newVRForm.$invalid" type="submit" ng-click="newVRForm.$valid && exists==false && saveNewMemberVR(newVRForm)">
         <i class="fa fa-save m-r-10"></i> Save Changes</button>
     <button class="btn btn-danger pull-left" ng-click="closeModal()"><i class="fa fa-times"></i> Cancel</button>
 </div>

@@ -756,7 +756,7 @@ angular.module 'elektorApp'
       else
         $scope.formError = "All fields are required"
 
-.controller 'VotersRegisterCtrl', ($scope, VotersRegister, Auth, $localStorage, $state, toastr, $modal) ->
+.controller 'VotersRegisterCtrl', ($scope, VotersRegister, Auth, $localStorage, $state, toastr, $modal, $http) ->
   Auth.me (usr) ->
     if usr.superAdmin is true
       $scope.superAdmin = true
@@ -773,14 +773,38 @@ angular.module 'elektorApp'
       $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
 
       $scope.load = (page) ->
-        VotersRegister.branchDetails
-          page: page
-          branchCode: $scope.selectedItem
-          perPage: $scope.perPage
-        , (voters_register, headers) ->
-          $scope.voters_register = voters_register
-          $scope.total = parseInt headers "total_found"
-          $scope.pages = Math.ceil($scope.total / $scope.perPage)
+        if $scope.searchVotersRegister is ''
+          VotersRegister.branchMembers
+            page: page
+            branchCode: $scope.selectedItem
+            perPage: $scope.perPage
+          , (voters_register, headers) ->
+            $scope.voters_register = voters_register
+            $scope.searchHeader = false
+            $scope.total = parseInt headers "total_found"
+            $scope.pages = Math.ceil($scope.total / $scope.perPage)
+        else
+          VotersRegister.branchMembers
+            page: page
+            branchCode: $scope.selectedItem
+            perPage: $scope.perPage
+            search: $scope.searchVotersRegister
+            , (voters_register, headers) ->
+            $scope.searchHeader = true
+            $scope.voters_register = voters_register
+            $scope.total = parseInt headers "total_found"
+            $scope.pages = Math.ceil($scope.total / $scope.perPage)
+          
+
+      $scope.checkName = ->
+        VotersRegister.checkVotersName $scope.member, (result) ->
+          console.log result
+          if result.length > 0
+            alert 'similar name already exists'
+            $scope.exists = true
+          else
+            $scope.exists = false
+            $scope.good = true
 
       $scope.load $scope.currentPage
 
@@ -796,10 +820,9 @@ angular.module 'elektorApp'
           backdrop: 'static'
 
       $scope.editMemberVR = (member) ->
+        if member.prevDataModified?
+          delete member.prevDataModified
         $scope.selectedMember = member
-        if member.othername?
-          $scope.selectedMember.firstName = member.othername?.split(" ")?[0]
-          $scope.selectedMember.middleName = member.othername?.split(" ")?[1]
 
         modal = $modal.open
           templateUrl: "app/manager/admin_dashboard/views/voters-register-form.html"
@@ -808,23 +831,40 @@ angular.module 'elektorApp'
 
       $scope.closeModal = ->
         $scope.selectedMember = null
+        $scope.exists = null
+        $scope.good = null
         modal.dismiss()
 
       $scope.updateMemberVR = ->
-        $scope.temp = {}
         if $scope.selectedMember.mobileNumber is ''
           $scope.selectedMember.mobileNumber = 'INVALID MOBILE'
         if $scope.selectedMember.email is ''
           $scope.selectedMember.email = 'NOT AVAILABLE'
-        $scope.selectedMember.modifiedBy = usr.username
+        $scope.selectedMember.prevModifiedBy = usr.username
+        $scope.selectedMember.prevModifiedDate = new Date
+        
         VotersRegister.saveData id: $scope.selectedMember._id, $scope.selectedMember, ->
           toastr.success "Member Data Updated"
           $scope.closeModal()
 
       $scope.saveNewMemberVR = (form) ->
-        VotersRegister.create $scope.member, (m) ->
-          toastr.success "New Member Data Created"
-          $scope.closeModal()
+        if $scope.exists is true
+          toastr.error "Member exists"
+        else
+          $scope.member.fullname = $scope.member.surname + ' ' + $scope.member.firstName
+          if $scope.member.mobileNumber is '' || not $scope.member.mobileNumber?
+            $scope.member.mobileNumber = 'INVALID MOBILE'
+          if $scope.member.email is '' || not $scope.member.email?
+            $scope.member.email = 'NOT AVAILABLE'
+          if $scope.member.scNumber is '' || not $scope.member.scNumber?
+            $scope.member.scNumber = 'NE'
+          $scope.member.createdBy = usr.username
+          $scope.member.createdDate = new Date
+          delete $scope.member.firstName
+          delete $scope.member.surname
+          VotersRegister.create $scope.member, (m) ->
+            toastr.success "New Member Data Created"
+            $scope.closeModal()
       
           
     else

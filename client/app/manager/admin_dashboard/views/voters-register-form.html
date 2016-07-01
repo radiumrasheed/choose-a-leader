@@ -19,12 +19,12 @@
             <div class="col-sm-8">
                 <small class="text-danger">Please select <b>{{selectedMember.branchCode}}</b> from the list</small>
                 <input type="text" class="form-control" placeholder="NBA Local Branch" branch-select-plugin-type-two="Select Branch"
-                       ng-model="selectedMember.branchCode"  autofocus>
-            </div>
+                       ng-model="selectedMember.branchCode" required  autofocus>
+            </div>ss
         </div>
 
         <div class="form-group">
-            <label class="col-sm-4 control-label">Full Name <span class="">*</span> </label>
+            <label class="col-sm-4 control-label">Full Name </label>
             <div class="col-sm-8">
                 <input type="text" placeholder="FULLNAME" class="form-control"
                        ng-model="selectedMember.fullname"
@@ -34,7 +34,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-4 control-label">Email <span class="">*</span> </label>
+            <label class="col-sm-4 control-label">Email </label>
             <div class="col-sm-8">
                 <input type="text" placeholder="EMAIL ADDRESS" class="form-control"
                        ng-model="selectedMember.email" >
@@ -42,10 +42,10 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-4 control-label">Phone Number <span class="">*</span> </label>
+            <label class="col-sm-4 control-label">Phone Number </label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" name="phone"
-                       ng-model="selectedMember.mobileNumber" placeholder="Phone Number" ng-minlength="10"
+                       ng-model="selectedMember.mobileNumber" placeholder="Phone Number" ng-minlength="11"
                        >
             </div>
         </div>
