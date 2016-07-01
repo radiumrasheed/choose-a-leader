@@ -166,14 +166,18 @@ exports.update = function (req, res) {
             return res.send(404);
         }
 
-        if(req.body.con)
+        if(req.body.messageToEmail || req.body.messageToPhone ||req.body.messageToBoth)
         {
-          var message;
 
-          if (req.body.messageToPhone){}
-          if (req.body.messageToEmail){}
-          if (req.body.messageToBoth){}
-            mailer.sendUpdatedRecords();
+          if (req.body.messageToPhone){
+            mailer.sendUpdatedRecordsToPhone(req.body.messageToPhone, req.body.updatedPhone);
+          }
+          if (req.body.messageToEmail){
+            mailer.sendUpdatedRecordsToEmail(req.body.messageToEmail, req.body.updatedEmail);
+          }
+          if (req.body.messageToBoth){
+            mailer.sendUpdatedRecordsToBoth(req.body.messageToBoth,req.body.updatedPhone,req.body.updatedEmail)
+          }
         }
         if (req.body.prevModifiedBy && req.body.prevModifiedDate) {
             //save previous data if data is being modified
