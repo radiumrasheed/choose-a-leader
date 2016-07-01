@@ -80,7 +80,7 @@ exports.searchDetails = function (req, res) {
 
     redisClient.exists(rKey, function (err, v) {
         if (v == 1) {
-            redisClient.hgetall(rkey, function (err, resArray) {
+            redisClient.hgetall(rKey, function (err, resArray) {
                 return sendData(resArray.total, JSON.parse(resArray.members));
             });
         } else {
@@ -123,10 +123,9 @@ exports.details = function (req, res) {
 
     if (req.body.confirm) {
         var rKey = ["confirm-true", req.body.branchCode, pageNo, perPage].join('-').replace(' ', '_');
-
         redisClient.exists(rKey, function (err, v) {
             if (v == 1) {
-                redisClient.hgetall(rkey, function (err, resArray) {
+                redisClient.hgetall(rKey, function (err, resArray) {
                     return sendData(resArray.total, JSON.parse(resArray.members));
                 });
             } else {
@@ -138,10 +137,13 @@ exports.details = function (req, res) {
                     // Write to Cache
                     var index, len;
                     for (index = 0, len = members.length; index < len; ++index) {
+                      console.log(members);
+                      console.log("member log");
                     var phone = members[index].updatedPhone;
                     if (phone.indexOf("+") == '+') {phone.replace(phone.indexOf("+"),"")}
                     if (phone.indexOf("234") == 234) {phone.replace(phone.indexOf("234"),"0")}
-                    if (phone.indexOf("0") == 0) {phone.replace(phone.indexOf("0"),"")}
+                    if (phone.indexOf("0") == '0') {phone.replace(phone.indexOf("0"),"")}
+
 
                     members[index].updatedPhone = phone;
                     if (members[index].updatedPhone == members[index].mobileNumber){
@@ -227,6 +229,7 @@ exports.update = function (req, res) {
         }
         if (req.body.prevModifiedBy && req.body.prevModifiedDate) {
             //save previous data if data is being modified
+            delete details.prevDataModified;
             req.body.prevDataModified = {
                 'fullname': details.fullname,
                 'branchCode': details.branchCode,
