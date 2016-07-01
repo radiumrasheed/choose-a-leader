@@ -39,3 +39,7 @@ angular.module 'elektorApp'
       method: 'POST'
       isArray: true
       url: '/api/votersReg/checkVotersName'
+    removeVoters:
+      method: 'POST'
+      isArray: true
+      url: '/api/votersReg/removeVoters'

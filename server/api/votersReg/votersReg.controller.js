@@ -259,13 +259,17 @@ exports.create = function (req, res) {
 exports.branchMembers = function (req, res) {
     var pageNo = req.body.page || 1,
         perPage = req.body.perPage || 25;
-
+    
+    //default condition for using this API
     var condition = {
         branchCode: req.body.branchCode
     };
 
-    if (req.body.confirm) {
-        condition["confirmed"] = false;
+    if (req.body.confirm === true) {
+        condition["confirmed"] = true;
+    }
+
+    if (req.body.updated === true) {
         condition["updated"] = true;
     }
 
@@ -296,6 +300,13 @@ exports.checkVotersName = function (req, res) {
             if (err) return handleError(res, err);
             return res.status(200).json(similarMembers);
         });
+};
+
+exports.removeVoters = function (req, res) {
+    VotersReg.remove({ _id: { $in: req.body } }, function (err) {
+        if (err) { return handleError(res, err); }
+        return res.status(200);
+    });  
 };
 
 function handleError(res, err) {
