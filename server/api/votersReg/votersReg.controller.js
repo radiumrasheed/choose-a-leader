@@ -73,7 +73,7 @@ exports.searchDetails = function(req, res) {
 
   redisClient.exists(rKey, function (err, v) {
     if (v == 1) {
-      redisClient.hgetall(rkey, function (err, resArray) {
+      redisClient.hgetall(rKey, function (err, resArray) {
         return sendData(resArray.total, JSON.parse(resArray.members));
       });
     } else {
@@ -93,7 +93,7 @@ exports.searchDetails = function(req, res) {
 
         // Write to Cache
         redisClient.hmset([rKey, "members", JSON.stringify(members), "total", total]);
-        redisClient.expire(rKey, 1800);
+        redisClient.expire(rKey, 600);
 
         return sendData(total, members);
       });
@@ -116,7 +116,7 @@ exports.details = function(req, res) {
     
     redisClient.exists(rKey, function (err, v) {
       if (v == 1) {
-        redisClient.hgetall(rkey, function (err, resArray) {
+        redisClient.hgetall(rKey, function (err, resArray) {
           return sendData(resArray.total, JSON.parse(resArray.members));
         });
       } else {
@@ -152,7 +152,7 @@ exports.details = function(req, res) {
           }
           // Write to Cache
           redisClient.hmset([mRKey, "members", JSON.stringify(members), "total", total]);
-          redisClient.expire(mRKey, 1800);
+          redisClient.expire(mRKey, 600);
 
           return sendData(total, members);
         });
@@ -185,6 +185,8 @@ exports.update = function(req, res) {
     if(!details) { return res.send(404); }
     var updated = _.merge(details, req.body);
     updated.save(function (err) {
+      // Invalidate Appropriate Redis Cache Here
+      redisClient.flushall();
       if (err) { return handleError(res, err); }
       return res.json(200, details);
 
