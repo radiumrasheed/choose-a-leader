@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'elektorApp'
-.service 'Voters_Register', ($resource) ->
+.service 'VotersRegister', ($resource) ->
   # AngularJS will instantiate a singleton by calling 'new' on this function
   $resource "/api/votersReg/:id", null,
     branches:
@@ -28,3 +28,14 @@ angular.module 'elektorApp'
     getUpdate:
       method: 'GET'
       url: '/api/votersReg/getUpdate'
+    create:
+      method: 'POST'
+      url: '/api/votersReg/create'
+    branchMembers:
+      method: 'POST'
+      isArray: true
+      url: '/api/votersReg/branchMembers'
+    checkVotersName:
+      method: 'POST'
+      isArray: true
+      url: '/api/votersReg/checkVotersName'

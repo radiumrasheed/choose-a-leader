@@ -1,40 +1,35 @@
 <div class="panel panel-green admin-menu">
-    <div class="panel-heading" >
-        <h2 class="panel-title text-uppercase text-left" >
-            <i  class="fa fa-list m-r-15" data-toggle="collapse" data-target="#collapseExample"></i> Admin Menu
+    <div class="panel-heading">
+        <h2 class="panel-title text-uppercase text-left">
+            <i class="fa fa-list m-r-15" data-toggle="collapse" data-target="#collapseExample"></i> Admin Menu
         </h2>
     </div>
     <div class="panel-body">
         <a ui-sref="." class="btn btn-block btn-lg">
             <i class="fa fa-dashboard"></i> HOME
         </a>
-        <!--<a ui-sref=".settings" class="btn btn-block btn-lg btn-brown">-->
-            <!--<i class="fa fa-cogs"></i> POLL SETTINGS-->
-        <!--</a>-->
         <a ui-sref=".branches" class="btn btn-block btn-lg" ng-hide="isBranchAdmin">
             <i class="fa fa-globe"></i> BRANCHES
         </a>
         <a ui-sref=".polls" class="btn btn-block btn-lg">
             <i class="fa fa-bullhorn"></i> POLLS
         </a>
-        <!--<a ui-sref=".positions" class="btn btn-block btn-lg btn-primary">-->
-            <!--<i class="fa fa-users"></i> CANDIDATES-->
-        <!--</a>-->
         <a ui-sref=".verified_register" class="btn btn-block btn-lg">
-            <i class="fa fa-group"></i> VERIFIED REGISTER
+            <i class="fa fa-check"></i> VERIFIED REGISTER
         </a>
-      <a ui-sref="confirm_register" class="btn btn-block btn-lg" ng-hide="isBranchAdmin">
-        <i class="fa fa-group"></i> CONFIRM VOTERS <span class="badge" style="background-color: red">{{VotersToConfirm}}</span>
-      </a>
+        <a ui-sref="confirm_register" class="btn btn-block btn-lg" ng-hide="isBranchAdmin">
+            <i class="fa fa-usb"></i>
+            CONFIRM VOTERS
+            <span class="badge" style="background-color: red">{{VotersToConfirm}}</span>
+        </a>
         <a ui-sref=".members" class="btn btn-block btn-lg">
             <i class="fa fa-group"></i> MEMBERS
         </a>
         <a ui-sref=".branch_requests" class="btn btn-block btn-lg" ng-hide="isBranchAdmin">
             <i class="fa fa-edit"></i> BRANCH UPDATES
         </a>
+        <a ui-sref=".voters_register" class="btn btn-block btn-lg" ng-hide="isBranchAdmin">
+            <i class="fa fa-archive"></i> VOTERS REGISTER
+        </a>
     </div>
-    <!--<div class="panel-footer">-->
-        <!--<a class="btn btn-danger btn-lg btn-block" ng-click="ctrl.logout()"><i class="fa fa-power-off"></i>-->
-            <!--LOGOUT</a>-->
-    <!--</div>-->
 </div>
