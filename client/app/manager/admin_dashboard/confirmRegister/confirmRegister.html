@@ -99,7 +99,8 @@
 
                 <td>
                   <i class="fa fa-check fa-2x text-success" ng-show="m.confirmed"></i>
-                  <button class="btn btn-sm btn-info" ng-hide="m.confirmed" ng-click="update(m, $index)">Confirm</button>
+                  <button ng-show="" class="btn btn-sm btn-info" ng-hide="m.confirmed||(m.emailIsMatch && m.phoneIsMatch)" ng-click="update(m, $index)">Confirm
+                  </button>
                 </td>
                 <!--<td>{{m.accessCode}}</td>-->
               </tr>

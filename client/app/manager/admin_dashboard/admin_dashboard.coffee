@@ -61,3 +61,8 @@ angular.module 'elektorApp'
     url: 'update_password/'
     templateUrl: 'app/manager/admin_dashboard/views/update-password.html'
     controller: 'PasswordCtrl'
+
+  .state 'admin_dashboard.voters_register',
+    url: 'voters_register/'
+    templateUrl: 'app/manager/admin_dashboard/views/voters-register.html'
+    controller: 'VotersRegisterCtrl'

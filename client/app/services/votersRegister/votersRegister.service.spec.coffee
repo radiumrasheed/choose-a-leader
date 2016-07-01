@@ -1,14 +1,14 @@
 'use strict'
 
-describe 'Service: Voters_Register', ->
+describe 'Service: VotersRegister', ->
 
   # load the service's module
   beforeEach module 'elektorApp'
 
   # instantiate service
-  Voters_Register = undefined
-  beforeEach inject (_Voters_Register_) ->
-    Voters_Register = _Voters_Register_
+  VotersRegister = undefined
+  beforeEach inject (_VotersRegister_) ->
+    VotersRegister = _VotersRegister_
 
   it 'should do something', ->
-    expect(!!Voters_Register).toBe true
+    expect(!!VotersRegister).toBe true

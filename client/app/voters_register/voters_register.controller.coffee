@@ -1,8 +1,8 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'RegisterCtrl', ($scope,Voters_Register,$window, $localStorage) ->
-  Voters_Register.branches (data)->
+.controller 'RegisterCtrl', ($scope, VotersRegister, $window, $localStorage) ->
+  VotersRegister.branches (data)->
     $scope.branchData = data
 
 #  $scope.sortType = "surname"
@@ -16,7 +16,7 @@ angular.module 'elektorApp'
 
   $scope.load = (page) ->
     if $scope.searchMembers is ''
-      Voters_Register.branchDetails
+      VotersRegister.branchDetails
         page: page
         perPage: $scope.perPage
         branchCode: $scope.selectedItem
@@ -28,7 +28,7 @@ angular.module 'elektorApp'
             $scope.total = parseInt headers "total_found"
             $scope.pages = Math.ceil($scope.total / $scope.perPage)
     else
-      Voters_Register.searchDetails
+      VotersRegister.searchDetails
         page: page
         perPage: $scope.perPage
         branchCode: $scope.selectedItem

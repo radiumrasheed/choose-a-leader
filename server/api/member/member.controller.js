@@ -32,8 +32,8 @@ exports.getMember = function (req, res) {
     Lawyer.find().and([{'fullname': surname}, {'fullname': firstname}]).exec(function (err, members) {
       if (err) return handleError(res, err);
       redisClient.set(key, JSON.stringify(members));
-      redisClient.expire(key, 1800);
-      
+      redisClient.expire(key, 120);
+
       return res.status(200).json(members);
     });
   }
@@ -47,7 +47,6 @@ exports.getMember = function (req, res) {
     } else { return doDefault(); }
   });
 };
-
 
 // Get list of members
 exports.index = function(req, res) {

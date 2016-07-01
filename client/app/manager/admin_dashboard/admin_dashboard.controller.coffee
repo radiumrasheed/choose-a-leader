@@ -406,7 +406,7 @@ angular.module 'elektorApp'
       toastr.success "Member Data Updated"
       $scope.closeModal()
       
-  $scope.newMember = (form) ->
+  $scope.saveNewMember = (form) ->
     Member.createNewMember $scope.member, (m) ->
       toastr.success "New Member Data Updated"
       $scope.closeModal()
@@ -422,7 +422,7 @@ angular.module 'elektorApp'
   $scope.sortType = "surname"
   $scope.sortReverse = false
   $scope.searchVerifiedRegister = ""
-  $scope.perPage = $localStorage.votersRegisterPerPage or 15
+  $scope.perPage = $localStorage.verifiedRegisterPerPage or 15
   $scope.currentPage = 1
   $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
 
@@ -451,7 +451,7 @@ angular.module 'elektorApp'
   $scope.load $scope.currentPage
 
   $scope.pageChanged = ->
-    $localStorage.votersRegisterPerPage = $scope.perPage
+    $localStorage.verifiedRegisterPerPage = $scope.perPage
     $scope.load $scope.currentPage
     
   $scope.sendLink = (member) ->
@@ -569,7 +569,6 @@ angular.module 'elektorApp'
           _.remove $scope.branches, (b) -> (selectedBranches.indexOf b._id) isnt -1
           $scope.branches.push branch
 
-#Rasheed made changes to support delete
 .controller 'PollsCtrl', ($scope, Auth, Poll, $modal, $timeout, toastr, $rootScope) ->
   $scope.perPage = 15
   $scope.currentPage = 1
@@ -756,3 +755,117 @@ angular.module 'elektorApp'
           toastr.error e.data.message
       else
         $scope.formError = "All fields are required"
+
+.controller 'VotersRegisterCtrl', ($scope, VotersRegister, Auth, $localStorage, $state, toastr, $modal, $http) ->
+  Auth.me (usr) ->
+    if usr.superAdmin is true
+      $scope.superAdmin = true
+
+      VotersRegister.branches (data) ->
+        $scope.branchData = data
+
+      modal = null
+      $scope.sortType = "fullname"
+      $scope.sortReverse = false
+      $scope.searchVotersRegister = ""
+      $scope.perPage = $localStorage.votersRegisterPerPage or 15
+      $scope.currentPage = 1
+      $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
+
+      $scope.load = (page) ->
+        if $scope.searchVotersRegister is ''
+          VotersRegister.branchMembers
+            page: page
+            branchCode: $scope.selectedItem
+            perPage: $scope.perPage
+          , (voters_register, headers) ->
+            $scope.voters_register = voters_register
+            $scope.searchHeader = false
+            $scope.total = parseInt headers "total_found"
+            $scope.pages = Math.ceil($scope.total / $scope.perPage)
+        else
+          VotersRegister.branchMembers
+            page: page
+            branchCode: $scope.selectedItem
+            perPage: $scope.perPage
+            search: $scope.searchVotersRegister
+            , (voters_register, headers) ->
+            $scope.searchHeader = true
+            $scope.voters_register = voters_register
+            $scope.total = parseInt headers "total_found"
+            $scope.pages = Math.ceil($scope.total / $scope.perPage)
+          
+
+      $scope.checkName = ->
+        VotersRegister.checkVotersName $scope.member, (result) ->
+          console.log result
+          if result.length > 0
+            alert 'similar name already exists'
+            $scope.exists = true
+          else
+            $scope.exists = false
+            $scope.good = true
+
+      $scope.load $scope.currentPage
+
+      $scope.pageChanged = ->
+        $localStorage.votersRegisterPerPage = $scope.perPage
+        $scope.load $scope.currentPage
+
+      $scope.addMemberVR = ->
+        $scope.member = {}
+        modal = $modal.open
+          templateUrl: "app/manager/admin_dashboard/views/new-voters-register-form.html"
+          scope: $scope
+          backdrop: 'static'
+
+      $scope.editMemberVR = (member) ->
+        if member.prevDataModified?
+          delete member.prevDataModified
+        $scope.selectedMember = member
+
+        modal = $modal.open
+          templateUrl: "app/manager/admin_dashboard/views/voters-register-form.html"
+          scope: $scope
+          backdrop: 'static'
+
+      $scope.closeModal = ->
+        $scope.selectedMember = null
+        $scope.exists = null
+        $scope.good = null
+        modal.dismiss()
+
+      $scope.updateMemberVR = ->
+        if $scope.selectedMember.mobileNumber is ''
+          $scope.selectedMember.mobileNumber = 'INVALID MOBILE'
+        if $scope.selectedMember.email is ''
+          $scope.selectedMember.email = 'NOT AVAILABLE'
+        $scope.selectedMember.prevModifiedBy = usr.username
+        $scope.selectedMember.prevModifiedDate = new Date
+        
+        VotersRegister.saveData id: $scope.selectedMember._id, $scope.selectedMember, ->
+          toastr.success "Member Data Updated"
+          $scope.closeModal()
+
+      $scope.saveNewMemberVR = (form) ->
+        if $scope.exists is true
+          toastr.error "Member exists"
+        else
+          $scope.member.fullname = $scope.member.surname + ' ' + $scope.member.firstName
+          if $scope.member.mobileNumber is '' || not $scope.member.mobileNumber?
+            $scope.member.mobileNumber = 'INVALID MOBILE'
+          if $scope.member.email is '' || not $scope.member.email?
+            $scope.member.email = 'NOT AVAILABLE'
+          if $scope.member.scNumber is '' || not $scope.member.scNumber?
+            $scope.member.scNumber = 'NE'
+          $scope.member.createdBy = usr.username
+          $scope.member.createdDate = new Date
+          delete $scope.member.firstName
+          delete $scope.member.surname
+          VotersRegister.create $scope.member, (m) ->
+            toastr.success "New Member Data Created"
+            $scope.closeModal()
+      
+          
+    else
+      $state.go "admin_dashboard"
