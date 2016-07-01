@@ -24,7 +24,9 @@ var StateSchema = new Schema({
   prevModifiedDate: Date,
   prevDataModified: {type: Schema.Types.Mixed },
   createdBy: String,
-  createdDate: Date
+  createdDate: Date,
+  emailIsMatch: Boolean,
+  phoneIsMatch: Boolean
 });
 
 module.exports = mongoose.model('VotersReg', StateSchema, 'VotersRegister');

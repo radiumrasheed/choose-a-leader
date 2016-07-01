@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var VotersReg = require('./votersReg.model'),
+  mailer = require('../../components/tools/mailer'),
     Branches = require('../branch/branch.model');
 
 // var redis = require('redis'),
@@ -12,10 +13,10 @@ var VotersReg = require('./votersReg.model'),
 exports.index = function (req, res) {
     Branches.find().distinct('name', function (err, branches) {
         if (err) { return handleError(res, err); }
-        
+
         branches.sort();
         branches.shift();
-        
+
         return res.json(200, branches);
     });
 };
@@ -53,7 +54,7 @@ exports.searchDetails = function (req, res) {
         res.header('total_found', total);
         return res.json(members);
     }
-    
+
     VotersReg.find({
         branchCode: req.body.branchCode,
         fullname: firstName
@@ -70,7 +71,7 @@ exports.searchDetails = function (req, res) {
                 members[index].mobileNumber = phone.replace(phone.substring(0, 6), '*******');
             }
         }
-        
+
         return sendData(total, members);
     });
 };
@@ -79,7 +80,6 @@ exports.searchDetails = function (req, res) {
 exports.details = function (req, res) {
     var pageNo = req.body.page || 1,
         perPage = req.body.perPage || 25;
-
     function sendData(total, members) {
         res.header('total_found', total);
         return res.json(members);
@@ -95,21 +95,22 @@ exports.details = function (req, res) {
             var index, len;
             for (index = 0, len = members.length; index < len; ++index) {
                 var phone = members[index].updatedPhone;
-                if (phone.indexOf("+") == '+') {phone.replace(phone.indexOf("+"),"")}
-                if (phone.indexOf("234") == 234) {phone.replace(phone.indexOf("234"),"0")}
-                if (phone.indexOf("0") == 0) {phone.replace(phone.indexOf("0"),"")}
-            
+                 phone=   phone.indexOf("+") == '+' ? phone.replace(phone.indexOf("+"),""): phone;
+                 phone=   phone.indexOf("234") == 234 ? phone.replace(phone.indexOf("234"),"0") : phone;
+                 phone=   phone.indexOf("0") == 0 ? phone.replace(phone.indexOf("0"),""): phone;
                 members[index].updatedPhone = phone;
                 if (members[index].updatedPhone == members[index].mobileNumber){
-                    members[index].phoneIsMatch = true;
+                  members[index].phoneIsMatch = true;
                 }
-                else{members[index].phoneIsMatch = false;}
-            
-                if (members[index].email == members[index].updatedEmail){
-                    members[index].emailIsMatch = true;
+                else{
+                  members[index].phoneIsMatch = false;
+                }
+
+                if (members[index].email.toLowerCase() == members[index].updatedEmail.toLowerCase()){
+                  members[index].emailIsMatch = true;
                 }
                 else {
-                    members[index].emailIsMatch = false;
+                  members[index].emailIsMatch = false;
                 }
             }
             return sendData(total, members);
@@ -128,7 +129,7 @@ exports.details = function (req, res) {
                     members[index].mobileNumber = phone.replace(phone.substring(0, 6), '*******');
                 }
             }
-        
+
             return sendData(total, members);
         });
     }
@@ -163,6 +164,16 @@ exports.update = function (req, res) {
         }
         if (!details) {
             return res.send(404);
+        }
+
+        if(req.body.con)
+        {
+          var message;
+
+          if (req.body.messageToPhone){}
+          if (req.body.messageToEmail){}
+          if (req.body.messageToBoth){}
+            mailer.sendUpdatedRecords();
         }
         if (req.body.prevModifiedBy && req.body.prevModifiedDate) {
             //save previous data if data is being modified
