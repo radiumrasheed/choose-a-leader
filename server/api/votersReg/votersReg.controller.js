@@ -103,7 +103,7 @@ exports.searchDetails = function (req, res) {
 
                 // Write to Cache
                 redisClient.hmset([rKey, "members", JSON.stringify(members), "total", total]);
-                redisClient.expire(rKey, 1800);
+                redisClient.expire(rKey, 120);
 
                 return sendData(total, members);
             });
@@ -136,6 +136,26 @@ exports.details = function (req, res) {
                     updated: true
                 }).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
                     // Write to Cache
+                    var index, len;
+                    for (index = 0, len = members.length; index < len; ++index) {
+                    var phone = members[index].updatedPhone;
+                    if (phone.indexOf("+") == '+') {phone.replace(phone.indexOf("+"),"")}
+                    if (phone.indexOf("234") == 234) {phone.replace(phone.indexOf("234"),"0")}
+                    if (phone.indexOf("0") == 0) {phone.replace(phone.indexOf("0"),"")}
+
+                    members[index].updatedPhone = phone;
+                    if (members[index].updatedPhone == members[index].mobileNumber){
+                      members[index].phoneIsMatch = true;
+                    }
+                    else{members[index].phoneIsMatch = false;}
+
+                    if (members[index].email == members[index].updatedEmail){
+                      members[index].emailIsMatch = true;
+                    }
+                    else {
+                      members[index].emailIsMatch = false;
+                    }
+                  }
                     redisClient.hmset([rKey, "members", JSON.stringify(members), "total", total]);
                     return sendData(total, members);
                 });
@@ -166,7 +186,7 @@ exports.details = function (req, res) {
                     }
                     // Write to Cache
                     redisClient.hmset([mRKey, "members", JSON.stringify(members), "total", total]);
-                    redisClient.expire(mRKey, 1800);
+                    redisClient.expire(mRKey, 120);
 
                     return sendData(total, members);
                 });
