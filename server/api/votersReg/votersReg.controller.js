@@ -305,17 +305,16 @@ exports.removeVoters = function(req, res) {
             if (!details) {
                 return res.send(404);
             }
-
-
             details.deleted = true;
             details.save(function (err, savedDetails) {
                 if (err) {
-                    return handleError(res, err);
+                    console.log('not flagged as deleted');
                 }
-                res.json(200, savedDetails);
+                console.info('flagged as deleted');
             });
         });
     }
+    return res.send(204);
 };
 
 function handleError(res, err) {
