@@ -926,7 +926,8 @@ angular.module 'elektorApp'
           $scope.resolvedEnquiries = enquiry
           $scope.perPage2 = enquiry.length
 
-
+      $scope.addEnquiry = ->
+        $state.go "enquiry"
 
       $scope.getAllUnresolved()
       $scope.getAllResolved()

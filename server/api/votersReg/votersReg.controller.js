@@ -102,7 +102,7 @@ exports.details = function (req, res) {
             for (index = 0, len = members.length; index < len; ++index) {
                 var phone = members[index].updatedPhone;
                 phone = phone.indexOf("+") == '+' ? phone.replace(phone.indexOf("+"), "") : phone;
-                phone = phone.indexOf("234") == 234 ? phone.replace(phone.indexOf("234"), "0") : phone;
+                phone = phone.indexOf("234") == '234' ? phone.replace(phone.indexOf("234"), "0") : phone;
                 phone = phone.indexOf("0") == 0 ? phone.replace(phone.indexOf("0"), "") : phone;
                 members[index].updatedPhone = phone;
                 if (members[index].updatedPhone == members[index].mobileNumber) {
