@@ -196,11 +196,11 @@ exports.update = function (req, res) {
             };
         }
         var updated = _.merge(details, req.body);
-        updated.save(function (err) {
+        updated.save(function (err, savedUpdated) {
             if (err) {
                 return handleError(res, err);
             }
-            return res.json(200, details);
+            return res.json(200, savedUpdated);
         });
     });
 };
@@ -220,9 +220,11 @@ exports.branchMembers = function (req, res) {
     var pageNo = req.body.page || 1,
         perPage = req.body.perPage || 25;
 
-    var condition = {
-        branchCode: req.body.branchCode
-    };
+    var condition = {};
+
+    if (req.body.branchCode) {
+        condition['branchCode'] = req.body.branchCode;
+    }
 
     if (req.body.deleted == false) {
         condition["deleted"] = false;

@@ -1,12 +1,12 @@
 <div class="panel panel-green">
     <div class="panel-heading">
         <div class="panel-title">
-            <i class="fa fa-users"></i> VOTERS REGISTER <span class="" ng-show="total">({{total}})</span>
+            <i class="fa fa-users"></i> VOTERS REGISTER
 
-            <!--<button ng-if="superAdmin" class="btn btn-sm btn-primary pull-right" ng-click="addMemberVR()">-->
-                <!--<i class="fa fa-pencil-square "></i> Add To Voters Register-->
-            <!--</button>-->
-            <button class="btn btn-danger pull-right pull btn-sm" ng-if="superAdmin" ng-show="hasSelected()"                  ng-click="deleteSelected()">
+            <button ng-if="superAdmin && canDelete" class="btn btn-sm btn-primary pull-right" ng-click="addMemberVR()">
+                <i class="fa fa-pencil-square "></i> Add To Voters Register
+            </button>
+            <button class="btn btn-danger pull-right pull btn-sm" ng-if="superAdmin" ng-show="hasSelected()" ng-click="deleteSelected()">
                 <i class="fa fa-trash"></i>
                 Delete Selected
             </button>
@@ -28,12 +28,12 @@
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                    <input type="text" name="searchVotersRegister" class="form-control" ng-disabled="!selectedItem" placeholder="Search by Fullname" ng-model="searchVotersRegister" ng-change="pageChanged()">
+                    <input type="text" name="searchVotersRegister" class="form-control"  placeholder="Search by Fullname" ng-model="searchVotersRegister" ng-change="pageChanged()">
                 </div>
             </div>
             <div class="form-group pull-right">
                 <div class="input-group">
-                    <div ng-click="resetAll()" class="btn btn-danger"><i class="fa fa-refresh"></i> </div>
+                    <div ng-click="resetAll()" class="btn btn-primary"><i class="fa fa-refresh"></i> </div>
                 </div>
             </div>
             <div class="form-group">
@@ -44,7 +44,7 @@
             </div>
             <div class="form-group">
                 <div class="input-group">
-                    <button ng-click="getUpdated()" ng-disabled="!selectedItem" class="btn" >
+                    <button ng-class="getUpdatedMembers ? 'btn-primary' : '' " type="button" data-toggle="button" aria-pressed="false" onautocomplete="off" ng-click="getUpdated()" class="btn" >
                         <i class="fa fa-check-circle " style="color: #00B22D;"></i>
                         Updated
                     </button>
@@ -52,7 +52,7 @@
             </div>
             <div class="form-group">
                 <div class="input-group">
-                    <button ng-disabled="!selectedItem" ng-click="getConfirmed()" class="btn" >
+                    <button ng-class="getConfirmedMembers ? 'btn-primary' : '' " type="button" data-toggle="button" aria-pressed="false" onautocomplete="off" ng-click="getConfirmed()" class="btn" >
                         <i class="fa fa-gavel " style="color: #122b40;"></i>
                         Confirmed
                     </button>
@@ -93,12 +93,12 @@
                 <td>{{v.email}}</td>
                 <td>{{v.scNumber}}</td>
                 <td>{{v.mobileNumber}}</td>
-                <!--<td>-->
-                    <!--<button class="btn btn-xs btn-block btn-purple selected" ng-click="editMemberVR(v, $index)">-->
-                        <!--<i class="fa fa-pencil-square "></i> Edit-->
-                    <!--</button>-->
-                    <!--<i ng-if="v.confirmed" class="fa fa-gravel" style="color: #122b40;"></i>-->
-                <!--</td>-->
+                <td ng-if="canEdit" >
+                    <button class="btn btn-xs btn-block btn-purple selected" ng-click="editMemberVR(v, $index)">
+                        <i class="fa fa-pencil-square "></i> Edit
+                    </button>
+                    <i ng-if="v.confirmed" class="fa fa-gravel" style="color: #122b40;"></i>
+                </td>
             </tr>
         </table>
 
@@ -114,6 +114,6 @@
     </div>
 
     <div class="panel-footer text-left">
-        <b>Total members in Voters Register: {{total}}</b>
+        <b>Total members as queried: {{total}}</b>
     </div>
 </div>
