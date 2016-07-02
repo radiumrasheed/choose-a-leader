@@ -2,7 +2,9 @@
 
 var _ = require('lodash');
 var VotersReg = require('./votersReg.model'),
-  mailer = require('../../components/tools/mailer'),
+    DelVotersReg = require('./delVotersReg.model'),
+    mailer = require('../../components/tools/mailer'),
+    async = require('async'),
     Branches = require('../branch/branch.model');
 
 // var redis = require('redis'),
@@ -12,7 +14,9 @@ var VotersReg = require('./votersReg.model'),
 // Get list of branches
 exports.index = function (req, res) {
     Branches.find().distinct('name', function (err, branches) {
-        if (err) { return handleError(res, err); }
+        if (err) {
+            return handleError(res, err);
+        }
 
         branches.sort();
         branches.shift();
@@ -80,6 +84,7 @@ exports.searchDetails = function (req, res) {
 exports.details = function (req, res) {
     var pageNo = req.body.page || 1,
         perPage = req.body.perPage || 25;
+
     function sendData(total, members) {
         res.header('total_found', total);
         return res.json(members);
@@ -96,22 +101,22 @@ exports.details = function (req, res) {
             var index, len;
             for (index = 0, len = members.length; index < len; ++index) {
                 var phone = members[index].updatedPhone;
-                 phone=   phone.indexOf("+") == '+' ? phone.replace(phone.indexOf("+"),""): phone;
-                 phone=   phone.indexOf("234") == 234 ? phone.replace(phone.indexOf("234"),"0") : phone;
-                 phone=   phone.indexOf("0") == 0 ? phone.replace(phone.indexOf("0"),""): phone;
+                phone = phone.indexOf("+") == '+' ? phone.replace(phone.indexOf("+"), "") : phone;
+                phone = phone.indexOf("234") == 234 ? phone.replace(phone.indexOf("234"), "0") : phone;
+                phone = phone.indexOf("0") == 0 ? phone.replace(phone.indexOf("0"), "") : phone;
                 members[index].updatedPhone = phone;
-                if (members[index].updatedPhone == members[index].mobileNumber){
-                  members[index].phoneIsMatch = true;
-                }
-                else{
-                  members[index].phoneIsMatch = false;
-                }
-
-                if (members[index].email.toLowerCase() == members[index].updatedEmail.toLowerCase()){
-                  members[index].emailIsMatch = true;
+                if (members[index].updatedPhone == members[index].mobileNumber) {
+                    members[index].phoneIsMatch = true;
                 }
                 else {
-                  members[index].emailIsMatch = false;
+                    members[index].phoneIsMatch = false;
+                }
+
+                if (members[index].email.toLowerCase() == members[index].updatedEmail.toLowerCase()) {
+                    members[index].emailIsMatch = true;
+                }
+                else {
+                    members[index].emailIsMatch = false;
                 }
             }
             return sendData(total, members);
@@ -167,18 +172,17 @@ exports.update = function (req, res) {
             return res.send(404);
         }
 
-        if(req.body.messageToEmail || req.body.messageToPhone ||req.body.messageToBoth)
-        {
+        if (req.body.messageToEmail || req.body.messageToPhone || req.body.messageToBoth) {
 
-          if (req.body.messageToPhone){
-            mailer.sendUpdatedRecordsToPhone(req.body.messageToPhone, req.body.updatedPhone);
-          }
-          if (req.body.messageToEmail){
-            mailer.sendUpdatedRecordsToEmail(req.body.messageToEmail, req.body.updatedEmail);
-          }
-          if (req.body.messageToBoth){
-            mailer.sendUpdatedRecordsToBoth(req.body.messageToBoth,req.body.updatedPhone,req.body.updatedEmail)
-          }
+            if (req.body.messageToPhone) {
+                mailer.sendUpdatedRecordsToPhone(req.body.messageToPhone, req.body.updatedPhone);
+            }
+            if (req.body.messageToEmail) {
+                mailer.sendUpdatedRecordsToEmail(req.body.messageToEmail, req.body.updatedEmail);
+            }
+            if (req.body.messageToBoth) {
+                mailer.sendUpdatedRecordsToBoth(req.body.messageToBoth, req.body.updatedPhone, req.body.updatedEmail)
+            }
         }
         if (req.body.prevModifiedBy && req.body.prevModifiedDate) {
             //save previous data if data is being modified
@@ -220,9 +224,16 @@ exports.branchMembers = function (req, res) {
         branchCode: req.body.branchCode
     };
 
-    if (req.body.confirm) {
-        condition["confirmed"] = false;
+    if (req.body.deleted == false) {
+        condition["deleted"] = false;
+    }
+
+    if (req.body.updated == true) {
         condition["updated"] = true;
+    }
+
+    if (req.body.confirm == true) {
+        condition["confirmed"] = true;
     }
 
     if (req.body.search) {
@@ -252,6 +263,59 @@ exports.checkVotersName = function (req, res) {
             if (err) return handleError(res, err);
             return res.status(200).json(similarMembers);
         });
+};
+
+/*exports.removeVoters = function (req, res) {
+
+    var index, len;
+    for (index = 0, len = req.body.ids.length; index < len; ++index) {
+
+        VotersReg.findOne({_id: req.body.ids[index]}, function (err, voter) {
+
+            async.series([
+
+                function (_cb) {
+                    DelVotersReg.create(voter, function (e, deleted) {
+                        console.log(voter);
+                        // if (e) { return handleError(res, err); }
+                        return _cb(null, deleted);
+                    });
+                },
+                function (_cb) {
+                    VotersReg.remove({_id: req.body.ids[index]}, function (e) {
+                        // if (e) { return handleError(res, err); }
+                        return _cb(null, 'deleted');
+                    });
+                }
+            ], function (err, response) {
+                if (err) { return console.error(err); }
+                return console.info(response);
+            });
+        });
+    };
+};*/
+
+exports.removeVoters = function(req, res) {
+    var index, len;
+    for (index = 0, len = req.body.ids.length; index < len; ++index) {
+        VotersReg.findById(req.body.ids[index], function (err, details) {
+            if (err) {
+                return handleError(res, err);
+            }
+            if (!details) {
+                return res.send(404);
+            }
+
+
+            details.deleted = true;
+            details.save(function (err, savedDetails) {
+                if (err) {
+                    return handleError(res, err);
+                }
+                res.json(200, savedDetails);
+            });
+        });
+    }
 };
 
 function handleError(res, err) {

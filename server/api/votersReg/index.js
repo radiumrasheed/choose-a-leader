@@ -16,9 +16,10 @@ router.post('/save', controller.update);
 //APIs after this line will require  session to work
 router.use(sessionSec);
 
-router.post('/create', sessionSec, controller.create);
-router.post('/branchMembers', sessionSec, controller.branchMembers);
-router.post('/checkVotersName', sessionSec, controller.checkVotersName);
+router.post('/create', controller.create);
+router.post('/branchMembers', controller.branchMembers);
+router.post('/checkVotersName', controller.checkVotersName);
+router.post('/removeVoters', controller.removeVoters);
 
 
 module.exports = router;
