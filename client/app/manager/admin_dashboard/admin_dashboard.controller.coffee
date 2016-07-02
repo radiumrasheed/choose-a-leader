@@ -882,5 +882,14 @@ angular.module 'elektorApp'
       Enquiry.getAllResolved (enquiries)->
         $scope.resolvedEnquiries = enquiries
         $scope.perPage2 = enquiries.length
+      
+      $scope.resolve (index) ->
+        Enquiry.resolve ()->
+          index.confirm = true
+          toastr.success "Update Successful"
+        , (e)  ->
+        $scope.submitting = false
+        toastr.error e.data.message
+        
     else
       $state.go "admin_dashboard"

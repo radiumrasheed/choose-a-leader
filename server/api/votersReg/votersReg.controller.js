@@ -89,7 +89,8 @@ exports.details = function (req, res) {
         VotersReg.find({
             branchCode: req.body.branchCode,
             confirmed: false,
-            updated: true
+            updated: true,
+            deleted: false
         }).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
             // Write to Cache
             var index, len;

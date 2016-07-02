@@ -16,3 +16,7 @@ angular.module 'elektorApp'
       method: 'GET'
       isArray: true
       url: '/api/enquiry/getResolved'
+    resolve:
+      method: 'POST'
+      isArray: false
+      url: '/api/enquiry/getOne'

@@ -30,9 +30,15 @@ exports.getUnresolved = function (req,res) {
 
 
 exports.getOne = function (req,res) {
-  Enquiry.findById(req.params.id, function(err, enquiries) {
+  Enquiry.findById(req.body._id, function(err, enquiries) {
     if(err) { return handleError(res, err); }
-    return res.json(enquiries);
+    var updated = _.merge(enquiries, req.body);
+    updated.save(function (err) {
+      if (err) {
+        return handleError(res, err);
+      }
+      return res.json(200, enquiries);
+    });
   });
 };
 

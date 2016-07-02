@@ -49,8 +49,6 @@ angular.module 'elektorApp'
         user.verified = 1
         user.branch = data.branchCode
 
-
-
         Member.createNewMember user,(newMember) ->
           if newMember
             if data.phoneIsMatch is true and data.emailIsMatch is false

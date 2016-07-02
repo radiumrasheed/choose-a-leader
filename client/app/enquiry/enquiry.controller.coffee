@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'EnquiryCtrl', ($scope, $state, Enquiry,toastr, Auth, $auth, $sessionStorage) ->
+.controller 'EnquiryCtrl', ($scope, $state, Enquiry,toastr) ->
   $scope.enquiry = {}
   $scope.submitting = false
   $scope.submit = (form) ->
