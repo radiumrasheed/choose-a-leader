@@ -759,10 +759,12 @@ angular.module 'elektorApp'
 .controller 'VotersRegisterCtrl', ($scope, VotersRegister, Auth, $localStorage, $state, toastr, $modal) ->
   Auth.me (usr) ->
     if usr.superAdmin is true
-      $scope.superAdmin = true
 
-      VotersRegister.branches (data) ->
-        $scope.branchData = data
+      if usr.canEdit
+        $scope.canEdit = true
+
+      if usr.canDelete
+        $scope.canDelete = true
 
       modal = null
       $scope.sortType = "fullname"
@@ -773,6 +775,10 @@ angular.module 'elektorApp'
       $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
       $scope.getUpdatedMembers = false
       $scope.getConfirmedMembers = false
+      $scope.superAdmin = true
+
+      VotersRegister.branches (data) ->
+        $scope.branchData = data
 
       $scope.getConfirmed = ->
         $scope.getConfirmedMembers = !$scope.getConfirmedMembers
@@ -815,10 +821,10 @@ angular.module 'elektorApp'
 
       $scope.checkName = ->
         VotersRegister.checkVotersName $scope.member, (result) ->
-          console.log result
           if result.length > 0
             alert 'similar name already exists'
             $scope.exists = true
+            $scope.member = {}
           else
             $scope.exists = false
             $scope.good = true
