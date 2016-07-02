@@ -8,4 +8,11 @@ angular.module 'elektorApp'
       method: 'POST'
       isArray: false
       url: '/api/enquiry/new'
-
+    getAllUnresolved:
+      method: 'GET'
+      isArray: true
+      url: '/api/enquiry/getUnresolved'
+    getAllResolved:
+      method: 'GET'
+      isArray: true
+      url: '/api/enquiry/getResolved'

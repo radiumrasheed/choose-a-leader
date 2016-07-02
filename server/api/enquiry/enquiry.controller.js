@@ -12,3 +12,31 @@ exports.create = function (req,res) {
     return res.json(201);
   });
 };
+
+exports.getResolved = function (req,res) {
+  Enquiry.find({resolved:true}).sort('_id').exec( function(err, enquiries) {
+    if(err) { return handleError(res, err); }
+    return res.json(enquiries);
+  });
+};
+
+exports.getUnresolved = function (req,res) {
+  Enquiry.find({resolved:false}).sort('_id').exec( function(err, enquiries) {
+    if(err) { return handleError(res, err); }
+    return res.json(enquiries);
+  });
+};
+
+
+
+exports.getOne = function (req,res) {
+  Enquiry.findById(req.params.id, function(err, enquiries) {
+    if(err) { return handleError(res, err); }
+    return res.json(enquiries);
+  });
+};
+
+
+function handleError(res, err) {
+  return res.send(500, err);
+}

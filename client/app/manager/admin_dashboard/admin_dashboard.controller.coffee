@@ -7,7 +7,7 @@ angular.module 'elektorApp'
     $scope.usr = usr
     if usr.role is "admin" || usr.role is "branch_admin"
       $scope.message = 'Hello'
-      
+
       $rootScope.$on "pollSettings", (e, data) ->
         $scope.settings = data
 
@@ -128,7 +128,7 @@ angular.module 'elektorApp'
     mywindow.print()
     mywindow.close()
     true
-    
+
   Poll.get id: pollId, (poll) ->
     $scope.poll = poll
     if $scope.poll.national
@@ -379,7 +379,7 @@ angular.module 'elektorApp'
         templateUrl: "app/manager/admin_dashboard/views/new-member-form.html"
         scope: $scope
         backdrop: 'static'
-        
+
   $scope.editMember = (member) ->
     $scope.selectedMember = member
     if member.othername?
@@ -405,7 +405,7 @@ angular.module 'elektorApp'
     Member.update id: $scope.selectedMember._id, $scope.selectedMember, ->
       toastr.success "Member Data Updated"
       $scope.closeModal()
-      
+
   $scope.saveNewMember = (form) ->
     Member.createNewMember $scope.member, (m) ->
       toastr.success "New Member Data Updated"
@@ -447,23 +447,23 @@ angular.module 'elektorApp'
           $scope.members = members
           $scope.total = parseInt headers "total_found"
           $scope.pages = Math.ceil($scope.total / $scope.perPage)
-          
+
   $scope.load $scope.currentPage
 
   $scope.pageChanged = ->
     $localStorage.verifiedRegisterPerPage = $scope.perPage
     $scope.load $scope.currentPage
-    
+
   $scope.sendLink = (member) ->
     if confirm "Are you sure"
       Member.createLink id : member._id, (response) ->
          alert "setup link sent to " + response.email
-        
+
   $scope.detailLink = (member) ->
     if confirm "Are you sure?"
       Member.detailLink id : member._id, (member) ->
         alert "details request link sent to " + member.email
-        
+
 .controller 'BURCtrl', ($scope, BranchRequest, toastr, $modal, Member, $rootScope, $state) ->
   if $rootScope.$user.role is 'branch_admin'
     $state.go "admin_dashboard"
@@ -756,7 +756,7 @@ angular.module 'elektorApp'
       else
         $scope.formError = "All fields are required"
 
-.controller 'VotersRegisterCtrl', ($scope, VotersRegister, Auth, $localStorage, $state, toastr, $modal, $http) ->
+.controller 'VotersRegisterCtrl', ($scope, VotersRegister, Auth, $localStorage, $state, toastr, $modal) ->
   Auth.me (usr) ->
     if usr.superAdmin is true
       $scope.superAdmin = true
@@ -771,48 +771,34 @@ angular.module 'elektorApp'
       $scope.perPage = $localStorage.votersRegisterPerPage or 15
       $scope.currentPage = 1
       $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
-      $scope.getUpdatedMembers = false
-      $scope.getConfirmedMembers = false
-      
-      $scope.getConfirmed = ->
-        $scope.getConfirmedMembers = !$scope.getConfirmedMembers
-        $scope.pageChanged()
-        
-      $scope.getUpdated = ->
-        $scope.getUpdatedMembers = !$scope.getUpdatedMembers
-        $scope.pageChanged()
 
       $scope.load = (page) ->
         if $scope.searchVotersRegister is ''
           VotersRegister.branchMembers
-            confirm: $scope.getConfirmedMembers
-            updated: $scope.getUpdatedMembers
             page: page
             branchCode: $scope.selectedItem
             perPage: $scope.perPage
           , (voters_register, headers) ->
-            if voters_register?
-              $scope.voters_register = voters_register
-              $scope.searchHeader = false
-              $scope.total = parseInt headers "total_found"
-              $scope.pages = Math.ceil($scope.total / $scope.perPage)
+            $scope.voters_register = voters_register
+            $scope.searchHeader = false
+            $scope.total = parseInt headers "total_found"
+            $scope.pages = Math.ceil($scope.total / $scope.perPage)
         else
           VotersRegister.branchMembers
-            confirm: $scope.getConfirmedMembers
-            updated: $scope.getUpdatedMembers
             page: page
             branchCode: $scope.selectedItem
             perPage: $scope.perPage
             search: $scope.searchVotersRegister
-          , (voters_register, headers) ->
-            if voters_register?
-              $scope.searchHeader = true
-              $scope.voters_register = voters_register
-              $scope.total = parseInt headers "total_found"
-              $scope.pages = Math.ceil($scope.total / $scope.perPage)
+            , (voters_register, headers) ->
+            $scope.searchHeader = true
+            $scope.voters_register = voters_register
+            $scope.total = parseInt headers "total_found"
+            $scope.pages = Math.ceil($scope.total / $scope.perPage)
+
 
       $scope.checkName = ->
         VotersRegister.checkVotersName $scope.member, (result) ->
+          console.log result
           if result.length > 0
             alert 'similar name already exists'
             $scope.exists = true
@@ -822,29 +808,9 @@ angular.module 'elektorApp'
 
       $scope.load $scope.currentPage
 
-      $scope.resetAll = ->
-        $scope.selectedItem = ''
-        $scope.voters_register = null
-        $scope.searchVotersRegister = ''
-        $scope.total = null
-
       $scope.pageChanged = ->
         $localStorage.votersRegisterPerPage = $scope.perPage
         $scope.load $scope.currentPage
-
-      $scope.hasSelected = ->
-        if $scope.voters_register?
-          $scope.voters_register.length and (_.filter $scope.voters_register, (v) -> v.selected).length >= 1
-
-      $scope.deleteSelected = ->
-        admin_username = prompt "Please enter your Username: "
-        if admin_username.toLowerCase() is usr.username.toLowerCase()
-          selectedVoters = _.pluck (_.filter $scope.voters_register, (v) -> v.selected), "_id"
-          VotersRegister.removeVoters ids: selectedVoters, (response) ->
-            _.remove $scope.voters_register, (v) -> (selectedVoters.indexOf v._id) isnt -1
-            alert selectedVoters.length + ' Voters successfully deleted'
-        else
-          alert "I hope you know what you are doing!"
 
       $scope.addMemberVR = ->
         $scope.member = {}
@@ -876,7 +842,7 @@ angular.module 'elektorApp'
           $scope.selectedMember.email = 'NOT AVAILABLE'
         $scope.selectedMember.prevModifiedBy = usr.username
         $scope.selectedMember.prevModifiedDate = new Date
-        
+
         VotersRegister.saveData id: $scope.selectedMember._id, $scope.selectedMember, ->
           toastr.success "Member Data Updated"
           $scope.closeModal()
@@ -900,7 +866,21 @@ angular.module 'elektorApp'
             toastr.success "New Member Data Created"
             $scope.closeModal()
 
-      
-          
+
+    else
+      $state.go "admin_dashboard"
+.controller 'SupportCtrl', ($state, $scope, Auth, Enquiry) ->
+  Auth.me (usr) ->
+    if usr.superAdmin is true
+      $scope.currentPage = 1
+      $scope.active1 = true
+      $scope.active2 = false
+
+      Enquiry.getAllUnresolved (enquiries)->
+          $scope.unResolvedEnquiries = enquiries
+          $scope.perPage1 = enquiries.length
+      Enquiry.getAllResolved (enquiries)->
+        $scope.resolvedEnquiries = enquiries
+        $scope.perPage2 = enquiries.length
     else
       $state.go "admin_dashboard"

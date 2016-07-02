@@ -2,10 +2,8 @@
 
 var _ = require('lodash');
 var VotersReg = require('./votersReg.model'),
-    DelVotersReg = require('./delVotersReg.model'),
-    mailer = require('../../components/tools/mailer'),
-    Branches = require('../branch/branch.model'),
-    async = require('async');
+  mailer = require('../../components/tools/mailer'),
+    Branches = require('../branch/branch.model');
 
 // var redis = require('redis'),
 //     config = require('../../config/environment'),
@@ -14,9 +12,7 @@ var VotersReg = require('./votersReg.model'),
 // Get list of branches
 exports.index = function (req, res) {
     Branches.find().distinct('name', function (err, branches) {
-        if (err) {
-            return handleError(res, err);
-        }
+        if (err) { return handleError(res, err); }
 
         branches.sort();
         branches.shift();
@@ -84,7 +80,6 @@ exports.searchDetails = function (req, res) {
 exports.details = function (req, res) {
     var pageNo = req.body.page || 1,
         perPage = req.body.perPage || 25;
-
     function sendData(total, members) {
         res.header('total_found', total);
         return res.json(members);
@@ -100,22 +95,22 @@ exports.details = function (req, res) {
             var index, len;
             for (index = 0, len = members.length; index < len; ++index) {
                 var phone = members[index].updatedPhone;
-                phone = phone.indexOf("+") == '+' ? phone.replace(phone.indexOf("+"), "") : phone;
-                phone = phone.indexOf("234") == 234 ? phone.replace(phone.indexOf("234"), "0") : phone;
-                phone = phone.indexOf("0") == 0 ? phone.replace(phone.indexOf("0"), "") : phone;
+                 phone=   phone.indexOf("+") == '+' ? phone.replace(phone.indexOf("+"),""): phone;
+                 phone=   phone.indexOf("234") == 234 ? phone.replace(phone.indexOf("234"),"0") : phone;
+                 phone=   phone.indexOf("0") == 0 ? phone.replace(phone.indexOf("0"),""): phone;
                 members[index].updatedPhone = phone;
-                if (members[index].updatedPhone == members[index].mobileNumber) {
-                    members[index].phoneIsMatch = true;
+                if (members[index].updatedPhone == members[index].mobileNumber){
+                  members[index].phoneIsMatch = true;
                 }
-                else {
-                    members[index].phoneIsMatch = false;
+                else{
+                  members[index].phoneIsMatch = false;
                 }
 
-                if (members[index].email.toLowerCase() == members[index].updatedEmail.toLowerCase()) {
-                    members[index].emailIsMatch = true;
+                if (members[index].email.toLowerCase() == members[index].updatedEmail.toLowerCase()){
+                  members[index].emailIsMatch = true;
                 }
                 else {
-                    members[index].emailIsMatch = false;
+                  members[index].emailIsMatch = false;
                 }
             }
             return sendData(total, members);
@@ -171,16 +166,18 @@ exports.update = function (req, res) {
             return res.send(404);
         }
 
-        if (req.body.con) {
-            var message;
+        if(req.body.messageToEmail || req.body.messageToPhone ||req.body.messageToBoth)
+        {
 
-            if (req.body.messageToPhone) {
-            }
-            if (req.body.messageToEmail) {
-            }
-            if (req.body.messageToBoth) {
-            }
-            mailer.sendUpdatedRecords();
+          if (req.body.messageToPhone){
+            mailer.sendUpdatedRecordsToPhone(req.body.messageToPhone, req.body.updatedPhone);
+          }
+          if (req.body.messageToEmail){
+            mailer.sendUpdatedRecordsToEmail(req.body.messageToEmail, req.body.updatedEmail);
+          }
+          if (req.body.messageToBoth){
+            mailer.sendUpdatedRecordsToBoth(req.body.messageToBoth,req.body.updatedPhone,req.body.updatedEmail)
+          }
         }
         if (req.body.prevModifiedBy && req.body.prevModifiedDate) {
             //save previous data if data is being modified
@@ -218,16 +215,12 @@ exports.branchMembers = function (req, res) {
     var pageNo = req.body.page || 1,
         perPage = req.body.perPage || 25;
 
-    //default condition for using this API
     var condition = {
         branchCode: req.body.branchCode
     };
 
-    if (req.body.confirm === true) {
-        condition["confirmed"] = true;
-    }
-
-    if (req.body.updated === true) {
+    if (req.body.confirm) {
+        condition["confirmed"] = false;
         condition["updated"] = true;
     }
 
@@ -258,35 +251,6 @@ exports.checkVotersName = function (req, res) {
             if (err) return handleError(res, err);
             return res.status(200).json(similarMembers);
         });
-};
-
-exports.removeVoters = function (req, res) {
-
-    var index, len;
-    for (index = 0, len = req.body._ids.length; index < len; ++index) {
-
-        VotersReg.find({_id: req.body.ids[index]}, function (err, voter) {
-            async.parallel([
-                function (_cb) {
-                    DelVotersReg.create(voter, function (e, deleted) {
-                        if (err) { return handleError(res, err); }
-                        return _cb(e, deleted);
-                    })
-                },
-                function (_cb) {
-                    VotersReg.remove({_id: req.body.ids[index]}, function (e) {
-                        if (err) { return handleError(res, err); }
-                        return _cb(e, 'deleted');
-                    });
-                }
-            ], function (err, response) {
-                if (errr) {
-                    return handleError(res, err);
-                }
-                return res.send(204);
-            });
-        });
-    };
 };
 
 function handleError(res, err) {

@@ -1,0 +1,85 @@
+<div class="panel panel-green">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <i class="fa fa-users"></i> Enquiry And Support Resolution Center
+      <button ng-if="superAdmin" class="btn btn-xs btn-primary pull-right" ng-click="addMemberVR()">
+        <i class="fa fa-pencil-square "></i> Add Enquiry
+      </button>
+    </div>
+
+  </div>
+  <div class="panel-body ">
+    <ul class="btn-group btn-group-justified" role="group">
+      <li href="#" ng-click="active1=true; active2 = false" class="btn " ng-class="active1? 'btn-danger-active':'btn-danger-outline'"><span class="fa fa-hourglass pull-left"></span> Unresolved</li>
+      <li href="#" ng-click="active1=false; active2 = true" class="btn" ng-class="active2? 'btn-success-active':'btn-success-outline'"><span class="fa fa-check pull-left"></span> Resolved</li>
+    </ul>
+    <br>
+
+    <table ng-show="active2" class="table table-striped table-condensed table-hover">
+      <tr>
+        <th class="col-sm-1">S/N.</th>
+        <th>
+          Name
+        </th>
+        <th>
+          Title
+        </th>
+        <th>
+          Message
+        </th>
+        <th>
+          Email
+        </th>
+        <th>
+          Time Received
+        </th>
+      </tr>
+      <tr ng-repeat="e in resolvedEnquiries track by $index" ng-show="e.resolved == true">
+        <td class="">{{(currentPage-1)*perPage2+$index+1}}.</td>
+        <td>{{e.name}}</td>
+        <td>{{e.title}}</td>
+        <td>{{e.message}}</td>
+        <td>{{e.email}}</td>
+        <td>{{e.timeSent}}</td>
+      </tr>
+    </table>
+    <table ng-show="active1" class="table table-striped table-condensed table-hover">
+      <tr>
+        <th class="col-sm-1">S/N.</th>
+        <th>
+            Name
+        </th>
+        <th>
+            Title
+        </th>
+        <th>
+            Message
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            Time Received
+        </th>
+        <th>
+          Action
+        </th>
+      </tr>
+      <tr ng-repeat="e in unResolvedEnquiries track by $index" ng-show="e.resolved == false">
+          <td class="">{{(currentPage-1)*perPage1+$index+1}}.</td>
+          <td>{{e.name}}</td>
+          <td>{{e.title}}</td>
+          <td>{{e.message}}</td>
+          <td>{{e.email}}</td>
+          <td>{{e.timeSent}}</td>
+          <td><button class="btn btn-success btn-sm"><span class="fa fa-check-square-o"></span>Resolve
+          </button></td>
+      </tr>
+    </table>
+
+  </div>
+
+  <div class="panel-footer text-left">
+    <b>Total Number Of Unresolved Tickets : {{unResolvedEnquiries.length}}</b>
+  </div>
+</div>
