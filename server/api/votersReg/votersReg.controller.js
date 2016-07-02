@@ -101,8 +101,12 @@ exports.details = function (req, res) {
             var index, len;
             for (index = 0, len = members.length; index < len; ++index) {
                 var phone = members[index].updatedPhone;
-                phone = phone.indexOf("+") == '+' ? phone.replace(phone.indexOf("+"), "") : phone;
-                phone = phone.indexOf("234") == '234' ? phone.replace(phone.indexOf("234"), "0") : phone;
+
+                phone = phone.replace('+',"");
+                if(phone.startsWith('234')){
+                  phone = phone.slice(3);
+                }
+
                 phone = phone.indexOf("0") == 0 ? phone.replace(phone.indexOf("0"), "") : phone;
                 members[index].updatedPhone = phone;
                 if (members[index].updatedPhone == members[index].mobileNumber) {

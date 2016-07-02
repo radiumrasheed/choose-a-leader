@@ -5,6 +5,7 @@ public
 .idea
 client/bower_components
 dist
+/server/config/environment/development.js
 /server/config/local.env.js
 newrelic_agent.log
 npm-debug.log
