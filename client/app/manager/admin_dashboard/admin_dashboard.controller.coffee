@@ -808,6 +808,7 @@ angular.module 'elektorApp'
           VotersRegister.branchMembers
             confirm: $scope.getConfirmedMembers
             updated: $scope.getUpdatedMembers
+            deleted: false
             page: page
             branchCode: $scope.selectedItem
             perPage: $scope.perPage
