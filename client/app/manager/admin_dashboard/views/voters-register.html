@@ -6,8 +6,9 @@
             <button ng-if="superAdmin" class="btn btn-sm btn-primary pull-right" ng-click="addMemberVR()">
                 <i class="fa fa-pencil-square "></i> Add To Voters Register
             </button>
-            <button class="btn btn-danger pull-right pull btn-sm m-r-25" ng-if="superAdmin" ng-show="hasSelected()"
-                    ng-click="deleteSelected()"><i class="fa fa-trash"></i>
+            <button class="btn btn-danger pull-right pull btn-sm" ng-if="superAdmin" ng-show="hasSelected()"                  ng-click="deleteSelected()">
+                <i class="fa fa-trash"></i>
+                Delete Selected
             </button>
         </div>
 
@@ -44,7 +45,7 @@
             </div>
             <div class="form-group">
                 <div class="input-group">
-                    <button ng-click="getUpdated()" class="btn" >
+                    <button ng-click="getUpdated()" ng-disabled="!selectedItem" class="btn" >
                         <i class="fa fa-check-circle " style="color: #00B22D;"></i>
                         Updated
                     </button>
@@ -52,7 +53,7 @@
             </div>
             <div class="form-group">
                 <div class="input-group">
-                    <button ng-click="getConfirmed()" class="btn" >
+                    <button ng-disabled="!selectedItem" ng-click="getConfirmed()" class="btn" >
                         <i class="fa fa-gavel " style="color: #122b40;"></i>
                         Confirmed
                     </button>

@@ -840,8 +840,9 @@ angular.module 'elektorApp'
         admin_username = prompt "Please enter your Username: "
         if admin_username.toLowerCase() is usr.username.toLowerCase()
           selectedVoters = _.pluck (_.filter $scope.voters_register, (v) -> v.selected), "_id"
-          VotersRegister.removeVoters selectedVoters, ->
+          VotersRegister.removeVoters ids: selectedVoters, (response) ->
             _.remove $scope.voters_register, (v) -> (selectedVoters.indexOf v._id) isnt -1
+            alert selectedVoters.length + ' Voters successfully deleted'
         else
           alert "I hope you know what you are doing!"
 
