@@ -56,7 +56,7 @@ angular.module 'elektorApp'
     url: 'branch_updates/'
     templateUrl: 'app/manager/admin_dashboard/views/branch-updates.html'
     controller: 'BURCtrl'
-    
+
   .state 'admin_dashboard.update_admin_password',
     url: 'update_password/'
     templateUrl: 'app/manager/admin_dashboard/views/update-password.html'
@@ -66,3 +66,7 @@ angular.module 'elektorApp'
     url: 'voters_register/'
     templateUrl: 'app/manager/admin_dashboard/views/voters-register.html'
     controller: 'VotersRegisterCtrl'
+  .state 'admin_dashboard.support',
+    url: 'support'
+    templateUrl: 'app/manager/admin_dashboard/views/supportandenquiry.html'
+    controller: 'SupportCtrl'

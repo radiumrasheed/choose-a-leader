@@ -22,12 +22,13 @@
 
   </div>
   <div class="row">
-    <div class="col-md-offset-2 col-md-8 panel panel-green no-padding">
+    <div ng-hide="submitting" class="col-md-offset-2 col-md-8 panel panel-green no-padding">
       <div class="panel-heading">
-        <div class="panel-title"><i class="fa fa-question-circle"></i>
+        <div  class="panel-title"><i class="fa fa-question-circle"></i>
           Please fill the form and submit your enquiries or complaints
         </div>
       </div>
+      <div ng-hide="submitting">
       <div class="panel-body">
         <form name="enquiryForm" class="form-horizontal">
 
@@ -98,14 +99,17 @@
           </div>
         </div>
       </div>
+      </div>
     </div>
 
-    <div class="container" ng-show="confirmation && submitting">
+    <div class="container" ng-show="submitting">
       <div style="background: rgba(8, 84, 8, 0.73); margin-bottom: 10px">
         <div class="row">
-          <div class="col-md-12 text-center" style="margin-top: 10px; margin-bottom: 10px">
-            <h2><span class="text-uppercase text-white text-bold">{{confirmationMessage}}</span></h2>
-            <h4><a ui-sref="login" ><label class="text-white"><strong>Click here to Login</strong></label></a></h4>
+          <div class="col-md-12 text-center" style="margin-top: 50px; margin-bottom: 10px">
+            <h2><span class="text-uppercase text-white text-bold">Your Enquiry has been received, we will get
+              back to you shortly. Thank You</span></h2>
+            <h4><a ui-sref="landing"
+            ><label class="text-white btn btn-info btn-lg"><strong>Go To Main Page</strong></label></a></h4>
           </div>
         </div>
       </div>

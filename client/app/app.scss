@@ -410,6 +410,41 @@ em {
   border-color: #5cb85c;
 }
 
+.btn-success-outline:hover {
+  color: white;
+  background-color: #5cb85c;
+  background-image: none;
+  border-color: #5cb85c;
+}
+
+.btn-success-active {
+  color: white;
+  background-color: #5cb85c;
+  background-image: none;
+  border-color: #5cb85c;
+}
+
+.btn-danger-outline {
+  color: #b83004;
+  background-color: transparent;
+  background-image: none;
+  border-color: #b83004;
+}
+
+.btn-danger-outline:hover {
+  color: white;
+  background-color: #b83004;
+  background-image: none;
+  border-color: #b83004;
+}
+
+.btn-danger-active {
+  color: white;
+  background-color: #b83004;
+  background-image: none;
+  border-color: #b83004;
+}
+
 .floating-button {
   @extend .btn;
   @extend .btn-success;
