@@ -829,7 +829,7 @@ angular.module 'elektorApp'
             $scope.exists = false
             $scope.good = true
 
-      $scope.load $scope.currentPage
+#      $scope.load $scope.currentPage
 
       $scope.resetAll = ->
         $scope.selectedItem = ''
