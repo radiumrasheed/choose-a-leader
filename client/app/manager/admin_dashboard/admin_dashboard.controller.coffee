@@ -846,7 +846,7 @@ angular.module 'elektorApp'
           VotersRegister.removeVoters ids: selectedVoters, (response) ->
             _.remove $scope.voters_register, (v) -> (selectedVoters.indexOf v._id) isnt -1
             alert selectedVoters.length + ' Voters successfully deleted'
-#            $scope.pageChanged()
+
         else
           alert "I hope you know what you are doing!"
 
