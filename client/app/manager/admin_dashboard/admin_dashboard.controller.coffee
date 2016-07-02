@@ -773,11 +773,11 @@ angular.module 'elektorApp'
       $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
       $scope.getUpdatedMembers = false
       $scope.getConfirmedMembers = false
-      
+
       $scope.getConfirmed = ->
         $scope.getConfirmedMembers = !$scope.getConfirmedMembers
         $scope.pageChanged()
-        
+
       $scope.getUpdated = ->
         $scope.getUpdatedMembers = !$scope.getUpdatedMembers
         $scope.pageChanged()
@@ -914,20 +914,33 @@ angular.module 'elektorApp'
       $scope.active1 = true
       $scope.active2 = false
 
-      Enquiry.getAllUnresolved (enquiries)->
+
+      $scope.getAllUnresolved = ->
+        Enquiry.getAllUnresolved (enquiries)->
           $scope.unResolvedEnquiries = enquiries
           $scope.perPage1 = enquiries.length
-      Enquiry.getAllResolved (enquiries)->
-        $scope.resolvedEnquiries = enquiries
-        $scope.perPage2 = enquiries.length
-      
-      $scope.resolve (index) ->
-        Enquiry.resolve ()->
-          index.confirm = true
-          toastr.success "Update Successful"
+
+
+      $scope.getAllResolved = ->
+        Enquiry.getAllResolved (enquiry)->
+          $scope.resolvedEnquiries = enquiry
+          $scope.perPage2 = enquiry.length
+
+
+
+      $scope.getAllUnresolved()
+      $scope.getAllResolved()
+      $scope.resolve = (e,index) ->
+        console.log e[index]
+        e[index].resolved = true
+        Enquiry.resolve e[index], (resp)->
+          if resp.resolved is true
+            $scope.getAllUnresolved()
+            $scope.getAllResolved()
+            toastr.success "Enquiries resolved Successful"
         , (e)  ->
-        $scope.submitting = false
-        toastr.error e.data.message
-        
+            e[index].resolved = false
+            toastr.error e.data.message
+
     else
       $state.go "admin_dashboard"

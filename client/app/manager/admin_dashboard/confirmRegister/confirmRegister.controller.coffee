@@ -58,13 +58,10 @@ angular.module 'elektorApp'
  been added to your NBA E-voting Portal Account, thank you for updating your records."
 
             if data.phoneIsMatch is false and data.emailIsMatch is true
-              data.messageToEmail = "Dear "+data.updatedFirstName+", Your Details Have been Updated successfully and this Phone Number: "+data.updatedPhone+" has
- been added to your NBA E-voting Portal Account, thank you for updating your records"
+              data.messageToEmail = data.updatedFirstName;
 
             if data.phoneIsMatch is true and data.emailIsMatch is true
-              data.messageToBoth = "Dear "+data.updatedFirstName+", Your Details Have been Updated successfully and
- this email "+data.emailIsMatch+"  and Phone Number: "+data.updatedPhone+" has been added to your NBA E-voting Portal Account, thank you for updating your
- records."
+              data.messageToBoth = data.updatedFirstName;
             data.confirmed = true
             VotersRegister.saveData data, (memb) ->
               if memb.confirmed

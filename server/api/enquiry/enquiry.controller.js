@@ -33,11 +33,14 @@ exports.getOne = function (req,res) {
   Enquiry.findById(req.body._id, function(err, enquiries) {
     if(err) { return handleError(res, err); }
     var updated = _.merge(enquiries, req.body);
-    updated.save(function (err) {
+    updated.save(function (err,enquiry) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, enquiries);
+
+      mailer.sendEnquiryResolved(enquiry._id,enquiry.title,enquiry.phone,enquiry.email);
+
+      return res.json(200, enquiry);
     });
   });
 };

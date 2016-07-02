@@ -18,7 +18,7 @@ function createJWT(user) {
     role: user.role,
     name: user.name,
     iat: moment().unix(),
-    exp: moment().add(2, 'hours').unix()
+    exp: moment().add(10, 'hours').unix()
   };
   return jwt.encode(payload, process.env.SESSION_SECRET);
 }

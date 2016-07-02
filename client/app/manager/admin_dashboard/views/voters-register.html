@@ -3,9 +3,9 @@
         <div class="panel-title">
             <i class="fa fa-users"></i> VOTERS REGISTER <span class="" ng-show="total">({{total}})</span>
 
-            <button ng-if="superAdmin" class="btn btn-sm btn-primary pull-right" ng-click="addMemberVR()">
-                <i class="fa fa-pencil-square "></i> Add To Voters Register
-            </button>
+            <!--<button ng-if="superAdmin" class="btn btn-sm btn-primary pull-right" ng-click="addMemberVR()">-->
+                <!--<i class="fa fa-pencil-square "></i> Add To Voters Register-->
+            <!--</button>-->
             <button class="btn btn-danger pull-right pull btn-sm" ng-if="superAdmin" ng-show="hasSelected()"                  ng-click="deleteSelected()">
                 <i class="fa fa-trash"></i>
                 Delete Selected
@@ -13,8 +13,7 @@
         </div>
 
     </div>
-
-    <div class="panel-body ">
+   <div class="panel-body ">
 
         <form  name="vraform" class="form-inline">
             <div class="form-group">
@@ -94,12 +93,12 @@
                 <td>{{v.email}}</td>
                 <td>{{v.scNumber}}</td>
                 <td>{{v.mobileNumber}}</td>
-                <td>
-                    <button class="btn btn-xs btn-block btn-purple selected" ng-click="editMemberVR(v, $index)">
-                        <i class="fa fa-pencil-square "></i> Edit
-                    </button>
-                    <i ng-if="v.confirmed" class="fa fa-gravel" style="color: #122b40;"></i>
-                </td>
+                <!--<td>-->
+                    <!--<button class="btn btn-xs btn-block btn-purple selected" ng-click="editMemberVR(v, $index)">-->
+                        <!--<i class="fa fa-pencil-square "></i> Edit-->
+                    <!--</button>-->
+                    <!--<i ng-if="v.confirmed" class="fa fa-gravel" style="color: #122b40;"></i>-->
+                <!--</td>-->
             </tr>
         </table>
 

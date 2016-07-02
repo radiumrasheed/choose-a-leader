@@ -122,7 +122,7 @@ exports.details = function (req, res) {
             return sendData(total, members);
         });
     } else {
-        VotersReg.find({branchCode: req.body.branchCode}).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
+        VotersReg.find({branchCode: req.body.branchCode, deleted:false}).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
             var index, len;
             for (index = 0, len = members.length; index < len; ++index) {
                 var email = members[index].email;
@@ -178,10 +178,10 @@ exports.update = function (req, res) {
                 mailer.sendUpdatedRecordsToPhone(req.body.messageToPhone, req.body.updatedPhone);
             }
             if (req.body.messageToEmail) {
-                mailer.sendUpdatedRecordsToEmail(req.body.messageToEmail, req.body.updatedEmail);
+              mailer.sendUpdatedRecordsToPhone(req.body.messageToPhone, req.body.updatedPhone);
             }
             if (req.body.messageToBoth) {
-                mailer.sendUpdatedRecordsToBoth(req.body.messageToBoth, req.body.updatedPhone, req.body.updatedEmail)
+              mailer.sendUpdatedRecordsToPhone(req.body.messageToPhone, req.body.updatedPhone);
             }
         }
         if (req.body.prevModifiedBy && req.body.prevModifiedDate) {
