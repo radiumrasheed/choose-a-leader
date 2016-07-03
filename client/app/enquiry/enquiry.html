@@ -71,7 +71,19 @@
                         placeholder="Your Message here"></textarea>
             </div>
           </div>
-
+          <div class="row col-md-offset-3 col-sm-offset-3">
+            <div class="col-sm-3 col-md-3 ">
+              <button class="btn btn-danger btn-block" type="reset" ng-disabled="!enquiryForm.$dirty"
+                      ng-click="reset() && enquiryForm.$setPristine()"> <i
+                class="fa fa-times"></i> RESET</button>
+            </div>
+            <div class="col-sm-4 col-md-4">
+              <button class="btn btn-default btn-block"
+                      ng-disabled="enquiryForm.$invalid || (enquiryForm.$valid && member.phone != phone_conf) || submitting"
+                      ng-click="submit(enquiryForm)"><i
+                class="fa fa-check"></i>Submit Enquiry</button>
+            </div>
+          </div>
         </form>
         <!--<div ng-hide="setupForm.$invalid || (setupForm.$valid && member.phone != phone_conf) || submitting"-->
              <!--style="margin-bottom: 0px;"-->
@@ -80,21 +92,7 @@
         <!--</div>-->
 
       </div>
-      <div class="panel-footer">
-        <div class="row col-md-offset-3">
-          <div class="col-sm-3 col-md-3 ">
-            <button class="btn btn-danger btn-block" type="reset" ng-disabled="!enquiryForm.$dirty"
-                    ng-click="reset() && enquiryForm.$setPristine()"> <i
-              class="fa fa-times"></i> RESET</button>
-          </div>
-          <div class="col-sm-4 col-md-4">
-            <button class="btn btn-default btn-block"
-                    ng-disabled="enquiryForm.$invalid || (enquiryForm.$valid && member.phone != phone_conf) || submitting"
-                    ng-click="submit(enquiryForm)"><i
-              class="fa fa-check"></i>Submit Enquiry</button>
-          </div>
-        </div>
-      </div>
+
       </div>
     </div>
 
