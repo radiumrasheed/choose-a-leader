@@ -85,8 +85,6 @@ exports.searchDetails = function (req, res) {
       VotersReg.find({
         branchCode: req.body.branchCode,
         fullname: firstName,
-        confirmed: true,
-        updated: true,
         deleted:false
       }).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
         return sendData(total, members);
