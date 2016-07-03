@@ -2,14 +2,11 @@
  * Created by DrCraig-PC on 25/05/2016.
  */
 'use strict';
-var Agenda = require('agenda');
 var CronJob = require('cron').CronJob;
 var _ = require('lodash');
 var mailer = require('./components/tools/mailer');
 var config = require('./config/environment');
 var Member = require('./api/member/member.model');
-
-// var agenda = new Agenda({db: {address: config.mongo.uri}});
 
 /*
  agenda.define('Send Accreditation Link To 50 Members', function (job, done) {

@@ -6,34 +6,38 @@
             <button ng-if="superAdmin && canDelete" class="btn btn-sm btn-primary pull-right" ng-click="addMemberVR()">
                 <i class="fa fa-pencil-square "></i> Add To Voters Register
             </button>
-            <button class="btn btn-danger pull-right pull btn-sm" ng-if="superAdmin" ng-show="hasSelected()" ng-click="deleteSelected()">
+            <button class="btn btn-danger pull-right pull btn-sm" ng-if="superAdmin" ng-show="hasSelected()"
+                    ng-click="deleteSelected()">
                 <i class="fa fa-trash"></i>
                 Delete Selected
             </button>
         </div>
 
     </div>
-   <div class="panel-body ">
+    <div class="panel-body ">
 
-        <form  name="vraform" class="form-inline">
+        <form name="vraform" class="form-inline">
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon"><i class="fa fa-shield"></i></div>
-                    <select name="selecteditem" ng-options="branch as branch for branch in branchData" class="form-control" ng-change="noData =false;currentPage=1; pageChanged();" ng-model="selectedItem" id="branch" ng-focus="vrform.searchVotersRegister.$setPristine()"
-                             ng-required="true">
-                        <option value=""> Select A Branch </option>
+                    <select name="selecteditem" ng-options="branch as branch for branch in branchData"
+                            class="form-control" ng-change="noData =false;currentPage=1; pageChanged();"
+                            ng-model="selectedItem" id="branch" ng-focus="vrform.searchVotersRegister.$setPristine()"
+                            ng-required="true">
+                        <option value=""> Select A Branch</option>
                     </select>
                 </div>
             </div>
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                    <input type="text" name="searchVotersRegister" class="form-control"  placeholder="Search by Fullname" ng-model="searchVotersRegister" ng-change="pageChanged()">
+                    <input type="text" name="searchVotersRegister" class="form-control" placeholder="Search by Fullname"
+                           ng-model="searchVotersRegister" ng-change="pageChanged()">
                 </div>
             </div>
             <div class="form-group pull-right">
                 <div class="input-group">
-                    <div ng-click="resetAll()" class="btn btn-primary"><i class="fa fa-refresh"></i> </div>
+                    <div ng-click="resetAll()" class="btn btn-primary"><i class="fa fa-refresh"></i></div>
                 </div>
             </div>
             <div class="form-group">
@@ -44,7 +48,8 @@
             </div>
             <div class="form-group">
                 <div class="input-group">
-                    <button ng-class="getUpdatedMembers ? 'btn-primary' : '' " type="button" data-toggle="button" aria-pressed="false" onautocomplete="off" ng-click="getUpdated()" class="btn" >
+                    <button ng-class="getUpdatedMembers ? 'btn-primary' : '' " type="button" data-toggle="button"
+                            aria-pressed="false" onautocomplete="off" ng-click="getUpdated()" class="btn">
                         <i class="fa fa-check-circle " style="color: #00B22D;"></i>
                         Updated
                     </button>
@@ -52,7 +57,8 @@
             </div>
             <div class="form-group">
                 <div class="input-group">
-                    <button ng-class="getConfirmedMembers ? 'btn-primary' : '' " type="button" data-toggle="button" aria-pressed="false" onautocomplete="off" ng-click="getConfirmed()" class="btn" >
+                    <button ng-class="getConfirmedMembers ? 'btn-primary' : '' " type="button" data-toggle="button"
+                            aria-pressed="false" onautocomplete="off" ng-click="getConfirmed()" class="btn">
                         <i class="fa fa-gavel " style="color: #122b40;"></i>
                         Confirmed
                     </button>
@@ -86,18 +92,19 @@
                 </a></th>
                 <th></th>
             </tr>
-            <tr ng-repeat="v in voters_register | orderBy:sortType:sortReverse | filter:searchVotersRegister track by $index" >
-                <td><input type="checkbox" ng-model="v.selected" /></td>
-                <td>{{(currentPage-1)*perPage+$index+1}}. <i ng-if="v.updated" class="fa fa-check-circle" style="color: #00B22D;"></i> </td>
+            <tr ng-repeat="v in voters_register | orderBy:sortType:sortReverse | filter:searchVotersRegister track by $index">
+                <td><input type="checkbox" ng-model="v.selected"/></td>
+                <td>{{(currentPage-1)*perPage+$index+1}}. <i ng-if="v.updated" class="fa fa-check-circle"
+                                                             style="color: #00B22D;"></i></td>
                 <td>{{v.fullname}}</td>
                 <td title="{{v.updatedEmail}}">{{v.email}}</td>
                 <td title="{{v.sc_number}}">{{v.scNumber}}</td>
                 <td title="{{v.updatedPhone}}">{{v.mobileNumber}}</td>
-                <td ng-if="canEdit" >
+                <td ng-if="canEdit">
                     <button class="btn btn-xs btn-block btn-purple selected" ng-click="editMemberVR(v, $index)">
                         <i class="fa fa-pencil-square "></i> Edit
                     </button>
-                    <i ng-if="v.confirmed" class="fa fa-gravel" style="color: #122b40;"></i>
+                    <i ng-if="v.confirm" class="fa fa-gravel" style="color: #122b40;"></i>
                 </td>
             </tr>
         </table>
@@ -108,7 +115,9 @@
                         boundary-links="true"
                         items-per-page="perPage"
                         class="centered-pager"
-                        ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+                        ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10"
+                        class="pagination-sm" num-pages="pages">
+            </pagination>
         </div>
 
     </div>

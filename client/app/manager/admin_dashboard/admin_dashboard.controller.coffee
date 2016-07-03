@@ -730,7 +730,7 @@ angular.module 'elektorApp'
         toastr.success "Settings Updated Successfully"
     else toastr.error "Please fill the form appropriately"
 
-.controller 'PasswordCtrl', ($scope, Auth, toastr) ->
+.controller 'PasswordCtrl', ($scope, Auth, toastr, $state) ->
   Auth.me (user) ->
     $scope.u = angular.copy user
 
@@ -748,6 +748,7 @@ angular.module 'elektorApp'
           $scope.u = angular.copy user
           $scope.password_cnf = null
           theForm.$setPristine()
+          $state.go "admin_dashboard"
 
         , (e) ->
           $scope.submitting = false
