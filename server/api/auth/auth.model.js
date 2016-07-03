@@ -23,9 +23,10 @@ var userSchema = new Schema({
         type: String,
         select: false
     },
-    clear_password     : {
+    otp     : {
         type: String,
-        select: false
+        select: false,
+        default: null
     },
     changedPassword: { type: Boolean, default: false },
     name: String,

@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'RequestPasswordCtrl', ( $scope, Auth, toastr ) ->
+.controller 'ForgotPasswordCtrl', ( $scope, Auth, toastr ) ->
   $scope.user = {}
   $scope.phoneNumberPattern = (->
     regexp = /^\(?(\d{4})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/

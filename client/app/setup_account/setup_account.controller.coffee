@@ -6,16 +6,13 @@ angular.module 'elektorApp'
   $scope.showLast = false
   $scope.confirmation = false
   $scope.master = {}
+  $scope.accessCode = null
+  
   $scope.reset = ->
     Member.me  _member: $stateParams.id, (member) ->
       if member.accredited is true
         $state.go "login"
       $scope.member = member
-#      if $scope.member.
-#      $scope.member.firstName = angular.copy $scope.member.othername
-
-
-  $scope.reset()
 
   $scope.submit = (theForm) ->
     if theForm.$valid
@@ -32,9 +29,7 @@ angular.module 'elektorApp'
         toastr.error e.data.message
     else
       toastr.error "Please fill the form appropriately before submitting"
-
-  $scope.accessCode = null
-
+      
   $scope.edit = ->
     $scope.showNext = false
 
@@ -96,6 +91,7 @@ angular.module 'elektorApp'
         $scope.submitting = false
         toastr.error e.data.message
 
+  $scope.reset()
 
   dashboard = ->
     $state.go "dashboard"

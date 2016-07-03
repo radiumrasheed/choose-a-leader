@@ -69,7 +69,7 @@ exports.update = function(req, res) {
 exports.createUser = function(req, res) {
 
 	var sendPassword = function (member, user) {
-		mailer.sendDefaultPassword(req.body.phone, member.email, user.clear_password, member.sc_number, function () {
+		mailer.sendDefaultPassword(req.body.phone, member.email, user.otp, member.sc_number, function () {
 			return res.status(200).json({
 				message: "Your password has been sent to the phone number and email address we have on file."
 			}, user);
@@ -91,8 +91,8 @@ exports.createUser = function(req, res) {
 
  else if (typeof member._user === "undefined" || member._user === null ) {
 			var u = new User();
-			u.clear_password = randomString();
-			u.password = u.generateHash(u.clear_password);
+			u.otp = randomString();
+			u.password = u.generateHash(u.otp);
 			u._member = req.query.id;
 			u.role = "member";
 			u.username = req.body.sc_number;
