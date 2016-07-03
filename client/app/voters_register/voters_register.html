@@ -1,177 +1,177 @@
-<div ng-include="'components/navbar/navbar.html'" xmlns="http://www.w3.org/1999/html"></div>
+<!--<div ng-include="'components/navbar/navbar.html'" xmlns="http://www.w3.org/1999/html"></div>-->
 
-<div class="container voters_register">
+<!--<div class="container voters_register">-->
 
-    <div class="row" style="margin-top: 15px">
-        <div class="col-md-offset-1 col-md-10 col-sm-offset-1 col-sm-10 panel panel-green no-padding">
-            <div class="panel-heading">
-                <div class="panel-title text-center"><img ng-src="assets/images/logo.png">
-                    <h2><span class="text-uppercase text-white text-bold">Voters Register</span></h2>
-                    <h5>
-                        <span class="text-uppercase text-white text-bold">Welcome to the NBA Election Portal Voters Register</span>
-                    </h5>
-                </div>
-            </div>
-            <div class="panel-body" style="margin: 20px;">
-                <br>
-                <div style="font-size: 12px; color: red" class="row alert alert-info">
-                    <p class="text-underline text-center"><strong>IMPORTANT INSTRUCTIONS</strong></p>
-                    <p><b>1. </b> Please go through this list carefully and update your records by clicking on the "Update" Button.</p>
-                    <p><b>2. </b> If your name is not on the list, but you paid your Bar Practising Fee and Branch Dues as and when due, kindly contact your Branch
-                        Chairman with your proof of payment or contact the National Electoral Committee on 0803 383 0679
-                        or send email to elections@nba-agc.org</p>
-                  <div ng-hide="true"><p><b>3. </b> Please ensure you update your details on or before Thursday, 30th
-                    June
-                    2016</p>
-                    <br>
-                    <p><b>Please Note:</b><br><strong><b>"NV"</b></strong> - Means Your Verification Details is yet
-                      to be available.<br><b>"NE"</b> - Means your Enrollment Number is not yet specified on our
-                      database<strong><b></b></strong></p></div>
+    <!--<div class="row" style="margin-top: 15px">-->
+        <!--<div class="col-md-offset-1 col-md-10 col-sm-offset-1 col-sm-10 panel panel-green no-padding">-->
+            <!--<div class="panel-heading">-->
+                <!--<div class="panel-title text-center"><img ng-src="assets/images/logo.png">-->
+                    <!--<h2><span class="text-uppercase text-white text-bold">Voters Register</span></h2>-->
+                    <!--<h5>-->
+                        <!--<span class="text-uppercase text-white text-bold">Welcome to the NBA Election Portal Voters Register</span>-->
+                    <!--</h5>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="panel-body" style="margin: 20px;">-->
+                <!--<br>-->
+                <!--<div style="font-size: 12px; color: red" class="row alert alert-info">-->
+                    <!--<p class="text-underline text-center"><strong>IMPORTANT INSTRUCTIONS</strong></p>-->
+                    <!--<p><b>1. </b> Please go through this list carefully and update your records by clicking on the "Update" Button.</p>-->
+                    <!--<p><b>2. </b> If your name is not on the list, but you paid your Bar Practising Fee and Branch Dues as and when due, kindly contact your Branch-->
+                        <!--Chairman with your proof of payment or contact the National Electoral Committee on 0803 383 0679-->
+                        <!--or send email to elections@nba-agc.org</p>-->
+                  <!--<div ng-hide="true"><p><b>3. </b> Please ensure you update your details on or before Thursday, 30th-->
+                    <!--June-->
+                    <!--2016</p>-->
+                    <!--<br>-->
+                    <!--<p><b>Please Note:</b><br><strong><b>"NV"</b></strong> - Means Your Verification Details is yet-->
+                      <!--to be available.<br><b>"NE"</b> - Means your Enrollment Number is not yet specified on our-->
+                      <!--database<strong><b></b></strong></p></div>-->
 
-                </div>
-                <div class="row ">
-                    <div class="col-md-12 col-sm-12">
-                        <div class="col-md-3 col-xs-12 col-sm-6">
-                            <i class="fa fa-home"></i>
-                            <label for="branch">NBA Branch <span class="required">*</span></label>
-                        </div>
+                <!--</div>-->
+                <!--<div class="row ">-->
+                    <!--<div class="col-md-12 col-sm-12">-->
+                        <!--<div class="col-md-3 col-xs-12 col-sm-6">-->
+                            <!--<i class="fa fa-home"></i>-->
+                            <!--<label for="branch">NBA Branch <span class="required">*</span></label>-->
+                        <!--</div>-->
 
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select ng-options="branch as branch for branch in branchData" class="form-control"
-                                    ng-change="noData =false; searchMembers='';currentPage=1; pageChanged();" ng-model="selectedItem" id="branch"
-                                    ng-required="true">
-                                <option value="">-- Please Select Your Branch --</option>
-                            </select>
-                        </div>
+                        <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+                            <!--<select ng-options="branch as branch for branch in branchData" class="form-control"-->
+                                    <!--ng-change="noData =false; searchMembers='';currentPage=1; pageChanged();" ng-model="selectedItem" id="branch"-->
+                                    <!--ng-required="true">-->
+                                <!--<option value="">&#45;&#45; Please Select Your Branch &#45;&#45;</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
 
-                        <div class="col-md-3 col-xs-12 col-sm-6">
-                            <br class="visible-xs">
-                            <i class="fa fa-users"></i>
-                            <label for="items">Names Per Page</label>
-                            <select id="items" ng-model="perPage" ng-options="item for item in pageSizes"
-                                    ng-change="pageChanged()"></select>
-                        </div>
-                    </div>
-                </div>
+                        <!--<div class="col-md-3 col-xs-12 col-sm-6">-->
+                            <!--<br class="visible-xs">-->
+                            <!--<i class="fa fa-users"></i>-->
+                            <!--<label for="items">Names Per Page</label>-->
+                            <!--<select id="items" ng-model="perPage" ng-options="item for item in pageSizes"-->
+                                    <!--ng-change="pageChanged()"></select>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
 
-                <div class="row ">
-                    <div class="panel-body">
+                <!--<div class="row ">-->
+                    <!--<div class="panel-body">-->
 
-                        <div class="text-center">
-                            <pagination first-text="First" last-text="Last" next-text="Next"
-                                        previous-text="Previous"
-                                        boundary-links="true"
-                                        items-per-page="perPage"
-                                        class="centered-pager"
-                                        ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm"
-                                        num-pages="pages"></pagination>
-                        </div>
-                        <div class="row" ng-show="selectedItem">
-                            <div class="form-group col-md-10 col-lg-10 col-sm-12 col-xs-12 col-md-offset-1">
-                                <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                                    <input type="text" class="form-control input-lg"
-                                           placeholder="Search Members By Surname"
-                                           ng-model="searchMembers">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-lg btn-success" ng-click="pageChanged()">Search</button>
-                                    </div>
+                        <!--<div class="text-center">-->
+                            <!--<pagination first-text="First" last-text="Last" next-text="Next"-->
+                                        <!--previous-text="Previous"-->
+                                        <!--boundary-links="true"-->
+                                        <!--items-per-page="perPage"-->
+                                        <!--class="centered-pager"-->
+                                        <!--ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm"-->
+                                        <!--num-pages="pages"></pagination>-->
+                        <!--</div>-->
+                        <!--<div class="row" ng-show="selectedItem">-->
+                            <!--<div class="form-group col-md-10 col-lg-10 col-sm-12 col-xs-12 col-md-offset-1">-->
+                                <!--<div class="input-group">-->
+                                    <!--<div class="input-group-addon"><i class="fa fa-search"></i></div>-->
+                                    <!--<input type="text" class="form-control input-lg"-->
+                                           <!--placeholder="Search Members By Surname"-->
+                                           <!--ng-model="searchMembers">-->
+                                    <!--<div class="input-group-btn">-->
+                                        <!--<button class="btn btn-lg btn-success" ng-click="pageChanged()">Search</button>-->
+                                    <!--</div>-->
 
-                                </div>
-                            </div>
-                            <!--<div class="form-group col-md-1 col-lg-1 col-sm-1 col-xs-1">-->
-                                <!--<button class="btn btn-sm btn-success" ng-click="pageChanged()">Search</button>-->
+                                <!--</div>-->
                             <!--</div>-->
-                        </div>
-                        <div ng-show="searchHeader" class="row col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                            <p class="alert alert-info">Your search returned {{total}} name(s) from {{selectedItem}}</p>
-                        </div>
-                        <div ng-show="noData && selectedItem"
-                             class=" text-center alert alert-danger">
-                            <p>Branch Dues List Not Yet Received</p>
-                        </div>
-                        <table ng-show="members.length " style="word-wrap: break-word;"
-                               class="table table-striped table-bordered table-condensed table-responsive table-hover">
-                            <tr>
-                                <th>S/N.</th>
-                                <th><a href="#">
-                                    Name
-                                </a>
-                                </th>
-                                <th class="text-center"><a href="#">
-                                    Phone.
-                                </a>
-                                </th>
-                                <th><a href="#">
-                                    Email
-                                </a>
-                                </th>
+                            <!--&lt;!&ndash;<div class="form-group col-md-1 col-lg-1 col-sm-1 col-xs-1">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<button class="btn btn-sm btn-success" ng-click="pageChanged()">Search</button>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--</div>-->
+                        <!--<div ng-show="searchHeader" class="row col-md-12 col-lg-12 col-sm-12 col-xs-12">-->
+                            <!--<p class="alert alert-info">Your search returned {{total}} name(s) from {{selectedItem}}</p>-->
+                        <!--</div>-->
+                        <!--<div ng-show="noData && selectedItem"-->
+                             <!--class=" text-center alert alert-danger">-->
+                            <!--<p>Branch Dues List Not Yet Received</p>-->
+                        <!--</div>-->
+                        <!--<table ng-show="members.length " style="word-wrap: break-word;"-->
+                               <!--class="table table-striped table-bordered table-condensed table-responsive table-hover">-->
+                            <!--<tr>-->
+                                <!--<th>S/N.</th>-->
                                 <!--<th><a href="#">-->
-                                    <!--Remarks-->
+                                    <!--Name-->
                                 <!--</a>-->
                                 <!--</th>-->
-                                <th>Action</th>
+                                <!--<th class="text-center"><a href="#">-->
+                                    <!--Phone.-->
+                                <!--</a>-->
+                                <!--</th>-->
+                                <!--<th><a href="#">-->
+                                    <!--Email-->
+                                <!--</a>-->
+                                <!--</th>-->
+                                <!--&lt;!&ndash;<th><a href="#">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;Remarks&ndash;&gt;-->
+                                <!--&lt;!&ndash;</a>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</th>&ndash;&gt;-->
+                                <!--<th>Action</th>-->
 
-                            </tr>
-                            <tr ng-repeat="m in members track by $index">
-                                <td>{{(currentPage-1)*perPage+$index+1}}. <i class="fa fa-check-square text-success"
-                                                                             ng-show="m.verified==1"></i></td>
-                                <td>{{m.fullname}}</td>
-                                <td ng-class="m.mobileNumber=='INVALID MOBILE'? 'danger':'success'" class="text-center">{{m.mobileNumber}}</td>
-                                <td ng-class="m.email=='NOT AVAILABLE'? 'danger':'success'">{{m.email}}</td>
-                                <!--<td ng-hide="m.updated" ng-class="m.verifiedStatus=='NV' || m.scNumber=='NE'? 'danger':'success'">-->
-                                    <!--<label ng-show="m.scNumber=='NE' && m.verifiedStatus!='NV'">{{m.scNumber}}</label>-->
-                                    <!--<label ng-show="m.scNumber!='NE' && m.verifiedStatus=='NV'">{{m.verifiedStatus}}</label>-->
-                                    <!--<label ng-show="m.scNumber=='NE' && m.verifiedStatus=='NV'">{{m.scNumber+' | '+m.verifiedStatus}}</label>-->
+                            <!--</tr>-->
+                            <!--<tr ng-repeat="m in members track by $index">-->
+                                <!--<td>{{(currentPage-1)*perPage+$index+1}}. <i class="fa fa-check-square text-success"-->
+                                                                             <!--ng-show="m.verified==1"></i></td>-->
+                                <!--<td>{{m.fullname}}</td>-->
+                                <!--<td ng-class="m.mobileNumber=='INVALID MOBILE'? 'danger':'success'" class="text-center">{{m.mobileNumber}}</td>-->
+                                <!--<td ng-class="m.email=='NOT AVAILABLE'? 'danger':'success'">{{m.email}}</td>-->
+                                <!--&lt;!&ndash;<td ng-hide="m.updated" ng-class="m.verifiedStatus=='NV' || m.scNumber=='NE'? 'danger':'success'">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<label ng-show="m.scNumber=='NE' && m.verifiedStatus!='NV'">{{m.scNumber}}</label>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<label ng-show="m.scNumber!='NE' && m.verifiedStatus=='NV'">{{m.verifiedStatus}}</label>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<label ng-show="m.scNumber=='NE' && m.verifiedStatus=='NV'">{{m.scNumber+' | '+m.verifiedStatus}}</label>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</td>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<td ng-show="m.updated" ng-class="m.verifiedStatus=='NV'? 'danger':'success'">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<label ng-show="m.verifiedStatus=='NV'">{{m.verifiedStatus}}</label>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</td>&ndash;&gt;-->
+                                <!--<td><label ng-show="m.updated" class="btn btn-sm btn-success">Details Updated</label>-->
+                                    <!--<button-->
+                                            <!--class="btn btn-sm btn-info" ng-hide="m.updated" ng-click="update(m._id)">Update-->
+                                    <!--</button>-->
                                 <!--</td>-->
-                                <!--<td ng-show="m.updated" ng-class="m.verifiedStatus=='NV'? 'danger':'success'">-->
-                                    <!--<label ng-show="m.verifiedStatus=='NV'">{{m.verifiedStatus}}</label>-->
-                                <!--</td>-->
-                                <td><label ng-show="m.updated" class="btn btn-sm btn-success">Details Updated</label>
-                                    <button
-                                            class="btn btn-sm btn-info" ng-hide="m.updated" ng-click="update(m._id)">Update
-                                    </button>
-                                </td>
-                                <!--<td>{{m.accessCode}}</td>-->
-                            </tr>
-                        </table>
+                                <!--&lt;!&ndash;<td>{{m.accessCode}}</td>&ndash;&gt;-->
+                            <!--</tr>-->
+                        <!--</table>-->
 
-                        <div class="text-center">
-                            <pagination first-text="First" last-text="Last" next-text="Next"
-                                        previous-text="Previous"
-                                        boundary-links="true"
-                                        items-per-page="perPage"
-                                        class="centered-pager"
-                                        ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm"
-                                        num-pages="pages"></pagination>
-                        </div>
+                        <!--<div class="text-center">-->
+                            <!--<pagination first-text="First" last-text="Last" next-text="Next"-->
+                                        <!--previous-text="Previous"-->
+                                        <!--boundary-links="true"-->
+                                        <!--items-per-page="perPage"-->
+                                        <!--class="centered-pager"-->
+                                        <!--ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm"-->
+                                        <!--num-pages="pages"></pagination>-->
+                        <!--</div>-->
 
-                    </div>
+                    <!--</div>-->
 
-                    <div class="panel-footer text-left">
-                        <b>Number of Members: {{total}}</b>
-                    </div>
-                </div>
+                    <!--<div class="panel-footer text-left">-->
+                        <!--<b>Number of Members: {{total}}</b>-->
+                    <!--</div>-->
+                <!--</div>-->
 
-            </div>
-            <div class="panel-footer">
-                <div class="text-left">
+            <!--</div>-->
+            <!--<div class="panel-footer">-->
+                <!--<div class="text-left">-->
 
-                </div>
-            </div>
-        </div>
-
-        <!--start of table-->
-        <!--<div class="panel-heading">-->
-        <!--<div class="panel-title">-->
-        <!--<i class="fa fa-users"></i> ALL MEMBERS <span ng-show="total">({{total}})</span>-->
-
+                <!--</div>-->
+            <!--</div>-->
         <!--</div>-->
 
-        <!--</div>-->
+        <!--&lt;!&ndash;start of table&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="panel-heading">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="panel-title">&ndash;&gt;-->
+        <!--&lt;!&ndash;<i class="fa fa-users"></i> ALL MEMBERS <span ng-show="total">({{total}})</span>&ndash;&gt;-->
 
-    </div>
-    <!--End of table-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
 
-</div>
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+    <!--</div>-->
+    <!--&lt;!&ndash;End of table&ndash;&gt;-->
+
+<!--</div>-->
 

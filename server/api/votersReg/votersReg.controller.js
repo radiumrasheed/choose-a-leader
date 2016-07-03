@@ -59,25 +59,40 @@ exports.searchDetails = function (req, res) {
         return res.json(members);
     }
 
-    VotersReg.find({
+    if(req.body.unconfirmedVoter){
+      VotersReg.find({
         branchCode: req.body.branchCode,
         fullname: firstName
-    }).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
+      }).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
         var index, len;
         for (index = 0, len = members.length; index < len; ++index) {
-            var email = members[index].email;
-            var phone = members[index].mobileNumber;
-            if (email != 'NOT AVAILABLE') {
-                var end = email.indexOf('@');
-                members[index].email = email.replace(email.substring(0, end), '*********');
-            }
-            if (phone != 'INVALID MOBILE') {
-                members[index].mobileNumber = phone.replace(phone.substring(0, 6), '*******');
-            }
+          var email = members[index].email;
+          var phone = members[index].mobileNumber;
+          if (email != 'NOT AVAILABLE') {
+            var end = email.indexOf('@');
+            members[index].email = email.replace(email.substring(0, end), '*********');
+          }
+          if (phone != 'INVALID MOBILE') {
+            members[index].mobileNumber = phone.replace(phone.substring(0, 6), '*******');
+          }
         }
 
         return sendData(total, members);
-    });
+      });
+    }
+
+    if(req.body.confirmedVoter){
+      VotersReg.find({
+        branchCode: req.body.branchCode,
+        fullname: firstName,
+        confirmed: true,
+        updated: true,
+        deleted:false
+      }).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
+        return sendData(total, members);
+      });
+    }
+
 };
 
 // Get list of branches with details with hidden modified data
@@ -321,6 +336,39 @@ exports.removeVoters = function(req, res) {
         });
     }
     return res.send(204);
+};
+
+exports.getConfirmed = function (req,res) {
+  var pageNo = req.body.page || 1,
+    perPage = req.body.perPage || 25;
+
+  function sendData(total, members) {
+    res.header('total_found', total);
+    return res.json(members);
+  }
+
+  VotersReg.find({
+    branchCode: req.body.branchCode,
+    deleted: false
+  }).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
+    // Write to Cache
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!members) {
+      return res.send(404);
+    }
+
+    // var index, len;
+    // for (index = 0, len = members.length; index < len; ++index)
+    // {
+    //     members[index].updatedFirstName = members[index].updatedFirstName.toUpperCase();
+    //     members[index].updatedMiddleName = members[index].updatedMiddleName.toUpperCase();
+    //     members[index].updatedSurname = members[index].updatedSurname.toUpperCase();
+    // }
+
+    return sendData(total, members);
+    });
 };
 
 function handleError(res, err) {

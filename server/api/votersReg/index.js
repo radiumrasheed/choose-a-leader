@@ -5,9 +5,11 @@ var controller = require('./votersReg.controller');
 var router = express.Router();
 var sessionSec = require('../../components/tools/sessionSec');
 
+
 router.get('/getUpdate', controller.getUpdatedBranches);
 router.get('/getCount', controller.getCount);
 router.get('/me', controller.getMe);
+router.post('/getConfirmed',controller.getConfirmed);
 router.post('/', controller.index);
 router.post('/details', controller.details);
 router.post('/search', controller.searchDetails);
