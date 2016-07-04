@@ -42,15 +42,18 @@ angular.module 'elektorApp', [
 
 .factory 'Utils', ($state, $auth, $sessionStorage) ->
   userIsSetup: (user) ->
-    if user._member._branch is undefined or user._member._branch is null
+    ###if user._member._branch is undefined or user._member._branch is null
       $auth.logout()
       $sessionStorage.tempMember = user._member
-      $state.go "branch_request", id: user._member._id
-    else if user._member.verified isnt 1
+      $state.go "branch_request", id: user._member._id###
+      
+    if user._member.verified isnt 1
       $auth.logout()
       $state.go "unconfirmed"
-#    else if user._member.email is "" or user._member.email is undefined or not user._member.codeConfirmed then $window.location.href = "/setup/''+user._mem"
-    else if user._member.email is "" or user._member.email is undefined or not user._member.codeConfirmed then $state.go "setup_account"
+
+    else if not user._member.codeConfirmed or not user._member.accredited
+      $auth.logout()
+      $state.go "setup_account", id: user._member._id
 
 .config ( $stateProvider, $urlRouterProvider, $locationProvider, $authProvider, $httpProvider, cloudinaryProvider ) ->
   $httpProvider.interceptors.push("requestInterceptor")

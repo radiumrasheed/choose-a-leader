@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <div class="panel-title">
             <i class="fa fa-users"></i> ALL MEMBERS <span ng-show="total">({{total}})</span>
-            <button ng-if="superAdmin" class="btn btn-xs btn-primary pull-right" ng-click="addMember()">
+            <button ng-if="superAdmin && canDelete" class="btn btn-xs btn-primary pull-right" ng-click="addMember()">
                 <i class="fa fa-pencil-square "></i> Add Member
             </button>
         </div>
@@ -10,17 +10,6 @@
     </div>
     <select class="pull-right" ng-model="perPage" ng-options="item for item in pageSizes"
             ng-change="pageChanged()"></select>
-
-    <div class="panel-body">
-
-        <div class="text-center">
-            <pagination first-text="First" last-text="Last" next-text="Next"
-                        previous-text="Previous"
-                        boundary-links="true"
-                        items-per-page="perPage"
-                        class="centered-pager"
-                        ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
-        </div>
 
         <div class="form-group ">
             <div class="input-group">
@@ -52,7 +41,7 @@
             </tr>
             <tr ng-repeat="m in members | orderBy:sortType:sortReverse | filter:searchMembers track by $index">
                 <td>{{(currentPage-1)*perPage+$index+1}}. <i class="fa fa-check-square text-success"
-                                                             ng-show="m.verified==1"></i> </td>
+                                                             ng-show="m.verified==1"></i></td>
                 <td>{{m.surname}} {{m.firstName || m.othername}} {{m.middleName}}</td>
                 <td class="text-center">{{m.sc_number}}</td>
                 <td>{{m.phone}}</td>
@@ -78,7 +67,8 @@
                         boundary-links="true"
                         items-per-page="perPage"
                         class="centered-pager"
-                        ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+                        ng-change="pageChanged()" total-items="total" ng-model="currentPage" max-size="10"
+                        class="pagination-sm" num-pages="pages"></pagination>
         </div>
 
     </div>
