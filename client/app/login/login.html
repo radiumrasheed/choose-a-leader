@@ -4,7 +4,8 @@
     <div class="row">
         <div class="center-form panel">
             <div class="panel-body">
-                <div class="text-center h3" ><i class="icon glyphicon-lock" ng-click="adminLogin()"> </i> Secure Login</div>
+                <div class="text-center h3"><i class="icon glyphicon-lock" ng-click="gotoAdminLogin()"> </i> Secure Login
+                </div>
                 <br>
 
                 <div class="alert alert-danger text-center" ng-show="formError">{{formError}}</div>
@@ -28,7 +29,7 @@
                     <hr>
 
                     <div class="text-center">
-                      <!--Forgotten your Password?-->
+                        <!--Forgotten your Password?-->
                         <a class="text-success text-bold text-underline" ui-sref="forgot_password">Forgot Password?</a>
                     </div>
                 </form>

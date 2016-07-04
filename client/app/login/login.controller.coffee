@@ -23,5 +23,5 @@ angular.module 'elektorApp'
       toastr.error e.data.message
       $scope.formError = e.data.message
 
-  $scope.adminLogin = ->
+  $scope.gotoAdminLogin = ->
     $state.go 'admin_login'
