@@ -144,11 +144,11 @@ exports.details = function (req, res) {
             for (index = 0, len = members.length; index < len; ++index) {
                 var email = members[index].email;
                 var phone = members[index].mobileNumber;
-                if (email != 'NOT AVAILABLE') {
+                if (email != 'NOT AVAILABLE' && email != null) {
                     var end = email.indexOf('@');
                     members[index].email = email.replace(email.substring(0, end), '*********');
                 }
-                if (phone != 'INVALID MOBILE') {
+                if (phone != 'INVALID MOBILE' && phone != null) {
                     members[index].mobileNumber = phone.replace(phone.substring(0, 6), '*******');
                 }
             }
