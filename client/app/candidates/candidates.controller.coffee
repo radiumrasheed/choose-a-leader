@@ -1,4 +1,4 @@
-'use strict'
-
-angular.module 'elektorApp'
-.controller 'CandidatesCtrl', () ->
+#'use strict'
+#
+#angular.module 'elektorApp'
+#.controller 'CandidatesCtrl', () ->

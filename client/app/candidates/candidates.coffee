@@ -1,3 +1,4 @@
+###
 'use strict'
 
 angular.module 'elektorApp'
@@ -7,4 +8,4 @@ angular.module 'elektorApp'
   templateUrl: 'app/candidates/candidates.html'
   controller: 'CandidatesCtrl'
   guestView: true
-    
+###
