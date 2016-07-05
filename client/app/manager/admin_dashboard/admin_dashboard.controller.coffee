@@ -181,7 +181,7 @@ angular.module 'elektorApp'
           pId = position._id._id
           realPosition = _.find $scope.positions, (p) -> p._id is pId
           _.each realPosition.candidates, (c) ->
-            voteResult = _.find position.votes, (v) -> v.candidate._id is c._member._id
+            voteResult = _.find position.votes, (v) -> v.candidate._id is c._member
             if not voteResult?
               results[_index].votes.push
                 candidate: c._member
