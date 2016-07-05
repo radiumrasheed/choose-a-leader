@@ -33,7 +33,7 @@ angular.module 'elektorApp', [
     moment(dt).fromNow()
 
   $rootScope.$on '$stateChangeStart', (event, next) ->
-    if not $auth.isAuthenticated() and not next.guestView then $window.location.href = '/login/'
+    if not $auth.isAuthenticated() and not next.guestView then $window.location.href = '/login'
     if $auth.isAuthenticated() && $auth.getPayload().role is 'member'
       if next.name isnt "change_password"
         Auth.me (user) ->
@@ -61,12 +61,12 @@ angular.module 'elektorApp', [
   cloudinaryProvider.set "cloud_name", "elektor"
   cloudinaryProvider.set "upload_preset", "hqcz8utg"
 
-  $authProvider.logoutRedirect = '/login/'
+  $authProvider.logoutRedirect = '/login'
   $authProvider.loginOnSignup = false
   $authProvider.signupRedirect = false
   $authProvider.loginUrl = '/auth/login'
   $authProvider.signupUrl = '/auth/create'
-  $authProvider.loginRoute = '/login/'
+  $authProvider.loginRoute = '/login'
 
   $authProvider.tokenPrefix = '__nba-elektor__'
 
