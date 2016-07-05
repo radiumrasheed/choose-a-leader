@@ -9,6 +9,7 @@ var sessionSec = require('../../components/tools/sessionSec');
 router.get('/getUpdate', controller.getUpdatedBranches);
 router.get('/getCount', controller.getCount);
 router.get('/me', controller.getMe);
+// router.get('/send',controller.send);
 router.post('/getConfirmed',controller.getConfirmed);
 router.post('/', controller.index);
 router.post('/details', controller.details);

@@ -50,24 +50,16 @@ angular.module 'elektorApp'
         user.branch = data.branchCode
 
         Member.createNewMember user,(newMember) ->
-          if newMember
-            if data.phoneIsMatch is true and data.emailIsMatch is false
-              data.messageToPhone = "Dear "+data.updatedFirstName+", Your Details Have been Updated successfully and
- this
- email: "+data.updatedEmail+" has
- been added to your NBA E-voting Portal Account, thank you for updating your records."
-
-            if data.phoneIsMatch is false and data.emailIsMatch is true
-              data.messageToEmail = data.updatedFirstName;
-
-            if data.phoneIsMatch is true and data.emailIsMatch is true
-              data.messageToBoth = data.updatedFirstName;
+          console.log newMember
+          if newMember.statusCode is 200
             data.confirmed = true
             VotersRegister.saveData data, (memb) ->
               if memb.confirmed
                 $scope.members[index].confirmed = memb.confirmed
                 toastr.success 'Voter was confirmed successfully'
               else toastr.error 'Voter was confirmed but not updated'
-          else toastr.error 'Voter was not Confirmed'
+          else if newMember.statusCode is 304
+            data.confirmed = false
+            toastr.error newMember.message
 
     else $state.go "dashboard"
