@@ -95,12 +95,25 @@ exports.showMember = function (req, res) {
 
 // Creates a new member in the DB.
 exports.create = function (req, res) {
-    Member.create(req.body, function (err, member) {
+  Member.find({sc_number:req.body.sc_number},function (err,found) {
+    if (err) {
+      return handleError(res, err);
+    }
+
+    if (found.length)
+    {
+      return res.json({message:'Voter Confirmed Already', statusCode:304});
+    }
+    else{
+      Member.create(req.body, function (err, member) {
         if (err) {
-            return handleError(res, err);
+          return handleError(res, err);
         }
-        return res.json(201, member);
-    });
+        return res.json({data:member,statusCode:200});
+      });
+    }
+  });
+
 };
 
 // Updates an existing member in the DB.

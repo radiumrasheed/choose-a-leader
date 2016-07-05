@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 /**
  * New Relic agent configuration.
@@ -10,7 +10,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ['elektor'],
+  app_name: ['elektorApp'],
   /**
    * Your New Relic license key.
    */

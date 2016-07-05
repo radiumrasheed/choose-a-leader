@@ -189,16 +189,16 @@ exports.update = function (req, res) {
             return res.send(404);
         }
 
-        if (req.body.messageToEmail || req.body.messageToPhone || req.body.messageToBoth) {
+        if (req.body.emailIsMatch || req.body.phoneIsMatch) {
 
-            if (req.body.messageToPhone) {
-                mailer.sendUpdatedRecordsToPhone(req.body.messageToPhone, req.body.updatedPhone);
+            if (req.body.phoneIsMatch == true && req.body.emailIsMatch == false) {
+                mailer.sendUpdatedRecordsToPhone(req.body);
             }
-            if (req.body.messageToEmail) {
-              mailer.sendUpdatedRecordsToPhone(req.body.messageToPhone, req.body.updatedPhone);
+            if (req.body.emailIsMatch == true && req.body.phoneIsMatch == false) {
+              mailer.sendUpdatedRecordsToEmail(req.body);
             }
-            if (req.body.messageToBoth) {
-              mailer.sendUpdatedRecordsToPhone(req.body.messageToPhone, req.body.updatedPhone);
+            if (req.body.emailIsMatch == true && req.body.phoneIsMatch == true) {
+              mailer.sendUpdatedRecordsToBoth(req.body);
             }
         }
         if (req.body.prevModifiedBy && req.body.prevModifiedDate) {
@@ -221,6 +221,45 @@ exports.update = function (req, res) {
         });
     });
 };
+
+// send text and email
+// exports.send = function (req, res) {
+//   VotersReg.find({successResponse:false}).limit(200).exec(function (err, details) {
+//     if (err) {
+//       return handleError(res, err);
+//     }
+//     if (!details) {
+//       return res.send(404);
+//     }
+//     async.forEachSeries(details, function (detail,callback) {
+//       if (detail.emailIsMatch || detail.phoneIsMatch) {
+//
+//         if (detail.phoneIsMatch == true && detail.emailIsMatch == false) {
+//           mailer.sendUpdatedRecordsToPhone(detail);
+//         }
+//         if (detail.emailIsMatch == true && detail.phoneIsMatch == false) {
+//           mailer.sendUpdatedRecordsToEmail(detail);
+//         }
+//         if (detail.emailIsMatch == true && detail.phoneIsMatch == true) {
+//           mailer.sendUpdatedRecordsToBoth(detail);
+//         }
+//       }
+//       detail.successResponse = true;
+//       detail.save(function (err, savedUpdated) {
+//         if (err) {
+//           return handleError(res, err);
+//         }
+//         callback();
+//       });
+//     },function(err){
+//       if (err) return next(err);
+//       res.send('Emails and Sms successfully sent to '+details.length+' people');
+//       console.log('Emails and Sms successfully sent to %d people', details.length);
+//     });
+//
+//   });
+// };
+
 
 // Creates a new member in the voters register DB.
 exports.create = function (req, res) {
