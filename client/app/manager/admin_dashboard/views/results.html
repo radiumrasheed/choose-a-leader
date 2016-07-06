@@ -11,8 +11,10 @@
                 <div class="center">
                     <div style="margin:auto 0;border:thin solid white;text-align:center;">
                         <div class="center">
-                            <img src="../../../../assets/images/nba_logo.jpg" width="220" height="185" width="220px" height="185px"/>
-                            <h3 STYLE="color: #00B22D;line-height: 18px;">NIGERIAN BAR ASSOCIATION 2016 VOTERS' REGISTER -</h3>
+                            <img src="../../../../assets/images/nba_logo.jpg" width="220" height="185" width="220px"
+                                 height="185px"/>
+                            <h3 STYLE="color: #00B22D;line-height: 18px;">NIGERIAN BAR ASSOCIATION 2016 VOTERS' REGISTER
+                                -</h3>
                         </div>
                     </div>
                     </di>
@@ -66,7 +68,9 @@
 
                 <div class="col-md-12">
                     <p>{{poll.description}}
-                        <button class="btn btn-sm btn-primary pull-right" ng-show="closed()" ng-click="makePublic()">Publish Results</button>
+                        <button class="btn btn-sm btn-primary pull-right" ng-show="closed()" ng-click="makePublic()">
+                            Publish Results
+                        </button>
                     </p>
                     <br>
                     <button class="pull-right btn btn-primary btn-sm" ng-click="PrintElem('#results')">Print</button>
@@ -102,13 +106,16 @@
                         <div class="center">
                             <div style="margin:auto 0;border:thin solid white;text-align:center;">
                                 <div class="center">
-                                    <img src="../../../../assets/images/nba_logo.jpg" width="220" height="185" width="220px" height="185px"/>
-                                    <h3 STYLE="color: #00B22D;line-height: 18px;">NIGERIAN BAR ASSOCIATION 2016 ELECTION RESULT - {{poll.title}}</h3>
+                                    <img src="../../../../assets/images/nba_logo.jpg" width="220" height="185"
+                                         width="220px" height="185px"/>
+                                    <h3 STYLE="color: #00B22D;line-height: 18px;">NIGERIAN BAR ASSOCIATION 2016 ELECTION
+                                        RESULT - {{poll.title}}</h3>
                                 </div>
                             </div>
                             </di>
                         </div>
-                        <table class="table table-striped table-hover table-bordered" style="border-collapse: separate; border-spacing: 0 5px;">
+                        <table class="table table-striped table-hover table-bordered"
+                               style="border-collapse: separate; border-spacing: 0 5px;">
                             <thead>
                             <tr class="success">
                                 <th class="text-center text-bold">POSITION</th>
@@ -120,9 +127,12 @@
                             </thead>
                             <tbody ng-repeat="p in results | orderBy:sortType">
                             <tr>
-                                <td rowspan="{{p.votes.length}}"><a class="h6" href="#" ng-click="poll.national ? open(p._id._id) : ''">{{p._id.name}}</a></td>
-                                <td class="h6">{{p.votes[0].candidate.surname+' '+(p.votes[0].candidate.firstName||p.votes[0].candidate.othername)}}
-                                    <i ng-if="p.votes[0].count !== p.votes[1].count" class="fa fa-trophy fa-2x pull-right" style="color: #e5c100;"></i>
+                                <td class="h6" rowspan="{{p.votes.length}}">{{p._id.name}}
+                                </td>
+                                <td class="h6">{{p.votes[0].candidate.surname+'
+                                    '+(p.votes[0].candidate.firstName||p.votes[0].candidate.othername)}}
+                                    <i ng-if="p.votes[0].count !== p.votes[1].count"
+                                       class="fa fa-trophy fa-2x pull-right" style="color: #e5c100;"></i>
                                 </td>
                                 <td class="text-center">{{p.votes[0].count}}</td>
                                 <td rowspan="{{p.votes.length}}" class="text-center">{{p.total_count}}</td>

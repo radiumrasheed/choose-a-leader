@@ -3,7 +3,7 @@
 angular.module 'elektorApp'
 .config ($stateProvider) ->
   $stateProvider.state 'assistant',
-    url: '/assistant/'
+    url: '/assistant'
     templateUrl: 'app/assistant/assistant.html'
     controller: 'AssistantCtrl'
 
