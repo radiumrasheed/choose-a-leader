@@ -10,7 +10,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ['elektorApp'],
+  app_name: ['elektor'],
   /**
    * Your New Relic license key.
    */

@@ -222,9 +222,9 @@ exports.update = function (req, res) {
     });
 };
 
-// send text and email
+//send text and email
 // exports.send = function (req, res) {
-//   VotersReg.find({successResponse:false}).limit(200).exec(function (err, details) {
+//   VotersReg.find({successResponse:false, phoneIsMatch:true,emailIsMatch:false}).limit(200).exec(function (err, details) {
 //     if (err) {
 //       return handleError(res, err);
 //     }
@@ -237,12 +237,7 @@ exports.update = function (req, res) {
 //         if (detail.phoneIsMatch == true && detail.emailIsMatch == false) {
 //           mailer.sendUpdatedRecordsToPhone(detail);
 //         }
-//         if (detail.emailIsMatch == true && detail.phoneIsMatch == false) {
-//           mailer.sendUpdatedRecordsToEmail(detail);
-//         }
-//         if (detail.emailIsMatch == true && detail.phoneIsMatch == true) {
-//           mailer.sendUpdatedRecordsToBoth(detail);
-//         }
+//
 //       }
 //       detail.successResponse = true;
 //       detail.save(function (err, savedUpdated) {

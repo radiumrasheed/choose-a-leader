@@ -408,7 +408,7 @@ exports.sendUpdatedRecordsToEmail = function(data) {
 };
 
 exports.sendUpdatedRecordsToPhone = function(data) {
-  var __message = 'Dear '+data.updatedFirstName+', Your Details Have been Updated and Confirmed successfully and this email: 0'+data.updatedEmail+' has been added to your NBA E-voting Portal Account, thank you for updating your records.';
+  var __message = 'Dear '+data.updatedFirstName+', Your Details Have been Updated and Confirmed successfully and this email: '+data.updatedEmail+' has been added to your NBA E-voting Portal Account, thank you for updating your records.';
 
 
   async.parallel([
