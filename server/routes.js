@@ -49,7 +49,7 @@ module.exports = function(app) {
 
 
   // Insert routes below\
-  app.use('/api/contestant', require('./api/contestant'));
+  app.use('/api/contestants', require('./api/contestants'));
   app.use('/api/enquiry', require('./api/enquiry'));
   app.use('/api/votersReg', require('./api/votersReg'));
   app.use('/api/branch_requests', require('./api/branch_request'));

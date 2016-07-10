@@ -10,3 +10,4 @@ var ContestantSchema = new Schema({
 });
 
 module.exports = mongoose.model('Contestant', ContestantSchema, 'Contestants');
+
