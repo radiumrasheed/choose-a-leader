@@ -25,7 +25,7 @@ function createJWT(user) {
 
 function randomString() {
     var text = "";
-    var possible = "ABCDEFGHJKLMNPQRSTUVWXY123456789";
+    var possible = "ABCDEFGHJKLMNPQRSTUVWXY1234567890";
 
     for (var i = 0; i < 5; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -94,63 +94,50 @@ exports.create = function (req, res) {
 };
 
 /**
- * Send Password to Members
+ * Get password Reset Request
  *
  * @param req
  * @param res
  */
-exports.requestPassword = function (req, res) {
-    var sendPassword = function (member, user) {
-        mailer.sendPassword(req.body.phone, member.email, user.otp, member.sc_number, function () {
+exports.getPasswordResetRequest = function (req, res) {
+    var confirmRequest = function (member) {
+        mailer.sendConfirmRequestCodeAsSMS(member.requestCode, member.phone, function () {
             return res.json({
-                message: "Your password has been sent to your phone number and email address."
+                message: "Please provide the code sent to your phone."
             });
         });
     };
 
     var exp = new RegExp(req.body.sc_number, 'i');
 
-    Member.findOne({sc_number: {$regex: exp}}, function (err, member) {
+    Member.findOne({sc_number: {$regex: exp}, accredited: true}, function (err, member) {
         if (err) {
             return handleError(res, err);
         }
         if (!member) {
-            return res.status(400).json({message: "No record found for specified Enrollment Number."});
+            return res.status(400).json({message: "No record found or not yet accredited. "});
+        }
+        /*        if (member.phone.indexOf(req.body.phone) === -1) {
+         return res.status(400).json({message: "Phone number you’ve entered is different from what we have on our verification register. Please contact your local branch."});
+         */
+
+        if (member.email !== req.body.email) {
+            return res.status(400).json({message: "Please provide the email you registered with."});
         }
 
-        if (member.phone.indexOf(req.body.phone) === -1) {
-            return res.status(400).json({message: "Phone number you’ve entered is different from what we have on our verification register. Please contact your local branch."});
-        } else {
-            // Generate User account (if it doesn't exist)
-            User.findOne({username: req.body.sc_number.toLowerCase()}, '+otp', function (err, user) {
-                if (err) {
-                    return handleError(res, err);
-                }
-                if (user) {
-                    // Send One Time Password As Email and Text Message
-                    return sendPassword(member, user);
-                } else {
-                    // Create New User Account
-                    var u = new User();
-                    u.username = req.body.sc_number;
-                    u.otp = randomString();
-                    u.password = u.generateHash(u.otp);
-                    u.role = "member";
-                    u._member = member._id;
+        var updatedMember = new Member();
+        updatedMember = _.merge(updatedMember, member);
 
-                    u.save(function (err) {
-                        if (err) {
-                            return handleError(res, err);
-                        }
-                        else {
-                            sendPassword(member, u);
-                            member._user = u._id;
-                            member.save();
-                        }
-                    });
-                }
-            });
-        }
+        updatedMember.requestCode = randomString();
+        updatedMember.save(function (err) {
+            if (err) {
+                return handleError(res, err);
+            }
+            else {
+                confirmRequest(updatedMember);
+            }
+        });
+
     });
 };
 
@@ -358,8 +345,6 @@ exports.changePassword = function (req, res) {
 
                 theUser.password = theUser.generateHash(req.body.password);
                 theUser.otp = null;
-                theUser.tokenExpires = moment().subtract(1, 'days').format();
-                theUser.resetToken = "";
                 theUser.changedPassword = true;
                 theUser.lastModified = new Date();
 
@@ -389,7 +374,6 @@ exports.changePassword = function (req, res) {
         });
     });
 };
-
 
 exports.signUp = function (req, res) {
 
@@ -433,6 +417,60 @@ exports.signIn = function (req, res) {
             res.send({token: createJWT(user), role: user.role});
 
         });
+    });
+};
+
+exports.sendResetLink = function (req, res) {
+    var exp = new RegExp(req.body.sc_number, 'i');
+
+    User.findOne({username: {$regex: exp}}, function (err, user) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!user) {
+            return res.status(400).json({message: "No record found or not yet accredited. "});
+        }
+        Member.findOne({sc_number: {$regex: exp}}, function (err, member) {
+
+
+            if (err) {
+                return handleError(res, err);
+            }
+            if (!member) {
+                return res.status(400).json({message: "No record found or not yet accredited. "});
+            }
+
+            if (member.requestCode.toLowerCase() !== req.body.checkCode.toLowerCase()) {
+                return res.status(400).json({message: "Invalid Code! ."});
+            }
+            else if (member.requestCode.toLowerCase() === req.body.checkCode.toLowerCase()) {
+
+                var _token = randomString();
+
+
+                user.tokenExpires = moment().add(3, 'hours').format();
+                user.resetToken = user.generateHash(_token);
+                delete user.requestCode;
+
+                var resetLink = 'https://election.nba-agc.org/reset_password/' + user.resetToken;
+
+                user.save(function (err) {
+                    if (err) {
+                        return handleError(res, err);
+                    }
+                    else {
+
+                        mailer.sendResetLinkToEmail(resetLink, req.body.email, function () {
+                            return res.json({
+                                message: "A link to reset your password has been sent to your email"
+                            });
+                        });
+                    }
+                });
+            }
+
+        });
+
     });
 };
 

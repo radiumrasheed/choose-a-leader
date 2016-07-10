@@ -28,6 +28,7 @@ var userSchema = new Schema({
         select: false,
         default: null
     },
+    requestCode: String,
     changedPassword: { type: Boolean, default: false },
     name: String,
     role: {
@@ -40,7 +41,9 @@ var userSchema = new Schema({
     lastModified: {
         type: Date,
         default: Date.now
-    }
+    },
+    resetToken: String,
+    tokenExpires: Date
 });
 
 // methods ======================

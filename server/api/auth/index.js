@@ -8,7 +8,8 @@ var router = express.Router();
 router.post('/login', controller.signIn);
 
 router.post('/confirmResetRequest', controller.confirmReset);
-router.post('/requestPassword', controller.requestPassword); //no session required
+router.post('/resetRequest', controller.getPasswordResetRequest); //no session required
+router.post('/verifyResetRequest', controller.sendResetLink);
 router.post('/changePassword', controller.changePassword); //no session required
 
 router.get('/me', sessionSec, controller.show);
