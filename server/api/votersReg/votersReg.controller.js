@@ -61,6 +61,7 @@ exports.searchDetails = function (req, res) {
 
     if(req.body.unconfirmedVoter){
       VotersReg.find({
+        deleted:false,
         branchCode: req.body.branchCode,
         fullname: firstName
       }).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
@@ -143,7 +144,9 @@ exports.details = function (req, res) {
             var index, len;
             for (index = 0, len = members.length; index < len; ++index) {
                 var email = members[index].email;
+
                 var phone = members[index].mobileNumber;
+
                 if (email != 'NOT AVAILABLE' && email != null) {
                     var end = email.indexOf('@');
                     members[index].email = email.replace(email.substring(0, end), '*********');
@@ -151,6 +154,20 @@ exports.details = function (req, res) {
                 if (phone != 'INVALID MOBILE' && phone != null) {
                     members[index].mobileNumber = phone.replace(phone.substring(0, 6), '*******');
                 }
+
+              if (members[index].updated !== undefined )
+              {
+                members[index].updatedSurname = members[index].updatedSurname.toUpperCase();
+                members[index].updatedFirstName = members[index].updatedFirstName.toUpperCase();
+                if(members[index].updatedMiddleName !== undefined){members[index].updatedMiddleName = members[index].updatedMiddleName.toUpperCase();}
+
+                var updatedPhone = members[index].updatedPhone;
+                var updatedEmail = members[index].updatedEmail;
+                var uend = updatedEmail.indexOf('@');
+                members[index].updatedPhone = updatedPhone.replace(updatedPhone.substring(0, 6), '*******');
+
+                members[index].updatedEmail = updatedEmail.replace(updatedEmail.substring(0, uend), '*********');
+              }
             }
 
             return sendData(total, members);
@@ -222,9 +239,9 @@ exports.update = function (req, res) {
     });
 };
 
-// send text and email
+//send text and email
 // exports.send = function (req, res) {
-//   VotersReg.find({successResponse:false}).limit(200).exec(function (err, details) {
+//   VotersReg.find({successResponse:false, phoneIsMatch:true,emailIsMatch:false}).limit(200).exec(function (err, details) {
 //     if (err) {
 //       return handleError(res, err);
 //     }
@@ -237,12 +254,7 @@ exports.update = function (req, res) {
 //         if (detail.phoneIsMatch == true && detail.emailIsMatch == false) {
 //           mailer.sendUpdatedRecordsToPhone(detail);
 //         }
-//         if (detail.emailIsMatch == true && detail.phoneIsMatch == false) {
-//           mailer.sendUpdatedRecordsToEmail(detail);
-//         }
-//         if (detail.emailIsMatch == true && detail.phoneIsMatch == true) {
-//           mailer.sendUpdatedRecordsToBoth(detail);
-//         }
+//
 //       }
 //       detail.successResponse = true;
 //       detail.save(function (err, savedUpdated) {

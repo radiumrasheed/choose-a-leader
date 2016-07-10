@@ -118,9 +118,12 @@
                             <tr ng-repeat="m in members track by $index">
                                 <td>{{(currentPage-1)*perPage+$index+1}}. <i class="fa fa-check-square text-success"
                                                                              ng-show="m.verified==1"></i></td>
-                                <td>{{m.fullname}}</td>
-                                <td ng-class="m.mobileNumber=='INVALID MOBILE'? 'danger':'success'" class="text-center">{{m.mobileNumber}}</td>
-                                <td ng-class="m.email=='NOT AVAILABLE'? 'danger':'success'">{{m.email}}</td>
+                                <td ng-show="m.updated ==undefined">{{m.fullname}}</td>
+                                <td ng-show="m.updated == true">{{m.updatedSurname+' '+m.updatedMiddleName+' '+m.updatedFirstName}}</td>
+                                <td ng-show="m.updated ==undefined" ng-class="m.mobileNumber=='INVALID MOBILE'? 'danger':'success'" class="text-center">{{m.mobileNumber}}</td>
+                              <td ng-show="m.updated == true" class="text-center success">{{m.updatedPhone}}</td>
+                                <td ng-show="m.updated ==undefined" ng-class="m.email=='NOT AVAILABLE'? 'danger':'success'">{{m.email}}</td>
+                              <td ng-show="m.updated == true" class="success">{{m.updatedEmail}}</td>
                                 <!--<td ng-hide="m.updated" ng-class="m.verifiedStatus=='NV' || m.scNumber=='NE'? 'danger':'success'">-->
                                     <!--<label ng-show="m.scNumber=='NE' && m.verifiedStatus!='NV'">{{m.scNumber}}</label>-->
                                     <!--<label ng-show="m.scNumber!='NE' && m.verifiedStatus=='NV'">{{m.verifiedStatus}}</label>-->
