@@ -14,15 +14,35 @@ angular.module 'elektorApp'
     $scope.formError = null
     $scope.formSuccess = null
 
-    Auth.retrievePassword $scope.user, (response) ->
+    Auth.resetRequest $scope.user, (response) ->
       $scope.submitting = false
       $scope.formSuccess = response.message
-
-      $scope.user = {}
-      theForm.$setPristine()
-      theForm.$setUnTouched()
+      toastr.success response.message
+#      $scope.user = {}
+#      theForm.$setPristine()
+#      theForm.$setUntouched()
+      $scope.requested = true
     , (e) ->
       $scope.submitting = false
       $scope.formError = e.data.message
+      toastr.error e.data.message
+
+
+
+  $scope.verifyRequest = (the2ndForm) ->
+    $scope.submitting1 = true
+    $scope.formError1 = null
+    $scope.formSuccess1 = null
+
+    Auth.verifyResetRequest $scope.user, (response) ->
+      $scope.submitting1 = false
+      $scope.formSuccess1 = response.message
+
+      $scope.user = {}
+      the2ndForm.$setPristine()
+      the2ndForm.$setUntouched()
+    , (e) ->
+      $scope.submitting1 = false
+      $scope.formError1 = e.data.message
       toastr.error e.data.message
 

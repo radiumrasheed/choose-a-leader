@@ -3,6 +3,7 @@
 angular.module 'elektorApp'
 .controller 'DashboardCtrl', ($scope, $rootScope, Auth, Utils, $state, Poll) ->
   Auth.me (user) ->
+    $scope.ready = true
     if user.role isnt "member"
       $state.go "login"
     else

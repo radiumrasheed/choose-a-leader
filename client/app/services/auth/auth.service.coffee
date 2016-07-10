@@ -4,9 +4,12 @@ angular.module 'elektorApp'
 .service 'Auth', ($resource) ->
   # AngularJS will instantiate a singleton by calling 'new' on this function
   $resource '/auth/:id', null,
-    retrievePassword:
+    resetRequest:
       method:'POST'
-      url: '/auth/requestPassword'
+      url: '/auth/resetRequest'
+    verifyResetRequest:
+      method: 'POST'
+      url: '/auth/verifyResetRequest'
     changePassword:
       method:'POST'
       url: '/auth/changePassword'
