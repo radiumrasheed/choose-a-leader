@@ -1013,3 +1013,71 @@ angular.module 'elektorApp'
 
     else
       $state.go "admin_dashboard"
+.controller 'NameFixCtrl', ($scope, VotersRegister,Member,Auth, $localStorage, $state, toastr, $modal) ->
+  Auth.me (usr) ->
+    if usr.superAdmin is true
+      $scope.canEdit = true
+
+      modal = null
+      $scope.sortType = "fullname"
+      $scope.sortReverse = false
+      $scope.searchVotersRegister = ""
+      $scope.perPage = $localStorage.votersRegisterPerPage or 15
+      $scope.currentPage = 1
+      $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
+      $scope.superAdmin = true
+
+      VotersRegister.branches (data) ->
+        $scope.branchData = data
+
+
+      $scope.load = (page) ->
+          VotersRegister.branchMembers
+            updated: true
+            deleted: false
+            page: page
+            branchCode: $scope.selectedItem
+            perPage: $scope.perPage
+          , (voters_register, headers) ->
+            if voters_register?
+              $scope.searchHeader = true
+              $scope.voters_register = voters_register
+              $scope.total = parseInt headers "total_found"
+              $scope.pages = Math.ceil($scope.total / $scope.perPage)
+
+      $scope.pageChanged = ->
+        $localStorage.votersRegisterPerPage = $scope.perPage
+        $scope.load $scope.currentPage
+
+      $scope.editMember =(member) ->
+        $scope.selectedMember = member
+        modal = $modal.open
+          templateUrl: "app/manager/admin_dashboard/views/fix-name-form.html"
+          scope: $scope
+          backdrop: 'static'
+
+
+      $scope.closeModal = ->
+        $scope.selectedMember = null
+        $scope.exists = null
+        $scope.good = null
+        modal.dismiss()
+
+      $scope.saveEditedMemberVR = (form) ->
+        member ={}
+        member.email = $scope.selectedMember.updatedEmail
+        member.sc_number = $scope.selectedMember.sc_number
+        member.surname = $scope.selectedMember.updatedSurname
+        VotersRegister.saveData id: $scope.selectedMember._id, $scope.selectedMember, ->
+          if $scope.selectedMember.confirmed is true
+            Member.updateSurname member,(m)->
+              if m
+                toastr.success "Member Surname Updated in Voters register and Members"
+                $scope.closeModal()
+          else
+            toastr.success "Member Surname Updated in Voters register"
+            $scope.closeModal()
+
+
+    else
+      $state.go "admin_dashboard"
