@@ -1064,6 +1064,7 @@ angular.module 'elektorApp'
         modal.dismiss()
 
       $scope.saveEditedMemberVR = (form) ->
+        $scope.selectedMember.NameFix = true
         member ={}
         member.email = $scope.selectedMember.updatedEmail
         member.sc_number = $scope.selectedMember.sc_number
