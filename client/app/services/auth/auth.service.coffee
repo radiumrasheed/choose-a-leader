@@ -26,3 +26,6 @@ angular.module 'elektorApp'
     sendOTP:
       method: 'GET'
       url: '/auth/sendOTP'
+    resetPassword:
+      method: 'POST'
+      url: '/auth/resetPassword'

@@ -5,5 +5,5 @@ angular.module 'elektorApp'
   $stateProvider.state 'reset_password',
     url: '/reset_password/:resetToken'
     templateUrl: 'app/reset_password/reset_password.html'
-    controller: 'UpdatePasswordCtrl'
+    controller: 'ResetPasswordCtrl'
     guestView: true

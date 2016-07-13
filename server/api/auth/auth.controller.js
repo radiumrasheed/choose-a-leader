@@ -474,6 +474,28 @@ exports.sendResetLink = function (req, res) {
     });
 };
 
+exports.resetPassword = function (req, res) {
+
+    User.findOne({"resetToken": req.body.id}).populate('_member').exec(function (err, user) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!user) {
+            return res.send(404);
+        }
+        User.populate(user, {
+            path: '_member._branch',
+            model: 'Branch'
+        }, function (err, doc) {
+            if (moment().isBefore(doc.tokenExpires)) {
+                return res.json(doc);
+            } else {
+                return res.status(401).json({message: 'Your password reset request has expired. Please make the request again.!'});
+            }
+        });
+    });
+};
+
 function handleError(res, err) {
     console.log('Auth Endpoint Error: ', err);
     return res.send(500, err);
