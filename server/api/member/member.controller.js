@@ -276,6 +276,28 @@ exports.detailLink = function (req, res) {
 };
 
 
+exports.updateSurname = function (req, res) {
+  if (req.body._id) {
+    delete req.body._id;
+  }
+
+  Member.findOne({email:req.body.email, sc_number:req.body.sc_number}, function (err, member) {
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!member) {
+      return res.send(404);
+    }
+    var updated = _.merge(member, req.body);
+    updated.save(function (err) {
+      if (err) {
+        return handleError(res, err);
+      }
+      return res.status(200).json(member);
+    });
+  });
+};
+
 function handleError(res, err) {
     return res.send(500, err);
 }

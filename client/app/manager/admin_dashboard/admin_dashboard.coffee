@@ -70,3 +70,7 @@ angular.module 'elektorApp'
     url: 'support'
     templateUrl: 'app/manager/admin_dashboard/views/supportandenquiry.html'
     controller: 'SupportCtrl'
+  .state 'admin_dashboard.fixname',
+    url: 'fixname'
+    templateUrl: 'app/manager/admin_dashboard/views/fix-name.html'
+    controller: 'NameFixCtrl'

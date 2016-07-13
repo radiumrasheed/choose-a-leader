@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var StateSchema = new Schema({
-  //successResponse: Boolean,
+  NameFix: Boolean,
   fullname: String,
   mobileNumber: String,
   email: String,

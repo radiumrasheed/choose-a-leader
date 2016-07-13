@@ -56,6 +56,7 @@ exports.searchDetails = function (req, res) {
 
     function sendData(total, members) {
         res.header('total_found', total);
+        members.sort();
         return res.json(members);
     }
 
@@ -76,6 +77,15 @@ exports.searchDetails = function (req, res) {
           if (phone != 'INVALID MOBILE') {
             members[index].mobileNumber = phone.replace(phone.substring(0, 6), '*******');
           }
+
+          if(members[index].updated !== undefined){
+            var updatedPhone = members[index].updatedPhone;
+            var updatedEmail = members[index].updatedEmail;
+            var uend = updatedEmail.indexOf('@');
+            members[index].updatedPhone = updatedPhone.replace(updatedPhone.substring(0, 6), '*******');
+            members[index].updatedEmail = updatedEmail.replace(updatedEmail.substring(0, uend), '*********');
+          }
+
         }
 
         return sendData(total, members);
@@ -88,9 +98,19 @@ exports.searchDetails = function (req, res) {
         fullname: firstName,
         deleted:false
       }).sort('fullname').paginate(pageNo, perPage, function (err, members, total) {
+        var index, len;
+        for (index = 0, len = members.length; index < len; ++index) {
+          if (members[index].updated !== undefined )
+          {
+            members[index].updatedSurname = members[index].updatedSurname.toUpperCase();
+            members[index].updatedFirstName = members[index].updatedFirstName.toUpperCase();
+            if(members[index].updatedMiddleName !== undefined){members[index].updatedMiddleName = members[index].updatedMiddleName.toUpperCase();}
+          }
+        }
         return sendData(total, members);
       });
     }
+
 
 };
 
@@ -101,6 +121,8 @@ exports.details = function (req, res) {
 
     function sendData(total, members) {
         res.header('total_found', total);
+        res.header('total_found', total);
+        members.sort();
         return res.json(members);
     }
 
@@ -169,7 +191,6 @@ exports.details = function (req, res) {
                 members[index].updatedEmail = updatedEmail.replace(updatedEmail.substring(0, uend), '*********');
               }
             }
-
             return sendData(total, members);
         });
     }

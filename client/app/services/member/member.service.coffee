@@ -27,7 +27,9 @@ angular.module 'elektorApp'
     detailLink:
       method: 'GET'
       url: '/api/members/detailLink'
-
+    updateSurname:
+      url: 'api/members/updateSurname'
+      method: "POST"
 
 .directive 'memberSelectPlugin', ( Member ) ->
   restrict: 'A'
