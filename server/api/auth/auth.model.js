@@ -43,7 +43,12 @@ var userSchema = new Schema({
         default: Date.now
     },
     resetToken: String,
-    tokenExpires: Date
+    tokenExpires: Date,
+    lastPasswordReset:  {
+        type: Date,
+        select: false,
+        default: null
+    }
 });
 
 // methods ======================

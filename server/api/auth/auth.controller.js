@@ -25,7 +25,7 @@ function createJWT(user) {
 
 function randomString() {
     var text = "";
-    var possible = "ABCDEFGHJKLMNPQRSTUVWXY1234567890";
+    var possible = "ABCDEFGHJKLMNPQRSTUVWXY123456789";
 
     for (var i = 0; i < 5; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -491,10 +491,10 @@ exports.resetPassword = function (req, res) {
             if (moment().isBefore(doc.tokenExpires)) {
                 return res.json(doc);
             } else {
-                delete doc.tokenExpires;
-                delete doc.resetToken;
-                console.log(doc);
-                doc.save(function (err) {
+                doc.tokenExpires = null;
+                doc.resetToken = null;
+                doc.save(function (err,doc) {
+                    console.log(doc);
                     if (err) {
                         return handleError(res, err);
                     }
@@ -504,6 +504,37 @@ exports.resetPassword = function (req, res) {
         });
     });
 };
+
+exports.newPassword = function (req, res) {
+    if (req.body._id === undefined) {
+        return res.status(400).json({message: 'Invalid password reset request.'});
+    }
+
+    User.findById(req.body._id, function (err, theUser) {
+        if (err) {
+            handleError(res, err);
+        }
+
+        if (moment().isBefore(theUser.tokenExpires)) {
+            theUser.password = theUser.generateHash(req.body.password);
+            theUser.lastPasswordReset = new Date();
+            theUser.resetToken = null;
+            theUser.tokenExpires = null;
+
+            theUser.save(function (err) {
+
+                if (err) {
+                    return handleError(res, err);
+                }
+                return res.status(200).json({message: "Password Changed Successfully!"});
+            });
+        }
+        else {
+            return res.status(302).json({message: "Request Expired, Please make another password reset request"})
+        }
+    });
+};
+
 
 function handleError(res, err) {
     console.log('Auth Endpoint Error: ', err);
