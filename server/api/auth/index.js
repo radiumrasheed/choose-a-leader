@@ -11,6 +11,7 @@ router.post('/confirmResetRequest', controller.confirmReset);
 router.post('/resetRequest', controller.getPasswordResetRequest); //no session required
 router.post('/verifyResetRequest', controller.sendResetLink);
 router.post('/changePassword', controller.changePassword); //no session required
+router.post('/newPassword', controller.newPassword);
 router.post('/resetPassword', controller.resetPassword);
 
 router.get('/me', sessionSec, controller.show);

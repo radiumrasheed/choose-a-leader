@@ -446,10 +446,11 @@ exports.sendResetLink = function (req, res) {
             else if (member.requestCode.toLowerCase() === req.body.checkCode.toLowerCase()) {
 
                 var _token = randomString();
+                var re = new RegExp('/', 'g');
 
 
                 user.tokenExpires = moment().add(3, 'hours').format();
-                user.resetToken = user.generateHash(_token);
+                user.resetToken = user.generateHash(_token).replace(re, '');
                 delete user.requestCode;
 
                 var resetLink = 'https://election.nba-agc.org/reset_password/' + user.resetToken;
@@ -481,7 +482,7 @@ exports.resetPassword = function (req, res) {
             return handleError(res, err);
         }
         if (!user) {
-            return res.send(404);
+            return res.status(401).json({message: 'Invalid Request'});
         }
         User.populate(user, {
             path: '_member._branch',
@@ -490,7 +491,15 @@ exports.resetPassword = function (req, res) {
             if (moment().isBefore(doc.tokenExpires)) {
                 return res.json(doc);
             } else {
-                return res.status(401).json({message: 'Your password reset request has expired. Please make the request again.!'});
+                delete doc.tokenExpires;
+                delete doc.resetToken;
+                console.log(doc);
+                doc.save(function (err) {
+                    if (err) {
+                        return handleError(res, err);
+                    }
+                    return res.status(200).json({message: 'Your password reset request has expired! Please make the request again.'});
+                });
             }
         });
     });
