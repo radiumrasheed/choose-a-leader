@@ -17,7 +17,8 @@
                                     <i class="fa fa-list"></i> CONTESTED POSITIONS
                                     <button class="btn btn-xs btn-primary pull-right" ng-click="newPosition()"><i
                                             class="fa fa-plus-square"></i> Add New
-                                        Position</button>
+                                        Position
+                                    </button>
                                 </div>
                             </div>
                             <div class="panel-body ">
@@ -28,15 +29,18 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="col-md-4 control-label">Title <span class="required">*</span></label>
+                                        <label class="col-md-4 control-label">Title <span
+                                                class="required">*</span></label>
                                         <div class="col-md-8">
-                                            <input type="text" ng-model="position.name" placeholder="Title" class="form-control"
+                                            <input type="text" ng-model="position.name" placeholder="Title"
+                                                   class="form-control"
                                                    required>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="col-md-4 control-label">Description <span class="required">*</span></label>
+                                        <label class="col-md-4 control-label">Description <span
+                                                class="required">*</span></label>
                                         <div class="col-md-8">
                             <textarea type="text" ng-model="position.description" placeholder="Position Description"
                                       class="form-control"
@@ -47,7 +51,8 @@
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">Index </label>
                                         <div class="col-md-8">
-                                         <input type="number" ng-model="position.index" placeholder="Index" class="form-control" required />
+                                            <input type="number" ng-model="position.index" placeholder="Index"
+                                                   class="form-control" required/>
                                         </div>
                                     </div>
 
@@ -60,7 +65,10 @@
                                             <button class="btn btn-default btn-sm"
                                                     ng-click="positionForm.$valid && submit(positionForm)"
                                                     type="submit"
-                                                    ng-disabled="positionForm.$invalid"><i class="fa fa-check-square"></i> {{position._id ? "Save Changes": "Create Position" }}</button>
+                                                    ng-disabled="positionForm.$invalid"><i
+                                                    class="fa fa-check-square"></i> {{position._id ? "Save Changes":
+                                                "Create Position" }}
+                                            </button>
                                         </div>
                                     </div>
 
@@ -68,12 +76,16 @@
 
                                 <ul class="list-group m-t-10">
                                     <li class="list-group-item" ng-repeat="p in positions track by $index">
-                                        <a ui-sref=".candidates({position_id: p._id})" ng-click="collapse=true">{{p.code}} - {{p
-                                            .name}}</a>
+                                        <a class="pull-left">{{p.index }}.  </a> -
                                         <a class="btn btn-xs btn-warning" ng-click="editPosition(p)">
-                                            <i class="fa fa-edit"></i>
+                                            <i class="fa fa-edit"> </i>
                                         </a>
-                                        <a class="btn btn-xs btn-danger pull-right" ng-click="deletePosition(p, $index)">
+                                        <a ui-sref=".candidates({position_id: p._id})" ng-click="collapse=true"> {{p.code}}
+                                            - {{p
+                                            .name}}</a>
+
+                                        <a class="btn btn-xs btn-danger pull-right"
+                                           ng-click="deletePosition(p, $index)">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </li>

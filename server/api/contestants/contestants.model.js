@@ -6,7 +6,8 @@ var mongoose = require('mongoose'),
 var ContestantSchema = new Schema({
   fullname: String,
   post: String,
-  profile:String
+  profile:String,
+  secure_url: String
 });
 
 module.exports = mongoose.model('Contestant', ContestantSchema, 'Contestants');

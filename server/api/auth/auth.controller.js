@@ -263,12 +263,13 @@ exports.confirm = function (req, res) {
                 return res.send(404);
             }
             var oldConf = member.codeConfirmed;
-            if (oldConf) {
+            if (oldConf && member.accredited === true) {
                 return res.status(200).json({message: "Accreditation Code already Confirmed"});
             }
 
             if (member.accessCode === req.query.code) {
                 member.codeConfirmed = true;
+                member.accredited = true;
                 member.save(function () {
                     var phone = extractPhoneNumber(member.phone);
 

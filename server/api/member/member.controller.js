@@ -225,8 +225,8 @@ exports.createUser = function (req, res) {
         }
 
         /*TODO := add check for setup-stage, if password is not changed go to step to step 2, if not confirmed, go to step 3 */
-        else if (member._user.changedPassword === false) {
-            return res.status(404).json({message: "Please change your password"});
+        else if (member._user.changedPassword === false || member.accredited !== true) {
+            return res.status(200).json(member._user);
         }
 
         else {
