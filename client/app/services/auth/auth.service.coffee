@@ -13,6 +13,9 @@ angular.module 'elektorApp'
     changePassword:
       method:'POST'
       url: '/auth/changePassword'
+    newPassword:
+      method: 'POST'
+      url: '/auth/newPassword'
     update: method:'PUT'
     me:
       method: 'GET'
@@ -26,3 +29,6 @@ angular.module 'elektorApp'
     sendOTP:
       method: 'GET'
       url: '/auth/sendOTP'
+    resetPassword:
+      method: 'POST'
+      url: '/auth/resetPassword'

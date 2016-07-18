@@ -25,7 +25,7 @@ function createJWT(user) {
 
 function randomString() {
     var text = "";
-    var possible = "ABCDEFGHJKLMNPQRSTUVWXY1234567890";
+    var possible = "ABCDEFGHJKLMNPQRSTUVWXY123456789";
 
     for (var i = 0; i < 5; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -263,12 +263,13 @@ exports.confirm = function (req, res) {
                 return res.send(404);
             }
             var oldConf = member.codeConfirmed;
-            if (oldConf) {
+            if (oldConf && member.accredited === true) {
                 return res.status(200).json({message: "Accreditation Code already Confirmed"});
             }
 
             if (member.accessCode === req.query.code) {
                 member.codeConfirmed = true;
+                member.accredited = true;
                 member.save(function () {
                     var phone = extractPhoneNumber(member.phone);
 
@@ -446,10 +447,11 @@ exports.sendResetLink = function (req, res) {
             else if (member.requestCode.toLowerCase() === req.body.checkCode.toLowerCase()) {
 
                 var _token = randomString();
+                var re = new RegExp('/', 'g');
 
 
                 user.tokenExpires = moment().add(3, 'hours').format();
-                user.resetToken = user.generateHash(_token);
+                user.resetToken = user.generateHash(_token).replace(re, '');
                 delete user.requestCode;
 
                 var resetLink = 'https://election.nba-agc.org/reset_password/' + user.resetToken;
@@ -473,6 +475,67 @@ exports.sendResetLink = function (req, res) {
 
     });
 };
+
+exports.resetPassword = function (req, res) {
+
+    User.findOne({"resetToken": req.body.id}).populate('_member').exec(function (err, user) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!user) {
+            return res.status(401).json({message: 'Invalid Request'});
+        }
+        User.populate(user, {
+            path: '_member._branch',
+            model: 'Branch'
+        }, function (err, doc) {
+            if (moment().isBefore(doc.tokenExpires)) {
+                return res.json(doc);
+            } else {
+                doc.tokenExpires = null;
+                doc.resetToken = null;
+                doc.save(function (err,doc) {
+                    console.log(doc);
+                    if (err) {
+                        return handleError(res, err);
+                    }
+                    return res.status(200).json({message: 'Your password reset request has expired! Please make the request again.'});
+                });
+            }
+        });
+    });
+};
+
+exports.newPassword = function (req, res) {
+    if (req.body._id === undefined) {
+        return res.status(400).json({message: 'Invalid password reset request.'});
+    }
+
+    User.findById(req.body._id, function (err, theUser) {
+        if (err) {
+            handleError(res, err);
+        }
+
+        if (moment().isBefore(theUser.tokenExpires)) {
+            theUser.password = theUser.generateHash(req.body.password);
+            theUser.lastPasswordReset = new Date();
+            theUser.resetToken = null;
+            theUser.tokenExpires = null;
+
+            theUser.save(function (err) {
+
+                if (err) {
+                    return handleError(res, err);
+                }
+                return res.status(200).json({message: "Password Changed Successfully!"});
+            });
+        }
+        else {
+            return res.status(302).json({message: "Request Expired, Please make another password reset request"})
+        }
+    });
+};
+
 
 function handleError(res, err) {
     console.log('Auth Endpoint Error: ', err);

@@ -20,7 +20,6 @@ angular.module 'elektorApp'
             $scope.submitting = false
             toastr.success response.message
 
-            $scope.u = angular.copy user
             $scope.password_cnf = null
             theForm.$setPristine()
 

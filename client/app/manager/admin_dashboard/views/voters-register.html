@@ -90,6 +90,7 @@
                     <span ng-show="sortType == 'mobileNumber' && sortReverse" class="fa fa-caret-down"></span>
                     <span ng-show="sortType == 'mobileNumber' && !sortReverse" class="fa fa-caret-up"></span>
                 </a></th>
+                <th ng-if="canEdit"></th>
                 <th></th>
             </tr>
             <tr ng-repeat="v in voters_register | orderBy:sortType:sortReverse | filter:searchVotersRegister track by $index">
@@ -104,7 +105,9 @@
                     <button class="btn btn-xs btn-block btn-purple selected" ng-click="editMemberVR(v, $index)">
                         <i class="fa fa-pencil-square "></i> Edit
                     </button>
-                    <i ng-if="v.confirmed" class="fa fa-gravel" style="color: #122b40;"></i>
+                </td>
+                <td>
+                    <i ng-if="v.confirmed" class="fa fa-gavel pull-right" style="color: #122b40;"></i>
                 </td>
             </tr>
         </table>

@@ -1,16 +1,16 @@
 'use strict'
 
-describe 'Controller: SetupAccountCtrl', ->
+describe 'Controller: ResetPasswordCtrl', ->
 
-  # load the controller's module
+# load the controller's module
   beforeEach module 'elektorApp'
-  SetupAccountCtrl = undefined
+  ResetPasswordCtrl = undefined
   scope = undefined
 
   # Initialize the controller and a mock scope
   beforeEach inject ($controller, $rootScope) ->
     scope = $rootScope.$new()
-    SetupAccountCtrl = $controller 'SetupAccountCtrl',
+    ResetPasswordCtrl = $controller 'ResetPasswordCtrl',
       $scope: scope
 
   it 'should ...', ->

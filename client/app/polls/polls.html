@@ -24,7 +24,7 @@
 
                   <div class="panel well panel-info hover" ng-repeat="p in polls" ng-click="showBallot(p)">
                     <span class="label pull-right" ng-class="
-                        {'label-primary': open(p), 'label-danger': after(p.closes), 'label-success': yetToOpen(p)}">
+                        {'label-primary': open(p), 'label-danger': after(p.closes), 'label-warning': yetToOpen(p)}">
                         Open{{after(p.opens)?"ed":"s"}} {{ago(p.opens)}} - Close{{before(p.closes)?"s":"d"}}
                         {{ago(p.closes)}}
                     </span>
