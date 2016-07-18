@@ -7,7 +7,7 @@
     <div class="row">
         <img src="{{ candidate.secure_url }}" class="img-rounded pull-md-left col-md-4" />
         <div class="caption col-md-8 pull-right">
-            <p class="text-justify">{{ candidate.profile }}</p>
+            <div ng-bind-html="candidate.profile"></div>
         </div>
     </div>
 </div>
