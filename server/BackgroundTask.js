@@ -14,7 +14,6 @@ mongoose.connect(config.mongo.uri, config.mongo.options);
 
 new CronJob('*/1 * * * *', function () {
     VotersRegister.find({getData :false, deleted:false}).limit(200).exec(function (err,data) {
-      console.log(data.length);
       if (data.length){
         _(data).forEach(function (datum) {
           var newData = {};
@@ -38,20 +37,27 @@ new CronJob('*/1 * * * *', function () {
             }
             else{newData.MobileNumber = datum.mobileNumber;}
           }
-          else if(datum.updated == true && data.confirmed == false){
+          if(datum.updated == true && datum.confirmed == false){
             newData.UpdatedName = datum.updatedSurname+' '+datum.updatedMiddleName+' '+datum.updatedFirstName;
             newData.Fullname = datum.fullname;
-            newData.Email = datum.email;
             newData.Branch = datum.branchCode;
-            newData.MobileNumber = datum.mobileNumber;
-            newData.UpdatedPhone = datum.updatedPhone;
-            newData.UpdatedEmail = datum.updatedEmail;
+            newData.UpdatedPhone = datum.updatedPhone.replace(datum.updatedPhone.substring(0, 6), '*******');
+            var nd = datum.updatedEmail.indexOf('@');
+            newData.UpdatedEmail = datum.updatedEmail.replace(datum.updatedEmail.substring(0, nd), '***********');
             newData.EnrollmentNo = datum.scNumber;
             newData.UpdatedEnrollmentNo = datum.sc_number;
-            newData.UpdatedPhone = datum.updatedPhone;
-            newData.DataStatus = 'not confirmed';
-          }
+            newData.DataStatus = 'updated but not yet confirmed';
+            if (datum.email != 'NOT AVAILABLE') {
+              var vend = datum.email.indexOf('@');
+              newData.Email = datum.email.replace(datum.email.substring(0, vend), '*********');
+            }
+            else{newData.Email = datum.email;}
+            if (datum.mobileNumber != 'INVALID MOBILE') {
+              newData.MobileNumber = datum.mobileNumber.replace(datum.mobileNumber.substring(0, 6), '*******');
+            }
+            else{newData.MobileNumber = datum.mobileNumber;}
 
+          }
           NewData.create(newData, function (err, member) {
             if (err) {
               console.log(err);

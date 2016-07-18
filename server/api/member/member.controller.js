@@ -95,7 +95,14 @@ exports.showMember = function (req, res) {
 
 // Creates a new member in the DB.
 exports.create = function (req, res) {
-  Member.find({sc_number:req.body.sc_number},function (err,found) {
+  var condition = {
+    sc_number:req.body.sc_number
+  };
+
+  if (req.body.confirm){
+    condition.inHouse = {$not:true}
+  }
+  Member.find(condition,function (err,found) {
     if (err) {
       return handleError(res, err);
     }
@@ -105,6 +112,7 @@ exports.create = function (req, res) {
       return res.json({message:'Voter Confirmed Already', statusCode:304});
     }
     else{
+      delete req.body.confirm;
       Member.create(req.body, function (err, member) {
         if (err) {
           return handleError(res, err);

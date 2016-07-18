@@ -48,6 +48,7 @@ angular.module 'elektorApp'
         user.email = data.updatedEmail
         user.verified = 1
         user.branch = data.branchCode
+        user.confirm = true
 
         Member.createNewMember user,(newMember) ->
           console.log newMember
