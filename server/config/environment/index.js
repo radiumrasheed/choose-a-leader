@@ -47,5 +47,4 @@ var all = {
 // ==============================================
 module.exports = _.merge(
   all,
-  require('./production.js') || {});
-  // require('./' + process.env.NODE_ENV + '.js') || {});
+  require('./' + process.env.NODE_ENV + '.js') || {});
