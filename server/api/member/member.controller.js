@@ -100,7 +100,7 @@ exports.create = function (req, res) {
   };
 
   if (req.body.confirm){
-    condition.inHouse = {$not:true}
+    condition.inHouse = {$ne:true}
   }
   Member.find(condition,function (err,found) {
     if (err) {
