@@ -9,9 +9,11 @@ var mailer = require('./components/tools/mailer');
 var config = require('./config/environment');
 var VotersRegister = require('./api/votersReg/votersReg.model');
 var NewData = require('./api/newData/newData.model');
+var Member = require('./api/member/member.model');
 mongoose.connect(config.mongo.uri, config.mongo.options);
 
 
+// extract data from voters register for export
 new CronJob('*/1 * * * *', function () {
     VotersRegister.find({getData :false, deleted:false}).limit(200).exec(function (err,data) {
       if (data.length){
@@ -76,38 +78,34 @@ new CronJob('*/1 * * * *', function () {
   }, null, true, 'Africa/Lagos'
 );
 
-/*
- agenda.define('Send Accreditation Link To 50 Members', function (job, done) {
-	console.log("1");
-	Member.find({setupLink_sent: false}).limit(50).exec(
-		function (err, allMembers) {
-			console.log("2");
-			if (err) {
-				job.fail(err);
-				job.save();
-				done();
-			}
-			if (allMembers.length) {
-				_(allMembers).forEach(function (member) {
-					mailer.sendSetupLink(member.phone, member.email, member._id, member.surname + ' ' + member.firstName, function () {
+new CronJob('*/1 * * * *', function () {
+  Member.find({setupLink_sent:{$ne:true},inHouse:true,verified:1}).limit(20).exec(
+    function (err, allMembers) {
+      console.log(allMembers);
+      if (err) {
+        return console.log("There was a server error "+err)
+      }
+      if (allMembers.length) {
+        _(allMembers).forEach(function (member) {
+          mailer.sendSetupLink(member.phone, member.email, member._id, member.surname + ' ' + member.firstName, function () {
 
-						console.log('email was sent to ' + member.email + '');
-					});
-					Member.update({_id: member._id}, {$set: {setupLink_sent: true}}, function (e) {
-						if (e) {
-							console.log(e);
-						}
-					});
-				});
+            console.log('Email and Sms was sent to ' + member.email + ' and '+member.phone+' respectively');
+          });
+          Member.update({_id: member._id}, {$set: {setupLink_sent: true}}, function (e) {
+            if (e) {
+              console.log(e);
+            }
+          });
+        });
 
-				done();
-			} else {
-				done();
-			}
-		}
-	)
-});
- */
+      } else {
+        return;
+      }
+    }
+  )
+  }, null, true, 'Africa/Lagos'
+);
+
 
 //agenda.every('minute', 'Send Accreditation Link To 50 Members');
 
