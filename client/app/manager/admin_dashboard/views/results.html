@@ -128,8 +128,15 @@
                             <tbody ng-repeat="p in results | orderBy:sortType">
                             <tr>
                                 <td class="h6" rowspan="{{p.votes.length}}">{{p._id.name}}
+                                    <span ng-if="p.votes[0].count === p.votes[1].count" class="label label-warning"
+                                          style="color: black;">
+                                        <i title="A tie in this position"
+                                           class="fa fa-warning pull-right" style="color: deeppink;"></i>
+                                        A Tie
+                                    </span>
                                 </td>
-                                <td class="h6">{{p.votes[0].candidate.surname+'
+                                <td ng-class="p.votes[0].count !== p.votes[1].count ? 'h6' : ''">
+                                    {{p.votes[0].candidate.surname+'
                                     '+(p.votes[0].candidate.firstName||p.votes[0].candidate.othername)}}
                                     <i ng-if="p.votes[0].count !== p.votes[1].count"
                                        class="fa fa-trophy fa-2x pull-right" style="color: #e5c100;"></i>

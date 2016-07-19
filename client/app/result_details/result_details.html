@@ -56,24 +56,29 @@
                                     </tr>
                                     </thead>
                                     <tbody ng-repeat="p in results | orderBy:sortType">
-                                        <tr>
-                                            <td rowspan="{{p.votes.length}}"><a class="h6" href="#"
-                                                                                ng-click="poll.national ? open(p._id._id) : ''">{{p._id.name}}</a>
-                                            </td>
-                                            <td ng-class="p.votes[0].count !== p.votes[1].count ? 'h6' : ''">
-                                                {{p.votes[0].candidate.surname+'
-                                                '+(p.votes[0].candidate.firstName||p.votes[0].candidate.othername)}}
-                                                <i ng-if="p.votes[0].count !== p.votes[1].count"
-                                                   class="fa fa-trophy fa-2x pull-right" style="color: #e5c100;"></i>
-                                            </td>
-                                            <td class="text-center h6">{{p.votes[0].count}}</td>
-                                            <td rowspan="{{p.votes.length}}" class="text-center h6">{{p.total_count}}</td>
-                                        </tr>
-                                        <tr ng-repeat="c in p.votes" ng-if="$index > 0">
-                                            <td>{{c.candidate.surname+' '+(c.candidate.firstName||c.candidate.othername)}}
-                                            </td>
-                                            <td class="text-center h6">{{c.count}}</td>
-                                        </tr>
+                                    <tr>
+                                        <td class="h6" rowspan="{{p.votes.length}}">{{p._id.name}}
+                                            <span ng-if="p.votes[0].count === p.votes[1].count" class="label label-warning"
+                                                  style="color: black;">
+                                                <i title="A tie in this position"
+                                                   class="fa fa-warning pull-right" style="color: deeppink;"></i>
+                                                A Tie
+                                            </span>
+                                        </td>
+                                        <td ng-class="p.votes[0].count !== p.votes[1].count ? 'h6' : ''">
+                                            {{p.votes[0].candidate.surname+'
+                                            '+(p.votes[0].candidate.firstName||p.votes[0].candidate.othername)}}
+                                            <i ng-if="p.votes[0].count !== p.votes[1].count"
+                                               class="fa fa-trophy fa-2x pull-right" style="color: #e5c100;"></i>
+                                        </td>
+                                        <td class="text-center h6">{{p.votes[0].count}}</td>
+                                        <td rowspan="{{p.votes.length}}" class="text-center h6">{{p.total_count}}</td>
+                                    </tr>
+                                    <tr ng-repeat="c in p.votes" ng-if="$index > 0">
+                                        <td>{{c.candidate.surname+' '+(c.candidate.firstName||c.candidate.othername)}}
+                                        </td>
+                                        <td class="text-center h6">{{c.count}}</td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
