@@ -67,14 +67,13 @@
             <div class="panel-body">
 
                 <div class="col-md-12">
-                    <p>{{poll.description}}
-                        <button class="btn btn-sm btn-primary pull-right" ng-show="closed()" ng-click="makePublic()">
-                            Publish Results
-                        </button>
+                    <p class="pull-left">{{poll.description}}</p>
+                    <p class="pull-right">
+                        <button type="button" class="btn btn-success-active" ng-show="closed()" ng-click="makePublic()">Publish</button>
+                        <button type="button" class="btn btn-danger-outline" ng-click="printPdf()">Save as PDF</button>
+
                     </p>
-                    <br>
-                    <button class="pull-right btn btn-primary btn-sm" ng-click="PrintElem('#results')">Print</button>
-                    <button class="btn btn-primary btn-sm" ng-click="PrintPdf()">Save PDF</button>
+
                 </div>
                 <!--
                                 <div class="col-md-12">

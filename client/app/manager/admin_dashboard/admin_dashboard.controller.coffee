@@ -238,7 +238,7 @@ angular.module 'elektorApp'
     $scope.printPdf = ->
       console.log "tt"
 
-      doc = new jsPDF
+      doc = new jsPDF()
 
       # We'll make our own renderer to skip this editor
   #    specialElementHandlers = '#editor': (element, renderer) ->
@@ -1013,6 +1013,7 @@ angular.module 'elektorApp'
 
     else
       $state.go "admin_dashboard"
+
 .controller 'NameFixCtrl', ($scope, VotersRegister,Member,Auth, $localStorage, $state, toastr, $modal) ->
   Auth.me (usr) ->
     if usr.superAdmin is true
