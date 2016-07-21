@@ -122,22 +122,24 @@ angular.module 'elektorApp'
       return
 
     $scope.Popup = (data) ->
-      mywindow = window.open('', 'results', 'height=400,width=600')
+      mywindow = window.open('', 'results', '')
       mywindow.document.write '<html><head><title>Results</title>'
 
       ###optional stylesheet###
 
-      #mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-      mywindow.document.write '</head><body >'
+      mywindow.document.write('<link rel="stylesheet" href="../../../app/app.css" type="text/css" />');
+      mywindow.document.write '</head><body>'
       mywindow.document.write data
       mywindow.document.write '</body></html>'
       mywindow.document.close()
       # necessary for IE >= 10
       mywindow.focus()
       # necessary for IE >= 10
-      mywindow.print()
-      mywindow.close()
-      true
+      $timeout ->
+        mywindow.print()
+        mywindow.close()
+        true
+      , 300
 
     Poll.get id: pollId, (poll) ->
       $scope.poll = poll

@@ -100,74 +100,77 @@
                                     </div>
                                 </div>
                 -->
-                <div id="results" class="center print table-responsive" style="background-color: white !important;">
-                    <div class="center">
+                <div id="results">
+                    <div class="center print table-responsive" style="background-color: white !important;">
                         <div class="center">
-                            <div style="margin:auto 0;border:thin solid white;text-align:center;">
-                                <div class="center">
-                                    <img src="../../../../assets/images/nba_logo.jpg" width="220" height="185"
-                                         width="220px" height="185px"/>
-                                    <h3 STYLE="color: #00B22D;line-height: 18px;">NIGERIAN BAR ASSOCIATION 2016 ELECTION
-                                        RESULT - {{poll.title}}</h3>
+                            <div class="center">
+                                <div style="margin:auto 0;border:thin solid white;text-align:center;">
+                                    <div class="center">
+                                        <img src="../../../../assets/images/nba_logo.jpg" width="220" height="185"
+                                             width="220px" height="185px"/>
+                                        <h4 style="color: #00B22D;line-height: 18px;">NIGERIAN BAR ASSOCIATION 2016 ELECTION
+                                            RESULT - {{poll.title}}</h4>
+                                    </div>
                                 </div>
+                                </di>
                             </div>
-                            </di>
-                        </div>
-                        <table class="table table-striped table-hover table-bordered"
-                               style="border-collapse: separate; border-spacing: 0 5px;">
-                            <thead>
-                            <tr class="success">
-                                <th class="text-center text-bold">POSITION</th>
-                                <th class="text-center text-bold" width="370px">CANDIDATES</th>
-                                <th class="text-center text-bold">VOTES CAST</th>
-                                <th class="text-center text-bold">TOTAL VOTES CAST</th>
-                                <th class="text-center text-bold">ELIGIBLE VOTERS</th>
-                            </tr>
-                            </thead>
-                            <tbody ng-repeat="p in results | orderBy:sortType">
-                            <tr>
-                                <td class="h6" rowspan="{{p.votes.length}}">{{p._id.name}}
-                                    <span ng-if="p.votes[0].count === p.votes[1].count" class="label label-warning"
-                                          style="color: black;">
+                            <table class="table table-striped table-hover table-bordered"
+                                   style="border-collapse: separate; border-spacing: 0 5px;">
+                                <thead>
+                                <tr class="success">
+                                    <th class="text-center text-bold">POSITION</th>
+                                    <th class="text-center text-bold" width="370px">CANDIDATES</th>
+                                    <th class="text-center text-bold">VOTES CAST</th>
+                                    <th class="text-center text-bold">TOTAL VOTES CAST</th>
+                                    <th class="text-center text-bold">ELIGIBLE VOTERS</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-repeat="p in results | orderBy:sortType">
+                                <tr>
+                                    <td class="h6" rowspan="{{p.votes.length}}">{{p._id.name}}
+                                        <span ng-if="p.votes[0].count === p.votes[1].count" class="label label-warning"
+                                              style="color: black;">
                                         <i title="A tie in this position"
                                            class="fa fa-warning pull-right" style="color: deeppink;"></i>
                                         A Tie
                                     </span>
-                                </td>
-                                <td ng-class="p.votes[0].count !== p.votes[1].count ? 'h6' : ''">
-                                    {{p.votes[0].candidate.surname+'
-                                    '+(p.votes[0].candidate.firstName||p.votes[0].candidate.othername)}}
-                                    <i ng-if="p.votes[0].count !== p.votes[1].count"
-                                       class="fa fa-trophy fa-2x pull-right" style="color: #e5c100;"></i>
-                                </td>
-                                <td class="text-center">{{p.votes[0].count}}</td>
-                                <td rowspan="{{p.votes.length}}" class="text-center">{{p.total_count}}</td>
-                                <td rowspan="{{p.votes.length}}" class="text-center">{{total}}</td>
-                            </tr>
-                            <tr ng-repeat="c in p.votes" ng-if="$index > 0">
-                                <td>{{c.candidate.surname+' '+(c.candidate.firstName||c.candidate.othername)}}</td>
-                                <td class="text-center">{{c.count}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                    </td>
+                                    <td ng-class="p.votes[0].count !== p.votes[1].count ? 'h6' : ''">
+                                        {{p.votes[0].candidate.surname+'
+                                        '+(p.votes[0].candidate.firstName||p.votes[0].candidate.othername)}}
+                                        <i ng-if="p.votes[0].count !== p.votes[1].count"
+                                           class="fa fa-trophy fa-2x pull-right" style="color: #e5c100;"></i>
+                                    </td>
+                                    <td class="text-center">{{p.votes[0].count}}</td>
+                                    <td rowspan="{{p.votes.length}}" class="text-center">{{p.total_count}}</td>
+                                    <td rowspan="{{p.votes.length}}" class="text-center">{{total}}</td>
+                                </tr>
+                                <tr ng-repeat="c in p.votes" ng-if="$index > 0">
+                                    <td>{{c.candidate.surname+' '+(c.candidate.firstName||c.candidate.othername)}}</td>
+                                    <td class="text-center">{{c.count}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--
+                                        <div class="col-md-12" ng-show="showPositionSummary">
+                                            <div class="title text-bold h3 text-center">Position Summary</div>
+                                            <table class="table table-striped table-hover table-bordered">
+                                                <tr class="success">
+                                                    <th class="text-right text-bold">CANDIDATE</th>
+                                                    <th class="text-bold">NO OF VOTERS</th>
+                                                    <th class="text-bold">VOTERS</th>
+                                                </tr>
+                                                <tr ng-repeat="c in resultsByMembers">
+                                                    <th class="text-right">{{c._id.surname}}</th>
+                                                    <th class="">{{c.votes.length}} </th>
+                                                    <th class=""></th>
+                                                </tr>
+                                            </table>
+                                        </div>
+                        -->
+
                     </div>
-                    <!--
-                                    <div class="col-md-12" ng-show="showPositionSummary">
-                                        <div class="title text-bold h3 text-center">Position Summary</div>
-                                        <table class="table table-striped table-hover table-bordered">
-                                            <tr class="success">
-                                                <th class="text-right text-bold">CANDIDATE</th>
-                                                <th class="text-bold">NO OF VOTERS</th>
-                                                <th class="text-bold">VOTERS</th>
-                                            </tr>
-                                            <tr ng-repeat="c in resultsByMembers">
-                                                <th class="text-right">{{c._id.surname}}</th>
-                                                <th class="">{{c.votes.length}} </th>
-                                                <th class=""></th>
-                                            </tr>
-                                        </table>
-                                    </div>
-                    -->
 
                 </div>
                 <div class="panel-footer text-left">
