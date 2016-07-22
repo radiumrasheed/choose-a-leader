@@ -80,17 +80,23 @@ exports.show = function (req, res) {
     });
 };
 
-// Get a single member for setup
+// Get a single member from the ID used only on SETUP ACCOUNT
 exports.showMember = function (req, res) {
-    Member.findById(req.query._member).populate('_user _branch').exec(function (err, member) {
-        if (err) {
-            return handleError(res, err);
-        }
-        if (!member) {
-            return res.send(404);
-        }
-        return res.json(member);
-    });
+    if (req.query._member) {
+        Member.findById(req.query._member).populate('_user _branch').exec(function (err, member) {
+            if (err) {
+                return handleError(res, err);
+            }
+            if (!member) {
+                return res.send(404);
+            }
+            return res.json(member);
+        });
+    }
+    else {
+        return res.send(400);
+    }
+
 };
 
 // Creates a new member in the DB.

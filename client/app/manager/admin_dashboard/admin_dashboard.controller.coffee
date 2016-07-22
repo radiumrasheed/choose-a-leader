@@ -27,7 +27,7 @@ angular.module 'elektorApp'
           perPage: 20
           _branch: usr._member._branch._id
         , (members, headers) ->
-          $scope.members = members
+          $scope.vmembers = members
           $scope.totalVerified = parseInt headers "total_found"
       else
         if usr.superAdmin is true
@@ -43,8 +43,9 @@ angular.module 'elektorApp'
           verified: true
           perPage: 20
         , (members, headers) ->
-          $scope.members = members
+          $scope.vmembers = members
           $scope.totalVerified = parseInt headers "total_found"
+          $scope.ready = true
 
     else
       $state.go "dashboard"

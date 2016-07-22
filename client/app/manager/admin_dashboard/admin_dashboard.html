@@ -1,6 +1,6 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<div class="container" id="admin_dashboard">
+<div ng-if="ready" class="container" id="admin_dashboard">
     <div class="row">
         <div class="col-md-3" admin-menu></div>
         <div class="col-md-9" ui-view>
@@ -82,3 +82,5 @@
         </div>
     </div>
 </div>
+
+<div ng-if="!ready" id="vh_loading_effect"></div>
