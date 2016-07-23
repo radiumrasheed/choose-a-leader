@@ -7,6 +7,7 @@ angular.module 'elektorApp', [
   'ui.router'
   'ngStorage'
   'ui.bootstrap'
+  'youtube-embed'
   'toastr'
   'satellizer'
   'naif.base64'
@@ -46,7 +47,7 @@ angular.module 'elektorApp', [
       $auth.logout()
       $sessionStorage.tempMember = user._member
       $state.go "branch_request", id: user._member._id###
-      
+
     if user._member.verified isnt 1
       $auth.logout()
       $state.go "unconfirmed"

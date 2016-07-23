@@ -239,6 +239,9 @@ exports.update = function (req, res) {
               mailer.sendUpdatedRecordsToBoth(req.body);
             }
         }
+      else {
+          mailer.sendUpdatedRecordsToBoth(req.body)
+        }
         if (req.body.prevModifiedBy && req.body.prevModifiedDate) {
             //save previous data if data is being modified
             delete details.prevDataModified;
@@ -326,6 +329,10 @@ exports.branchMembers = function (req, res) {
     if (req.body.confirm == true) {
         condition["confirmed"] = true;
     }
+
+  if (req.body.confirmed == false) {
+    condition["confirmed"] = false;
+  }
 
     if (req.body.search) {
         var search = req.body.search;
