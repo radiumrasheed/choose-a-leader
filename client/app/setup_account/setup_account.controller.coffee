@@ -90,6 +90,7 @@ angular.module 'elektorApp'
       , (e) ->
         $scope.submitting = false
         $scope.formError = e.data.message
+        theForm.$setPristine()
         toastr.error e.data.message
 
     else
@@ -110,10 +111,10 @@ angular.module 'elektorApp'
   $scope.compareCode = (form) ->
     if form.$valid
       $scope.submitting = true
-      $scope.confirmation = true
       Auth.confirmCode id: $scope.master._id, code: $scope.accessCode, $scope.master, (response) ->
         toastr.success response.message
-
+        $scope.submitting = false
+        $scope.confirmation = true
         $scope.confirmationMessage =response.message
       , (e) ->
         $scope.submitting = false

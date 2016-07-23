@@ -18,9 +18,7 @@
     </div>
 
   </div>
-
   <div class="row text-center">
-
     <h6>Please go through theses 3 steps for accreditation</h6>
     <div class="pearls pearls-lg row">
       <div style="margin-top: 20px;">
@@ -49,7 +47,6 @@
     </div>
 
     <div class="row">
-
       <div class="col-md-offset-3 col-md-6 col-xs-offset-1 col-xs-10 panel panel-green no-padding" ng-hide="showNext || showLast">
         <div class="panel-heading">
           <div class="panel-title center-block"><i class="fa fa-unlock"></i>
@@ -204,11 +201,11 @@
               <div class="form-group">
                 <label class="col-sm-5 col-xs-6 control-label">Current Password <span class="required">*</span> </label>
                 <div class="col-sm-7 col-xs-6">
-                  <input class="form-control form-control-warning" type="password"
+                  <input class="form-control form-control-warning" type="password" name="current_password"
                          ng-model="u.current_password" ng-minlength="6"
                          placeholder="Enter current password" required autofocus>
                   <div class="text-center m-t-10">
-                    <small class="text-danger">
+                    <small class="text-danger" ng-hide="pwdForm.current_password.$valid">
                       Password is CASE SENSITIVE
                     </small>
                   </div>
@@ -264,20 +261,18 @@
 
           <form name="accessForm" class="form-horizontal">
 
-            <div class="alert alert-warning">
-              <p>Thank you for your patience. Accreditation Code has been sent to your phone and email. Please enter is below</p>
-              <p>If you didn't get the
-                message, please <a ng-click="resendCode()" ng-disabled="resendingCode" href="#"
-                                   class="text-primary"><strong>Click
-                  Here</strong></a> to resend it to you. </p>
-            </div>
+            <p class="alert alert-warning">One more step to go. Accreditation Code has been sent to your phone and email. Please enter it below</p>
+            <p >If you didn't get the
+              message, please <a ng-click="resendCode()" ng-disabled="resendingCode" href="#"
+                                 class="text-primary"><strong>Click
+                Here</strong></a> to resend it </p>
 
             <div class="form-group">
-              <label class="col-sm-5 col-xs-5 control-label">Accreditation Code <span class="required">*</span> </label>
-              <div class="col-sm-7 col-xs-7">
-                <input class="form-control" type="password"
-                       ng-model="accessCode" ng-minlength="8"
-                       placeholder="Enter Accreditation Code" required>
+              <div class="col-sm-6 col-sm-offset-3">
+                <label class="control-label">Accreditation Code <span class="required">*</span> </label><br><br>
+                <input type="text" maxlength="8" placeholder="Enter Accreditation Code"
+                       class="form-control input-lg"
+                       ng-model="accessCode" required>
               </div>
             </div>
 
@@ -285,13 +280,13 @@
         </div>
         <div class="panel-footer">
           <div class="row">
-            <div class="col-sm-5 col-xs-5">
+            <div class="col-sm-5">
               <button class="btn btn-danger btn-block"
                       ng-click="showNext=false"><i
                 class="fa fa-times"></i> BACK
               </button>
             </div>
-            <div class="col-sm-7 col-xs-7">
+            <div class="col-sm-7">
               <button class="btn btn-default btn-block" ng-disabled="accessForm.$invalid || submitting"
                       ng-click="compareCode(accessForm)"><i
                 class="fa fa-check"></i> CONFIRM CODE
@@ -302,7 +297,7 @@
       </div>
 
 
-      <div class="container" ng-show="confirmation && submitting" ng-if="confirmationMessage">
+      <div class="container" ng-show="confirmation && !submitting" ng-if="confirmationMessage">
         <div style="background: rgba(8, 84, 8, 0.73); margin-bottom: 10px">
           <div class="row">
             <div class="col-md-12 text-center" style="margin-top: 10px; margin-bottom: 10px">
