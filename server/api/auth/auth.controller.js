@@ -101,9 +101,9 @@ exports.create = function (req, res) {
  */
 exports.getPasswordResetRequest = function (req, res) {
   var confirmRequest = function (member) {
-    mailer.sendConfirmRequestCodeAsSMS(member.requestCode, member.phone, function () {
+    mailer.sendConfirmRequestCodeAsSMS(member.email, member.requestCode, member.phone, function () {
       return res.json({
-        message: "Please provide the code sent to your phone."
+        message: "A reset code has been sent to your phone and email."
       });
     });
   };
