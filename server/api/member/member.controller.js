@@ -16,7 +16,7 @@ function randomString() {
     var text = "";
     var possible = "ABCDEFGHJKLMNPQRSTUVWXY123456789";
 
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 6; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
 
@@ -83,14 +83,34 @@ exports.show = function (req, res) {
 // Get a single member from the ID used only on SETUP ACCOUNT
 exports.showMember = function (req, res) {
     if (req.query._member) {
-        Member.findById(req.query._member).populate('_user _branch').exec(function (err, member) {
+        Member.findById(req.query._member).populate('_user').populate('_branch').exec(function (err, member) {
             if (err) {
                 return handleError(res, err);
             }
             if (!member) {
                 return res.send(404);
             }
-            return res.json(member);
+            if (member.setupLink_sent !== true) {
+                return res.send(403);
+            }
+            if (typeof member._user === "undefined" || member._user === null) {
+                res.header('stage', 1);
+                return res.json(member);
+            }
+            else if (member._user.changedPassword !== true && member.accredited !== true) {
+                res.header('stage', 2);
+                return res.json(member);
+            }
+            else if (member._user.changedPassword === true && member.accredited !== true) {
+                res.header('stage', 3);
+                return res.json(member);
+            }
+            else if (member.accredited === true) {
+                res.header('stage', 'FINISHED');
+                return res.send(200);
+            }
+            console.warn('what then');
+            return res.send(406);
         });
     }
     else {
@@ -153,11 +173,33 @@ exports.update = function (req, res) {
     });
 };
 
+exports.resendPassword = function (req, res) {
+    var sendPassword = function (member, user) {
+        mailer.sendDefaultPassword(member._id, member.phone, member.email, user.otp, member.sc_number, function () {
+            return res.status(200).json({message : 'Username and Password Resent!'});
+        });
+    };
+
+    Member.findById(req.query._member).populate('_user', '+otp').exec(function (err, member) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!member) {
+            return res.send(404);
+        }
+        if (member._user.changedPassword !== true && member.accredited !== true) {
+            console.log(member, member._user);
+            sendPassword(member, member._user);
+        }
+
+    });
+}
+
 // Creates a new User in auths and updates its corresponding member in the database
 exports.createUser = function (req, res) {
 
     var sendPassword = function (member, user) {
-        mailer.sendDefaultPassword(req.body.phone, member.email, user.otp, member.sc_number, function () {
+        mailer.sendDefaultPassword(member._id, member.phone, member.email, user.otp, member.sc_number, function () {
             return res.status(200).json(user);
         });
     };
@@ -238,7 +280,8 @@ exports.createUser = function (req, res) {
         }
 
         /*TODO := add check for setup-stage, if password is not changed go to step to step 2, if not confirmed, go to step 3 */
-        else if (member._user.changedPassword === false || member.accredited !== true) {
+        else if (member._user.changedPassword !== false || member.accredited !== true) {
+            res.header('stage', 2);
             return res.status(200).json(member._user);
         }
 

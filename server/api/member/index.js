@@ -12,6 +12,7 @@ router.post('/getmember',controller.getMember);
 router.get('/createLink', controller.createLink);
 router.get('/detailLink', controller.detailLink);
 router.get('/me', controller.showMember);
+router.get('/resendPassword', controller.resendPassword);
 router.put('/createUser', controller.createUser);
 router.get('/', sessionSec, controller.index);
 

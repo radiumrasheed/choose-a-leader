@@ -191,7 +191,7 @@ exports.update = function (req, res) {
                     if (req.query.sendCode) {
                         var phone = extractPhoneNumber(updatedM.phone);
 
-                        mailer.sendVerificationSMS(phone, updatedM.email, updatedM.accessCode, function () {
+                        mailer.sendVerificationSMS(updatedM._id, phone, updatedM.email, updatedM.accessCode, function () {
                             return getUser(req.params.id, res);
                         });
                     } else {
@@ -220,21 +220,22 @@ var extractPhoneNumber = function (phone_number) {
  * @param res
  */
 exports.sendCode = function (req, res) {
-    User.findById(req.user).populate('_member').exec(function (err, user) {
+  console.log(req.query._member);
+    Member.findById(req.query._member).exec(function (err, member) {
         if (err) {
             return handleError(res, err);
         }
-        if (!user) {
+        if (!member) {
             return res.send(404);
         }
 
-        if (user._member.accessCode === undefined || user._member.accessCode === '' || user._member.accessCode === null) {
+        if (member.accessCode === undefined || member.accessCode === '' || member.accessCode === null) {
             return res.status(400).json({message: "Please setup account first."});
         }
 
-        var phone = extractPhoneNumber(user._member.phone);
+        var phone = extractPhoneNumber(member.phone);
 
-        mailer.sendVerificationSMS(phone, user._member.email, user._member.accessCode, function () {
+        mailer.sendVerificationSMS(member._id, phone, member.email, member.accessCode, function () {
             return res.send(200);
         });
     });
@@ -270,7 +271,10 @@ exports.confirm = function (req, res) {
             if (member.accessCode === req.query.code) {
                 member.codeConfirmed = true;
                 member.accredited = true;
-                member.save(function () {
+                member.save(function (err) {
+                    if (err) {
+                        return handleError(res, err);
+                    }
                     var phone = extractPhoneNumber(member.phone);
 
                     mailer.sendConfirmationSMS(phone, member.email, function () {
@@ -351,16 +355,17 @@ exports.changePassword = function (req, res) {
 
                 theUser.save(function (err) {
 
-                    if (err !== null) {
+                    if (err) {
+                        console.error('fatal error');
                         return handleError(res, err);
                     }
                     if (req.query.sendCode) {
                         Member.findById(theUser._member, function (err, updatedM) {
                             var phone = extractPhoneNumber(updatedM.phone);
 
-                            mailer.sendVerificationSMS(phone, updatedM.email, updatedM.accessCode, function () {
+                            mailer.sendVerificationSMS(updatedM._id, phone, updatedM.email, updatedM.accessCode, function () {
                             });
-                            return res.status(200).json({message: "Password Changed Successfully!. Accreditation Code sent!"});
+                            return res.status(200).json({message: "Password Changed Successfully and Accreditation Code sent!"});
                         });
                     } else {
                         return res.status(200).json({message: "Password Changed Successfully!"});
@@ -370,7 +375,7 @@ exports.changePassword = function (req, res) {
 
             }
             else {
-                return res.status(404).send({message: 'Invalid Password'});
+                return res.status(404).send({message: 'Incorrect Default Password. Please note that it is CASE SENSITIVE'});
             }
         });
     });

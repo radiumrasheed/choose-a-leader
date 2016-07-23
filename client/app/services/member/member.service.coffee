@@ -30,6 +30,9 @@ angular.module 'elektorApp'
     updateSurname:
       url: 'api/members/updateSurname'
       method: "POST"
+    resendPassword:
+      url: 'api/members/resendPassword'
+      method: "GET"
 
 .directive 'memberSelectPlugin', ( Member ) ->
   restrict: 'A'

@@ -4,20 +4,32 @@ angular.module 'elektorApp'
 .controller 'SetupAccountCtrl', ($scope, $timeout, Auth, toastr, Utils, $state, $stateParams, Member, $auth) ->
   $auth.logout()
 
+  $scope.showFirst = true
   $scope.showLast = false
   $scope.confirmation = false
   $scope.master = {}
   $scope.accessCode = null
 
   $scope.reset = ->
-    Member.me  _member: $stateParams.id, (member) ->
-      if member.accredited is true
-        $state.go "login"
+    Member.me  _member: $stateParams.id, (member, extras) ->
       $scope.member = member
-    , (e) ->
-      dashboard ->
-        toastr.error e.data.message
+      console.log member
 
+      switch extras('stage')
+        when '1' then $scope.step1()
+        when '2' then $scope.step2()
+        when '3' then $scope.step3()
+        else $scope.redirectToDashoard()
+
+
+    , (e) ->
+      $state.go "landing"
+      toastr.error e.data
+      console.warn e.data
+
+  $scope.redirectToDashoard = ->
+    $state.go "landing"
+    toastr.info "You have completed Accreditation"
 
   $scope.submit = (theForm) ->
     if theForm.$valid
@@ -27,8 +39,9 @@ angular.module 'elektorApp'
         $scope.u = angular.copy user
         $scope.master = angular.copy user
         $scope.u.password = null
-        toastr.success "Update Successful."
+        toastr.success "Your Username and default Password has been sent"
         $scope.showNext = true
+        $scope.showFirst = false
       , (e)  ->
         $scope.submitting = false
         toastr.error e.data.message
@@ -39,10 +52,12 @@ angular.module 'elektorApp'
     $scope.showNext = false
 
   $scope.step1 = ->
+    $scope.showFirst = true
     $scope.showLast = false
     $scope.showNext = false
 
   $scope.step2 = ->
+    $scope.showFirst = false
     $scope.member
     $scope.jumped = true
     $scope.u = $scope.member._user
@@ -50,7 +65,9 @@ angular.module 'elektorApp'
     $scope.showNext = true
 
   $scope.step3 = ->
-    $scope.showNext = true
+    $scope.showFirst = false
+    $scope.master = $scope.member._user
+    $scope.showNext = false
     $scope.showLast = true
 
   $scope.changePassword = (theForm) ->
@@ -80,9 +97,15 @@ angular.module 'elektorApp'
 
   $scope.resendCode = ->
     $scope.resendingCode = true
-    Auth.resendCode ->
-      toastr.info "Access Code Re-Sent!"
+    Auth.resendCode _member: $stateParams.id, (member) ->
+      toastr.info "Accreditation Code Re-Sent!"
       $scope.resendingCode = false
+
+  $scope.resendPassword = ->
+    $scope.resendingPassword = true
+    Member.resendPassword _member: $stateParams.id, (result) ->
+      toastr.info "Username and Password Re-Sent!"
+      $scope.resendingPassword = false
 
   $scope.compareCode = (form) ->
     if form.$valid

@@ -789,9 +789,9 @@ angular.module 'elektorApp'
 
 .controller 'PasswordCtrl', ($scope, Auth, toastr, $state) ->
   Auth.me (usr) ->
-    if usr.username.substring(0,9) is 'nba_admin'
-      toastr.error "NO ACCESS"
-      $state.go "admin_dashboard"
+#    if usr.username.substring(0,9) is 'nba_admin'
+#      toastr.error "NO ACCESS"
+#      $state.go "admin_dashboard"
 
     $scope.u = angular.copy usr
 

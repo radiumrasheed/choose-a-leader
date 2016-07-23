@@ -15,7 +15,7 @@ router.post('/newPassword', controller.newPassword);
 router.post('/resetPassword', controller.resetPassword);
 
 router.get('/me', sessionSec, controller.show);
-router.get('/sendCode', sessionSec, controller.sendCode);
+router.get('/sendCode', controller.sendCode);
 // router.get('/sendOTP', controller.sendOTP);
 router.post('/confirmCode', controller.confirm);
 
