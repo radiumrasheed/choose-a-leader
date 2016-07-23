@@ -1,0 +1,69 @@
+<div class="modal-header">
+  <h4>
+    Add Names to members List And Voters Register
+    <button class="btn btn-xs btn-danger pull-right" ng-click="closeModal()"><i class="fa fa-times"></i></button>
+  </h4>
+</div>
+<div class="modal-body">
+  <form name="addForm" ng-submit="addForm.$valid && addNewMember(addForm)" class="form form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-4 control-label">Surname <span class="required">*</span> </label>
+      <div class="col-sm-8">
+        <input type="text" placeholder="SURNAME" class="form-control" name="surname" minlength="3"
+               ng-model="newMember.updatedSurname"
+               ng-value="newMember.updatedSurname"
+               required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-4 control-label">Middle Name <span class="required">*</span> </label>
+      <div class="col-sm-8">
+        <input type="text" placeholder="Middle Name" class="form-control" name="middleName" minlength="3"
+               ng-model="newMember.updatedMiddleName"
+               ng-value="newMember.updatedMiddleName"
+               required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-4 control-label">First Name <span class="required">*</span> </label>
+      <div class="col-sm-8">
+        <input type="text" placeholder="First Name" class="form-control" name="firstName" minlength="3"
+               ng-model="newMember.updatedFirstName"
+               ng-value="newMember.updatedFirstName"
+               required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-4 control-label">Phone Number <span class="required">*</span> </label>
+      <div class="col-sm-8">
+        <input type="number" placeholder="Phone Number" class="form-control" name="updatedPhone" minlength="3"
+               ng-model="newMember.updatedPhone"
+               ng-value="newMember.updatedPhone"
+               required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-4 control-label">Email <span class="required">*</span> </label>
+      <div class="col-sm-8">
+        <input type="email" placeholder="Email" class="form-control" name="updatedEmail" minlength="3"
+               ng-model="newMember.updatedEmail"
+               ng-value="newMember.updatedEmail"
+               required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-4 control-label">Enrollment Number<span class="required">*</span> </label>
+      <div class="col-sm-8">
+        <input type="text" placeholder="Enrollment Number" class="form-control" name="sc_number" minlength="3"
+               ng-model="newMember.sc_number"
+               ng-value="newMember.sc_number"
+               required>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" ng-disabled="addForm.$invalid" type="submit" ng-click="addForm.$valid && addNewMember(addForm)">
+    <i class="fa fa-save m-r-10"></i> Save Changes</button>
+  <button class="btn btn-danger pull-left" ng-click="closeModal()"><i class="fa fa-times"></i> Cancel</button>
+</div>

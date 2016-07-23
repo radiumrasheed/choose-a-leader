@@ -29,7 +29,8 @@ var StateSchema = new Schema({
   emailIsMatch: Boolean,
   phoneIsMatch: Boolean,
   deleted: {type: Boolean, default: false},
-  getData:false
+  getData:false,
+  notUpdatedSms:Boolean
 });
 
 module.exports = mongoose.model('VotersReg', StateSchema, 'VotersRegister');

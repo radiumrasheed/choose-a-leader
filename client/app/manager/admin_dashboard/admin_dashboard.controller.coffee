@@ -1086,3 +1086,92 @@ angular.module 'elektorApp'
 
     else
       $state.go "admin_dashboard"
+.controller 'ConfirmRecordCtrl', ($scope, VotersRegister,Member,Auth, $localStorage, $state, toastr, $modal) ->
+  Auth.me (usr) ->
+    if usr.superAdmin is true
+      $scope.canEdit = true
+
+      modal = null
+      $scope.sortType = "fullname"
+      $scope.sortReverse = false
+      $scope.searchVotersRegister = ""
+      $scope.perPage = $localStorage.votersRegisterPerPage or 15
+      $scope.currentPage = 1
+      $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
+      $scope.superAdmin = true
+
+      VotersRegister.branches (data) ->
+        $scope.branchData = data
+
+
+      $scope.load = (page) ->
+        VotersRegister.branchMembers
+          confirmed:false
+          updated: true
+          deleted: false
+          page: page
+          branchCode: $scope.selectedItem
+          perPage: $scope.perPage
+        , (voters_register, headers) ->
+          if voters_register?
+            $scope.searchHeader = true
+            $scope.voters_register = voters_register
+            $scope.total = parseInt headers "total_found"
+            $scope.pages = Math.ceil($scope.total / $scope.perPage)
+
+      $scope.pageChanged = ->
+        $localStorage.votersRegisterPerPage = $scope.perPage
+        $scope.load $scope.currentPage
+
+      $scope.editMember =(member) ->
+        $scope.selectedMember = member
+        modal = $modal.open
+          templateUrl: "app/manager/admin_dashboard/views/confirmRecord-form.html"
+          scope: $scope
+          backdrop: 'static'
+      $scope.addMember = ->
+        $scope.newMember = {}
+        modal = $modal.open
+          templateUrl: "app/manager/admin_dashboard/views/confirmRecord-add-form.html"
+          scope: $scope
+          backdrop: 'static'
+
+      $scope.closeModal = ->
+        $scope.selectedMember = null
+        $scope.exists = null
+        $scope.good = null
+        modal.dismiss()
+
+      $scope.saveVRMember = (form) ->
+        if confirm 'Are you sure you want to submit this Data?'
+          $scope.confirmed= true
+          member ={}
+          member.email = $scope.selectedMember.updatedEmail
+          member.sc_number = $scope.selectedMember.sc_number
+          member.surname = $scope.selectedMember.updatedSurname
+          member.middleName = $scope.selectedMember.updatedMiddleName
+          member.firstName = $scope.selectedMember.updatedFirstName
+          member.phone = $scope.selectedMember.updatedPhone
+          member.email = $scope.selectedMember.updatedEmail
+          member.branch = $scope.selectedMember.branchCode
+          member.verified = 1
+          member.createdBy = usr.username
+          member.confirm = true
+          Member.createNewMember member,(newMember) ->
+            if newMember.statusCode is 200
+              $scope.selectedMember.confirmed = true
+              VotersRegister.saveData $scope.selectedMember, (memb) ->
+                if memb.confirmed
+                  $scope.selectedMember.confirmed = memb.confirmed
+                  $scope.closeModal()
+                  toastr.success 'Voter was confirmed successfully'
+                else toastr.error 'Voter was confirmed but not updated'
+            else if newMember.statusCode is 304
+              $scope.selectedMember.confirmed = false
+              $scope.closeModal()
+              toastr.error newMember.message
+      $scope.addNewMember = (form) ->
+
+
+    else
+      $state.go "admin_dashboard"

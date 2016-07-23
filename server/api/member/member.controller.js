@@ -135,7 +135,7 @@ exports.create = function (req, res) {
 
     if (found.length)
     {
-      return res.json({message:'Voter Confirmed Already', statusCode:304});
+      return res.json({message:'Voter Confirmed Already, Or Seems Like This SCN Is Already Taken', statusCode:304});
     }
     else{
       delete req.body.confirm;

@@ -30,7 +30,8 @@ var MemberSchema = new Schema({
   _branch: { type: Schema.Types.ObjectId, ref: 'Branch' },
   _user: { type: Schema.Types.ObjectId, ref: 'Auth' },
   lastModified: { type: Date, default: Date.now },
-  requestCode: String
+  requestCode: String,
+  createdBy: String
 });
 
 module.exports = mongoose.model('Member', MemberSchema);
