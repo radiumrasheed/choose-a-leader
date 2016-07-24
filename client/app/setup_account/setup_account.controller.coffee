@@ -13,23 +13,20 @@ angular.module 'elektorApp'
   $scope.reset = ->
     Member.me  _member: $stateParams.id, (member, extras) ->
       $scope.member = member
-      console.log member
 
       switch extras('stage')
         when '1' then $scope.step1()
         when '2' then $scope.step2()
         when '3' then $scope.step3()
-        else $scope.redirectToDashoard()
-
+        when '4' then $scope.redirectToDashoard()
+        else $state.go 'landing'
 
     , (e) ->
       $state.go "landing"
-      toastr.error e.data
-      console.warn e.data
 
   $scope.redirectToDashoard = ->
     $state.go "landing"
-    toastr.info "You have completed Accreditation"
+    toastr.info "You have already completed Accreditation"
 
   $scope.submit = (theForm) ->
     if theForm.$valid
@@ -55,6 +52,9 @@ angular.module 'elektorApp'
     $scope.showFirst = true
     $scope.showLast = false
     $scope.showNext = false
+    $scope.confirmation = false
+    $scope.master = {}
+    $scope.accessCode = null
 
   $scope.step2 = ->
     $scope.showFirst = false
