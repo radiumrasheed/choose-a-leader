@@ -1,120 +1,125 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
 <div class="container profile">
-    <div class="row">
-        <div class="col-md-3" menu></div>
+  <div class="row">
+    <div class="col-md-3" menu></div>
 
-        <div class="col-md-9">
-            <!--<div class="row">
-                <div class="col-md-12">
-                    <div class="alert alert-success">
-                        <h5 class="text-left text-uppercase">Update Information</h5>
-                        <p class="text-white text-justify">Please fill and update your details below</p>
-                    </div>
-                </div>
-            </div>-->
+    <div ng-if="user" class="col-md-9">
+      <!--<div class="row">
+          <div class="col-md-12">
+              <div class="alert alert-success">
+                  <h5 class="text-left text-uppercase">Update Information</h5>
+                  <p class="text-white text-justify">Please fill and update your details below</p>
+              </div>
+          </div>
+      </div>-->
 
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            <h3 class="panel-title text-uppercase text-left"><i class="fa fa-user m-r-15"></i> Update Profile</h3>
-                        </div>
-                        <div class="panel-body">
-                            <form name="profileForm" class="form-horizontal">
-                                <div class="alert alert-info">
-                                  <p class="text-justify"> You can only update your Address and Date of Birth.</p>
-                                  <p class="text-justify">To update other details, please visit your branch</p>
-                                   <p class="text-right"> Fields marked <span class="required">*</span> are required.</p>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">Branch <span class="required">*</span></label>
-                                    <div class="col-md-4">
-                                        <input ng-disabled="true" class="form-control" ng-model="user._member._branch.name">
-                                    </div>
-                                    <label class="col-md-2 control-label">
-                                        Enrollment Number <span class="required">*</span>
-                                    </label>
-                                    <div class="col-md-4">
-                                        <input ng-disabled="!notAdmin()" class="form-control" ng-model="user._member.sc_number" ng-value="user._member.firstName || user._member.othername"
-                                               placeholder="First (Given) Name" required>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">Title</label>
-                                    <div class="col-md-4">
-                                        <input class="form-control" ng-model="user._member.title"
-                                               placeholder="E.g. Chief, Dr, Mr, Mrs, Prof, etc">
-                                    </div>
-                                    <label class="col-md-2 control-label">
-                                        First Name <span class="required">*</span>
-                                    </label>
-                                    <div class="col-md-4">
-                                        <input ng-disabled="!notAdmin()" class="form-control" ng-model="user._member.firstName" ng-value="user._member.firstName || user._member.othername"
-                                               placeholder="First (Given) Name" required>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">Middle Name <span class="required">*</span></label>
-                                    <div class="col-md-4">
-                                        <input ng-disabled="!notAdmin()" class="form-control" ng-model="user._member.middleName"
-                                               placeholder="Middle Name">
-                                    </div>
-                                    <label class="col-md-2 control-label">
-                                        Surname <span class="required">*</span>
-                                    </label>
-                                    <div class="col-md-4">
-                                        <input ng-disabled="!notAdmin()" class="form-control" ng-model="user._member.surname"
-                                               placeholder="Surname" required>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">Address</label>
-                                    <div class="col-md-4">
-                                        <input class="form-control" ng-model="user._member.address"
-                                               placeholder="Address">
-                                    </div>
-                                    <label class="col-md-2 control-label">Date of Birth</label>
-                                    <div class="col-md-4">
-                                        <input class="form-control" type="date" ng-model="user._member.dateOfBirth"
-                                               placeholder="Date of Birth">
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">Gender <span class="required">*</span></label>
-                                    <div class="col-md-4">
-                                        <select ng-disabled="!notAdmin()" ng-model="user._member.gender" class="form-control">
-                                            <option value="">Your Gender</option>
-                                            <option value="M">Male</option>
-                                            <option value="F">Female</option>
-                                        </select>
-
-                                    </div>
-                                    <label class="col-md-2 control-label">Email <span class="required">*</span></label>
-                                    <div class="col-md-4">
-                                        <input ng-disabled="true" class="form-control" ng-model="user._member.email"
-                                               placeholder="Email Address">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="panel-footer">
-                            <div class="text-left">
-                                Last Updated: {{ago(user._member.lastModified)}}
-                                <a class="btn-link text-success pull-right" ng-click="updateProfile(profileForm)"
-                                   ng-hide="profileForm.$invalid"><i
-                                        class="fa fa-check-square"></i> Update
-                                    Profile</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-green">
+            <div class="panel-heading">
+              <h3 class="panel-title text-uppercase text-left"><i class="fa fa-user m-r-15"></i> Update Profile</h3>
             </div>
+            <div class="panel-body">
+              <form name="profileForm" class="form-horizontal">
+                <div class="alert alert-info">
+                  <p class="text-justify"> You can only update your Address and Date of Birth.</p>
+                  <p class="text-justify">To update other details, please visit your branch</p>
+                  <p class="text-right"> Fields marked <span class="required">*</span> are required.</p>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Branch <span class="required">*</span></label>
+                  <div class="col-md-4">
+                    <input ng-disabled="true" class="form-control" ng-model="user._member._branch.name">
+                  </div>
+                  <label class="col-md-2 control-label">
+                    Enrollment Number <span class="required">*</span>
+                  </label>
+                  <div class="col-md-4">
+                    <input ng-disabled="!notAdmin()" class="form-control" ng-model="user._member.sc_number" ng-value="user._member.firstName || user._member.othername"
+                           placeholder="First (Given) Name" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Title</label>
+                  <div class="col-md-4">
+                    <input class="form-control" ng-model="user._member.title"
+                           placeholder="E.g. Chief, Dr, Mr, Mrs, Prof, etc">
+                  </div>
+                  <label class="col-md-2 control-label">
+                    First Name <span class="required">*</span>
+                  </label>
+                  <div class="col-md-4">
+                    <input ng-disabled="!notAdmin()" class="form-control" ng-model="user._member.firstName" ng-value="user._member.firstName || user._member.othername"
+                           placeholder="First (Given) Name" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Middle Name <span class="required">*</span></label>
+                  <div class="col-md-4">
+                    <input ng-disabled="!notAdmin()" class="form-control" ng-model="user._member.middleName"
+                           placeholder="Middle Name">
+                  </div>
+                  <label class="col-md-2 control-label">
+                    Surname <span class="required">*</span>
+                  </label>
+                  <div class="col-md-4">
+                    <input ng-disabled="!notAdmin()" class="form-control" ng-model="user._member.surname"
+                           placeholder="Surname" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Address</label>
+                  <div class="col-md-4">
+                    <input class="form-control" ng-model="user._member.address"
+                           placeholder="Address">
+                  </div>
+                  <label class="col-md-2 control-label">Date of Birth</label>
+                  <div class="col-md-4">
+                    <input class="form-control" type="date" ng-model="user._member.dateOfBirth"
+                           placeholder="Date of Birth">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Gender <span class="required">*</span></label>
+                  <div class="col-md-4">
+                    <select ng-disabled="!notAdmin()" ng-model="user._member.gender" class="form-control">
+                      <option value="">Your Gender</option>
+                      <option value="M">Male</option>
+                      <option value="F">Female</option>
+                    </select>
+
+                  </div>
+                  <label class="col-md-2 control-label">Email <span class="required">*</span></label>
+                  <div class="col-md-4">
+                    <input ng-disabled="true" class="form-control" ng-model="user._member.email"
+                           placeholder="Email Address">
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="panel-footer">
+              <div class="text-left">
+                Last Updated: {{ago(user._member.lastModified)}}
+                <a class="btn-link text-success pull-right" ng-click="updateProfile(profileForm)"
+                   ng-hide="profileForm.$invalid"><i
+                  class="fa fa-check-square"></i> Update
+                  Profile</a>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+    <div ng-if="!user" class="spinner">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
+  </div>
 </div>

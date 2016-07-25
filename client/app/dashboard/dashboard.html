@@ -1,115 +1,141 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
 <div ng-if="ready" class="container dashboard">
-    <div class="row">
-        <div class="col-md-3" menu>
+  <div class="row">
+    <div class="col-md-3" menu>
 
-        </div>
+    </div>
 
-        <div class="col-md-9">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="panel panel-default panel-green">
-                  <div class="panel-heading">
-                    <h3 class="panel-title text-uppercase text-left">
-                      <i class="fa fa-dashboard m-r-15"></i> Welcome, {{$user._member.title + " " + $user._member.firstName + " " + $user._member.surname}}
-                    </h3>
+    <div class="col-md-9">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-default panel-green">
+            <div class="panel-heading">
+              <h3 class="panel-title text-uppercase text-left">
+                <i class="fa fa-dashboard m-r-15"></i> Welcome, {{$user._member.title + " " + $user._member.firstName + " " + $user._member.surname}}
+              </h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="alert alert-info" role="alert">
+                    <!--<h5 class="text-left text-uppercase">Platform Usage Information</h5>-->
+                    <h5 class="text-center text-uppercase">How to vote in 3 Steps</h5>
+                    <p class="text-left"> Go to Polls to see available polls.</p>
+                    <p class=" text-left"> Click on an open poll to see available positions.</p>
+                    <p class=" text-left"> Choose candidate and VOTE.</p>
                   </div>
-                  <div class="panel-body">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="alert alert-info" role="alert">
-                          <!--<h5 class="text-left text-uppercase">Platform Usage Information</h5>-->
-                          <h5 class="text-center text-uppercase">How to vote in 3 Steps</h5>
-                          <p class="text-left">   Go to Polls to see available polls.</p>
-                          <p class=" text-left">   Click on an open poll to see available positions.</p>
-                          <p class=" text-left">   Choose candidate and VOTE.</p>
-                        </div>
+                </div>
+              </div>
+
+<!--              <div class="row col-md-10 col-md-offset-1 text-center">
+                <div class=" ">
+                  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h2 class="panel-title text-uppercase">
+                        <i class="fa fa-calendar"></i>AVAILABLE POLLS
+                      </h2>
+                    </div>
+                    <div class="panel-body">
+                      <div ng-repeat="p in polls">
+                        <a href="#" class="btn btn-primary btn-block" ng-click="showBallot(p)" ng-show="open(p)">{{p.title}}</a>
                       </div>
                     </div>
-
-                    <div class="row col-md-10 col-md-offset-1 text-center">
-                      <div class=" ">
-                        <div class="panel panel-success">
-                          <div class="panel-heading">
-                            <h2 class="panel-title text-uppercase">
-                              <i class="fa fa-calendar"></i>AVAILABLE POLLS
-                            </h2>
-                          </div>
-                          <div class="panel-body">
-                            <div ng-repeat="p in polls" >
-                              <a href="#" class="list-group-item" ng-click="showBallot(p)" ng-show="open(p)">{{p.title}}</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
-                    <div class="row col-md-10 col-md-offset-1 text-center">
-                      <div class="">
-                        <div class="panel panel-success">
-                          <div class="panel-heading">
-                            <h2 class="panel-title text-uppercase">
-                              <i class="fa fa-user"></i>My Profile
-                            </h2>
-                          </div>
-                          <div class="panel-body">
-                            <table class="col-md-6 col-md-offset-3 col-sm-12 col-xs-12 text-center table-responsive">
-                              <tr class="list-group-item" title="Full Name">
-                                <td class="text-left"><i class="fa fa-user m-r-10"></i> </td>
-                                <td class="h5 text-right">{{$user._member.title + " " + $user._member.firstName + " " + $user._member.surname}}</td>
-                              </tr>
-                              <tr class=" list-group-item" title="Enrollment Number">
-                                <td class="text-left"><i class="fa fa-credit-card m-r-10" ></i> </td>
-                                <td class="h5 center">{{$user._member.sc_number}}</td>
-                              </tr>
-                              <tr class=" list-group-item" title="Branch">
-                                <td class="text-left"><i class="fa fa-shield m-r-15"></i> </td>
-                                <td class="h5 text-center">{{$user._member.branch}}</td>
-                              </tr>
-                              <tr class=" list-group-item" title="Email Address">
-                                <td class="text-left"><i class="fa fa-envelope m-r-10"></i> </td>
-                                <td class="h5 text-center"> {{ $user._member.email}}</td>
-                              </tr>
-                            </table>
-
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-<!--
-                    <div class="row text-center col-md-6 col-sm-6">
-                      <div class=" col-md-offset-1 col-sm-offset-1">
-                        <div class="panel panel-success">
-                          <div class="panel-heading">
-                            <h2 class="panel-title text-uppercase">
-                              <i class="fa fa-calendar"></i> PAST POLLS
-                            </h2>
-                          </div>
-                          <div class="panel-body">
-                            <div ng-repeat="p in polls" >
-                              <a href="#" class="list-group-item" ng-click="showBallot(p)" ng-show="after(p.closes)">{{p.title}}</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
--->
-                    <!--<h1>{{$user._member.firstName + " " + $user._member.surname}}</h1>-->
                   </div>
-                  <div class="panel-footer">
-                    <div class="text-right">
-                      For Enquiries please contact <address><a href="mailto:elections@nba-agc.org">
-                      elections@nba-agc.org</a></address>
+                </div>
+              </div>-->
+
+              <div class="row col-md-10 col-md-offset-1 text-center">
+                <div class=" ">
+                  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h2 class="panel-title text-uppercase">
+                        <i class="fa fa-calendar"></i>UPCOMING POLLS
+                        <br>
+                        <small class="text-lowercase text-info">   Please click on the button below</small>
+                      </h2>
+                    </div>
+                    <div class="panel-body">
+                      <div ng-repeat="p in polls">
+                        <a href="#" class="btn btn-primary btn-block" ng-click="showBallot(p)" ng-show="yetToOpen(p)">{{p.title}}</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+
+              <div class="row col-md-10 col-md-offset-1 text-center">
+                <div class="">
+                  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h2 class="panel-title text-uppercase">
+                        <i class="fa fa-user"></i>My Profile
+                      </h2>
+                    </div>
+                    <div class="panel-body">
+                      <table class="col-md-6 col-md-offset-3 col-sm-12 col-xs-12 text-center table-responsive">
+                        <tr class="list-group-item" title="Full Name">
+                          <td class="text-left"><i class="fa fa-user m-r-10"></i></td>
+                          <td class="h5 text-right">{{$user._member.title + " " + $user._member.firstName + " " + $user._member.surname}}</td>
+                        </tr>
+                        <tr class=" list-group-item" title="Enrollment Number">
+                          <td class="text-left"><i class="fa fa-credit-card m-r-10"></i></td>
+                          <td class="h5 center">{{$user._member.sc_number}}</td>
+                        </tr>
+                        <tr class=" list-group-item" title="Branch">
+                          <td class="text-left"><i class="fa fa-shield m-r-15"></i></td>
+                          <td class="h5 text-center">{{$user._member.branch}}</td>
+                        </tr>
+                        <tr class=" list-group-item" title="Email Address">
+                          <td class="text-left"><i class="fa fa-envelope m-r-10"></i></td>
+                          <td class="h5 text-center"> {{ $user._member.email}}</td>
+                        </tr>
+                      </table>
+
                     </div>
                   </div>
                 </div>
               </div>
+
+              <!--
+                                  <div class="row text-center col-md-6 col-sm-6">
+                                    <div class=" col-md-offset-1 col-sm-offset-1">
+                                      <div class="panel panel-success">
+                                        <div class="panel-heading">
+                                          <h2 class="panel-title text-uppercase">
+                                            <i class="fa fa-calendar"></i> PAST POLLS
+                                          </h2>
+                                        </div>
+                                        <div class="panel-body">
+                                          <div ng-repeat="p in polls" >
+                                            <a href="#" class="list-group-item" ng-click="showBallot(p)" ng-show="after(p.closes)">{{p.title}}</a>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+              -->
+              <!--<h1>{{$user._member.firstName + " " + $user._member.surname}}</h1>-->
             </div>
-
-
+            <div class="panel-footer">
+              <div class="text-right">
+                For Enquiries please contact
+                <address><a href="mailto:elections@nba-agc.org">
+                  elections@nba-agc.org</a></address>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+
+
     </div>
+  </div>
 </div>
-<div ng-if="!ready" id="vh_loading_effect"></div>
+<div ng-if="!ready" class="spinner">
+  <div class="bounce1"></div>
+  <div class="bounce2"></div>
+  <div class="bounce3"></div>
+</div>

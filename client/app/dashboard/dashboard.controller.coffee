@@ -17,6 +17,9 @@ angular.module 'elektorApp'
       $scope.after = (dt) ->
         moment().isAfter(dt)
 
+      $scope.yetToOpen = (p) ->
+        moment().isBefore(p.opens) and moment().isBefore(p.closes)
+
       Poll.my_polls branch: user._member._branch._id, (polls) ->
         $scope.polls = polls
 
@@ -25,5 +28,5 @@ angular.module 'elektorApp'
         $scope.ends = _.find data, (d) -> d.name is "poll_ends"
 
       $scope.showBallot = (p) ->
-#        if $scope.open p then 
+#        if $scope.open p then
         $state.go "ballots", id: p._id

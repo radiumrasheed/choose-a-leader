@@ -4,6 +4,7 @@ angular.module 'elektorApp'
 .controller 'UpdatePasswordCtrl', ( $scope, Auth, toastr, $state ) ->
 
   Auth.me (user) ->
+    $scope.ready = true
     if user.role isnt "member"
       $state.go "login"
     else

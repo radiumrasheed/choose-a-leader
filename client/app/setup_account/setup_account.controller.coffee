@@ -2,10 +2,6 @@
 
 angular.module 'elektorApp'
 .controller 'SetupAccountCtrl', ($scope, $timeout, Auth, toastr, Utils, $state, $stateParams, Member, $auth, $window) ->
-  $window.onbeforeunload = ->
-    'Dear Learned, you are advised to complete accreditation!'
-
-  $window.onbeforeunload()
 
   $auth.logout()
 
@@ -18,6 +14,11 @@ angular.module 'elektorApp'
   $scope.reset = ->
     Member.me  _member: $stateParams.id, (member, extras) ->
       $scope.member = member
+
+      String::replaceAt = (index, character) ->
+        @substr(0, index) + character + @substr(index + character.length)
+
+      $scope.member.hiddenPhone = $scope.member.phone.replaceAt(4, '***')
 
       switch extras('stage')
         when '1' then $scope.step1()

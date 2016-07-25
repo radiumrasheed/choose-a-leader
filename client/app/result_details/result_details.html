@@ -3,7 +3,7 @@
 <div class="container result_details">
     <div class="row">
         <div class="col-sm-3 side-menu" menu></div>
-        <div class="col-md-9">
+        <div ng-if="poll" class="col-md-9">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-green">
@@ -92,5 +92,10 @@
             </div>
 
         </div>
+      <div ng-if="!poll" class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
     </div>
 </div>

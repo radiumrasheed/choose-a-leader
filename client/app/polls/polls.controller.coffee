@@ -17,6 +17,7 @@ angular.module 'elektorApp'
         $state.go "branch_request", id: user._member._id
 
       Poll.my_polls branch: user._member._branch._id, (polls) ->
+        $scope.ready = true
         $scope.polls = polls
 
       $scope.open = (p) ->
@@ -32,5 +33,5 @@ angular.module 'elektorApp'
         moment().isAfter(dt)
 
       $scope.showBallot = (p) ->
-#        if $scope.open p then 
+#        if $scope.open p then
         $state.go "ballots", id: p._id
