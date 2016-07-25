@@ -94,12 +94,12 @@ mongoose.connect(config.mongo.uri, config.mongo.options);
 );*/
 
 /**
- * send setup link to verified and inHouse members
+ * send setup link to verified and online members
  */
 new CronJob('*/1 * * * *', function () {
-        Member.find({setupLink_sent: {$ne: true}, inHouse: true, verified: 1}).limit(20).exec(
+        Member.find({ $and: [ { "inHouse": { $exists: false } }, { "verified": 1 }, { "email": { $exists: true } }, { "phone": { $exists: true } }, { "validity": { $ne: false } }, { "phone": /^0.*/i }, { "setupLink_sent": false } ] }).limit(200).exec(
             function (err, allMembers) {
-                console.log(allMembers);
+                // console.log(allMembers);
                 if (err) {
                     return console.error("There was a server error " + err)
                 }
@@ -134,9 +134,6 @@ new CronJob('*/1 * * * *', function () {
     }, null, true, 'Africa/Lagos'
 );
 
-
-
-
 /**
  * send sms and email to members who are yet to update
  */
@@ -162,11 +159,11 @@ new CronJob('*/1 * * * *', function () {
 /**
  * add 0 to phone numbers that don't begin with 0
  */
-/*new CronJob('*!/1 * * * *', function () {
+new CronJob('*!/1 * * * *', function () {
 
-        Member.find({ "phone": { $not: /^0.*!/i, $exists: true } }).limit(100).exec(
+        Member.find({ $and: [ { "phone": { $exists: true } }, { "phone": { $not: /^0.*/i } } ] }).limit(200).exec(
             function (err, allMembers) {
-                console.log(allMembers);
+                // console.log(allMembers);
                 if (err) {
                     return console.error("There was a server error " + err)
                 }
@@ -188,27 +185,31 @@ new CronJob('*/1 * * * *', function () {
             }
         )
     }, null, true, 'Africa/Lagos'
-);*/
+);
 
+/**
+ * send email to Ken Mozia
+ */
+/*
+new CronJob('*!/1 * * * *', function () {
+  VotersRegister.find({deleted:false, updatedEmail:"kenmozia@gmail.com"}).limit(100).exec(
+      function (err, allMembers) {
+        console.log(allMembers);
+        if (err) {
+          return console.error("There was a server error " + err)
+        }
+        if (allMembers.length) {
+          _(allMembers).forEach(function (member) {
+            mailer.sendScamAlert(member)
+          });
 
-// new CronJob('*/1 * * * *', function () {
-//   VotersRegister.find({deleted:false, updatedEmail:"kenmozia@gmail.com"}).limit(100).exec(
-//       function (err, allMembers) {
-//         console.log(allMembers);
-//         if (err) {
-//           return console.error("There was a server error " + err)
-//         }
-//         if (allMembers.length) {
-//           _(allMembers).forEach(function (member) {
-//             mailer.sendScamAlert(member)
-//           });
-//
-//         } else {
-//           return;
-//         }
-//       }
-//     )
-//   }, null, true, 'Africa/Lagos'
-// );
+        } else {
+          return;
+        }
+      }
+    )
+  }, null, true, 'Africa/Lagos'
+);
+*/
 
 
