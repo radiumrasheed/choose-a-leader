@@ -1,7 +1,12 @@
 'use strict'
 
 angular.module 'elektorApp'
-.controller 'SetupAccountCtrl', ($scope, $timeout, Auth, toastr, Utils, $state, $stateParams, Member, $auth) ->
+.controller 'SetupAccountCtrl', ($scope, $timeout, Auth, toastr, Utils, $state, $stateParams, Member, $auth, $window) ->
+  $window.onbeforeunload = ->
+    'Dear Learned, you are advised to complete accreditation!'
+
+  $window.onbeforeunload()
+
   $auth.logout()
 
   $scope.showFirst = true
