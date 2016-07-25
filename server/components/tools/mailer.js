@@ -266,7 +266,7 @@ exports.sendSetupLink = function(phone, email, _id, name, next) {
 exports.sendDetailLink = function(phone, email, _id, name, next) {
 	//TODO: replace with valid link
 	var link = 'https://election.nba-agc.org/pre_setup/' + _id + '/';
-	var __message = 'Welcome to NBA 2016 e-Voting Portal, Kindly visit the link below to confirm your details in order to start the accreditation process. ' + link;
+	var __message = 'Test SMS. ';
 /*
 	var __message = 'Sir, please find sample title: NBA-2016';
 */
@@ -288,7 +288,7 @@ exports.sendDetailLink = function(phone, email, _id, name, next) {
 			});
 		},
 		function (cb) {
-			if (email!=undefined && email!=null) {
+			/*if (email!=undefined && email!=null) {
 				var newMessage = message;
 				newMessage.html = html_message;
 				newMessage.subject = 'Welcome to the NBA 2016 e-Voting Portal';
@@ -299,10 +299,11 @@ exports.sendDetailLink = function(phone, email, _id, name, next) {
 				});
 			} else {
 				return cb(null, 'INVALID LOGIN - EMAIL NOT SENT');
-			}
+			}*/
+      return cb(null, 'sms');
 		}
 	], function (err, results) {
-		console.info("detail request link sent as SMS and Email ", results);
+		console.info("test SMS sent as sms ", results);
 		return next();
 	});
 };
