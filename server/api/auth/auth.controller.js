@@ -269,8 +269,7 @@ exports.confirm = function (req, res) {
 
         mailer.sendConfirmationSMS(phone, member.email, function () {
           return res.status(200).json({
-            message: "CONGRATULATIONS. You have been accredited!" +
-            " Confirmed"
+            message: "CONGRATULATIONS. You have been successfully accredited!"
           });
         });
       });
