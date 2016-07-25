@@ -102,7 +102,7 @@
               </div>
             </div>
 
-            <div class="form-group">
+            <div ng-hide="true" class="form-group">
               <label class="col-sm-5 col-xs-6 control-label text-right">Middle Name </label>
               <div class="col-sm-7 col-xs-6">
                 <input type="text" placeholder="MIDDLE NAME" class="form-control"
@@ -145,13 +145,15 @@
         </div>
         <div class="panel-footer">
           <div class="row">
+<!--
             <div class="col-sm-5 col-xs-5">
               <button class="btn btn-danger btn-block" type="reset" ng-disabled="!setupForm.$dirty"
                       ng-click="reset() && setupForm.$setPristine()"><i
                 class="fa fa-times"></i> RESET
               </button>
             </div>
-            <div class="col-sm-7 col-xs-7">
+-->
+            <div class="col-sm-6 col-sm-offset-3 col-xs-offset-3 col-xs-6">
               <button class="btn btn-default btn-block"
                       ng-disabled="setupForm.$invalid || (setupForm.$valid && member.phone != phone_conf) || submitting"
                       ng-click="submit(setupForm)"><i
@@ -178,8 +180,7 @@
           <div class="alert alert-warning" ng-show="jumped">
             <span>PLEASE PROVIDE THE USERNAME AND PASSWORD SENT TO YOUR PHONE OR EMAIL </span>
             <br>
-            <br>
-            <strong>or <a class="text-info" href="#" ng-click="resendPassword()" ng-disabled="resendingPassword">CLICK HERE </a>to have it resent to you</strong>
+
           </div>
           <br><br>
           <div class="row">
@@ -199,14 +200,14 @@
               </div>
 
               <div class="form-group">
-                <label class="col-sm-5 col-xs-6 control-label">Current Password <span class="required">*</span> </label>
+                <label class="col-sm-5 col-xs-6 control-label">Current Password <span class="required">*</span><br> <small class="text-danger" style="font-size: 75%;">already sent to your phone and email</small></label>
                 <div class="col-sm-7 col-xs-6">
                   <input class="form-control form-control-warning" type="password" name="current_password"
                          ng-model="u.current_password" ng-minlength="6"
                          placeholder="Enter current password" required >
                   <div class="text-center m-t-10">
-                    <small class="text-danger" ng-hide="pwdForm.current_password.$valid">
-                      Password is CASE SENSITIVE
+                    <small class="text-danger" style="font-size: 70%;" ng-hide="pwdForm.current_password.$valid">
+                      All passwords are CASE SENSITIVE
                     </small>
                   </div>
                 </div>
@@ -239,14 +240,15 @@
                       ng-disabled="pwdForm.$invalid || (pwdForm.$valid && u.password != password_cnf) || submitting"
                       class="btn btn-default">Change Password
               </button>
+              <div class="text-center">
+                <br>
+                <small>If you havn't received your username and password,  <a class="text-info" href="#" ng-click="resendPassword()" ng-disabled="resendingPassword">CLICK HERE </a>to have it resent to you</small>
+              </div>
             </form>
           </div>
-          <br><br>
         </div>
         <div class="panel-footer">
-          <div class="text-left">
 
-          </div>
         </div>
       </div>
 
@@ -262,10 +264,7 @@
           <form name="accessForm" class="form-horizontal">
 
             <p class="alert alert-warning">One more step to go. Accreditation Code has been sent to your phone and email. Please enter it below</p>
-            <p >If you didn't get the
-              message, please <a ng-click="resendCode()" ng-disabled="resendingCode" href="#"
-                                 class="text-primary"><strong>Click
-                Here</strong></a> to resend it </p>
+
 
             <div class="form-group">
               <div class="col-sm-6 col-sm-offset-3">
@@ -274,24 +273,23 @@
                        class="form-control input-lg" ng-model="master.accessCode"  required>
               </div>
             </div>
-
-          </form>
-        </div>
-        <div class="panel-footer">
-          <div class="row">
-            <div class="col-sm-5">
-              <button class="btn btn-danger btn-block"
-                      ng-click="showNext=false"><i
-                class="fa fa-times"></i> BACK
-              </button>
-            </div>
-            <div class="col-sm-7">
+            <div class="col-sm-6 col-sm-offset-3 col-xs-offset-3 col-xs-6">
               <button class="btn btn-default btn-block" ng-disabled="accessForm.$invalid || submitting"
                       ng-click="compareCode(accessForm)"><i
                 class="fa fa-check"></i> CONFIRM CODE
               </button>
             </div>
+          </form>
+        </div>
+        <div class="panel-footer">
+          <div class="text-info">
+            <p >If you didn't get the
+              message, please <a ng-click="resendCode()" ng-disabled="resendingCode" href="#"
+                                 class="text-primary"><strong>Click
+                Here</strong></a> to resend it </p>
+
           </div>
+
         </div>
       </div>
 
@@ -301,8 +299,8 @@
           <div class="row">
             <div class="col-md-12 text-center" style="margin-top: 10px; margin-bottom: 10px">
               <h2><span class="text-uppercase text-white text-bold">{{confirmationMessage}}</span></h2>
-              <a ui-sref="login"><label class=" h4 text-white">Click here to
-                Login</label></a>
+              <a ui-sref="login"class="btn btn-primary h3 text-white">You can now click here to
+                Login</a>
             </div>
           </div>
         </div>

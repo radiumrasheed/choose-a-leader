@@ -27,6 +27,24 @@
                         </div>
                       </div>
                     </div>
+
+                    <div class="row col-md-10 col-md-offset-1 text-center">
+                      <div class=" ">
+                        <div class="panel panel-success">
+                          <div class="panel-heading">
+                            <h2 class="panel-title text-uppercase">
+                              <i class="fa fa-calendar"></i>AVAILABLE POLLS
+                            </h2>
+                          </div>
+                          <div class="panel-body">
+                            <div ng-repeat="p in polls" >
+                              <a href="#" class="list-group-item" ng-click="showBallot(p)" ng-show="open(p)">{{p.title}}</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
                     <div class="row col-md-10 col-md-offset-1 text-center">
                       <div class="">
                         <div class="panel panel-success">
@@ -59,23 +77,8 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row text-center col-md-6 col-sm-6">
-                      <div class="col-md-offset-1 col-sm-offset-1 ">
-                        <div class="panel panel-success">
-                          <div class="panel-heading">
-                            <h2 class="panel-title text-uppercase">
-                              <i class="fa fa-calendar"></i>AVAILABLE POLLS
-                            </h2>
-                          </div>
-                          <div class="panel-body">
-                              <div ng-repeat="p in polls" >
-                                <a href="#" class="list-group-item" ng-click="showBallot(p)" ng-show="open(p)">{{p.title}}</a>
-                              </div>
-                            </div>
-                        </div>
-                      </div>
 
-                    </div>
+<!--
                     <div class="row text-center col-md-6 col-sm-6">
                       <div class=" col-md-offset-1 col-sm-offset-1">
                         <div class="panel panel-success">
@@ -92,6 +95,7 @@
                         </div>
                       </div>
                     </div>
+-->
                     <!--<h1>{{$user._member.firstName + " " + $user._member.surname}}</h1>-->
                   </div>
                   <div class="panel-footer">
