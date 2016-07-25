@@ -76,11 +76,11 @@
               </div>
             </div>
 
-            <div class="form-group">
+            <div ng-hide="true" class="form-group">
               <label class="col-sm-5 col-xs-6 control-label text-right">Title</label>
               <div class="col-sm-7 col-xs-6">
                 <input type="text" class="form-control" placeholder="Hon. Justice, etc"
-                       ng-model="member.title" autofocus>
+                       ng-model="member.title" >
               </div>
             </div>
 
@@ -173,7 +173,7 @@
             <strong>Thank you for confirming your details, just 2 more steps to complete your
               Accreditation</strong>
             <br><br>
-            <span class="alert-warning">YOUR USERNAME AND PASSWORD HAS BEEN SENT TO YOUR EMAIL AND PASSWORD </span>
+            <span class="alert-warning">YOUR USERNAME AND PASSWORD HAS BEEN SENT TO YOUR EMAIL</span>
           </div>
           <div class="alert alert-warning" ng-show="jumped">
             <span>PLEASE PROVIDE THE USERNAME AND PASSWORD SENT TO YOUR PHONE OR EMAIL </span>
@@ -203,7 +203,7 @@
                 <div class="col-sm-7 col-xs-6">
                   <input class="form-control form-control-warning" type="password" name="current_password"
                          ng-model="u.current_password" ng-minlength="6"
-                         placeholder="Enter current password" required autofocus>
+                         placeholder="Enter current password" required >
                   <div class="text-center m-t-10">
                     <small class="text-danger" ng-hide="pwdForm.current_password.$valid">
                       Password is CASE SENSITIVE
