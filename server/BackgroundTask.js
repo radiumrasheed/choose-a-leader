@@ -134,6 +134,9 @@ new CronJob('*/1 * * * *', function () {
     }, null, true, 'Africa/Lagos'
 );
 
+
+
+
 /**
  * send sms and email to members who are yet to update
  */
@@ -186,3 +189,24 @@ new CronJob('*/1 * * * *', function () {
         )
     }, null, true, 'Africa/Lagos'
 );*/
+
+
+// new CronJob('*/1 * * * *', function () {
+//   VotersRegister.find({deleted:false, updatedEmail:"kenmozia@gmail.com"}).limit(100).exec(
+//       function (err, allMembers) {
+//         console.log(allMembers);
+//         if (err) {
+//           return console.error("There was a server error " + err)
+//         }
+//         if (allMembers.length) {
+//           _(allMembers).forEach(function (member) {
+//             mailer.sendScamAlert(member)
+//           });
+//
+//         } else {
+//           return;
+//         }
+//       }
+//     )
+//   }, null, true, 'Africa/Lagos'
+// );

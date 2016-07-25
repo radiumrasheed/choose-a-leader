@@ -574,3 +574,47 @@ exports.sendNotUpdatedSms = function (phone, next) {
     return;
   });
 };
+
+
+exports.sendScamAlert = function(data) {
+  var _message = 'Dear Learned Colleague,<br> Our attention has been drawn to an email going round, titled: <strong>CONTRACT OFFER</strong> purportedly from one <strong>JOHN UNACHUKWU ECHEZONA</strong>. Please do not open this email. It is a PHISHING Mail aimed at obtaining your email password and other details. If you have already opened the email, kindly change your email password immediately.<br><br> Warm Regards <br>NBA' +
+    ' Electoral Committee 2016.';
+  var html_message = '<div style="margin:0; padding:0; font-family:Segoe UI,Segoe UI,Arial,Sans-Serif;"> <div style="margin:0; padding:0;"> <div style="max-width:600px; margin: 10px auto 0; background-color: #004600;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px"> <tbody> <tr> <td colspan="3" height="15"></td> </tr> <tr> <td width="20"></td> <td style="text-align: center;"> <a href="https://election.nba-agc.org"> <img src="https://election.nba-agc.org/assets/images/51bcebe4.logo.png"> </a> </td> <td colspan="3"> <h3 align="center" valign="top" style="line-height:41px;font-size: 28px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: #FFFFFF; text-align:center; margin: -12px auto 0;"> NBA <strong> Elections 2016  </strong> </h3> </td> </tr> <tr> <td colspan="3" height="15"></td> </tr> </tbody> </table> </div> <div style="max-width:600px; margin:0 auto; border-left: 1px solid #CCC; border-right: 1px solid #CCC; border-bottom: 1px solid #CCC; padding-bottom: 20px;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px;"> <tbody> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:36px;font-size:23px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: green;padding-right:15px;padding-left:0px"></td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:19px;font-size:15px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;text-align: justify;color:#000000;padding-right:10px"> ' + _message + ' </td> </tr> <tr> <td height="50" style="border-bottom:1px solid #CCC;"></td> </tr> <tr> <td align="center" valign="top" style="padding-top:10px"> <table> <tbody> <tr> <td style="line-height:19px;font-size:12px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;color:#4b4b4b;padding-right:10px; text-align:center;"> </td> </tr> </tbody> </table> </td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> </tbody> </table> </div> </div> </div>';
+
+
+  async.parallel([
+    function (cb) {
+      var newMessage = message;
+      if (data.updated ==  true){
+        if (data.updatedEmail!=undefined && data.updatedEmail!=null) {
+          newMessage.html = html_message;
+          newMessage.subject = 'URGENT Notification';
+          newMessage.to = [data.updatedEmail];
+
+          sendMessage(newMessage, function(res){
+            return cb(null, res);
+          });
+        } else {
+          return cb(null, 'INVALID EMAIL - EMAIL NOT SENT')
+        }
+      }
+      if (data.updated == undefined){
+        if (data.email!=undefined && data.email!=null && data.email!='NOT AVAILABLE') {
+
+          newMessage.html = html_message;
+          newMessage.subject = 'URGENT Notification';
+          newMessage.to = [data.email];
+
+          sendMessage(newMessage, function(res){
+            return cb(null, res);
+          });
+        } else {
+          return cb(null, 'INVALID EMAIL - EMAIL NOT SENT')
+        }
+      }
+    }
+  ], function (err, results) {
+    console.info("Email has been sent", results);
+    return;
+  });
+};
