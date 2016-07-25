@@ -83,19 +83,29 @@ new CronJob('*/1 * * * *', function () {
     function (err, allMembers) {
       console.log(allMembers);
       if (err) {
-        return console.log("There was a server error "+err)
+        return console.error("There was a server error "+err)
       }
       if (allMembers.length) {
         _(allMembers).forEach(function (member) {
-          mailer.sendSetupLink(member.phone, member.email, member._id, member.surname + ' ' + member.firstName, function () {
+            member.setup_id = member.generateHash(member._id).replace(/[/$.]/g, '');
+            member.save(function (err) {
+                if (err) {
+                   console.error(err);
+                }
 
-            console.log('Email and Sms was sent to ' + member.email + ' and '+member.phone+' respectively');
-          });
-          Member.update({_id: member._id}, {$set: {setupLink_sent: true}}, function (e) {
-            if (e) {
-              console.log(e);
-            }
-          });
+                mailer.sendSetupLink(member.phone, member.email, member.setup_id, member.surname + ' ' + member.firstName, function () {
+
+                    Member.update({_id: member._id}, {$set: {setupLink_sent: true}}, function (e) {
+                        if (e) {
+                            console.error(e);
+                        }
+                        console.log('Email and Sms was sent to ' + member.email + ' and '+member.phone+' respectively');
+
+                    });
+                });
+                
+            });
+
         });
 
       } else {

@@ -31,14 +31,24 @@ angular.module 'elektorApp'
   $scope.submit = (theForm) ->
     if theForm.$valid
       $scope.submitting = true
-      Member.createUser id: $scope.member._id, $scope.member, (user) ->
-        $scope.submitting = false
-        $scope.u = angular.copy user
-        $scope.master = angular.copy user
-        $scope.u.password = null
-        toastr.success "Your Username and default Password has been sent"
-        $scope.showNext = true
-        $scope.showFirst = false
+      Member.createUser id: $scope.member._id, $scope.member, (user, extras) ->
+        if extras('stage') is '3' || extras('stage') is 3
+          $scope.submitting = false
+          $scope.u = angular.copy user
+          $scope.master = angular.copy user
+          $scope.u.password = null
+          toastr.success "Almost done, Confirm your accreditation code"
+          $scope.showFirst = false
+          $scope.showNext = false
+          $scope.showLast = true
+        else
+          $scope.submitting = false
+          $scope.u = angular.copy user
+          $scope.master = angular.copy user
+          $scope.u.password = null
+          toastr.success "Your Username and default Password has been sent"
+          $scope.showNext = true
+          $scope.showFirst = false
       , (e)  ->
         $scope.submitting = false
         toastr.error e.data.message
@@ -98,20 +108,20 @@ angular.module 'elektorApp'
 
   $scope.resendCode = ->
     $scope.resendingCode = true
-    Auth.resendCode _member: $stateParams.id, (member) ->
+    Auth.resendCode _member: $scope.master._member, (member) ->
       toastr.info "Accreditation Code Re-Sent!"
       $scope.resendingCode = false
 
   $scope.resendPassword = ->
     $scope.resendingPassword = true
-    Member.resendPassword _member: $stateParams.id, (result) ->
+    Member.resendPassword _member: $scope.u._member, (result) ->
       toastr.info "Username and Password Re-Sent!"
       $scope.resendingPassword = false
 
   $scope.compareCode = (form) ->
     if form.$valid
       $scope.submitting = true
-      Auth.confirmCode id: $scope.master._id, code: $scope.accessCode, $scope.master, (response) ->
+      Auth.confirmCode id: $scope.master._id, code: $scope.master.accessCode, $scope.master, (response) ->
         toastr.success response.message
         $scope.submitting = false
         $scope.confirmation = true

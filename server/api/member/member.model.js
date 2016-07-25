@@ -1,6 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose'),
+    bcrypt   = require('bcrypt-nodejs'),
     Schema = mongoose.Schema;
 
 var MemberSchema = new Schema({
@@ -31,7 +32,13 @@ var MemberSchema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'Auth' },
   lastModified: { type: Date, default: Date.now },
   requestCode: String,
-  createdBy: String
+  createdBy: String,
+  setup_id: String
 });
+
+// generating a hash
+MemberSchema.methods.generateHash = function(id) {
+  return bcrypt.hashSync(id, bcrypt.genSaltSync(8), null);
+};
 
 module.exports = mongoose.model('Member', MemberSchema);

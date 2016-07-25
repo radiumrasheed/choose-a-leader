@@ -83,7 +83,7 @@ exports.show = function (req, res) {
 // Get a single member from the ID used only on SETUP ACCOUNT
 exports.showMember = function (req, res) {
     if (req.query._member) {
-        Member.findById(req.query._member).populate('_user').populate('_branch').exec(function (err, member) {
+        Member.findOne({setup_id : req.query._member}).populate('_user').populate('_branch').exec(function (err, member) {
             if (err) {
                 return handleError(res, err);
             }
@@ -175,7 +175,7 @@ exports.update = function (req, res) {
 
 exports.resendPassword = function (req, res) {
     var sendPassword = function (member, user) {
-        mailer.sendDefaultPassword(member._id, member.phone, member.email, user.otp, member.sc_number, function () {
+        mailer.sendDefaultPassword(member.setup_id, member.phone, member.email, user.otp, member.sc_number, function () {
             return res.status(200).json({message: 'Username and Password Resent!'});
         });
     };
@@ -194,7 +194,7 @@ exports.resendPassword = function (req, res) {
     });
 }
 
-// Creates a new User in auths and updates its corresponding member in the database
+// Creates a new User in auths and updates its corresponding member in the database for SETUP only
 exports.createUser = function (req, res) {
 
     var sendPassword = function (member, user) {
@@ -225,62 +225,78 @@ exports.createUser = function (req, res) {
         }
 
         else if (typeof member._user === "undefined" || member._user === null) {
-            var u = new User();
-            u.otp = randomString();
-            u.password = u.generateHash(u.otp);
-            u._member = req.query.id;
-            u.role = "member";
-            u.username = req.body.sc_number;
-            u.save(function (err) {
-                if (err) {
-                    return handleError(res, err);
+            var re = new RegExp(member.sc_number, 'i');
+            User.findOne({username : re}, 'username', function (err, user) {
+                console.log(user, member.sc_number);
+               if (err) { return handleError(res, err); }
+                if (user) {
+                    return res.status(409).json({message: 'Please contact our support team'});
                 }
-                else {
-                    Branch.findOne({name: req.body.branch}, '_id', function (err, branch) {
+                if (!user) {
+                    var u = new User();
+                    u.otp = randomString();
+                    u.password = u.generateHash(u.otp);
+                    u._member = req.query.id;
+                    u.role = "member";
+                    u.username = req.body.sc_number;
+                    u.save(function (err) {
                         if (err) {
-                            User.findOneAndRemove({"_id": u._id}, function (err) {
-                                if (err) {
-                                    return handleError(res, err);
-                                }
-                            });
                             return handleError(res, err);
                         }
-                        if (!branch) {
-                            User.findOneAndRemove({"_id": u._id}, function (err) {
+                        else {
+                            Branch.findOne({name: req.body.branch}, '_id', function (err, branch) {
                                 if (err) {
+                                    User.findOneAndRemove({"_id": u._id}, function (err) {
+                                        if (err) {
+                                            return handleError(res, err);
+                                        }
+                                    });
                                     return handleError(res, err);
                                 }
-                            });
-                            return res.status(404).json({message: "No record found for specified branch!"});
-                        }
-                        member._branch = branch._id;
-                        member._user = u._id;
-                        member.title = req.body.title;
-                        member.lastModified = new Date();
-                        if (member.accessCode === undefined || member.accessCode === '') {
-                            member.accessCode = User.randomString(8);
-                        }
-                        member.save(function (err) {
-                            if (err) {
-                                User.findOneAndRemove({"_id": u._id}, function (err) {
+                                if (!branch) {
+                                    User.findOneAndRemove({"_id": u._id}, function (err) {
+                                        if (err) {
+                                            return handleError(res, err);
+                                        }
+                                    });
+                                    return res.status(404).json({message: "No record found for specified branch!"});
+                                }
+                                member._branch = branch._id;
+                                member._user = u._id;
+                                member.title = req.body.title;
+                                member.lastModified = new Date();
+                                if (member.accessCode === undefined || member.accessCode === '') {
+                                    member.accessCode = User.randomString(8);
+                                }
+                                member.save(function (err) {
                                     if (err) {
-                                        return handleError(res, err);
+                                        User.findOneAndRemove({"_id": u._id}, function (err) {
+                                            if (err) {
+                                                return handleError(res, err);
+                                            }
+                                        });
+                                        return res.status(404).json({message: "Cannot register member"});
+                                    }
+                                    else {
+                                        sendPassword(member, u);
                                     }
                                 });
-                                return res.status(404).json({message: "Cannot register member"});
-                            }
-                            else {
-                                sendPassword(member, u);
-                            }
-                        });
+                            });
+                        }
                     });
                 }
             });
+
         }
 
         /*TODO := add check for setup-stage, if password is not changed go to step to step 2, if not confirmed, go to step 3 */
-        else if (member._user.changedPassword !== false || member.accredited !== true) {
+        else if (member._user.changedPassword !== true && member.accredited !== true) {
             res.header('stage', 2);
+            return res.status(200).json(member._user);
+        }
+
+        else if (member._user.changedPassword === true && member.accredited !== true) {
+            res.header('stage', 3);
             return res.status(200).json(member._user);
         }
 

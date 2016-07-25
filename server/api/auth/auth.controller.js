@@ -228,13 +228,13 @@ exports.sendCode = function (req, res) {
       return res.send(404);
     }
 
-    if (member.accessCode === undefined || member.accessCode === '' || member.accessCode === null) {
+    if (typeof member.accessCode === "undefined" || member.accessCode === '' || member.accessCode === null) {
       return res.status(400).json({message: "Please setup account first."});
     }
 
     var phone = extractPhoneNumber(member.phone);
 
-    mailer.sendVerificationSMS(member._id, phone, member.email, member.accessCode, function () {
+    mailer.sendVerificationSMS(member.setup_id, phone, member.email, member.accessCode, function () {
       return res.send(200);
     });
   });
@@ -258,7 +258,7 @@ exports.confirm = function (req, res) {
     if (oldConf && member.accredited === true) {
       return res.status(200).json({message: "Accreditation Code already Confirmed"});
     }
-
+    console.log(req.query, req.body);
     if (member.accessCode === req.query.code) {
       member.codeConfirmed = true;
       member.accredited = true;
@@ -349,7 +349,6 @@ exports.changePassword = function (req, res) {
         theUser.save(function (err) {
 
           if (err) {
-            console.error('fatal error');
             return handleError(res, err);
           }
           if (req.query.sendCode) {
@@ -445,7 +444,7 @@ exports.sendResetLink = function (req, res) {
       else if (member.requestCode.toLowerCase() === req.body.checkCode.toLowerCase()) {
 
         var _token = randomString();
-        var re = new RegExp('/', 'g');
+        var re = new RegExp('[$/]', 'g');
 
 
         user.tokenExpires = moment().add(3, 'hours').format();
