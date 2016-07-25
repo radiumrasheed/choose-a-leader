@@ -198,7 +198,7 @@ exports.resendPassword = function (req, res) {
 exports.createUser = function (req, res) {
 
     var sendPassword = function (member, user) {
-        mailer.sendDefaultPassword(member._id, member.phone, member.email, user.otp, member.sc_number, function () {
+        mailer.sendDefaultPassword(member.setup_id, member.phone, member.email, user.otp, member.sc_number, function () {
             return res.status(200).json(user);
         });
     };
