@@ -227,7 +227,6 @@ exports.createUser = function (req, res) {
         else if (typeof member._user === "undefined" || member._user === null) {
             var re = new RegExp(member.sc_number, 'i');
             User.findOne({username : re}, 'username', function (err, user) {
-                console.log(user, member.sc_number);
                if (err) { return handleError(res, err); }
                 if (user) {
                     return res.status(409).json({message: 'Please contact our support team'});
