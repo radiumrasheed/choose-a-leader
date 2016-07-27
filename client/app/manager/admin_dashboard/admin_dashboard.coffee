@@ -78,3 +78,7 @@ angular.module 'elektorApp'
     url: 'confirmrecord'
     templateUrl: 'app/manager/admin_dashboard/views/confirmRecord.html'
     controller: 'ConfirmRecordCtrl'
+  .state 'admin_dashboard.validity',
+    url: 'validity'
+    templateUrl: 'app/manager/admin_dashboard/views/validity_register.html'
+    controller: 'ValidityCtrl'

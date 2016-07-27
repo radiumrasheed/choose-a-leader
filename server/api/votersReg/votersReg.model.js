@@ -30,7 +30,10 @@ var StateSchema = new Schema({
   phoneIsMatch: Boolean,
   deleted: {type: Boolean, default: false},
   getData:false,
-  notUpdatedSms:Boolean
+  notUpdatedSms:Boolean,
+  sendScamAlert:Boolean,
+  validity:Boolean,
+  remarks:String
 });
 
 module.exports = mongoose.model('VotersReg', StateSchema, 'VotersRegister');

@@ -22,6 +22,9 @@ angular.module 'elektorApp'
     saveData:
       method: 'POST'
       url: '/api/votersReg/save'
+    saveData2:
+      method: 'POST'
+      url: '/api/votersReg/save2'
     getCount:
       method: 'GET'
       url: '/api/votersReg/getCount'
@@ -47,3 +50,7 @@ angular.module 'elektorApp'
       method: 'POST'
       isArray: true
       url: '/api/votersReg/getConfirmed'
+    getSpecific:
+      method: 'POST'
+      isArray: true
+      url: '/api/votersReg/specific'

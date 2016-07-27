@@ -33,7 +33,8 @@ var MemberSchema = new Schema({
   lastModified: { type: Date, default: Date.now },
   requestCode: String,
   createdBy: String,
-  setup_id: String
+  setup_id: String,
+  validity:Boolean
 });
 
 // generating a hash
