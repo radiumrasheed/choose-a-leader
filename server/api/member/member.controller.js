@@ -68,7 +68,6 @@ exports.index = function (req, res) {
         condition['_user'] = {$exists : false};
     }
     Member.find(condition).paginate((req.query.page || 1), (req.query.perPage || 25), function (err, members, total) {
-        console.log(condition);
         res.header('total_found', total);
         return res.json(members);
     });
