@@ -8,6 +8,7 @@ var router = express.Router();
 router.get('/stats', controller.stats);
 router.get('/statsByMembers', controller.statsByMembers);
 router.get('/statsByBranches', controller.statsByBranches);
+router.get('/lawyerStats', controller.lawyerStats);
 
 router.use(sessionSec);
 
