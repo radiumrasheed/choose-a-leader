@@ -66,15 +66,28 @@ angular.module 'elektorApp'
     url: 'voters_register/'
     templateUrl: 'app/manager/admin_dashboard/views/voters-register.html'
     controller: 'VotersRegisterCtrl'
+
   .state 'admin_dashboard.support',
     url: 'support'
     templateUrl: 'app/manager/admin_dashboard/views/supportandenquiry.html'
     controller: 'SupportCtrl'
+
   .state 'admin_dashboard.fixname',
     url: 'fixname'
     templateUrl: 'app/manager/admin_dashboard/views/fix-name.html'
     controller: 'NameFixCtrl'
+
   .state 'admin_dashboard.confirmrecord',
     url: 'confirmrecord'
     templateUrl: 'app/manager/admin_dashboard/views/confirmRecord.html'
     controller: 'ConfirmRecordCtrl'
+
+  .state 'admin_dashboard.board',
+    url: 'board/:id/'
+    templateUrl: 'app/manager/admin_dashboard/views/board.html'
+    controller: 'BoardCtrl'
+
+  .state 'admin_dashboard.unaccredited',
+    url: 'unaccredited'
+    templateUrl: 'app/manager/admin_dashboard/views/resend-link.html'
+    controller: 'UnaccreditedCtrl'

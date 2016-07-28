@@ -1,0 +1,58 @@
+<div ng-controller="BoardCtrl" class="panel panel-green">
+    <div class="panel-heading">
+        <div class="panel-title">
+
+            <div class="pull-right">
+                <div class="btn-primary  btn btn-xs">Positions</div>
+                <div class="btn-primary btn btn-xs">Branches</div>
+                <div class="btn-primary btn btn-xs">Lawyers</div>
+            </div>
+            <i class="fa fa-terminal"></i> BOARD
+            <br>
+        </div>
+    </div>
+
+    <div  class="panel-body">
+        <div id="Lawyers">
+
+            <div class="col-md-12">
+                <div class="panel panel-green">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <i class="fa fa-list"></i> {{poll._branch.name}}: {{poll.title}}
+                            <span class="pull-right label label-info">{{poll._branch.name}}</span>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="center print table-responsive" style="background-color: white !important;">
+                            <div class="center">
+                                <table class="table table-striped table-hover table-bordered"
+                                       style="border-collapse: separate; border-spacing: 0 5px;">
+                                    <thead>
+                                    <tr class="success">
+                                        <th class="text-center text-bold">LAWYER</th>
+                                        <th class="text-center text-bold" width="370px">BRANCH</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody ng-repeat="l in lawyerStats | orderBy:sortType">
+                                    <tr>
+                                        <td class="h6" rowspan="{{l._member.surname+' '+(l._member.firstName||l._member.othername)}}">{{p._id.name}}
+                                        </td>
+                                        <td class="text-center">{{l._member._branch.name}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="panel-footer text-left">
+
+    </div>
+</div>

@@ -24,6 +24,9 @@ angular.module 'elektorApp'
     createLink:
       method: "GET"
       url: '/api/members/createLink'
+    resendLink:
+      method: "GET"
+      url: '/api/members/resendLink'
     detailLink:
       method: 'GET'
       url: '/api/members/detailLink'
@@ -33,6 +36,13 @@ angular.module 'elektorApp'
     resendPassword:
       url: 'api/members/resendPassword'
       method: "GET"
+    stats:
+      url: 'api/members/stats'
+      method: "GET"
+    distinctBranch:
+      url: 'api/members/distinctBranch'
+      method: 'GET'
+      isArray: true
 
 .directive 'memberSelectPlugin', ( Member ) ->
   restrict: 'A'

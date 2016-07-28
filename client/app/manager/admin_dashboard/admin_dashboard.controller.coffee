@@ -4,6 +4,7 @@
 angular.module 'elektorApp'
 .controller 'AdminDashboardCtrl', ($scope, $rootScope, Auth, $state, Member) ->
   Auth.me (usr) ->
+    $scope.nohint = true
     $scope.usr = usr
     if usr.role is "admin" || usr.role is "branch_admin"
       $scope.message = 'Hello'
@@ -46,6 +47,9 @@ angular.module 'elektorApp'
           $scope.vmembers = members
           $scope.totalVerified = parseInt headers "total_found"
           $scope.ready = true
+
+      Member.stats (stats) ->
+        $scope.stats = stats
 
     else
       $state.go "dashboard"
@@ -1086,6 +1090,7 @@ angular.module 'elektorApp'
 
     else
       $state.go "admin_dashboard"
+
 .controller 'ConfirmRecordCtrl', ($scope, VotersRegister,Member,Auth, $localStorage, $state, toastr, $modal) ->
   Auth.me (usr) ->
     if usr.superAdmin is true
@@ -1172,6 +1177,89 @@ angular.module 'elektorApp'
               toastr.error newMember.message
       $scope.addNewMember = (form) ->
 
+
+    else
+      $state.go "admin_dashboard"
+
+.controller 'BoardCtrl', ($scope, Auth, Vote, $rootScope, $stateParams, Poll, $timeout) ->
+  Auth.me (usr) ->
+    Poll.positionsDetailed id : $stateParams.id, (positions)  ->
+      $scope.positions = positions
+      $scope.standings()
+
+    $scope.standings = ->
+      Vote.lawyerStats poll : $stateParams.id, (stats) ->
+        $scope.lawyerStats = stats
+
+        $rootScope.$broadcast "board_lawyerStats", stats
+        $timeout ->
+          $scope.standings()
+        , 30000
+      return
+
+.controller 'UnaccreditedCtrl', ($scope, Member, Auth, $localStorage, $state, toastr, $modal) ->
+  Auth.me (usr) ->
+    if usr.superAdmin is true
+
+      $scope.sortType = "fullname"
+      $scope.sortReverse = false
+      $scope.searchMember = ""
+      $scope.perPage = $localStorage.votersRegisterPerPage or 15
+      $scope.currentPage = 1
+      $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
+      $scope.superAdmin = true
+
+      Member.distinctBranch (data) ->
+        $scope.branchData = data
+
+      $scope.load = (page) ->
+        if $scope.searchMember is ''
+          Member.query
+            page: page
+            branchCode: $scope.selectedItem
+            unaccredited: true
+            perPage: $scope.perPage
+          , (unaccredited, headers) ->
+            if unaccredited?
+              $scope.unaccredited = unaccredited
+              $scope.searchHeader = false
+              deleted: false
+              $scope.total = parseInt headers "total_found"
+              $scope.pages = Math.ceil($scope.total / $scope.perPage)
+        else
+          Member.query
+            page: page
+            branchCode: $scope.selectedItem
+            unaccredited: true
+            perPage: $scope.perPage
+            name: $scope.searchMember
+          , (unaccredited, headers) ->
+            if unaccredited?
+              $scope.searchHeader = true
+              $scope.unaccredited = unaccredited
+              $scope.total = parseInt headers "total_found"
+              $scope.pages = Math.ceil($scope.total / $scope.perPage)
+
+      #      $scope.load $scope.currentPage
+
+      $scope.resetAll = ->
+        $scope.selectedItem = ''
+        $scope.unaccredited = null
+        $scope.searchMember = ''
+        $scope.total = 0
+        $scope.getUpdatedMembers = false
+        $scope.getConfirmedMembers = false
+
+      $scope.resetAll()
+
+      $scope.pageChanged = ->
+        $localStorage.membersPerPage = $scope.perPage
+        $scope.load $scope.currentPage
+
+      $scope.resendLink = (member) ->
+        if confirm "Resend to "+member.email+' '+member.phone
+          Member.resendLink id : member._id, (response) ->
+            alert "setup link sent to " + response.email
 
     else
       $state.go "admin_dashboard"
