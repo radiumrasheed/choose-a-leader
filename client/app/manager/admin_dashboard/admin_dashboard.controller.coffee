@@ -1180,6 +1180,57 @@ angular.module 'elektorApp'
 
     else
       $state.go "admin_dashboard"
+.controller 'ValidityCtrl', ($scope, VotersRegister,Member,Auth, $localStorage,toastr,$state) ->
+  Auth.me (usr) ->
+    if usr.superAdmin is true
+      request = {}
+      $scope.sortType = "fullname"
+      $scope.sortReverse = false
+      $scope.perPage = $localStorage.votersRegisterPerPage or 15
+      $scope.currentPage = 1
+      $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
+      $scope.superAdmin = true
+
+      VotersRegister.branches (data) ->
+        $scope.branchData = data
+
+      $scope.pageChanged = ->
+        $localStorage.votersRegisterPerPage = $scope.perPage
+        $scope.load $scope.currentPage
+      $scope.load = (page) ->
+        VotersRegister.getSpecific
+          updated: true
+          deleted: false
+          page: page
+          branchCode: $scope.selectedBranch
+          perPage: $scope.perPage
+        , (voters_register, headers) ->
+          if voters_register?
+            $scope.searchHeader = true
+            $scope.voters_register = voters_register
+            $scope.total = parseInt headers "total_found"
+            $scope.pages = Math.ceil($scope.total / $scope.perPage)
+
+      $scope.saveValidity = (m,index,remarks) ->
+
+        request._id = m._id
+        request.validity = false
+        request.remarks = remarks
+
+        VotersRegister.saveData2 request, (data) ->
+          if m.confirmed is true
+            request.email = m.updatedEmail
+            request.sc_number = m.sc_number
+            Member.updateSurname request,(d) ->
+              toastr.success "Voter FLagged in Voters register and Member"
+              m.validity = true
+          else
+            toastr.success "Voter FLagged in Voters register"
+            m.validity = true
+
+
+
+
 
 .controller 'BoardCtrl', ($scope, Auth, Vote, $rootScope, $stateParams, Poll, $timeout) ->
   Auth.me (usr) ->

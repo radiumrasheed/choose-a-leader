@@ -5,7 +5,8 @@ var VotersReg = require('./votersReg.model'),
     DelVotersReg = require('./delVotersReg.model'),
     mailer = require('../../components/tools/mailer'),
     async = require('async'),
-    Branches = require('../branch/branch.model');
+    Branches = require('../branch/branch.model'),
+    Lawyer = require('../member/Lawyer.model');
 
 // var redis = require('redis'),
 //     config = require('../../config/environment'),
@@ -240,8 +241,8 @@ exports.update = function (req, res) {
             }
         }
       else {
-          mailer.sendUpdatedRecordsToBoth(req.body)
-        }
+            mailer.sendUpdatedRecordsToBoth(req.body)
+          }
         if (req.body.prevModifiedBy && req.body.prevModifiedDate) {
             //save previous data if data is being modified
             delete details.prevDataModified;
@@ -446,6 +447,84 @@ exports.getConfirmed = function (req,res) {
 
     return sendData(total, members);
     });
+};
+
+exports.getSpecific = function (req, res) {
+  var pageNo = req.body.page || 1,
+    perPage = req.body.perPage || 25;
+
+  var condition = {
+    validity:{$ne:false}
+  };
+
+  if (req.body.branchCode) {
+    condition['branchCode'] = req.body.branchCode;
+  }
+
+  if (req.body.deleted == false) {
+    condition["deleted"] = false;
+  }
+
+  if (req.body.updated == true) {
+    condition["updated"] = true;
+  }
+
+
+
+  function sendData(total, members) {
+    res.header('total_found', total);
+    return res.json(members);
+  }
+  VotersReg.find(condition).select('updatedSurname updatedMiddleName updatedFirstName updatedEmail sc_number confirmed _id').sort('updatedSurname').paginate(pageNo, perPage, function (err, members, total) {
+
+    async.forEachSeries(members, function (member, callback) {
+      var updated = {};
+      async.series([
+        function (callback) {
+          var scnumber = member.sc_number.toLowerCase().replace('scn','').replace('.','').replace(':','').replace('sc','').replace(',','').trim();
+          scnumber = new RegExp(scnumber, 'i');
+          Lawyer.findOne({scNumber:scnumber}).select('fullname scNumber -_id').exec(function (err,result) {
+            updated =  _.merge(member, result);
+            callback();
+          })
+      },
+      function (callback) {
+          member = updated;
+        console.log(member);
+        callback();
+      }],function (err) {
+        if (err)
+        {
+          return next(err);
+        }
+        // console.log(members);
+        callback();
+      });
+
+    },function () {
+      return sendData(total, members);
+    });
+
+  });
+
+};
+
+exports.update2 = function (req, res) {
+  VotersReg.findById(req.body._id, function (err, details) {
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!details) {
+      return res.send(404);
+    }
+    var updated = _.merge(details, req.body);
+    updated.save(function (err, savedUpdated) {
+      if (err) {
+        return handleError(res, err);
+      }
+      return res.json(200, savedUpdated);
+    });
+  });
 };
 
 function handleError(res, err) {

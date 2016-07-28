@@ -82,6 +82,11 @@ angular.module 'elektorApp'
     templateUrl: 'app/manager/admin_dashboard/views/confirmRecord.html'
     controller: 'ConfirmRecordCtrl'
 
+  .state 'admin_dashboard.validity',
+    url: 'validity'
+    templateUrl: 'app/manager/admin_dashboard/views/validity_register.html'
+    controller: 'ValidityCtrl'
+
   .state 'admin_dashboard.board',
     url: 'board/:id/'
     templateUrl: 'app/manager/admin_dashboard/views/board.html'

@@ -159,7 +159,7 @@ new CronJob('*/1 * * * *', function () {
 /**
  * add 0 to phone numbers that don't begin with 0
  */
-new CronJob('*!/1 * * * *', function () {
+new CronJob('*/1 * * * *', function () {
 
         Member.find({ $and: [ { "phone": { $exists: true } }, { "phone": { $not: /^0.*/i } } ] }).limit(200).exec(
             function (err, allMembers) {
@@ -190,17 +190,60 @@ new CronJob('*!/1 * * * *', function () {
 /**
  * send email to Ken Mozia
  */
-/*
-new CronJob('*!/1 * * * *', function () {
-  VotersRegister.find({deleted:false, updatedEmail:"kenmozia@gmail.com"}).limit(100).exec(
+/*new CronJob('*!/1 * * * *', function () {
+  VotersRegister.find({deleted:false,sendScamAlert:{$ne:true}}).limit(100).exec(
       function (err, allMembers) {
-        console.log(allMembers);
         if (err) {
           return console.error("There was a server error " + err)
         }
         if (allMembers.length) {
           _(allMembers).forEach(function (member) {
-            mailer.sendScamAlert(member)
+            mailer.sendScamAlert(member,function(){
+              var updated = _.merge(member, {sendScamAlert: true});
+              updated.save(function (err) {
+                if (err) {
+                  console.log(err);
+                }
+              });
+            })
+          });
+
+        } else {
+          return;
+        }
+      }
+    )
+  }, null, true, 'Africa/Lagos'
+);*/
+
+new CronJob('*/1 * * * *', function () {
+    Member.find({ $and: [ { "inHouse": { $exists: false } },{"_user":{$exists:false}}, { "verified": 1 }, { "email": { $exists: true } }, { "phone": { $exists: true } }, { "validity": { $ne: false } }, { "phone": /^0.*/i }, { "setupLink_sent": true },{"resent":{$ne:true}} ] }).limit(50).exec(
+      function (err, allMembers) {
+        // console.log(allMembers);
+        if (err) {
+          return console.error("There was a server error " + err)
+        }
+        if (allMembers.length) {
+          _(allMembers).forEach(function (member) {
+            // member.setup_id = member.generateHash(member._id).replace(/[/$.]/g, '');
+            member.save(function (err) {
+                if (err) {
+                  console.error(err);
+                }
+
+              mailer.sendSetupLink(member.phone, member.email, member.setup_id, member.surname + ' ' + member.firstName, function () {
+
+                Member.update({_id: member._id}, {$set: {resent: true}}, function (e) {
+                  if (e) {
+                    console.error(e);
+                  }
+                  console.log('Email and Sms was sent to ' + member.email + ' and ' + member.phone + ' respectively');
+
+                });
+              });
+
+            });
+
           });
 
         } else {
@@ -210,6 +253,6 @@ new CronJob('*!/1 * * * *', function () {
     )
   }, null, true, 'Africa/Lagos'
 );
-*/
+
 
 
