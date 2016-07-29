@@ -10,9 +10,10 @@ var ReceiptSchema = new Schema({
     emailSent: { type: Boolean, default: false },
     smsSent: { type: Boolean, default: false },
     ipAddress: String,
-    _member: { type: Schema.Types.ObjectId, ref: 'Member' },
+    _member: { type: Schema.Types.ObjectId, ref: 'Auth' },
     _votes: [{ type: Schema.Types.ObjectId, ref: 'Vote' }],
     _poll: [{ type: Schema.Types.ObjectId, ref: 'Poll' }],
+    _realMember: { type: Schema.Types.ObjectId, ref: 'Member' },
     receiptDate: { type: Date, default: Date.now }
 });
 

@@ -38,9 +38,9 @@
                                     </thead>
                                     <tbody ng-repeat="l in boardStats.lawyerStats">
                                     <tr>
-                                        <td class="h6">{{l._member.surname+' '+(l._member.firstName||l._member.othername)}}
+                                        <td class="h6">{{l._realMember.surname+' '+(l._realMember.firstName||l._realMmember.othername)}}
                                         </td>
-                                        <td class="text-center">{{l._member.branch}}</td>
+                                        <td class="text-center">{{l._realMember.branch}}</td>
                                         <td class="text-center">{{l.ipAddress}}</td>
 
 

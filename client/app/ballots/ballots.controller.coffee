@@ -97,12 +97,13 @@ angular.module 'elektorApp'
 
     $scope.submitBallot = (form) ->
       if form.$valid
-        Vote.submitBallot $scope.ballot, ->
-          toastr.success "Ballot Cast Successfully"
+        Vote.submitBallot $scope.ballot, (receipt) ->
           $state.go "ballot_receipt"
+          toastr.success "Ballot Cast Successfully"
         , (err) ->
+          $state.go "polls"
           toastr.error err.data.message
-      else toastr.error "Please fill the form before submitting."
+      else toastr.error "Please enter your password to cast vote"
 
     $scope.open = (bio) ->
       modalInstance = $modal.open(
