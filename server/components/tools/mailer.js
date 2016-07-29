@@ -208,7 +208,10 @@ exports.sendBallotReceiptSMS = function(phone, email, code, signature, next) {
 				var newMessage = message;
 				newMessage.html = html_message;
 				newMessage.subject = 'Vote Successfully Casted';
-				newMessage.to = [email];
+        // var arr = [];
+        // arr.push(email);
+        // arr.push('nba.elections@inec.gov.ng');
+        newMessage.to = [email];
 
 				sendMessage(newMessage, function(res){
 					return cb(null, res);
@@ -662,4 +665,21 @@ exports.resendSetupLink = function(phone, email, _id, name, next) {
         console.info("accreditation link sent as SMS and Email ", results);
         return next();
     });
+};
+
+
+exports.sendTest = function() {
+
+
+  var newMessage = message;
+  newMessage.html = 'Test Html Page';
+  newMessage.subject = 'URGENT Notification';
+  var arr = [];
+  arr.push('drcraig20@gmail.com');
+  arr.push('ope.olugasa@gitlimited.com');
+  newMessage.to = arr;
+
+  sendMessage(newMessage, function(res,json){
+    return json;
+  });
 };
