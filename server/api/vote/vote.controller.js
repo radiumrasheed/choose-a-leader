@@ -226,7 +226,7 @@ exports.castVote = function (req, res) {
               if (typeof req.body[k] === "object") {
                 candidateSignature[k] = req.body[k].code;
 
-                console.log(req.body[k]);
+                //console.log(req.body[k]);
                 votes.push({
                   _branch: member._branch,
                   _position: k,
