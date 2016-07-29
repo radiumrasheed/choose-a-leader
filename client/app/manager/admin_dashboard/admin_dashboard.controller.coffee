@@ -2,7 +2,7 @@
 
 
 angular.module 'elektorApp'
-.controller 'AdminDashboardCtrl', ($scope, $rootScope, Auth, $state, Member) ->
+.controller 'AdminDashboardCtrl', ($scope, $rootScope, Auth, $state, Member, $timeout) ->
   Auth.me (usr) ->
     $scope.nohint = true
     $scope.usr = usr
@@ -46,10 +46,14 @@ angular.module 'elektorApp'
         , (members, headers) ->
           $scope.vmembers = members
           $scope.totalVerified = parseInt headers "total_found"
-          $scope.ready = true
 
       Member.stats (stats) ->
         $scope.stats = stats
+        $scope.ready = true
+        $timeout ->
+          Member.stats()
+        , 30000
+      return
 
     else
       $state.go "dashboard"
@@ -1180,6 +1184,7 @@ angular.module 'elektorApp'
 
     else
       $state.go "admin_dashboard"
+
 .controller 'ValidityCtrl', ($scope, VotersRegister,Member,Auth, $localStorage,toastr,$state) ->
   Auth.me (usr) ->
     if usr.superAdmin is true
@@ -1227,10 +1232,6 @@ angular.module 'elektorApp'
           else
             toastr.success "Voter FLagged in Voters register"
             m.validity = true
-
-
-
-
 
 .controller 'BoardCtrl', ($scope, Auth, Vote, $rootScope, $stateParams, Poll, $timeout) ->
   Auth.me (usr) ->
@@ -1311,6 +1312,8 @@ angular.module 'elektorApp'
         if confirm "Resend to "+member.email+' '+member.phone
           Member.resendLink id : member._id, (response) ->
             alert "setup link sent to " + response.email
+            $scope.pageChanged()
+
 
     else
       $state.go "admin_dashboard"
