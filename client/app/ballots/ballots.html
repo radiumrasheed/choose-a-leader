@@ -3,7 +3,7 @@
 <script type="text/ng-template" id="bioModalContent.html">
 
     <div class="modal-header">
-        <button class="btn btn-warning pull-right" type="button" ng-click="closeModal()">Close</button>
+        <button class="btn btn-warning pull-right" type="button" ng-click="cancel()">Close</button>
         <h3 class="modal-title" ng-bind="bio.fullname"></h3>
         <h5 class="modal-title" ng-bind="bio.post"></h5>
     </div>
@@ -17,7 +17,7 @@
     </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-warning" type="button" ng-click="closeModal()">Close</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">Close</button>
     </div>
 </script>
 
@@ -115,7 +115,7 @@
                                         <div ng-click="setChoice(position._id, candidate)" class="col-md-6 center-block">
                                             <div>
                                                 <a href="#" class="text-bold h4 text-center" style="line-height: 3.5em;"
-                                                   ng-bind="(candidate._member.firstName||candidate._member.othername) + ' ' + candidate._member.surname"></a>
+                                                   ng-bind="candidate.fullname"></a>
                                                 <div class="printed pull-right" style="height: 60px;width: 50px; border:2px solid red;"></div>
                                             </div>
                                         </div>
