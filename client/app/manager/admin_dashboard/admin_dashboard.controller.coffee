@@ -1246,7 +1246,7 @@ angular.module 'elektorApp'
         $rootScope.$broadcast "board_lawyerStats", stats
         $timeout ->
           $scope.standings()
-        , 30000
+        , 15000
       return
 
 .controller 'UnaccreditedCtrl', ($scope, Member, Auth, $localStorage, $state, toastr, $modal) ->

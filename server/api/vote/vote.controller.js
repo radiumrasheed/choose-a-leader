@@ -9,7 +9,9 @@ var Vote = require('./vote.model'),
     Position = require('../position/position.model'),
     Receipt = require('./ballot_receipt.model'),
     Member = require('../member/member.model'),
-    Poll = require('../poll/poll.model');
+    Poll = require('../poll/poll.model'),
+    BoardBranch = require('./board_branch.model'),
+    BoardPosition = require('./board_position.model');
 
 var async = require('async');
 var mailer = require('../../components/tools/mailer');
@@ -335,8 +337,11 @@ exports.destroy = function(req, res) {
 };
 
 exports.lawyerStats = function (req, res) {
-  Receipt.find({_poll: req.query.poll}, '-code -ipAddress -signature -receiptDate')
-      .populate({path: '_poll', select: 'title', options: {limit: 30}})
+  Receipt.find({_poll: req.query.poll}, '-code -signature -receiptDate -smsSent -emailSent')
+      .populate({path: '_poll', select: 'title'})
+      .populate('_member')
+      .sort('-receiptDate')
+      .limit(5)
       .exec(function (err, Lawyers) {
         if (err) {
           return handleError(res, err);
@@ -344,6 +349,10 @@ exports.lawyerStats = function (req, res) {
         return res.status(200).json(Lawyers);
       });
 };
+
+/*exports.positionStats = function (req, res) {
+
+};*/
 
 function handleError(res, err) {
   console.log('Vote Module Error', err);

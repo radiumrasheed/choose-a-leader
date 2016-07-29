@@ -3,9 +3,9 @@
         <div class="panel-title">
 
             <div class="pull-right">
-                <div class="btn-primary  btn btn-xs">Positions</div>
-                <div class="btn-primary btn btn-xs">Branches</div>
-                <div class="btn-primary btn btn-xs">Lawyers</div>
+                <div ng-click="flag.positions=!flag.positions" class="btn-primary  btn btn-xs">Positions</div>
+                <div ng-click="flag.branches=!flag.branches" class="btn-primary btn btn-xs">Branches</div>
+                <div ng-click="flag.lawyers=!flag.lawyers" class="btn-primary btn btn-xs">Lawyers</div>
             </div>
             <i class="fa fa-terminal"></i> BOARD
             <br>
@@ -13,14 +13,13 @@
     </div>
 
     <div  class="panel-body">
-        <div id="Lawyers">
+        <div ng-if="flag.lawyers" id="Lawyers">
 
             <div class="col-md-12">
                 <div class="panel panel-green">
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <i class="fa fa-list"></i> {{poll._branch.name}}: {{poll.title}}
-                            <span class="pull-right label label-info">{{poll._branch.name}}</span>
+                            <i class="fa fa-television"></i> Last 5 Votes
                         </div>
                     </div>
                     <div class="panel-body">
@@ -32,14 +31,96 @@
                                     <thead>
                                     <tr class="success">
                                         <th class="text-center text-bold">LAWYER</th>
-                                        <th class="text-center text-bold" width="370px">BRANCH</th>
+                                        <th class="text-center text-bold">BRANCH</th>
+                                        <th class="text-center text-bold" width="370px">IP ADDRESS</th>
                                     </tr>
                                     </thead>
                                     <tbody ng-repeat="l in lawyerStats | orderBy:sortType">
                                     <tr>
-                                        <td class="h6" rowspan="{{l._member.surname+' '+(l._member.firstName||l._member.othername)}}">{{p._id.name}}
+                                        <td class="h6">{{l._member.surname+' '+(l._member.firstName||l._member.othername)}}
                                         </td>
-                                        <td class="text-center">{{l._member._branch.name}}</td>
+                                        <td class="text-center">{{l._member.branch}}</td>
+                                        <td class="text-center">{{l.ipAddress}}</td>
+
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="flag.positions" id="Positions">
+
+            <div class="col-md-12">
+                <div class="panel panel-green">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <i class="fa fa-steam"></i>Votes by Position
+                        </div>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="center print table-responsive" style="background-color: white !important;">
+                            <div class="center">
+                                <table class="table table-striped table-hover table-bordered"
+                                       style="border-collapse: separate; border-spacing: 0 5px;">
+                                    <thead>
+                                    <tr class="success">
+                                        <th class="text-center text-bold">POSITION</th>
+                                        <th class="text-center text-bold">VOTES</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody ng-repeat="p in positionStats | orderBy:sortType">
+                                    <tr>
+                                        <td class="h6">{{p.name}}
+                                        </td>
+                                        <td class="text-center">{{p.votes}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="flag.branches" id="Branches">
+
+            <div class="col-md-12">
+                <div class="panel panel-green">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <i class="fa fa-steam"></i>Votes by Braanches
+                        </div>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="center print table-responsive" style="background-color: white !important;">
+                            <div class="center">
+                                <table class="table table-striped table-hover table-bordered"
+                                       style="border-collapse: separate; border-spacing: 0 5px;">
+                                    <thead>
+                                    <tr class="success">
+                                        <th class="text-center text-bold">BRANCH</th>
+                                        <th class="text-center text-bold">VOTES</th>
+                                        <th class="text-center text-bold">ACCREDITED</th>
+                                        <th class="text-center text-bold">INVALIDATED</th>
+                                        <th class="text-center text-bold">ELIGIBLE</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody ng-repeat="p in positionStats | orderBy:sortType">
+                                    <tr>
+                                        <td class="h6">{{p.name}}
+                                        </td>
+                                        <td class="text-center">{{p.votes}}</td>
+                                        <td class="h6">{{p.accredited}}
+                                        </td>
+                                        <td class="text-center">{{p.invalidated}}</td>
+                                        <td class="h6">{{p.eligible}}
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
