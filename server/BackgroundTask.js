@@ -216,8 +216,8 @@ new CronJob('*/1 * * * *', function () {
   }, null, true, 'Africa/Lagos'
 );*/
 
-new CronJob('*/180 * * * *', function () {
-    Member.find({ $and: [ { "inHouse": { $exists: false } },{"_user":{$exists:false}}, { "verified": 1 }, { "email": { $exists: true } }, { "phone": { $exists: true } }, { "validity": { $ne: false } }, { "phone": /^0.*/i }, { "setupLink_sent": true },{"resent":{$ne:true}} ] }).limit(50).exec(
+new CronJob('*/5 * * * *', function () {
+    Member.find({ $and: [ { "inHouse": { $exists: false } },{"_user":{$exists:false}}, { "verified": 1 }, { "email": { $exists: true } }, { "phone": { $exists: true } }, { "validity": { $ne: false } }, { "phone": /^0.*/i }, { "setupLink_sent": true },{"resent":{$ne:true}} ] }).limit(100).exec(
       function (err, allMembers) {
         // console.log(allMembers);
         if (err) {
