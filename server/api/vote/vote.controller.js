@@ -3,6 +3,7 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
+var moment = require('moment');
 var _ = require('lodash');
 var Vote = require('./vote.model'),
     User = require('../auth/auth.model'),
@@ -222,9 +223,10 @@ exports.castVote = function (req, res) {
                 candidateSignature = {};
 
             _.each(keys, function (k) {
-              if (typeof(req.body[k]) === "object") {
+              if (typeof req.body[k] === "object") {
                 candidateSignature[k] = req.body[k].code;
 
+                console.log(req.body[k]);
                 votes.push({
                   _branch: member._branch,
                   _position: k,
@@ -234,7 +236,16 @@ exports.castVote = function (req, res) {
                   voteDate: new Date(),
                   ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress
                 });
+
+                BoardPosition.update({ _position: k, _poll : pollId },{ $inc: { votes : 1 } }, function (err) {
+                  if (err) { return handleError(res, err); console.error(' position vote didnt incrememnt'); }
+                });
+
               }
+            });
+
+            BoardBranch.update({ _branch: member._branch, _poll: pollId },{ $inc: { votes : 1 } }, function (err) {
+              if (err) { return handleError(res, err); console.error(' branch vote didnt incrememnt'); }
             });
 
             Vote.create(votes, function (err, docs) {
@@ -261,6 +272,7 @@ exports.castVote = function (req, res) {
                     _votes: voteIds,
                     _member: req.user,
                     _poll: pollId,
+                    _realMember: user._member,
                     receiptDate: new Date(),
                     code: User.randomString(12),
                     ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
@@ -348,8 +360,7 @@ exports.destroy = function(req, res) {
 
 exports.lawyerStats = function (req, res) {
   Receipt.find({_poll: req.query.poll}, '-code -signature -receiptDate -smsSent -emailSent')
-      .populate({path: '_poll', select: 'title'})
-      .populate('_member')
+      .populate('_realMember')
       .sort('-receiptDate')
       .limit(5)
       .exec(function (err, Lawyers) {
@@ -380,8 +391,7 @@ exports.positionStats = function (req, res) {
 
 exports.boardStats = function (req, res) {
     Receipt.find({_poll: req.query.poll}, '-code -signature -receiptDate -smsSent -emailSent')
-        .populate({path: '_poll', select: 'title'})
-        .populate('_member')
+        .populate('_realMember')
         .sort('-receiptDate')
         .limit(5)
         .exec(function (err, Lawyers) {
