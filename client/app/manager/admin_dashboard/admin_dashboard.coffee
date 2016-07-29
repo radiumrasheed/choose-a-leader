@@ -88,7 +88,7 @@ angular.module 'elektorApp'
     controller: 'ValidityCtrl'
 
   .state 'admin_dashboard.board',
-    url: 'board/:id/'
+    url: 'board/5788ca8a07111ac633075528/'
     templateUrl: 'app/manager/admin_dashboard/views/board.html'
     controller: 'BoardCtrl'
 
