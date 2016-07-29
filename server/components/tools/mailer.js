@@ -623,10 +623,12 @@ exports.sendScamAlert = function(data) {
 };
 
 exports.resendSetupLink = function(phone, email, _id, name, next) {
-    var link = 'https://election.nba-agc.org/setup/' + _id + '/';
-    var __message = 'Welcome to NBA 2016 e-Voting Portal, please visit the link below to begin accreditation .' + link;
+  var link = 'https://election.nba-agc.org/setup/' + _id + '/';
+  var __message = 'Dear ' + name + ' Welcome to NBA 2016 e-Voting Portal, please visit the link below to begin' +
+    ' accreditation .' + link;
 
-    var _message = 'Dear ' + name + ', <br><br> Welcome to the NBA 2016 e-VOTING PORTAL <br> <br> Please visit the link below to begin accreditation <br> <b> <a href="' + link + '"> <p>https://election.nba-agc.org/setup</p> </a> </b> <br>';
+  var _message = 'Dear ' + name + ', <br><br> Welcome to the NBA 2016 e-VOTING PORTAL <br> <br> Please click on the link below to begin your accreditation <br> <b> <a href="' + link + '"> <p>'+link+'</p> </a> </b> <br> OR copy the link and paste it in' +
+    ' your browser if you are having issues.';
 
     var html_message = '<div style="margin:0; padding:0; font-family:Segoe UI,Segoe UI,Arial,Sans-Serif;"> <div style="margin:0; padding:0;"> <div style="max-width:600px; margin: 10px auto 0; background-color: #004600;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px"> <tbody> <tr> <td colspan="3" height="15"></td> </tr> <tr> <td width="20"></td> <td style="text-align: center;"> <a href="https://election.nba-agc.org"> <img src="https://election.nba-agc.org/assets/images/51bcebe4.logo.png"> </a> </td> <td colspan="3"> <h3 align="center" valign="top" style="line-height:41px;font-size: 28px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: #FFFFFF; text-align:center; margin: -12px auto 0;"> NBA <strong> e-Voting Portal </strong> </h3> </td> </tr> <tr> <td colspan="3" height="15"></td> </tr> </tbody> </table> </div> <div style="max-width:600px; margin:0 auto; border-left: 1px solid #CCC; border-right: 1px solid #CCC; border-bottom: 1px solid #CCC; padding-bottom: 20px;"> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="display:block; max-width:600px;"> <tbody> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:36px;font-size:23px;font-family:Segoe UI Light,Segoe UI,Arial,Sans-Serif;color: green;padding-right:15px;padding-left:0px"></td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> <tr> <td colspan="3" height="20"></td> </tr> <tr> <td width="40"></td> <td align="left" valign="top"> <table width="520" border="0" cellspacing="0" cellpadding="0" style="display:block"> <tbody> <tr> <td align="left" valign="top" style="line-height:19px;font-size:15px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;text-align: justify;color:#000000;padding-right:10px"> ' + _message + ' </td> </tr> <tr> <td height="50" style="border-bottom:1px solid #CCC;"></td> </tr> <tr> <td align="center" valign="top" style="padding-top:10px"> <table> <tbody> <tr> <td style="line-height:19px;font-size:12px;font-family: Segoe UI,Segoe UI,Arial,Sans-Serif;color:#4b4b4b;padding-right:10px; text-align:center;"> <span style="color: #00CC39; font-weight:bold;">For enquiries,  </span> please  send emails to: elections@nba-agc.org</td> </tr> </tbody> </table> </td> </tr> </tbody> </table> </td> <td width="40"></td> </tr> </tbody> </table> </div> </div> </div>';
     var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
@@ -635,7 +637,7 @@ exports.resendSetupLink = function(phone, email, _id, name, next) {
         function (cb) {
             var destination = phone.indexOf("0") == 0 ? phone : "0"+phone;
 
-            request('http://www.smslive247.com/http/index.aspx?cmd=sendquickmsg&owneremail='+process.env.SMS_OWNER_EMAIL+'&subacct='+process.env.SMS_SUB_ACCOUNT+'&subacctpwd='+process.env.SMS_SUB_ACCOUNT_PASSWORD+'&message='+__message+'&sender='+process.env.SMS_SENDER+'&sendto='+destination+'&msgtype='+process.env.SMS_MSG_TYPE, function(error, res, body) {
+            request('http://107.20.195.151/mcast_ws_v2/index.php?user='+process.env.MCAST_USERNAME+'&password='+process.env.MCAST_PASSWORD+'&from='+process.env.SMS_FROM+'&to='+destination+'&message='+__message+'&type=json', function(error, res, body) {
                 if (error) { return console.error(error); }
                 Sms.create({ to: phone, message: __message });
 
