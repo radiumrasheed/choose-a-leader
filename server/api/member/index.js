@@ -10,12 +10,14 @@ router.post('/updateSurname', controller.updateSurname);
 router.post('/newMember', controller.create);
 router.post('/getmember',controller.getMember);
 router.get('/createLink', controller.createLink);
+router.get('/resendLink', controller.resendLink);
 router.get('/detailLink', controller.detailLink);
 router.get('/me', controller.showMember);
 router.get('/resendPassword', controller.resendPassword);
 router.put('/createUser', controller.createUser);
+router.get('/distinctBranch', controller.distinctBranch);
+router.get('/stats', controller.stats);
 router.get('/', sessionSec, controller.index);
-
 
 router.get('/:id', sessionSec, controller.show);
 router.put('/:id', sessionSec, controller.update);

@@ -5,40 +5,46 @@
         </h2>
     </div>
     <div class="panel-body">
-        <a ui-sref="." class="btn btn-block btn-lg">
+        <a ui-sref="." class="btn btn-block ">
             <i class="fa fa-dashboard"></i> HOME
         </a>
-        <a ui-sref=".branches" class="btn btn-block btn-lg" ng-hide="isBranchAdmin">
+        <a ui-sref=".board" class="btn btn-block " ng-hide="isBranchAdmin">
+            <i class="fa fa-terminal"></i> BOARD
+        </a>
+        <a ui-sref=".branches" class="btn btn-block " ng-hide="isBranchAdmin">
             <i class="fa fa-globe"></i> BRANCHES
         </a>
-        <a ui-sref=".polls" class="btn btn-block btn-lg">
+        <a ui-sref=".polls" class="btn btn-block ">
             <i class="fa fa-bullhorn"></i> POLLS
         </a>
-        <a ui-sref=".verified_register" class="btn btn-block btn-lg">
+        <a ui-sref=".verified_register" class="btn btn-block ">
             <i class="fa fa-check"></i> VERIFIED REGISTER
         </a>
-        <a ui-sref="confirm_register" class="btn btn-block btn-lg" ng-hide="isBranchAdmin">
+        <a ui-sref="confirm_register" class="btn btn-block " ng-hide="isBranchAdmin">
             <i class="fa fa-usb"></i>
             CONFIRM VOTERS
             <span class="badge" style="background-color: red">{{VotersToConfirm}}</span>
         </a>
-        <a ui-sref=".members" class="btn btn-block btn-lg">
+        <a ui-sref=".members" class="btn btn-block ">
             <i class="fa fa-group"></i> MEMBERS
         </a>
-        <a ui-sref=".branch_requests" class="btn btn-block btn-lg" ng-hide="isBranchAdmin">
+        <a ui-sref=".branch_requests" class="btn btn-block " ng-hide="isBranchAdmin">
             <i class="fa fa-edit"></i> BRANCH UPDATES
         </a>
-        <a ui-sref=".voters_register" class="btn btn-block btn-lg" ng-hide="isBranchAdmin">
+        <a ui-sref=".voters_register" class="btn btn-block " ng-hide="isBranchAdmin">
             <i class="fa fa-archive"></i> VOTERS REGISTER
         </a>
-      <a ui-sref=".support" class="btn btn-block btn-lg" ng-hide="isBranchAdmin">
+      <a ui-sref=".support" class="btn btn-block " ng-hide="isBranchAdmin">
         <i class="fa fa-hourglass"></i> COMPLAINT RESOLUTION
       </a>
-      <a ui-sref=".fixname" class="btn btn-block btn-lg" ng-hide="isBranchAdmin">
+      <a ui-sref=".fixname" class="btn btn-block " ng-hide="isBranchAdmin">
         <i class="fa fa-edit"></i> NAME CHANGE
       </a>
-      <a ui-sref=".confirmrecord" class="btn btn-block btn-lg" ng-hide="isBranchAdmin">
-        <i class="fa fa-check"></i> Confirm Branch Data
+      <a ui-sref=".confirmrecord" class="btn btn-block " ng-hide="isBranchAdmin">
+        <i class="fa fa-check"></i> CONFIRM BRANCH DATA
+      </a>
+      <a ui-sref=".unaccredited" class="btn btn-block " ng-hide="isBranchAdmin">
+        <i class="fa fa-slack"></i> UNACCREDITED
       </a>
       <a ui-sref=".validity" class="btn btn-block btn-lg" ng-hide="isBranchAdmin">
         <i class="fa fa-check"></i> SCN Verification

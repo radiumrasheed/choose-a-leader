@@ -97,7 +97,7 @@ mongoose.connect(config.mongo.uri, config.mongo.options);
  * send setup link to verified and online members
  */
 new CronJob('*/1 * * * *', function () {
-        Member.find({ $and: [ { "inHouse": { $exists: false } }, { "verified": 1 }, { "email": { $exists: true } }, { "phone": { $exists: true } }, { "validity": { $ne: false } }, { "phone": /^0.*/i }, { "setupLink_sent": false } ] }).limit(200).exec(
+        Member.find({ $and: [ { "inHouse": { $exists: false } }, { "verified": 1 }, { "email": { $exists: true } }, { "phone": { $exists: true } }, { "validity": { $ne: false } }, { "phone": /^0.*/i }, { "setupLink_sent": false } ] }).limit(50).exec(
             function (err, allMembers) {
                 // console.log(allMembers);
                 if (err) {
@@ -215,5 +215,44 @@ new CronJob('*/1 * * * *', function () {
     )
   }, null, true, 'Africa/Lagos'
 );*/
+
+new CronJob('*/5 * * * *', function () {
+    Member.find({ $and: [ { "inHouse": { $exists: false } },{"_user":{$exists:false}}, { "verified": 1 }, { "email": { $exists: true } }, { "phone": { $exists: true } }, { "validity": { $ne: false } }, { "phone": /^0.*/i }, { "setupLink_sent": true },{"resent":{$ne:true}} ] }).limit(100).exec(
+      function (err, allMembers) {
+        // console.log(allMembers);
+        if (err) {
+          return console.error("There was a server error " + err)
+        }
+        if (allMembers.length) {
+          _(allMembers).forEach(function (member) {
+            // member.setup_id = member.generateHash(member._id).replace(/[/$.]/g, '');
+            member.save(function (err) {
+                if (err) {
+                  console.error(err);
+                }
+
+              mailer.sendSetupLink(member.phone, member.email, member.setup_id, member.surname + ' ' + member.firstName, function () {
+
+                Member.update({_id: member._id}, {$set: {resent: true}}, function (e) {
+                  if (e) {
+                    console.error(e);
+                  }
+                  console.log('Email and Sms was Re-sent to ' + member.email + ' and ' + member.phone + ' respectively');
+
+                });
+              });
+
+            });
+
+          });
+
+        } else {
+          return;
+        }
+      }
+    )
+  }, null, true, 'Africa/Lagos'
+);
+
 
 

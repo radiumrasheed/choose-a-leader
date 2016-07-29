@@ -60,7 +60,13 @@ exports.index = function (req, res) {
     if (req.query._branch) {
         condition["$and"] = [{'_branch': req.query._branch}];
     }
-
+    if (req.query.branchCode) {
+        condition['branch'] = req.query.branchCode;
+    }
+    if (req.query.unaccredited) {
+        condition['setupLink_sent'] = true;
+        condition['_user'] = {$exists : false};
+    }
     Member.find(condition).paginate((req.query.page || 1), (req.query.perPage || 25), function (err, members, total) {
         res.header('total_found', total);
         return res.json(members);
@@ -307,6 +313,25 @@ exports.createUser = function (req, res) {
     });
 };
 
+//Gets a user and resends setup link as sms and mail
+exports.resendLink = function (req, res) {
+    var resendLink = function (member) {
+        mailer.resendSetupLink(member.phone, member.email, member.setup_id, member.surname + ' ' + member.firstName, function () {
+            return res.status(200).json(member);
+        });
+    };
+
+    Member.findById(req.query.id, function (err, member) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!member) {
+            return res.send(404);
+        }
+        resendLink(member);
+    });
+};
+
 //Gets a user and sends setup link as sms and mail
 exports.createLink = function (req, res) {
     var sendLink = function (member) {
@@ -367,6 +392,41 @@ exports.updateSurname = function (req, res) {
         });
     });
 };
+
+//Stats no Members
+exports.stats = function (req, res) {
+    Member.count({accredited : true}, function (err, accredited) {
+        if (err) { handleError(res, err); }
+        Member.count({_user : { $exists : true }}, function (err, started_accreditation) {
+            if (err) { handleError(res, err); }
+            Member.count( { validity: false }, function (err, invalidated) {
+                if (err) { handleError(res, err); }
+                Member.count( { setupLink_sent : true }, function (err, setupLink_sent) {
+                    if (err) { return handleError(res, err); }
+                    Member.count( { resent : true }, function (err, resent) {
+                        if (err) { return handleError(res, err); }
+                        res.status(200).json({accredited : accredited, started_accreditation : started_accreditation, invalidated :invalidated, setupLink_sent : setupLink_sent, resent : resent});
+                    });
+                });
+            });
+        });
+    });
+};
+
+
+exports.distinctBranch = function (req, res) {
+    Branch.find().distinct('name', function (err, branches) {
+        if (err) {
+            return handleError(res, err);
+        }
+
+        branches.sort();
+        branches.shift();
+
+        return res.json(200, branches);
+    });
+};
+
 
 function handleError(res, err) {
     return res.send(500, err);

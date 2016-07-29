@@ -9,7 +9,9 @@ var Vote = require('./vote.model'),
     Position = require('../position/position.model'),
     Receipt = require('./ballot_receipt.model'),
     Member = require('../member/member.model'),
-    Poll = require('../poll/poll.model');
+    Poll = require('../poll/poll.model'),
+    BoardBranch = require('./board_branch.model'),
+    BoardPosition = require('./board_position.model');
 
 var async = require('async');
 var mailer = require('../../components/tools/mailer');
@@ -200,87 +202,94 @@ exports.castVote = function (req, res) {
     if(!user) { return res.status(400).json({message: "User not found!"}); }
     if (user._member.verified!=1) { return res.status(400).json({message: "You do not have authorization to vote here."}); }
 
-    if (_usr.toString() === _pol.toString() || poll.national) {
-      // Verify Password
-      user.validPassword(req.body.password, function(err, isMatch) {
-        if (!isMatch) { return res.status(401).send({ message: 'Password Incorrect.' }); }
+    if (moment().isBefore(poll.closes)){
+      if (_usr.toString() === _pol.toString() || poll.national) {
+        // Verify Password
+        user.validPassword(req.body.password, function(err, isMatch) {
+          if (!isMatch) { return res.status(401).send({ message: 'Password Incorrect.' }); }
 
-        var member = user._member;
-        if (member.codeConfirmed) {
-          var pollId = req.body._poll;
+          var member = user._member;
+          if (member.codeConfirmed) {
+            var pollId = req.body._poll;
 
-          // Build Vote Objects
-          delete req.body.accessCode;
-          delete req.body.password;
-          delete req.body._poll;
+            // Build Vote Objects
+            delete req.body.accessCode;
+            delete req.body.password;
+            delete req.body._poll;
 
-          var keys = _.keys(req.body),
-              votes = [],
-              candidateSignature = {};
+            var keys = _.keys(req.body),
+                votes = [],
+                candidateSignature = {};
 
-          _.each(keys, function (k) {
-            if (typeof(req.body[k]) === "object") {
-              candidateSignature[k] = req.body[k].code;
+            _.each(keys, function (k) {
+              if (typeof(req.body[k]) === "object") {
+                candidateSignature[k] = req.body[k].code;
 
-              votes.push({
-                _branch: member._branch,
-                _position: k,
-                _member: req.user,
-                _poll: pollId,
-                candidate: req.body[k]._member._id,
-                voteDate: new Date(),
-                ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress
-              });
-            }
-          });
-
-          Vote.create(votes, function (err, docs) {
-            if (err) { return handleError(res, err); }
-
-            Vote.find({
-              _member: req.user,
-              _position: { $in: keys }
-            }, '_id', function (err, savedVotes) {
-
-              var voteIds = _.pluck(savedVotes, '_id');
-              // Create a Receipt after Inserting the Votes
-
-              Position.find({ _id: { $in: keys } }, function (err, signatures) {
-                var signature = "";
-                _.each(signatures, function (s) {
-                  if (typeof(candidateSignature[s._id]) === 'undefined') {
-                    candidateSignature[s._id] = '0';
-                  }
-                  signature += s.code + ":" + candidateSignature[s._id]+";";
-                });
-
-                var receipt = {
-                  _votes: voteIds,
+                votes.push({
+                  _branch: member._branch,
+                  _position: k,
                   _member: req.user,
                   _poll: pollId,
-                  receiptDate: new Date(),
-                  code: User.randomString(12),
-                  ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-                  signature: signature
-                };
+                  candidate: req.body[k]._member._id,
+                  voteDate: new Date(),
+                  ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress
+                });
+              }
+            });
 
-                Receipt.create(receipt, function (err, receipt) {
-                  // Send Receipt Code to User
-                  mailer.sendBallotReceiptSMS(member.phoneNumber || member.phone, member.email, receipt.code, receipt.signature, function () {
-                    return res.json(receipt);
+            Vote.create(votes, function (err, docs) {
+              if (err) { return handleError(res, err); }
+
+              Vote.find({
+                _member: req.user,
+                _position: { $in: keys }
+              }, '_id', function (err, savedVotes) {
+
+                var voteIds = _.pluck(savedVotes, '_id');
+                // Create a Receipt after Inserting the Votes
+
+                Position.find({ _id: { $in: keys } }, function (err, signatures) {
+                  var signature = "";
+                  _.each(signatures, function (s) {
+                    if (typeof(candidateSignature[s._id]) === 'undefined') {
+                      candidateSignature[s._id] = '0';
+                    }
+                    signature += s.code + ":" + candidateSignature[s._id]+";";
+                  });
+
+                  var receipt = {
+                    _votes: voteIds,
+                    _member: req.user,
+                    _poll: pollId,
+                    receiptDate: new Date(),
+                    code: User.randomString(12),
+                    ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+                    signature: signature
+                  };
+
+                  Receipt.create(receipt, function (err, receipt) {
+                    // Send Receipt Code to User
+                    mailer.sendBallotReceiptSMS(member.phoneNumber || member.phone, member.email, receipt.code, receipt.signature, function () {
+                      return res.json(receipt);
+                    });
                   });
                 });
               });
             });
-          });
-        }
-        else {
-          return res.status(400).json({message: "You've not been accredited. Hence, you are not eligible to vote."});
-        }
-      });
-    } else {
-      return res.status(403).json({message: "You do not have authorization to vote here."});
+          }
+          else {
+            return res.status(400).json({message: "You've not been accredited. Hence, you are not eligible to vote."});
+          }
+        });
+      } else {
+        return res.status(403).json({message: "You do not have authorization to vote here."});
+      }
     }
+
+    else {
+      return res.status(403).json({message: "Poll has closed and voting has ended."});
+    }
+
   });
 };
 
@@ -326,6 +335,24 @@ exports.destroy = function(req, res) {
     });
   });
 };
+
+exports.lawyerStats = function (req, res) {
+  Receipt.find({_poll: req.query.poll}, '-code -signature -receiptDate -smsSent -emailSent')
+      .populate({path: '_poll', select: 'title'})
+      .populate('_member')
+      .sort('-receiptDate')
+      .limit(5)
+      .exec(function (err, Lawyers) {
+        if (err) {
+          return handleError(res, err);
+        }
+        return res.status(200).json(Lawyers);
+      });
+};
+
+/*exports.positionStats = function (req, res) {
+
+};*/
 
 function handleError(res, err) {
   console.log('Vote Module Error', err);
