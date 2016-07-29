@@ -57,7 +57,7 @@
                     </div>
                     <div class="panel-body">
                       <div ng-repeat="p in polls">
-                        <a href="#" class="btn btn-primary btn-block" ng-click="showBallot(p)" ng-show="yetToOpen(p)">{{p.title}}</a>
+                        <a class="btn btn-primary btn-block" ng-click="showBallot(p)" ng-show="yetToOpen(p) || open(p)">{{p.title}}</a>
                       </div>
                     </div>
                   </div>

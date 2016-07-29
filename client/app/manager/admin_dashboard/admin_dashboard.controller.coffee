@@ -2,6 +2,7 @@
 
 
 angular.module 'elektorApp'
+
 .controller 'AdminDashboardCtrl', ($scope, $rootScope, Auth, $state, Member, $timeout) ->
   Auth.me (usr) ->
     $scope.nohint = true
@@ -1235,19 +1236,40 @@ angular.module 'elektorApp'
 
 .controller 'BoardCtrl', ($scope, Auth, Vote, $rootScope, $stateParams, Poll, $timeout) ->
   Auth.me (usr) ->
-    Poll.positionsDetailed id : $stateParams.id, (positions)  ->
-      $scope.positions = positions
+#    no sense buh pls ignore @least
+    Auth.me (usr) ->
       $scope.standings()
 
     $scope.standings = ->
-      Vote.lawyerStats poll : $stateParams.id, (stats) ->
-        $scope.lawyerStats = stats
+      Vote.boardStats poll : $stateParams.id, (b_stats) ->
+        $scope.boardStats = b_stats
 
-        $rootScope.$broadcast "board_lawyerStats", stats
+        $rootScope.$broadcast "boardStats", b_stats
         $timeout ->
           $scope.standings()
         , 15000
       return
+
+#    $scope.goFullscreen = ->
+#    # Fullscreen
+#      if myFullscreen.isEnabled()
+#        myFullscreen.cancel()
+#      else
+#        myFullscreen.all()
+#
+#      ###  Set Fullscreen to a specific
+#      element (bad practice)
+#      ###
+#
+#      # Fullscreen.enable(document.getElementById('img'))
+#      return
+#
+#    $scope.isFullScreen = false
+#
+#    $scope.goFullScreenViaWatcher = ->
+#      $scope.isFullScreen = !$scope.isFullScreen
+#      return
+
 
 .controller 'UnaccreditedCtrl', ($scope, Member, Auth, $localStorage, $state, toastr, $modal) ->
   Auth.me (usr) ->

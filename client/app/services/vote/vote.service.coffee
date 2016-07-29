@@ -28,7 +28,19 @@ angular.module 'elektorApp'
       method: 'GET'
       url: '/api/votes/statsByBranches'
       isArray: true
-    lawyerStats:
+    lawStats:
       method: 'GET'
       url: '/api/votes/lawyerStats'
       isArray: true
+    branchStats:
+      method: 'GET'
+      url: '/api/votes/branchStats'
+      isArray: true
+    positionStats:
+      method: 'GET'
+      url: '/api/votes/positionStats'
+      isArray: true
+    boardStats:
+      method: 'GET'
+      url: '/api/votes/boardStats'
+  #      isArray: true

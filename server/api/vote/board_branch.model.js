@@ -6,12 +6,13 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var BoardBranchSchema = new Schema({
-    branch: String,
+    name: String,
     votes: { type: Number, default: 0 },
     accredited: Number,
     invalidated: Number,
     eligible: Number,
-    _branch: [{ type: Schema.Types.ObjectId, ref: 'Branch' }]
+    _branch: [{ type: Schema.Types.ObjectId, ref: 'Branch' }],
+    _poll: [{ type: Schema.Types.ObjectId, ref: 'Poll' }]
 });
 
-module.exports = mongoose.model('BoardBranch', BoardBranchSchema);
+module.exports = mongoose.model('BoardBranch', BoardBranchSchema, 'BoardBranch');

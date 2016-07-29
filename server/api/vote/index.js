@@ -8,9 +8,14 @@ var router = express.Router();
 router.get('/stats', controller.stats);
 router.get('/statsByMembers', controller.statsByMembers);
 router.get('/statsByBranches', controller.statsByBranches);
-router.get('/lawyerStats', controller.lawyerStats);
 
 router.use(sessionSec);
+
+router.get('/lawyerStats', controller.lawyerStats);
+router.get('/positionStats', controller.positionStats);
+router.get('/branchStats', controller.branchStats);
+
+router.get('/boardStats', controller.boardStats);
 
 router.post('/ballot', controller.castVote);
 router.get('/receipt', controller.receipt);

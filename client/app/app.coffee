@@ -15,8 +15,8 @@ angular.module 'elektorApp', [
   'angular-loading-bar'
   'cloudinary'
   'ngFileUpload'
-  "googlechart"
-  "dibari.angular-ellipsis"
+  'googlechart'
+  'dibari.angular-ellipsis'
 ]
 
 .run ($auth, $rootScope, $window, Utils, Auth) ->

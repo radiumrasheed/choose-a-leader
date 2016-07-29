@@ -266,6 +266,16 @@ exports.castVote = function (req, res) {
                     ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
                     signature: signature
                   };
+/*
+
+                    BoardBranch.update({ name: " " },{ $inc: { votes : 1 } }, function (err) {
+                        if (error) { return handleError(res, err); console.error('vote didnt incrememnt'); }
+                    });
+
+                    BoardPosition.update({ name: " " },{ $inc: { votes : 1 } }, function (err) {
+                        if (error) { return handleError(res, err); console.error('vote didnt incrememnt'); }
+                    });
+*/
 
                   Receipt.create(receipt, function (err, receipt) {
                     // Send Receipt Code to User
@@ -350,9 +360,49 @@ exports.lawyerStats = function (req, res) {
       });
 };
 
-/*exports.positionStats = function (req, res) {
+exports.branchStats = function (req, res) {
+  BoardBranch.find({_poll: req.query.poll}, function (err, Branches) {
+        if (err) {
+          return handleError(res, err);
+        }
+        return res.status(200).json(Branches);
+      });
+};
 
-};*/
+exports.positionStats = function (req, res) {
+  BoardPosition.find({_poll: req.query.poll}, function (err, Positions) {
+    if (err) {
+      return handleError(res, err);
+    }
+    return res.status(200).json(Positions);
+  });
+};
+
+exports.boardStats = function (req, res) {
+    Receipt.find({_poll: req.query.poll}, '-code -signature -receiptDate -smsSent -emailSent')
+        .populate({path: '_poll', select: 'title'})
+        .populate('_member')
+        .sort('-receiptDate')
+        .limit(5)
+        .exec(function (err, Lawyers) {
+            if (err) {
+                return handleError(res, err);
+            }
+            BoardBranch.find({_poll: req.query.poll}, 'name votes accredited invalidated eligible').sort('name').exec( function (err, Branches) {
+                if (err) {
+                    return handleError(res, err);
+                }
+                BoardPosition.find({_poll: req.query.poll}, 'name votes').sort('index').exec( function (err, Positions) {
+                    if (err) {
+                        return handleError(res, err);
+                    }
+                    return res.status(200).json({positionStats : Positions, branchStats : Branches, lawyerStats : Lawyers});
+                });
+                // return res.status(200).json(Branches);
+            });
+            // return res.status(200).json(Lawyers);
+        });
+};
 
 function handleError(res, err) {
   console.log('Vote Module Error', err);
