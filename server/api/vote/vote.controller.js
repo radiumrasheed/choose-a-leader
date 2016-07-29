@@ -393,7 +393,7 @@ exports.boardStats = function (req, res) {
     Receipt.find({_poll: req.query.poll}, '-code -signature -receiptDate -smsSent -emailSent')
         .populate('_realMember')
         .sort('-receiptDate')
-        .limit(5)
+        .limit(10)
         .exec(function (err, Lawyers) {
             if (err) {
                 return handleError(res, err);

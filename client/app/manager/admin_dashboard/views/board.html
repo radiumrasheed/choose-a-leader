@@ -20,7 +20,7 @@
                 <div class="panel panel-green">
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <i class="fa fa-television"></i> Last 5 Votes
+                            <i class="fa fa-television"></i> Last 10 Votes
                         </div>
                     </div>
                     <div class="panel-body">
@@ -33,15 +33,16 @@
                                     <tr class="success">
                                         <th class="text-center text-bold">LAWYER</th>
                                         <th class="text-center text-bold">BRANCH</th>
-                                        <th class="text-center text-bold" width="370px">IP ADDRESS</th>
+                                        <!--<th class="text-center text-bold" width="370px">IP ADDRESS</th>-->
                                     </tr>
                                     </thead>
                                     <tbody ng-repeat="l in boardStats.lawyerStats">
                                     <tr>
-                                        <td class="h6">{{l._realMember.surname+' '+(l._realMember.firstName||l._realMmember.othername)}}
+                                        <td class="h4 text-uppercase">{{l._realMember.surname+'
+                                          '+(l._realMember.firstName||l._realMmember.othername)}}
                                         </td>
                                         <td class="text-center">{{l._realMember.branch}}</td>
-                                        <td class="text-center">{{l.ipAddress}}</td>
+                                        <!--<td class="text-center">{{l.ipAddress}}</td>-->
 
 
                                     </tr>
