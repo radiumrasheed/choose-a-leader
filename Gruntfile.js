@@ -372,8 +372,10 @@ module.exports = function (grunt) {
             'assets/images/{,*/}*.{webp}',
             'assets/fonts/**/*',
             'assets/select2/**/*',
+            'assets/seals/**/*',
             'index.html',
-            'loaderio-1e79d3aa612539c421baa13f8cab1db8.txt'
+            'loaderio-1e79d3aa612539c421baa13f8cab1db8.txt',
+            'a2f4f49c848a99027f809cf248aea2284a80bbdfc2b58c9c4b2c8c33729e7ebb.txt'
           ]
         }, {
           expand: true,

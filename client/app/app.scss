@@ -81,6 +81,12 @@ $white: #FFFFFF;
 body {
   padding-bottom: 20px;
   background-color: rgba(115, 137, 135, 0.29);
+
+  #site-seal {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
 }
 
 html { height: 100%; }
