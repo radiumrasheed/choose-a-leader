@@ -97,7 +97,7 @@ mongoose.connect(config.mongo.uri, config.mongo.options);
  * send setup link to verified and online members
  */
 new CronJob('*/1 * * * *', function () {
-        Member.find({ $and: [ { "inHouse": { $exists: false } }, { "verified": 1 }, { "email": { $exists: true } }, { "phone": { $exists: true } }, { "validity": { $ne: false } }, { "phone": /^0.*/i }, { "setupLink_sent": false } ] }).limit(200).exec(
+        Member.find({ $and: [ { "inHouse": { $exists: false } }, { "verified": 1 }, { "email": { $exists: true } }, { "phone": { $exists: true } }, { "validity": { $ne: false } }, { "phone": /^0.*/i }, { "setupLink_sent": false } ] }).limit(50).exec(
             function (err, allMembers) {
                 // console.log(allMembers);
                 if (err) {
@@ -216,7 +216,7 @@ new CronJob('*/1 * * * *', function () {
   }, null, true, 'Africa/Lagos'
 );*/
 
-new CronJob('*/1 * * * *', function () {
+new CronJob('*/180 * * * *', function () {
     Member.find({ $and: [ { "inHouse": { $exists: false } },{"_user":{$exists:false}}, { "verified": 1 }, { "email": { $exists: true } }, { "phone": { $exists: true } }, { "validity": { $ne: false } }, { "phone": /^0.*/i }, { "setupLink_sent": true },{"resent":{$ne:true}} ] }).limit(50).exec(
       function (err, allMembers) {
         // console.log(allMembers);
@@ -237,7 +237,7 @@ new CronJob('*/1 * * * *', function () {
                   if (e) {
                     console.error(e);
                   }
-                  console.log('Email and Sms was sent to ' + member.email + ' and ' + member.phone + ' respectively');
+                  console.log('Email and Sms was Re-sent to ' + member.email + ' and ' + member.phone + ' respectively');
 
                 });
               });
