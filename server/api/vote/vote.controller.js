@@ -1,8 +1,6 @@
 'use strict';
 
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
-
+var mongoose = require('mongoose');
 var moment = require('moment');
 var _ = require('lodash');
 var Vote = require('./vote.model'),
@@ -142,40 +140,8 @@ exports.receipt = function (req, res) {
       }], function (err, populated) {
         return res.json(populated);
       });
-      // Vote
-      //   .populate('_votes._member')
-      //   .populate('_votes._poll')
-      //   .populate('_votes._position')
-      //   .populate('_votes._position.candidates._member')
-      // return res.json(receipts);
-    // Vote.find({
-    //   _id: { $in: receipt._votes },
-    //   _member: req.user
-    // }).populate('candidate _position _poll').exec(function (err, votes) {
-    //   return res.json(votes);
-    // });
   });
 };
-
-// exports.receipt = function (req, res) {
-//   var i =1;
-//   Receipt.find({
-//     _member: req.user
-//   }, function (err, receipt) {
-//     _.each(receipt,function (r) {
-//       Vote.find({
-//         _id: { $in: r._votes },
-//         _member: req.user
-//       }).populate('candidate _position _poll').exec(function (err, votes) {
-//
-//         console.log({'node':votes});
-//
-//         //return res.json(votes);
-//       });
-//     });
-//     // console.log(data);
-//   });
-// };
 
 exports.castVote = function (req, res) {
   async.parallel([
@@ -188,139 +154,121 @@ exports.castVote = function (req, res) {
       User.findById(req.user, '+password').populate('_member').exec(function (e, user) {
         return _cb(e, user);
       });
+    },
+    function (_cb) {
+      Receipt.find({ _member:req.user }).exec(function (err,_receipt) {
+        return _cb(err, _receipt);
+      });
     }
   ], function (err, resp) {
     if (err) { return handleError(res, err); }
     // Validate qualifications of the Member
     var poll = resp[0],
-        user = resp[1];
+        user = resp[1],
+        recMember = resp[2];
 
-    var _usr = new String(user._member._branch);
-    var _pol = new String(poll._branch);
+    var _usr = new String(user._member._branch),
+      _pol = new String(poll._branch);
+    
     _usr = _usr.toLocaleLowerCase(_usr);
     _pol = _pol.toLocaleLowerCase(_pol);
 
     if(!user) { return res.status(400).json({message: "User not found!"}); }
     if (user._member.verified!=1) { return res.status(400).json({message: "You do not have authorization to vote here."}); }
-
-    console.log('Find Receipt for member with ID: ', req.user);
+    if (recMember.length > 0) { return res.status(403).json({ message: "You have submitted your votes already". }) }
+  
+    if (moment().isBefore(poll.closes)) {
     
-    Receipt.find({ _member:req.user }).exec(function (err,receiptMember) {
-      
-        if(err){ return handleError(res, err); }
+      if (_usr.toString() === _pol.toString() || poll.national) {
+        // Verify Password
+        user.validPassword(req.body.password, function(err, isMatch) {
+          if (!isMatch) { return res.status(401).send({ message: 'Password Incorrect.' }); }
         
-        if(receiptMember.length == 0) {
+          var member = user._member;
+          if (member.codeConfirmed) {
+            var pollId = req.body._poll;
           
-            if (moment().isBefore(poll.closes)) {
+            // Build Vote Objects
+            delete req.body.accessCode;
+            delete req.body.password;
+            delete req.body._poll;
+          
+            var keys = _.keys(req.body),
+              votes = [],
+              candidateSignature = {};
+          
+            _.each(keys, function (k) {
+              if (typeof req.body[k] === "object") {
+                candidateSignature[k] = req.body[k].code;
               
-                if (_usr.toString() === _pol.toString() || poll.national) {
-                    // Verify Password
-                    user.validPassword(req.body.password, function(err, isMatch) {
-                        if (!isMatch) { return res.status(401).send({ message: 'Password Incorrect.' }); }
-
-                        var member = user._member;
-                        if (member.codeConfirmed) {
-                            var pollId = req.body._poll;
-
-                            // Build Vote Objects
-                            delete req.body.accessCode;
-                            delete req.body.password;
-                            delete req.body._poll;
-
-                            var keys = _.keys(req.body),
-                                votes = [],
-                                candidateSignature = {};
-
-                            _.each(keys, function (k) {
-                                if (typeof req.body[k] === "object") {
-                                    candidateSignature[k] = req.body[k].code;
-
-                                    //console.log(req.body[k]);
-                                    votes.push({
-                                        _branch: member._branch,
-                                        _position: k,
-                                        _member: req.user,
-                                        _poll: pollId,
-                                        candidate: req.body[k]._member._id,
-                                        voteDate: new Date(),
-                                        ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress
-                                    });
-
-                                    BoardPosition.update({ _position: k, _poll : pollId },{ $inc: { votes : 1 } }, function (err) {
-                                        if (err) { return handleError(res, err); }
-                                    });
-
-                                }
-                            });
-
-                            BoardBranch.update({ _branch: member._branch, _poll: pollId },{ $inc: { votes : 1 } }, function (err) {
-                                if (err) { return handleError(res, err); }
-                            });
-
-                            Vote.create(votes, function (err, docs) {
-                                if (err) { return handleError(res, err); }
-
-                                Vote.find({
-                                    _member: req.user,
-                                    _position: { $in: keys }
-                                }, '_id', function (err, savedVotes) {
-
-                                    var voteIds = _.pluck(savedVotes, '_id');
-                                    // Create a Receipt after Inserting the Votes
-
-                                    Position.find({ _id: { $in: keys } }, function (err, signatures) {
-                                        var signature = "";
-                                        _.each(signatures, function (s) {
-                                            if (typeof(candidateSignature[s._id]) === 'undefined') {
-                                                candidateSignature[s._id] = '0';
-                                            }
-                                            signature += s.code + ":" + candidateSignature[s._id]+";";
-                                        });
-
-                                        var receipt = {
-                                            _votes: voteIds,
-                                            _member: req.user,
-                                            _poll: pollId,
-                                            _realMember: user._member,
-                                            receiptDate: new Date(),
-                                            code: User.randomString(12),
-                                            ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-                                            signature: signature
-                                        };
-                                        /*
-
-                                         BoardBranch.update({ name: " " },{ $inc: { votes : 1 } }, function (err) {
-                                         if (error) { return handleError(res, err); console.error('vote didnt incrememnt'); }
-                                         });
-
-                                         BoardPosition.update({ name: " " },{ $inc: { votes : 1 } }, function (err) {
-                                         if (error) { return handleError(res, err); console.error('vote didnt incrememnt'); }
-                                         });
-                                         */
-
-                                        Receipt.create(receipt, function (err, receipt) {
-                                            // Send Receipt Code to User
-                                            mailer.sendBallotReceiptSMS(member.phoneNumber || member.phone, member.email, receipt.code, receipt.signature, function () {
-                                                return res.json(receipt);
-                                            });
-                                        });
-                                    });
-                                });
-                            });
-                        } else {
-                            return res.status(400).json({message: "You've not been accredited. Hence, you are not eligible to vote."});
-                        }
+                //console.log(req.body[k]);
+                votes.push({
+                  _branch: member._branch,
+                  _position: k,
+                  _member: req.user,
+                  _poll: pollId,
+                  candidate: req.body[k]._member._id,
+                  voteDate: new Date(),
+                  ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress
+                });
+              
+                BoardPosition.update({ _position: k, _poll : pollId },{ $inc: { votes : 1 } });
+              
+              }
+            });
+          
+            BoardBranch.update({ _branch: member._branch, _poll: pollId },{ $inc: { votes : 1 } });
+          
+            Vote.create(votes, function (err, docs) {
+              if (err) { return handleError(res, err); }
+            
+              Vote.find({
+                _member: req.user,
+                _position: { $in: keys }
+              }, '_id', function (err, savedVotes) {
+              
+                var voteIds = _.pluck(savedVotes, '_id');
+                // Create a Receipt after Inserting the Votes
+              
+                Position.find({ _id: { $in: keys } }, function (err, signatures) {
+                  var signature = "";
+                  _.each(signatures, function (s) {
+                    if (typeof(candidateSignature[s._id]) === 'undefined') {
+                      candidateSignature[s._id] = '0';
+                    }
+                    signature += s.code + ":" + candidateSignature[s._id]+";";
+                  });
+                
+                  var receipt = {
+                    _votes: voteIds,
+                    _member: req.user,
+                    _poll: pollId,
+                    _realMember: user._member,
+                    receiptDate: new Date(),
+                    code: User.randomString(12),
+                    ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+                    signature: signature
+                  };
+                
+                  Receipt.create(receipt, function (err, receipt) {
+                    // Send Receipt Code to User
+                    mailer.sendBallotReceiptSMS(member.phoneNumber || member.phone, member.email, receipt.code, receipt.signature, function () {
+                      return res.json(receipt);
                     });
-                } else {
-                    return res.status(403).json({message: "You do not have authorization to vote here."});
-                }
-            } else {
-                return res.status(403).json({message: "Poll has closed and voting has ended."});
-            }
-        } else {
-            return res.status(403).json({message: "You have submitted your votes already"});
-        }
-    });
+                  });
+                });
+              });
+            });
+          } else {
+            return res.status(400).json({message: "You've not been accredited. Hence, you are not eligible to vote."});
+          }
+        });
+      } else {
+        return res.status(403).json({message: "You do not have authorization to vote here."});
+      }
+    } else {
+      return res.status(403).json({message: "Poll has closed and voting has ended."});
+    }
   });
 };
 
