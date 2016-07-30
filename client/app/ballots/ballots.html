@@ -167,7 +167,7 @@
                                         </tr>
                                         <tr ng-repeat="p in positions">
                                             <th class="text-right">{{p.name}}</th>
-                                            <td ng-if="ballot[p._id]" class="text-uppercase">{{((ballot[p._id]._member.firstName||ballot[p._id]._member.othername)+' '+ballot[p._id]._member.surname)}}
+                                            <td ng-if="ballot[p._id]" class="text-uppercase">{{(ballot[p._id].fullname)}}
                                             </td>
                                             <td ng-if="!ballot[p._id]" class="text-lowercase text-danger">- no vote -
                                             </td>
