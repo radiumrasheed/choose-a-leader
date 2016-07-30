@@ -150,147 +150,279 @@ exports.receipt = function (req, res) {
 exports.castVote = function (req, res) {
   const CACHE_KEY = "VOTED_"+req.user;
   
-  function doDefault() {
-    async.parallel([
-      function (_cb) {
-        Poll.findById(req.body._poll, function (e, poll) {
-          return _cb(e, poll);
-        });
-      },
-      function (_cb) {
-        User.findById(req.user, '+password').populate('_member').exec(function (e, user) {
-          return _cb(e, user);
-        });
-      },
-      function (_cb) {
-        Receipt.find({ _member:req.user }).exec(function (err,_receipt) {
-          return _cb(err, _receipt);
-        });
-      }
-    ], function (err, resp) {
-      if (err) { return handleError(res, err); }
-      // Validate qualifications of the Member
-      var poll = resp[0],
-        user = resp[1],
-        recMember = resp[2];
+  async.parallel([
+    function (_cb) {
+      Poll.findById(req.body._poll, function (e, poll) {
+        return _cb(e, poll);
+      });
+    },
+    function (_cb) {
+      User.findById(req.user, '+password').populate('_member').exec(function (e, user) {
+        return _cb(e, user);
+      });
+    },
+    function (_cb) {
+      Receipt.find({ _member:req.user }).exec(function (err,_receipt) {
+        return _cb(err, _receipt);
+      });
+    }
+  ], function (err, resp) {
+    if (err) { return handleError(res, err); }
+    // Validate qualifications of the Member
+    var poll = resp[0],
+      user = resp[1],
+      recMember = resp[2];
     
-      var _usr = new String(user._member._branch),
-        _pol = new String(poll._branch);
+    var _usr = new String(user._member._branch),
+      _pol = new String(poll._branch);
     
-      _usr = _usr.toLocaleLowerCase(_usr);
-      _pol = _pol.toLocaleLowerCase(_pol);
+    _usr = _usr.toLocaleLowerCase(_usr);
+    _pol = _pol.toLocaleLowerCase(_pol);
     
-      if(!user) { return res.status(400).json({message: "User not found!"}); }
-      if (user._member.verified!=1) { return res.status(400).json({message: "You do not have authorization to vote here."}); }
-      if (recMember.length > 0) { return res.status(403).json({ message: "You have submitted your votes already" }); }
+    if(!user) { return res.status(400).json({message: "User not found!"}); }
+    if (user._member.verified!=1) { return res.status(400).json({message: "You do not have authorization to vote here."}); }
+    if (recMember.length > 0) { return res.status(403).json({ message: "You have submitted your votes already" }); }
     
-      if (moment().isBefore(poll.closes)) {
+    if (moment().isBefore(poll.closes)) {
       
-        if (_usr.toString() === _pol.toString() || poll.national) {
-          // Verify Password
-          user.validPassword(req.body.password, function(err, isMatch) {
-            if (!isMatch) { return res.status(401).send({ message: 'Password Incorrect.' }); }
+      if (_usr.toString() === _pol.toString() || poll.national) {
+        // Verify Password
+        user.validPassword(req.body.password, function(err, isMatch) {
+          if (!isMatch) { return res.status(401).send({ message: 'Password Incorrect.' }); }
           
-            var member = user._member;
-            if (member.codeConfirmed) {
-              var pollId = req.body._poll;
+          var member = user._member;
+          if (member.codeConfirmed) {
+            var pollId = req.body._poll;
             
-              // Build Vote Objects
-              delete req.body.accessCode;
-              delete req.body.password;
-              delete req.body._poll;
+            // Build Vote Objects
+            delete req.body.accessCode;
+            delete req.body.password;
+            delete req.body._poll;
             
-              var keys = _.keys(req.body),
-                votes = [],
-                candidateSignature = {};
+            var keys = _.keys(req.body),
+              votes = [],
+              candidateSignature = {};
             
-              _.each(keys, function (k) {
-                if (typeof req.body[k] === "object") {
-                  candidateSignature[k] = req.body[k].code;
+            _.each(keys, function (k) {
+              if (typeof req.body[k] === "object") {
+                candidateSignature[k] = req.body[k].code;
                 
-                  //console.log(req.body[k]);
-                  votes.push({
-                    _branch: member._branch,
-                    _position: k,
+                //console.log(req.body[k]);
+                votes.push({
+                  _branch: member._branch,
+                  _position: k,
+                  _member: req.user,
+                  _poll: pollId,
+                  candidate: req.body[k]._member._id,
+                  voteDate: new Date(),
+                  ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress
+                });
+                
+                BoardPosition.update({ _position: k, _poll : pollId },{ $inc: { votes : 1 } }, function (e) {
+                  if (e) { console.log(e); }
+                });
+              }
+            });
+            
+            BoardBranch.update({ _branch: member._branch, _poll: pollId },{ $inc: { votes : 1 } }, function (e) {
+              if (e) { console.log(e); }
+            });
+            
+            Vote.create(votes, function (err, docs) {
+              if (err) { return handleError(res, err); }
+              
+              Vote.find({
+                _member: req.user,
+                _position: { $in: keys }
+              }, '_id', function (err, savedVotes) {
+                
+                var voteIds = _.pluck(savedVotes, '_id');
+                // Create a Receipt after Inserting the Votes
+                
+                Position.find({ _id: { $in: keys } }, function (err, signatures) {
+                  var signature = "";
+                  _.each(signatures, function (s) {
+                    if (typeof(candidateSignature[s._id]) === 'undefined') {
+                      candidateSignature[s._id] = '0';
+                    }
+                    signature += s.code + ":" + candidateSignature[s._id]+";";
+                  });
+                  
+                  var receipt = {
+                    _votes: voteIds,
                     _member: req.user,
                     _poll: pollId,
-                    candidate: req.body[k]._member._id,
-                    voteDate: new Date(),
-                    ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress
-                  });
-                
-                  BoardPosition.update({ _position: k, _poll : pollId },{ $inc: { votes : 1 } });
-                }
-              });
-            
-              BoardBranch.update({ _branch: member._branch, _poll: pollId },{ $inc: { votes : 1 } });
-            
-              Vote.create(votes, function (err, docs) {
-                if (err) { return handleError(res, err); }
-              
-                Vote.find({
-                  _member: req.user,
-                  _position: { $in: keys }
-                }, '_id', function (err, savedVotes) {
-                
-                  var voteIds = _.pluck(savedVotes, '_id');
-                  // Create a Receipt after Inserting the Votes
-                
-                  Position.find({ _id: { $in: keys } }, function (err, signatures) {
-                    var signature = "";
-                    _.each(signatures, function (s) {
-                      if (typeof(candidateSignature[s._id]) === 'undefined') {
-                        candidateSignature[s._id] = '0';
-                      }
-                      signature += s.code + ":" + candidateSignature[s._id]+";";
-                    });
+                    _realMember: user._member,
+                    receiptDate: new Date(),
+                    code: User.randomString(12),
+                    ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+                    signature: signature
+                  };
                   
-                    var receipt = {
-                      _votes: voteIds,
-                      _member: req.user,
-                      _poll: pollId,
-                      _realMember: user._member,
-                      receiptDate: new Date(),
-                      code: User.randomString(12),
-                      ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-                      signature: signature
-                    };
-                  
-                    Receipt.create(receipt, function (err, receipt) {
-                      
-                      redisClient.set(CACHE_KEY, res.user);
-                      
-                      // Send Receipt Code to User
-                      mailer.sendBallotReceiptSMS(member.phoneNumber || member.phone, member.email, receipt.code, receipt.signature, function () {
-                        return res.json(receipt);
-                      });
+                  Receipt.create(receipt, function (err, receipt) {
+                    
+                    redisClient.set(CACHE_KEY, res.user);
+                    
+                    // Send Receipt Code to User
+                    mailer.sendBallotReceiptSMS(member.phoneNumber || member.phone, member.email, receipt.code, receipt.signature, function () {
+                      return res.json(receipt);
                     });
                   });
                 });
               });
-            } else {
-              return res.status(400).json({message: "You've not been accredited. Hence, you are not eligible to vote."});
-            }
-          });
-        } else {
-          return res.status(403).json({message: "You do not have authorization to vote here."});
-        }
+            });
+          } else {
+            return res.status(400).json({message: "You've not been accredited. Hence, you are not eligible to vote."});
+          }
+        });
       } else {
-        return res.status(403).json({message: "Poll has closed and voting has ended."});
+        return res.status(403).json({message: "You do not have authorization to vote here."});
       }
-    });
-  }
-  
-  redisClient.exists(CACHE_KEY, function (err, response) {
-    if (err) { return doDefault(); }
-    else {
-      if (response == 1) {
-        return res.status(403).json({ message: "You have submitted your votes already" });
-      } else {
-        return doDefault();
-      }
+    } else {
+      return res.status(403).json({message: "Poll has closed and voting has ended."});
     }
   });
+  // function doDefault() {
+  //   async.parallel([
+  //     function (_cb) {
+  //       Poll.findById(req.body._poll, function (e, poll) {
+  //         return _cb(e, poll);
+  //       });
+  //     },
+  //     function (_cb) {
+  //       User.findById(req.user, '+password').populate('_member').exec(function (e, user) {
+  //         return _cb(e, user);
+  //       });
+  //     },
+  //     function (_cb) {
+  //       Receipt.find({ _member:req.user }).exec(function (err,_receipt) {
+  //         return _cb(err, _receipt);
+  //       });
+  //     }
+  //   ], function (err, resp) {
+  //     if (err) { return handleError(res, err); }
+  //     // Validate qualifications of the Member
+  //     var poll = resp[0],
+  //       user = resp[1],
+  //       recMember = resp[2];
+  //
+  //     var _usr = new String(user._member._branch),
+  //       _pol = new String(poll._branch);
+  //
+  //     _usr = _usr.toLocaleLowerCase(_usr);
+  //     _pol = _pol.toLocaleLowerCase(_pol);
+  //
+  //     if(!user) { return res.status(400).json({message: "User not found!"}); }
+  //     if (user._member.verified!=1) { return res.status(400).json({message: "You do not have authorization to vote here."}); }
+  //     if (recMember.length > 0) { return res.status(403).json({ message: "You have submitted your votes already" }); }
+  //
+  //     if (moment().isBefore(poll.closes)) {
+  //
+  //       if (_usr.toString() === _pol.toString() || poll.national) {
+  //         // Verify Password
+  //         user.validPassword(req.body.password, function(err, isMatch) {
+  //           if (!isMatch) { return res.status(401).send({ message: 'Password Incorrect.' }); }
+  //
+  //           var member = user._member;
+  //           if (member.codeConfirmed) {
+  //             var pollId = req.body._poll;
+  //
+  //             // Build Vote Objects
+  //             delete req.body.accessCode;
+  //             delete req.body.password;
+  //             delete req.body._poll;
+  //
+  //             var keys = _.keys(req.body),
+  //               votes = [],
+  //               candidateSignature = {};
+  //
+  //             _.each(keys, function (k) {
+  //               if (typeof req.body[k] === "object") {
+  //                 candidateSignature[k] = req.body[k].code;
+  //
+  //                 //console.log(req.body[k]);
+  //                 votes.push({
+  //                   _branch: member._branch,
+  //                   _position: k,
+  //                   _member: req.user,
+  //                   _poll: pollId,
+  //                   candidate: req.body[k]._member._id,
+  //                   voteDate: new Date(),
+  //                   ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress
+  //                 });
+  //
+  //                 BoardPosition.update({ _position: k, _poll : pollId },{ $inc: { votes : 1 } });
+  //               }
+  //             });
+  //
+  //             BoardBranch.update({ _branch: member._branch, _poll: pollId },{ $inc: { votes : 1 } });
+  //
+  //             Vote.create(votes, function (err, docs) {
+  //               if (err) { return handleError(res, err); }
+  //
+  //               Vote.find({
+  //                 _member: req.user,
+  //                 _position: { $in: keys }
+  //               }, '_id', function (err, savedVotes) {
+  //
+  //                 var voteIds = _.pluck(savedVotes, '_id');
+  //                 // Create a Receipt after Inserting the Votes
+  //
+  //                 Position.find({ _id: { $in: keys } }, function (err, signatures) {
+  //                   var signature = "";
+  //                   _.each(signatures, function (s) {
+  //                     if (typeof(candidateSignature[s._id]) === 'undefined') {
+  //                       candidateSignature[s._id] = '0';
+  //                     }
+  //                     signature += s.code + ":" + candidateSignature[s._id]+";";
+  //                   });
+  //
+  //                   var receipt = {
+  //                     _votes: voteIds,
+  //                     _member: req.user,
+  //                     _poll: pollId,
+  //                     _realMember: user._member,
+  //                     receiptDate: new Date(),
+  //                     code: User.randomString(12),
+  //                     ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+  //                     signature: signature
+  //                   };
+  //
+  //                   Receipt.create(receipt, function (err, receipt) {
+  //
+  //                     redisClient.set(CACHE_KEY, res.user);
+  //
+  //                     // Send Receipt Code to User
+  //                     mailer.sendBallotReceiptSMS(member.phoneNumber || member.phone, member.email, receipt.code, receipt.signature, function () {
+  //                       return res.json(receipt);
+  //                     });
+  //                   });
+  //                 });
+  //               });
+  //             });
+  //           } else {
+  //             return res.status(400).json({message: "You've not been accredited. Hence, you are not eligible to vote."});
+  //           }
+  //         });
+  //       } else {
+  //         return res.status(403).json({message: "You do not have authorization to vote here."});
+  //       }
+  //     } else {
+  //       return res.status(403).json({message: "Poll has closed and voting has ended."});
+  //     }
+  //   });
+  // }
+  //
+  // redisClient.exists(CACHE_KEY, function (err, response) {
+  //   if (err) { return doDefault(); }
+  //   else {
+  //     if (response == 1) {
+  //       return res.status(403).json({ message: "You have submitted your votes already" });
+  //     } else {
+  //       return doDefault();
+  //     }
+  //   }
+  // });
 };
 
 // Get a single vote
