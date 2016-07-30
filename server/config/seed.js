@@ -22,6 +22,8 @@ User.count({}, function(e, count) {
         user.username = 'omonayajo';
 
         user.save();
+    } else {
+        console.log("Found ", count , " User accounts");
     }
 });
 

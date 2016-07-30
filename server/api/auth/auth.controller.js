@@ -396,13 +396,12 @@ exports.signUp = function (req, res) {
 };
 
 exports.signIn = function (req, res) {
-  var not_member = "{'$ne' : 'member'}";
   User.findOne({
     username: req.body.username.toLowerCase(),
     role: (req.body.admin ? ({'$ne': 'member'}) : 'member')
   }, '+password', function (err, user) {
     if (!user) {
-      return res.status(401).send({message: 'Wrong username and/or password'});
+      return res.status(401).send({message: 'Wrong username and/or password', u: user});
     }
 
     user.validPassword(req.body.password, function (err, isMatch) {

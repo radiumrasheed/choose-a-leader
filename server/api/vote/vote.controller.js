@@ -203,11 +203,16 @@ exports.castVote = function (req, res) {
     if(!user) { return res.status(400).json({message: "User not found!"}); }
     if (user._member.verified!=1) { return res.status(400).json({message: "You do not have authorization to vote here."}); }
 
-    Receipt.find({_member:req.user}).exec(function (err,receiptMember) {
+    console.log('Find Receipt for member with ID: ', req.user);
+    
+    Receipt.find({ _member:req.user }).exec(function (err,receiptMember) {
+      
         if(err){ return handleError(res, err); }
-        if(!receiptMember)
-        {
-            if (moment().isBefore(poll.closes)){
+        
+        if(receiptMember.length == 0) {
+          
+            if (moment().isBefore(poll.closes)) {
+              
                 if (_usr.toString() === _pol.toString() || poll.national) {
                     // Verify Password
                     user.validPassword(req.body.password, function(err, isMatch) {
@@ -230,7 +235,7 @@ exports.castVote = function (req, res) {
                                 if (typeof req.body[k] === "object") {
                                     candidateSignature[k] = req.body[k].code;
 
-                                    console.log(req.body[k]);
+                                    //console.log(req.body[k]);
                                     votes.push({
                                         _branch: member._branch,
                                         _position: k,
@@ -242,14 +247,14 @@ exports.castVote = function (req, res) {
                                     });
 
                                     BoardPosition.update({ _position: k, _poll : pollId },{ $inc: { votes : 1 } }, function (err) {
-                                        if (err) { return handleError(res, err); console.error(' position vote didnt incrememnt'); }
+                                        if (err) { return handleError(res, err); }
                                     });
 
                                 }
                             });
 
                             BoardBranch.update({ _branch: member._branch, _poll: pollId },{ $inc: { votes : 1 } }, function (err) {
-                                if (err) { return handleError(res, err); console.error(' branch vote didnt incrememnt'); }
+                                if (err) { return handleError(res, err); }
                             });
 
                             Vote.create(votes, function (err, docs) {
@@ -302,28 +307,20 @@ exports.castVote = function (req, res) {
                                     });
                                 });
                             });
-                        }
-                        else {
+                        } else {
                             return res.status(400).json({message: "You've not been accredited. Hence, you are not eligible to vote."});
                         }
                     });
                 } else {
                     return res.status(403).json({message: "You do not have authorization to vote here."});
                 }
-            }
-
-            else {
+            } else {
                 return res.status(403).json({message: "Poll has closed and voting has ended."});
             }
-        }
-        else {
+        } else {
             return res.status(403).json({message: "You have submitted your votes already"});
-
         }
     });
-
-
-
   });
 };
 
