@@ -489,7 +489,7 @@ exports.getSpecific = function (req, res) {
       },
       function (callback) {
           member = updated;
-        console.log(member);
+        //console.log(member);
         callback();
       }],function (err) {
         if (err)
