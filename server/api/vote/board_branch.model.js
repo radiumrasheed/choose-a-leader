@@ -11,8 +11,8 @@ var BoardBranchSchema = new Schema({
     accredited: Number,
     invalidated: Number,
     eligible: Number,
-    _branch: [{ type: Schema.Types.ObjectId, ref: 'Branch' }],
-    _poll: [{ type: Schema.Types.ObjectId, ref: 'Poll' }]
+    _branch: { type: Schema.Types.ObjectId, ref: 'Branch' },
+    _poll: { type: Schema.Types.ObjectId, ref: 'Poll' }
 });
 
 module.exports = mongoose.model('BoardBranch', BoardBranchSchema, 'BoardBranch');

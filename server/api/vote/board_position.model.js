@@ -7,9 +7,11 @@ var mongoose = require('mongoose'),
 
 var BoardPositionSchema = new Schema({
     name: String,
+    description: String,
+    index: Number,
     votes: { type: Number, default: 0 },
-    _position: [{ type: Schema.Types.ObjectId, ref: 'Position' }],
-    _poll: [{ type: Schema.Types.ObjectId, ref: 'Poll' }]
+    _position: { type: Schema.Types.ObjectId, ref: 'Position' },
+    _poll: { type: Schema.Types.ObjectId, ref: 'Poll' }
 });
 
 module.exports = mongoose.model('BoardPosition', BoardPositionSchema, 'BoardPosition');

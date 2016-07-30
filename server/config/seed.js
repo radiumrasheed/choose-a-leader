@@ -9,7 +9,36 @@ var User = require('../api/auth/auth.model');
 var Member = require('../api/member/member.model');
 var Setting = require('../api/setting/setting.model');
 var faker = require('faker'),
-    _ = require('lodash');
+    _ = require('lodash'),
+  BoardBranch = require('../api/vote/board_branch.model'),
+  BoardPosition = require('../api/vote/board_position.model'),
+  Branch = require('../api/branch/branch.model'),
+  Vote = require('../api/vote/vote.model'),
+  Position = require('../api/position/position.model');
+
+BoardPosition.remove({}, function () {
+    console.log("Cleared BoardPosition collection");
+    
+    Position.find({}, function (e, positions) {
+        _.each(positions, function (position) {
+            Vote.count({ _position: position._id }, function (e, voteCount) {
+                
+                // Count Votes for this Position
+                var data = {
+                    _position: position._id,
+                    votes: voteCount,
+                    name: position.name,
+                    description: position.description,
+                    _poll: position._poll,
+                    index: position.index
+                };
+                
+                var bp = new BoardPosition(data);
+                bp.save();
+            });
+        });
+    });
+});
 
 User.count({}, function(e, count) {
     if (count < 1) {
@@ -22,8 +51,6 @@ User.count({}, function(e, count) {
         user.username = 'omonayajo';
 
         user.save();
-    } else {
-        console.log("Found ", count , " User accounts");
     }
 });
 
