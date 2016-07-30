@@ -6,6 +6,10 @@ var Poll = require('../poll/poll.model');
 var User = require('../auth/auth.model');
 var async = require('async');
 
+var redis = require('redis'),
+  config = require('../../config/environment'),
+  redisClient = redis.createClient(config.redis.uri);
+
 function showPosition(id, res) {
   Position.findById(id).populate('candidates._member').exec(function (err, position) {
     if(err) { return handleError(res, err); }
@@ -30,8 +34,32 @@ exports.index = function(req, res) {
 // Get list of positions and candidates
 exports.ballot = function(req, res) {
   if (req.query._poll === undefined) return res.json([]);
+  
+  const CACHE_KEY = "POSITIONS_IN_" + req.query._poll;
+  
+  redisClient.exists(CACHE_KEY, function (err, response) {
+    if (err) { return doDefault(); }
+    else {
+      if (response == 1) {
+        redisClient.get(CACHE_KEY, function (err, positions) {
+          return res.json(JSON.parse(positions));
+        });
+      } else {
+        return doDefault();
+      }
+    }
+  });
+  
+  function doDefault() {
+    Position.find(req.query).select('-candidates.photo').populate('candidates._member').sort({ "index" : 1 }).exec(function (err, positions) {
+      if(err) { return handleError(res, err); }
+      redisClient.set(CACHE_KEY, JSON.stringify(positions), function () {
+        return res.json(positions);
+      });
+    });
+  }
 
-  async.parallel([
+  /*async.parallel([
       function (_cb) {
         Poll.findById(req.query._poll, function (e, poll) {
           return _cb(e, poll);
@@ -62,7 +90,7 @@ exports.ballot = function(req, res) {
       // User isn't Qualified to Vote in this Ballot
       return res.json([]);
     }
-  });
+  });*/
 };
 
 exports.photo = function (req, res) {
