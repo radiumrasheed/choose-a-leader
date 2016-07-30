@@ -182,7 +182,7 @@ exports.castVote = function (req, res) {
     
       if(!user) { return res.status(400).json({message: "User not found!"}); }
       if (user._member.verified!=1) { return res.status(400).json({message: "You do not have authorization to vote here."}); }
-      if (recMember.length > 0) { return res.status(403).json({ message: "You have submitted your votes already". }) }
+      if (recMember.length > 0) { return res.status(403).json({ message: "You have submitted your votes already" }); }
     
       if (moment().isBefore(poll.closes)) {
       
@@ -285,7 +285,7 @@ exports.castVote = function (req, res) {
     if (err) { return doDefault(); }
     else {
       if (response == 1) {
-        return res.status(403).json({ message: "You have submitted your votes already". })
+        return res.status(403).json({ message: "You have submitted your votes already" });
       } else {
         return doDefault();
       }
