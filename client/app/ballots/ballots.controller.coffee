@@ -9,6 +9,8 @@ angular.module 'elektorApp'
   $scope.showtable=false
   $scope.showDiv=true
 
+  $scope.submitting = false
+
   Auth.me (user) ->
     $scope.user = user
 
@@ -96,11 +98,13 @@ angular.module 'elektorApp'
       $scope.showingReceipt = false
 
     $scope.submitBallot = (form) ->
-      if form.$valid
+      if form.$valid and not $scope.submitting
+        $scope.submitting = true
         Vote.submitBallot $scope.ballot, (receipt) ->
           $state.go "ballot_receipt"
           toastr.success "Ballot Cast Successfully"
         , (err) ->
+          $scope.submitting = false
           $state.go "polls"
           toastr.error err.data.message
       else toastr.error "Please enter your password to cast vote"
