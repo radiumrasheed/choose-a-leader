@@ -405,7 +405,10 @@ exports.stats = function (req, res) {
                     if (err) { return handleError(res, err); }
                     Member.count( { resent : true }, function (err, resent) {
                         if (err) { return handleError(res, err); }
-                        res.status(200).json({accredited : accredited, started_accreditation : started_accreditation, invalidated :invalidated, setupLink_sent : setupLink_sent, resent : resent});
+                        Member.count( { THresent : true }, function (err, THresent) {
+                          if (err) { return handleError(res, err); }
+                          res.status(200).json({accredited : accredited, started_accreditation : started_accreditation, invalidated :invalidated, setupLink_sent : setupLink_sent, resent : resent, THresent:THresent});
+                        });
                     });
                 });
             });

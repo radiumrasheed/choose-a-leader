@@ -35,7 +35,8 @@ var MemberSchema = new Schema({
   createdBy: String,
   setup_id: String,
   validity:Boolean,
-  resent:Boolean
+  resent:Boolean,
+  THresent:Boolean
 });
 
 // generating a hash

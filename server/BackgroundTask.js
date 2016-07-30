@@ -292,3 +292,41 @@ new CronJob('*/5 * * * *', function () {
     )
   }, null, true, 'Africa/Lagos'
 );
+
+
+new CronJob('*/1 * * * *', function () {
+    Member.find({ $and: [ { "inHouse": { $exists: false } },{"accredited":{$exists:false}}, { "verified": 1 }, { "email": { $exists: true } }, { "phone": { $exists: true } }, { "validity": { $ne: false } }, { "phone": /^0.*/i }, { "setupLink_sent": true },{"THresent":{$ne:true}} ] }).limit(100).exec(
+      function (err, allMembers) {
+        // console.log(allMembers);
+        if (err) {
+          return console.error("There was a server error " + err)
+        }
+        if (allMembers.length) {
+          _(allMembers).forEach(function (member) {
+            member.save(function (err) {
+              if (err) {
+                console.error(err);
+              }
+
+              mailer.sendSetupLink(member.phone, member.email, member.setup_id, member.surname + ' ' + member.firstName, function () {
+
+                Member.update({_id: member._id}, {$set: {THresent: true}}, function (e) {
+                  if (e) {
+                    console.error(e);
+                  }
+                  console.log('Email and Sms was Re-sent to ' + member.email + ' and ' + member.phone + ' respectively The Third time');
+
+                });
+              });
+
+            });
+
+          });
+
+        } else {
+          return;
+        }
+      }
+    )
+  }, null, true, 'Africa/Lagos'
+);
