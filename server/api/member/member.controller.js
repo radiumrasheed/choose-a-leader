@@ -6,6 +6,7 @@ var Lawyer = require('./Lawyer.model');
 var User = require('../auth/auth.model');
 var Branch = require('../branch/branch.model');
 var mailer = require('../../components/tools/mailer');
+var moment = require('moment');
 require('mongoose-pagination');
 
 /*var redis = require('redis'),
@@ -88,41 +89,50 @@ exports.show = function (req, res) {
 
 // Get a single member from the ID used only on SETUP ACCOUNT
 exports.showMember = function (req, res) {
-    if (req.query._member) {
-        Member.findOne({setup_id : req.query._member}).populate('_user').populate('_branch').exec(function (err, member) {
-            if (err) {
-                return handleError(res, err);
-            }
-            if (!member) {
-                return res.send(404);
-            }
-            if (member.setupLink_sent !== true) {
-                return res.send(403);
-            }
-            if (typeof member._user === "undefined" || member._user === null) {
-                res.header('stage', 1);
-                return res.json(member);
-            }
-            else if (member._user.changedPassword !== true && member.accredited !== true) {
-                res.header('stage', 2);
-                return res.json(member);
-            }
-            else if (member._user.changedPassword === true && member.accredited !== true) {
-                res.header('stage', 3);
-                return res.json(member);
-            }
-            else if (member.accredited === true) {
-                res.header('stage', 4);
-                return res.send(200);
-            }
-            return res.status(200).json({message: "Please contact our support team"});
+    if ( moment().isAfter("2016-07-30 23:59", "YYYY-MM-DD HH:mm") ) {
+        return res.status(403).json({
+            message: "Sorry, Accreditation has ended!"
         });
     }
     else {
-        return res.status(400).json({
-            message: "Invalid Request"
-        });
+        if (req.query._member) {
+            Member.findOne({setup_id : req.query._member}).populate('_user').populate('_branch').exec(function (err, member) {
+                if (err) {
+                    return handleError(res, err);
+                }
+                if (!member) {
+                    return res.send(404);
+                }
+                if (member.setupLink_sent !== true) {
+                    return res.send(403);
+                }
+                if (typeof member._user === "undefined" || member._user === null) {
+                    res.header('stage', 1);
+                    return res.json(member);
+                }
+                else if (member._user.changedPassword !== true && member.accredited !== true) {
+                    res.header('stage', 2);
+                    return res.json(member);
+                }
+                else if (member._user.changedPassword === true && member.accredited !== true) {
+                    res.header('stage', 3);
+                    return res.json(member);
+                }
+                else if (member.accredited === true) {
+                    res.header('stage', 4);
+                    return res.send(200);
+                }
+                return res.status(200).json({message: "Please contact our support team"});
+            });
+        }
+        else {
+            return res.status(400).json({
+                message: "Invalid Request"
+            });
+        }
     }
+
+
 
 };
 
@@ -203,114 +213,123 @@ exports.resendPassword = function (req, res) {
 // Creates a new User in auths and updates its corresponding member in the database for SETUP only
 exports.createUser = function (req, res) {
 
-    var sendPassword = function (member, user) {
-        mailer.sendDefaultPassword(member.setup_id, member.phone, member.email, user.otp, member.sc_number, function () {
-            return res.status(200).json(user);
+    if ( moment().isAfter("2016-07-30 23:59", "YYYY-MM-DD HH:mm") ) {
+        return res.status(403).json({
+            message: "Sorry, Accreditation has ended!"
         });
-    };
+    }
+    else {
 
-    if (req.body._id) {
-        delete req.body._id;
-    } //delete the member_ID from the form
-    if (req.body._user) {
-        delete req.body._user;
-    } //delete the me0mber.user_ID from the form
-
-    Member.findById(req.query.id).populate('_user').exec(function (err, member) {
-        if (err) {
-            return handleError(res, err);
-        }
-        if (!member) {
-            return res.status(404).json({message: "No record found for specified Enrollment Number."});
-        }
-
-        if (member.phone.indexOf(req.body.phone) === -1) {
-            return res.status(400).json({
-                message: "Phone number you’ve entered is different from what we have on our verification register. Please contact your local branch."
+        var sendPassword = function (member, user) {
+            mailer.sendDefaultPassword(member.setup_id, member.phone, member.email, user.otp, member.sc_number, function () {
+                return res.status(200).json(user);
             });
-        }
+        };
 
-        else if (typeof member._user === "undefined" || member._user === null) {
-            var re = new RegExp(member.sc_number, 'i');
-            User.findOne({username : re}, 'username', function (err, user) {
-               if (err) { return handleError(res, err); }
-                if (user) {
-                    return res.status(409).json({message: 'Please contact our support team'});
-                }
-                if (!user) {
-                    var u = new User();
-                    u.otp = randomString();
-                    u.password = u.generateHash(u.otp);
-                    u._member = req.query.id;
-                    u.role = "member";
-                    u.username = req.body.sc_number;
-                    u.save(function (err) {
-                        if (err) {
-                            return handleError(res, err);
-                        }
-                        else {
-                            Branch.findOne({name: req.body.branch}, '_id', function (err, branch) {
-                                if (err) {
-                                    User.findOneAndRemove({"_id": u._id}, function (err) {
-                                        if (err) {
-                                            return handleError(res, err);
-                                        }
-                                    });
-                                    return handleError(res, err);
-                                }
-                                if (!branch) {
-                                    User.findOneAndRemove({"_id": u._id}, function (err) {
-                                        if (err) {
-                                            return handleError(res, err);
-                                        }
-                                    });
-                                    return res.status(404).json({message: "No record found for specified branch!"});
-                                }
-                                member._branch = branch._id;
-                                member._user = u._id;
-                                member.title = req.body.title;
-                                member.lastModified = new Date();
-                                if (member.accessCode === undefined || member.accessCode === '') {
-                                    member.accessCode = User.randomString(8);
-                                }
-                                member.save(function (err) {
+        if (req.body._id) {
+            delete req.body._id;
+        } //delete the member_ID from the form
+        if (req.body._user) {
+            delete req.body._user;
+        } //delete the me0mber.user_ID from the form
+
+        Member.findById(req.query.id).populate('_user').exec(function (err, member) {
+            if (err) {
+                return handleError(res, err);
+            }
+            if (!member) {
+                return res.status(404).json({message: "No record found for specified Enrollment Number."});
+            }
+
+            if (member.phone.indexOf(req.body.phone) === -1) {
+                return res.status(400).json({
+                    message: "Phone number you’ve entered is different from what we have on our verification register. Please contact your local branch."
+                });
+            }
+
+            else if (typeof member._user === "undefined" || member._user === null) {
+                var re = new RegExp(member.sc_number, 'i');
+                User.findOne({username : re}, 'username', function (err, user) {
+                    if (err) { return handleError(res, err); }
+                    if (user) {
+                        return res.status(409).json({message: 'Please contact our support team'});
+                    }
+                    if (!user) {
+                        var u = new User();
+                        u.otp = randomString();
+                        u.password = u.generateHash(u.otp);
+                        u._member = req.query.id;
+                        u.role = "member";
+                        u.username = req.body.sc_number;
+                        u.save(function (err) {
+                            if (err) {
+                                return handleError(res, err);
+                            }
+                            else {
+                                Branch.findOne({name: req.body.branch}, '_id', function (err, branch) {
                                     if (err) {
                                         User.findOneAndRemove({"_id": u._id}, function (err) {
                                             if (err) {
                                                 return handleError(res, err);
                                             }
                                         });
-                                        return res.status(404).json({message: "Cannot register member"});
+                                        return handleError(res, err);
                                     }
-                                    else {
-                                        sendPassword(member, u);
+                                    if (!branch) {
+                                        User.findOneAndRemove({"_id": u._id}, function (err) {
+                                            if (err) {
+                                                return handleError(res, err);
+                                            }
+                                        });
+                                        return res.status(404).json({message: "No record found for specified branch!"});
                                     }
+                                    member._branch = branch._id;
+                                    member._user = u._id;
+                                    member.title = req.body.title;
+                                    member.lastModified = new Date();
+                                    if (member.accessCode === undefined || member.accessCode === '') {
+                                        member.accessCode = User.randomString(8);
+                                    }
+                                    member.save(function (err) {
+                                        if (err) {
+                                            User.findOneAndRemove({"_id": u._id}, function (err) {
+                                                if (err) {
+                                                    return handleError(res, err);
+                                                }
+                                            });
+                                            return res.status(404).json({message: "Cannot register member"});
+                                        }
+                                        else {
+                                            sendPassword(member, u);
+                                        }
+                                    });
                                 });
-                            });
-                        }
-                    });
-                }
-            });
+                            }
+                        });
+                    }
+                });
 
-        }
+            }
 
-        /*TODO := add check for setup-stage, if password is not changed go to step to step 2, if not confirmed, go to step 3 */
-        else if (member._user.changedPassword !== true && member.accredited !== true) {
-            res.header('stage', 2);
-            return res.status(200).json(member._user);
-        }
+            /*TODO := add check for setup-stage, if password is not changed go to step to step 2, if not confirmed, go to step 3 */
+            else if (member._user.changedPassword !== true && member.accredited !== true) {
+                res.header('stage', 2);
+                return res.status(200).json(member._user);
+            }
 
-        else if (member._user.changedPassword === true && member.accredited !== true) {
-            res.header('stage', 3);
-            return res.status(200).json(member._user);
-        }
+            else if (member._user.changedPassword === true && member.accredited !== true) {
+                res.header('stage', 3);
+                return res.status(200).json(member._user);
+            }
 
-        else {
-            return res.status(409).json({
-                message: "User is already registered"
-            });
-        }
-    });
+            else {
+                return res.status(409).json({
+                    message: "User is already registered"
+                });
+            }
+        });
+    }
+
 };
 
 //Gets a user and resends setup link as sms and mail

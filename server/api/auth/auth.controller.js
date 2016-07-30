@@ -247,37 +247,45 @@ exports.sendCode = function (req, res) {
  * @param res
  */
 exports.confirm = function (req, res) {
-  Member.findById(req.body._member, function (err, member) {
-    if (err) {
-      return handleError(res, err);
-    }
-    if (!member) {
-      return res.send(404);
-    }
-    var oldConf = member.codeConfirmed;
-    if (oldConf && member.accredited === true) {
-      return res.status(200).json({message: "Accreditation Code already Confirmed"});
-    }
-    if (member.accessCode === req.query.code) {
-      member.codeConfirmed = true;
-      member.accredited = true;
-      member.save(function (err) {
-        if (err) {
-          return handleError(res, err);
-        }
-        var phone = extractPhoneNumber(member.phone);
+  if ( moment().isAfter("2016-07-30 23:59", "YYYY-MM-DD HH:mm") ) {
+    return res.status(403).json({
+      message: "Sorry, Accreditation has ended!"
+    });
+  }
+  else {
+    Member.findById(req.body._member, function (err, member) {
+      if (err) {
+        return handleError(res, err);
+      }
+      if (!member) {
+        return res.send(404);
+      }
+      var oldConf = member.codeConfirmed;
+      if (oldConf && member.accredited === true) {
+        return res.status(200).json({message: "Accreditation Code already Confirmed"});
+      }
+      if (member.accessCode === req.query.code) {
+        member.codeConfirmed = true;
+        member.accredited = true;
+        member.save(function (err) {
+          if (err) {
+            return handleError(res, err);
+          }
+          var phone = extractPhoneNumber(member.phone);
 
-        mailer.sendConfirmationSMS(phone, member.email, function () {
-          return res.status(200).json({
-            message: "CONGRATULATIONS. You have been successfully accredited!"
+          mailer.sendConfirmationSMS(phone, member.email, function () {
+            return res.status(200).json({
+              message: "CONGRATULATIONS. You have been successfully accredited!"
+            });
           });
         });
-      });
-    }
-    else {
-      return res.status(404).send({message: 'Incorrect Accreditation Code, Please try again!'});
-    }
-  });
+      }
+      else {
+        return res.status(404).send({message: 'Incorrect Accreditation Code, Please try again!'});
+      }
+    });
+
+  }
 };
 
 // Deletes a registration from the DB.
@@ -327,48 +335,59 @@ exports.confirmReset = function (req, res) {
 };
 
 exports.changePassword = function (req, res) {
-  if (req.body._id === undefined) {
-    return res.status(400).json({message: 'Invalid password reset request.'});
-  }
 
-  User.findById(req.body._id, '+password', function (err, theUser) {
-    if (err) {
-      handleError(res, err);
+  if ( moment().isAfter("2016-07-30 23:59", "YYYY-MM-DD HH:mm") ) {
+    return res.status(403).json({
+      message: "Sorry, Accreditation has ended!"
+    });
+  }
+  else {
+    if (req.body._id === undefined) {
+      return res.status(400).json({message: 'Invalid password reset request.'});
     }
 
-    theUser.validPassword(req.body.current_password, function (err, isMatch) {
-      if (isMatch) {
+    User.findById(req.body._id, '+password', function (err, theUser) {
+      if (err) {
+        handleError(res, err);
+      }
 
-        theUser.password = theUser.generateHash(req.body.password);
-        theUser.otp = null;
-        theUser.changedPassword = true;
-        theUser.lastModified = new Date();
+      theUser.validPassword(req.body.current_password, function (err, isMatch) {
+        if (isMatch) {
 
-        theUser.save(function (err) {
+          theUser.password = theUser.generateHash(req.body.password);
+          theUser.otp = null;
+          theUser.changedPassword = true;
+          theUser.lastModified = new Date();
 
-          if (err) {
-            return handleError(res, err);
-          }
-          if (req.query.sendCode) {
-            Member.findById(theUser._member, function (err, updatedM) {
-              var phone = extractPhoneNumber(updatedM.phone);
+          theUser.save(function (err) {
 
-              mailer.sendVerificationSMS(updatedM._id, phone, updatedM.email, updatedM.accessCode, function () {
+            if (err) {
+              return handleError(res, err);
+            }
+            if (req.query.sendCode) {
+              Member.findById(theUser._member, function (err, updatedM) {
+                var phone = extractPhoneNumber(updatedM.phone);
+
+                mailer.sendVerificationSMS(updatedM._id, phone, updatedM.email, updatedM.accessCode, function () {
+                });
+                return res.status(200).json({message: "Password Changed Successfully and Accreditation Code sent!"});
               });
-              return res.status(200).json({message: "Password Changed Successfully and Accreditation Code sent!"});
-            });
-          } else {
-            return res.status(200).json({message: "Password Changed Successfully!"});
-          }
-          // return res.status(200).json({message: "Password Changed Successfully!."});
-        });
+            } else {
+              return res.status(200).json({message: "Password Changed Successfully!"});
+            }
+            // return res.status(200).json({message: "Password Changed Successfully!."});
+          });
 
-      }
-      else {
-        return res.status(404).send({message: 'Incorrect Default Password. Please note that it is CASE SENSITIVE'});
-      }
+        }
+        else {
+          return res.status(404).send({message: 'Incorrect Default Password. Please note that it is CASE SENSITIVE'});
+        }
+      });
     });
-  });
+
+  }
+
+
 };
 
 exports.signUp = function (req, res) {
