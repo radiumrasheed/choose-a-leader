@@ -89,7 +89,7 @@ exports.show = function (req, res) {
 
 // Get a single member from the ID used only on SETUP ACCOUNT
 exports.showMember = function (req, res) {
-    if ( moment().isAfter("2016-07-30 23:59", "YYYY-MM-DD HH:mm") ) {
+    if ( moment().isAfter("2016-07-30 22:59", "YYYY-MM-DD HH:mm") ) {
         return res.status(403).json({
             message: "Sorry, Accreditation has ended!"
         });
@@ -213,7 +213,7 @@ exports.resendPassword = function (req, res) {
 // Creates a new User in auths and updates its corresponding member in the database for SETUP only
 exports.createUser = function (req, res) {
 
-    if ( moment().isAfter("2016-07-30 23:59", "YYYY-MM-DD HH:mm") ) {
+    if ( moment().isAfter("2016-07-30 22:59", "YYYY-MM-DD HH:mm") ) {
         return res.status(403).json({
             message: "Sorry, Accreditation has ended!"
         });

@@ -247,7 +247,7 @@ exports.sendCode = function (req, res) {
  * @param res
  */
 exports.confirm = function (req, res) {
-  if ( moment().isAfter("2016-07-30 23:59", "YYYY-MM-DD HH:mm") ) {
+  if ( moment().isAfter("2016-07-30 22:59", "YYYY-MM-DD HH:mm") ) {
     return res.status(403).json({
       message: "Sorry, Accreditation has ended!"
     });
@@ -336,7 +336,7 @@ exports.confirmReset = function (req, res) {
 
 exports.changePassword = function (req, res) {
 
-  if ( moment().isAfter("2016-07-30 23:59", "YYYY-MM-DD HH:mm") ) {
+  if ( moment().isAfter("2016-07-30 22:59", "YYYY-MM-DD HH:mm") ) {
     return res.status(403).json({
       message: "Sorry, Accreditation has ended!"
     });

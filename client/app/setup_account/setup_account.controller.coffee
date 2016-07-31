@@ -34,32 +34,32 @@ angular.module 'elektorApp'
     $state.go "landing"
     toastr.info "You have already completed Accreditation"
 
-  $scope.submit = (theForm) ->
-    if theForm.$valid
-      $scope.submitting = true
-      Member.createUser id: $scope.member._id, $scope.member, (user, extras) ->
-        if extras('stage') is '3' || extras('stage') is 3
-          $scope.submitting = false
-          $scope.u = angular.copy user
-          $scope.master = angular.copy user
-          $scope.u.password = null
-          toastr.success "Almost done, Confirm your accreditation code"
-          $scope.showFirst = false
-          $scope.showNext = false
-          $scope.showLast = true
-        else
-          $scope.submitting = false
-          $scope.u = angular.copy user
-          $scope.master = angular.copy user
-          $scope.u.password = null
-          toastr.success "Your Username and default Password has been sent"
-          $scope.showNext = true
-          $scope.showFirst = false
-      , (e)  ->
-        $scope.submitting = false
-        toastr.error e.data.message
-    else
-      toastr.error "Please fill the form appropriately before submitting"
+#  $scope.submit = (theForm) ->
+#    if theForm.$valid
+#      $scope.submitting = true
+#      Member.createUser id: $scope.member._id, $scope.member, (user, extras) ->
+#        if extras('stage') is '3' || extras('stage') is 3
+#          $scope.submitting = false
+#          $scope.u = angular.copy user
+#          $scope.master = angular.copy user
+#          $scope.u.password = null
+#          toastr.success "Almost done, Confirm your accreditation code"
+#          $scope.showFirst = false
+#          $scope.showNext = false
+#          $scope.showLast = true
+#        else
+#          $scope.submitting = false
+#          $scope.u = angular.copy user
+#          $scope.master = angular.copy user
+#          $scope.u.password = null
+#          toastr.success "Your Username and default Password has been sent"
+#          $scope.showNext = true
+#          $scope.showFirst = false
+#      , (e)  ->
+#        $scope.submitting = false
+#        toastr.error e.data.message
+#    else
+#      toastr.error "Please fill the form appropriately before submitting"
 
   $scope.edit = ->
     $scope.showNext = false
