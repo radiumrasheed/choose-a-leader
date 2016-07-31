@@ -114,8 +114,10 @@
                                         <th class="text-center text-bold">BRANCH</th>
                                         <th class="text-center text-bold">VOTES</th>
                                         <th class="text-center text-bold">ACCREDITED</th>
-                                        <th class="text-center text-bold">INVALIDATED</th>
+                                        <!--<th class="text-center text-bold">INVALIDATED</th>-->
+<!--
                                         <th class="text-center text-bold">ELIGIBLE</th>
+-->
                                     </tr>
                                     </thead>
                                     <tbody ng-repeat="b in boardStats.branchStats">
@@ -125,9 +127,9 @@
                                         <td style="background-color: #adffa7;" class="text-center">{{b.votes}}</td>
                                         <td class="text-center">{{b.accredited}}
                                         </td>
-                                        <td class="text-center">{{b.invalidated}}</td>
-                                        <td class="text-center">{{b.eligible}}
-                                        </td>
+                                        <!--<td class="text-center">{{b.invalidated}}</td>-->
+                                        <!--<td class="text-center">{{b.eligible}}
+                                        </td>-->
                                     </tr>
                                     </tbody>
                                 </table>

@@ -496,8 +496,6 @@ exports.getSpecific = function (req, res) {
         {
           return next(err);
         }
-        // console.log(members);
-        callback();
       });
 
     },function () {

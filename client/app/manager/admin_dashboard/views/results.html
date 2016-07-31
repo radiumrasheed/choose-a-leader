@@ -122,7 +122,9 @@
                                     <th class="text-center text-bold" width="370px">CANDIDATES</th>
                                     <th class="text-center text-bold">VOTES CAST</th>
                                     <th class="text-center text-bold">TOTAL VOTES CAST</th>
+<!--
                                     <th class="text-center text-bold">ELIGIBLE VOTERS</th>
+-->
                                 </tr>
                                 </thead>
                                 <tbody ng-repeat="p in results | orderBy:sortType">
@@ -143,11 +145,13 @@
                                     </td>
                                     <td class="text-center">{{p.votes[0].count}}</td>
                                     <td rowspan="{{p.votes.length}}" class="text-center">{{p.total_count}}</td>
-                                    <td rowspan="{{p.votes.length}}" class="text-center">{{total}}</td>
+                                    <!--<td rowspan="{{p.votes.length}}" class="text-center">{{total}}</td>-->
                                 </tr>
                                 <tr ng-repeat="c in p.votes" ng-if="$index > 0">
                                     <td>{{c.candidate.surname+' '+(c.candidate.firstName||c.candidate.othername)}}</td>
+<!--
                                     <td class="text-center">{{c.count}}</td>
+-->
                                 </tr>
                                 </tbody>
                             </table>
