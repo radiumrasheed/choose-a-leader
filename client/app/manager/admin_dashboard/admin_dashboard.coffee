@@ -33,7 +33,7 @@ angular.module 'elektorApp'
     controller: 'CandidatesCtrl'
 
   .state 'admin_dashboard.results',
-    url: 'results/:id/#'
+    url: 'results/:id/'
     templateUrl: 'app/manager/admin_dashboard/views/results.html'
     controller: 'ResultsCtrl'
 
