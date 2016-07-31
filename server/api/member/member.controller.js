@@ -443,7 +443,6 @@ exports.distinctBranch = function (req, res) {
         }
 
         branches.sort();
-        branches.shift();
 
         return res.json(200, branches);
     });

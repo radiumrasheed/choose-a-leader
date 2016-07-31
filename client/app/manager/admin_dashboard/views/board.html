@@ -10,10 +10,15 @@
             </div>
             <i class="fa fa-terminal"></i> LIVE BOARD
             <br>
+
         </div>
     </div>
 
     <div  class="panel-body">
+        <div ng-if="boardStats" class=" alert alert-primary pull-right">
+          <i class="fa fa-calendar"></i> Total Votes Cast:{{boardStats.votedStats}} &nbsp;&nbsp;
+          <i class="fa fa-television"></i>   Total Accredited Voters:{{boardStats.accreditedStats}}
+        </div>
         <div ng-if="!flag.lawyers" id="Lawyers">
 
             <div class="col-md-12">
