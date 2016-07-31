@@ -33,7 +33,7 @@ angular.module 'elektorApp'
     controller: 'CandidatesCtrl'
 
   .state 'admin_dashboard.results',
-    url: 'results/:id/#!%'
+    url: 'results/:id/#'
     templateUrl: 'app/manager/admin_dashboard/views/results.html'
     controller: 'ResultsCtrl'
 
@@ -92,7 +92,13 @@ angular.module 'elektorApp'
     templateUrl: 'app/manager/admin_dashboard/views/board.html'
     controller: 'BoardCtrl'
 
+  .state 'admin_dashboard.status',
+    url: 'status'
+    templateUrl: 'app/manager/admin_dashboard/views/memberstatus.html'
+    controller: 'StatusCtrl'
+
   .state 'admin_dashboard.unaccredited',
     url: 'unaccredited'
     templateUrl: 'app/manager/admin_dashboard/views/resend-link.html'
     controller: 'UnaccreditedCtrl'
+
