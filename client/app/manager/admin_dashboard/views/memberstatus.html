@@ -64,8 +64,8 @@
             </tr>
             <tr ng-repeat="m in unaccredited | orderBy:sortType:sortReverse | filter:searchMember track by $index">
                 <td>{{(currentPage-1)*perPage+$index+1}}.</td>
-                <td>{{m.surname}} {{m.firstName || m.othername}} {{m.middleName}}</td>
-                <td>{{m.sc_number}}</td>
+                <td style="background-color: #00B22D">{{m.surname}} {{m.firstName || m.othername}} {{m.middleName}}</td>
+                <td style="background-color: #00B22D">{{m.sc_number}}</td>
                 <td style="background-color: #00B22D" ng-show="m._user" >YES</td><td style="background-color: #b25f6b" ng-show="!m._user" >NO</td>
                 <td style="background-color: #00B22D" ng-show="m.accredited"  >YES</td><td style="background-color: #b25f6b" ng-show="!m.accredited" >NO</td>
                 <td ng-show="m.validity===false" style="background-color: #b25f6b" >NO</td><td style="background-color: #00B22D" ng-show="m.validity!==false">YES</td>

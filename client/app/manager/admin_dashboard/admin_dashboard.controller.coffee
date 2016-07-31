@@ -1234,11 +1234,22 @@ angular.module 'elektorApp'
             toastr.success "Voter FLagged in Voters register"
             m.validity = true
 
-.controller 'BoardCtrl', ($scope, Auth, Vote, $rootScope, $stateParams, Poll, $timeout) ->
+.controller 'BoardCtrl', ($scope, Auth, Vote, $rootScope, $stateParams, Poll, $timeout, Member) ->
   Auth.me (usr) ->
 #    no sense buh pls ignore @least
+
+
+    Member.stats (stats) ->
+      $scope.stats = stats
+      $scope.ready = true
+      $timeout ->
+        Member.stats()
+      , 30000
+      return
+
     Auth.me (usr) ->
       $scope.standings()
+
 
     $scope.standings = ->
       Vote.boardStats poll : $stateParams.id, (b_stats) ->
