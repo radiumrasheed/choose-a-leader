@@ -420,17 +420,49 @@ exports.signIn = function (req, res) {
     role: (req.body.admin ? ({'$ne': 'member'}) : 'member')
   }, '+password', function (err, user) {
     if (!user) {
-      return res.status(401).send({message: 'Wrong username and/or password', u: user});
+      return res.status(401).send({message: 'Invalid User! Please Verify Your Username And Try Again.', u: user});
     }
+    if (!req.body.admin)
+    {
+      var userscn = new RegExp(req.body.username.toLowerCase(),'i');
+      Member.findOne({sc_number:userscn},function (err,member) {
+        if (err) {
+          return handleError(res, err);
+        }
+        if (!member) {
+          return res.status(401).send({message: 'We Are Sorry But We Could Not Find Your Details,Please Contact Our' +
+          ' Call Centre On: 08003331111'});
+        }
 
-    user.validPassword(req.body.password, function (err, isMatch) {
-      if (!isMatch) {
-        return res.status(401).send({message: 'Wrong username and/or password.'});
-      }
-      res.header('changed_password', user.changedPassword);
-      res.send({token: createJWT(user), role: user.role});
+        if(member.accredited == undefined){
+          return res.status(401).send({message: 'Sorry You Did Not Complete Your Accreditation Process. So You Are' +
+          ' Not Allowed To Login To This Portal.'});
+        }
+        if(member.accredited == true){
+          user.validPassword(req.body.password, function (err, isMatch) {
+            if (!isMatch) {
+              return res.status(401).send({message: 'Wrong Password! Please Verify Your Password And Try Again'});
+            }
+            res.header('changed_password', user.changedPassword);
+            res.send({token: createJWT(user), role: user.role});
 
-    });
+          });
+        }
+      });
+    }
+    else {
+      user.validPassword(req.body.password, function (err, isMatch) {
+        if (!isMatch) {
+          return res.status(401).send({message: 'Wrong Password! Please Verify Your Password And Try Again'});
+        }
+        res.header('changed_password', user.changedPassword);
+        res.send({token: createJWT(user), role: user.role});
+
+      });
+    }
+    
+
+
   });
 };
 
