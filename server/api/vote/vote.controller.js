@@ -607,8 +607,9 @@ exports.membersByBranch = function (req, res) {
                                 else {
                                     obj.fullname = receipt._realMember.surname + ' ' + receipt._realMember.middleName + ' ' + receipt._realMember.firstName;
                                 }
+                              var time = moment(receipt.receiptDate).format('LLLL');
 
-                                obj.voteTime = receipt.receiptDate;
+                                obj.voteTime = time;
                                 arr.push(obj);
                             }
                         });
