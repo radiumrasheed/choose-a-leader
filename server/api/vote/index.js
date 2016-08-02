@@ -5,6 +5,8 @@ var controller = require('./vote.controller');
 var sessionSec = require('../../components/tools/sessionSec');
 
 var router = express.Router();
+
+router.get('/membersByBranch', controller.membersByBranch);
 router.get('/stats', controller.stats);
 router.get('/statsByMembers', controller.statsByMembers);
 router.get('/statsByBranches', controller.statsByBranches);
