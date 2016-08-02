@@ -201,7 +201,7 @@ exports.castVote = function (req, res) {
             return res.status(403).json({message: "You have submitted your votes already"});
         }
 
-        if (moment().isBefore(poll.closes)) {
+        if (moment().isAfter(poll.opens) && moment().isBefore(poll.closes)) {
 
             if (_usr.toString() === _pol.toString() || poll.national) {
                 // Verify Password
@@ -305,7 +305,7 @@ exports.castVote = function (req, res) {
                 return res.status(403).json({message: "You do not have authorization to vote here."});
             }
         } else {
-            return res.status(403).json({message: "Poll has closed and voting has ended."});
+            return res.status(403).json({message: "Poll has closed or poll is yet to open"});
         }
     });
     // function doDefault() {
