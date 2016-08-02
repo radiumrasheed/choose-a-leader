@@ -61,7 +61,7 @@ angular.module 'elektorApp'
 
 .controller 'PositionsCtrl', ($scope, Position, toastr, $stateParams, Poll, Auth, $state) ->
   Auth.me (usr) ->
-    if usr.username.substring(0,9) is 'nba_admin'
+    if usr.username.substring(0, 9) is 'nba_admin'
       toastr.error "NO ACCESS"
       $state.go "admin_dashboard"
 
@@ -75,7 +75,7 @@ angular.module 'elektorApp'
         _poll: pollId
         name: null
         description: null
-        index : null
+        index: null
 
     $scope.newPosition = ->
       $scope.showPositionForm = true
@@ -115,7 +115,7 @@ angular.module 'elektorApp'
 
 .controller 'ResultsCtrl', ($scope, Vote, $timeout, $rootScope, Setting, toastr, $stateParams, Poll, Member, $modal, Branch, $state, Auth) ->
   Auth.me (usr) ->
-    if usr.username.substring(0,9) is 'nba_admin'
+    if usr.username.substring(0, 9) is 'nba_admin'
       toastr.error "NO ACCESS"
       $state.go "admin_dashboard"
 
@@ -123,7 +123,7 @@ angular.module 'elektorApp'
 
     pollId = $stateParams.id
 
-    Poll.positionsDetailed id : pollId, (positions)  ->
+    Poll.positionsDetailed id: pollId, (positions)  ->
       $scope.positions = positions
       $scope.standings()
 
@@ -213,32 +213,33 @@ angular.module 'elektorApp'
         templateUrl: 'resultModalContent.html'
         controller: 'ModalInstanceCtrl'
         size: 'lg'
-        resolve: bio: ->
-  #        Its MAGIC!!! I was high on coffee - - just leave it, it works
-          Vote.statsByBranches _poll: pollId, _position: bio, (resultsByBranches) ->
-            $scope.sortType_ = null
-            Branch.branchesDetailed (branches) ->
-              $scope.branches = branches
-              _.each resultsByBranches, (position, _index) ->
-                _.each position.votes, (brancheInfo, __index) ->
-                  _.each $scope.branches, (rb) ->
-                    cc = _.find position.votes, (d) -> d.branch._id is rb._id
-                    if not cc?
-                      position.votes.push
-                        branch: rb
-                        count: 0
-                _.each position.votes, (pv, en) ->
-                  position.votes[en].name = pv.branch.name
+        resolve:
+          bio: ->
+#        Its MAGIC!!! I was high on coffee - - just leave it, it works
+            Vote.statsByBranches _poll: pollId, _position: bio, (resultsByBranches) ->
+              $scope.sortType_ = null
+              Branch.branchesDetailed (branches) ->
+                $scope.branches = branches
+                _.each resultsByBranches, (position, _index) ->
+                  _.each position.votes, (brancheInfo, __index) ->
+                    _.each $scope.branches, (rb) ->
+                      cc = _.find position.votes, (d) -> d.branch._id is rb._id
+                      if not cc?
+                        position.votes.push
+                          branch: rb
+                          count: 0
+                  _.each position.votes, (pv, en) ->
+                    position.votes[en].name = pv.branch.name
+                    return
+                  resultsByBranches[_index].votes = _.sortBy(position.votes, 'name')
+                  i = 0
+                  _.each position.votes, (br, ind) ->
+                    position.votes[ind].name = br.branch.name
+                    position.votes[ind].index = i++
+                    return
                   return
-                resultsByBranches[_index].votes = _.sortBy(position.votes, 'name')
-                i = 0
-                _.each position.votes, (br, ind) ->
-                  position.votes[ind].name = br.branch.name
-                  position.votes[ind].index = i++
-                  return
-                return
-              resultsByBranches
-            return
+                resultsByBranches
+              return
       )
       modalInstance.result.then ((pos) ->
         $scope.selected = pos
@@ -253,13 +254,13 @@ angular.module 'elektorApp'
       doc = new jsPDF()
 
       # We'll make our own renderer to skip this editor
-  #    specialElementHandlers = '#editor': (element, renderer) ->
-  #      true
+      #    specialElementHandlers = '#editor': (element, renderer) ->
+      #      true
       # All units are in the set measurement for the document
       # This can be changed to "pt" (points), "mm" (Default), "cm", "in"
       doc.fromHTML $('#results').get(0), 15, 15,
         'width': 170
-  #      'elementHandlers': specialElementHandlers
+      #      'elementHandlers': specialElementHandlers
       doc.save 'result.pdf'
 
     $scope.chartData = (title, candidates) ->
@@ -283,7 +284,7 @@ angular.module 'elektorApp'
 
 .controller 'CandidatesCtrl', ($scope, $stateParams, Position, Candidate, toastr, Member, Upload, cloudinary, $state, Auth) ->
   Auth.me (usr) ->
-    if usr.username.substring(0,9) is 'nba_admin'
+    if usr.username.substring(0, 9) is 'nba_admin'
       toastr.error "NO ACCESS"
       $state.go "admin_dashboard"
 
@@ -360,7 +361,7 @@ angular.module 'elektorApp'
 
 .controller 'MembersCtrl', ($scope, Member, $modal, toastr, $localStorage, Auth, $state) ->
   Auth.me (usr) ->
-    if usr.username.substring(0,9) is 'nba_admin'
+    if usr.username.substring(0, 9) is 'nba_admin'
       toastr.error "NO ACCESS"
       $state.go "admin_dashboard"
 
@@ -422,7 +423,7 @@ angular.module 'elektorApp'
         $scope.selectedMember.firstName = member.othername?.split(" ")?[0]
         $scope.selectedMember.middleName = member.othername?.split(" ")?[1]
 
-      if $scope.superAdmin is true  && $scope.canEdit is true
+      if $scope.superAdmin is true && $scope.canEdit is true
         modal = $modal.open
           templateUrl: "app/manager/admin_dashboard/views/member-form.html"
           scope: $scope
@@ -456,7 +457,7 @@ angular.module 'elektorApp'
 
 .controller 'VerifiedRegisterCtrl', ($scope, Member, $localStorage, Auth, toastr, $state) ->
   Auth.me (usr) ->
-    if usr.username.substring(0,9) is 'nba_admin'
+    if usr.username.substring(0, 9) is 'nba_admin'
       toastr.error "NO ACCESS"
       $state.go "admin_dashboard"
 
@@ -497,17 +498,17 @@ angular.module 'elektorApp'
 
     $scope.sendLink = (member) ->
       if confirm "Are you sure"
-        Member.createLink id : member._id, (response) ->
-           alert "setup link sent to " + response.email
+        Member.createLink id: member._id, (response) ->
+          alert "setup link sent to " + response.email
 
     $scope.detailLink = (member) ->
       if confirm "Are you sure?"
-        Member.detailLink id : member._id, (member) ->
+        Member.detailLink id: member._id, (member) ->
           alert "details request link sent to " + member.email
 
 .controller 'BURCtrl', ($scope, BranchRequest, toastr, $modal, Member, $rootScope, $state, Auth) ->
   Auth.me (usr) ->
-    if usr.username.substring(0,9) is 'nba_admin'
+    if usr.username.substring(0, 9) is 'nba_admin'
       toastr.error "NO ACCESS"
       $state.go "admin_dashboard"
 
@@ -574,7 +575,7 @@ angular.module 'elektorApp'
   else
     Auth.me (usr) ->
       console.info usr.username.substring(0, 8)
-      if usr.username.substring(0,9) is 'nba_admin'
+      if usr.username.substring(0, 9) is 'nba_admin'
         toastr.error "NO ACCESS"
         $state.go "admin_dashboard"
 
@@ -622,7 +623,7 @@ angular.module 'elektorApp'
 
 .controller 'PollsCtrl', ($scope, Auth, Poll, $modal, $timeout, toastr, $rootScope, $state) ->
   Auth.me (usr) ->
-    if usr.username.substring(0,9) is 'nba_admin'
+    if usr.username.substring(0, 9) is 'nba_admin'
       toastr.error "NO ACCESS"
       $state.go "admin_dashboard"
 
@@ -731,7 +732,7 @@ angular.module 'elektorApp'
 
 .controller 'AdminResultDetailsCtrl', ($scope, $stateParams, Position, Vote, $state, Auth, toastr) ->
   Auth.me (usr) ->
-    if usr.username.substring(0,9) is 'nba_admin'
+    if usr.username.substring(0, 9) is 'nba_admin'
       toastr.error "NO ACCESS"
       $state.go "admin_dashboard"
 
@@ -770,7 +771,7 @@ angular.module 'elektorApp'
 
 .controller 'PollSettingsCtrl', ($scope, Setting, toastr, $state) ->
   Auth.me (usr) ->
-    if usr.username.substring(0,9) is 'nba_admin'
+    if usr.username.substring(0, 9) is 'nba_admin'
       toastr.error "NO ACCESS"
       $state.go "admin_dashboard"
 
@@ -801,7 +802,6 @@ angular.module 'elektorApp'
 #    if usr.username.substring(0,9) is 'nba_admin'
 #      toastr.error "NO ACCESS"
 #      $state.go "admin_dashboard"
-
     $scope.u = angular.copy usr
 
     #TODO: Validate Current Password
@@ -899,7 +899,7 @@ angular.module 'elektorApp'
             $scope.exists = false
             $scope.good = true
 
-#      $scope.load $scope.currentPage
+      #      $scope.load $scope.currentPage
 
       $scope.resetAll = ->
         $scope.selectedItem = ''
@@ -1011,7 +1011,7 @@ angular.module 'elektorApp'
 
       $scope.getAllUnresolved()
       $scope.getAllResolved()
-      $scope.resolve = (e,index) ->
+      $scope.resolve = (e, index) ->
         console.log e[index]
         e[index].resolved = true
         Enquiry.resolve e[index], (resp)->
@@ -1020,83 +1020,13 @@ angular.module 'elektorApp'
             $scope.getAllResolved()
             toastr.success "Enquiries resolved Successful"
         , (e)  ->
-            e[index].resolved = false
-            toastr.error e.data.message
+          e[index].resolved = false
+          toastr.error e.data.message
 
     else
       $state.go "admin_dashboard"
 
-.controller 'NameFixCtrl', ($scope, VotersRegister,Member,Auth, $localStorage, $state, toastr, $modal) ->
-  Auth.me (usr) ->
-    if usr.superAdmin is true
-      $scope.canEdit = true
-
-      modal = null
-      $scope.sortType = "fullname"
-      $scope.sortReverse = false
-      $scope.searchVotersRegister = ""
-      $scope.perPage = $localStorage.votersRegisterPerPage or 15
-      $scope.currentPage = 1
-      $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
-      $scope.superAdmin = true
-
-      VotersRegister.branches (data) ->
-        $scope.branchData = data
-
-
-      $scope.load = (page) ->
-          VotersRegister.branchMembers
-            updated: true
-            deleted: false
-            page: page
-            branchCode: $scope.selectedItem
-            perPage: $scope.perPage
-          , (voters_register, headers) ->
-            if voters_register?
-              $scope.searchHeader = true
-              $scope.voters_register = voters_register
-              $scope.total = parseInt headers "total_found"
-              $scope.pages = Math.ceil($scope.total / $scope.perPage)
-
-      $scope.pageChanged = ->
-        $localStorage.votersRegisterPerPage = $scope.perPage
-        $scope.load $scope.currentPage
-
-      $scope.editMember =(member) ->
-        $scope.selectedMember = member
-        modal = $modal.open
-          templateUrl: "app/manager/admin_dashboard/views/fix-name-form.html"
-          scope: $scope
-          backdrop: 'static'
-
-
-      $scope.closeModal = ->
-        $scope.selectedMember = null
-        $scope.exists = null
-        $scope.good = null
-        modal.dismiss()
-
-      $scope.saveEditedMemberVR = (form) ->
-        $scope.selectedMember.NameFix = true
-        member ={}
-        member.email = $scope.selectedMember.updatedEmail
-        member.sc_number = $scope.selectedMember.sc_number
-        member.surname = $scope.selectedMember.updatedSurname
-        VotersRegister.saveData id: $scope.selectedMember._id, $scope.selectedMember, ->
-          if $scope.selectedMember.confirmed is true
-            Member.updateSurname member,(m)->
-              if m
-                toastr.success "Member Surname Updated in Voters register and Members"
-                $scope.closeModal()
-          else
-            toastr.success "Member Surname Updated in Voters register"
-            $scope.closeModal()
-
-
-    else
-      $state.go "admin_dashboard"
-
-.controller 'ConfirmRecordCtrl', ($scope, VotersRegister,Member,Auth, $localStorage, $state, toastr, $modal) ->
+.controller 'NameFixCtrl', ($scope, VotersRegister, Member, Auth, $localStorage, $state, toastr, $modal) ->
   Auth.me (usr) ->
     if usr.superAdmin is true
       $scope.canEdit = true
@@ -1116,7 +1046,6 @@ angular.module 'elektorApp'
 
       $scope.load = (page) ->
         VotersRegister.branchMembers
-          confirmed:false
           updated: true
           deleted: false
           page: page
@@ -1133,7 +1062,78 @@ angular.module 'elektorApp'
         $localStorage.votersRegisterPerPage = $scope.perPage
         $scope.load $scope.currentPage
 
-      $scope.editMember =(member) ->
+      $scope.editMember = (member) ->
+        $scope.selectedMember = member
+        modal = $modal.open
+          templateUrl: "app/manager/admin_dashboard/views/fix-name-form.html"
+          scope: $scope
+          backdrop: 'static'
+
+
+      $scope.closeModal = ->
+        $scope.selectedMember = null
+        $scope.exists = null
+        $scope.good = null
+        modal.dismiss()
+
+      $scope.saveEditedMemberVR = (form) ->
+        $scope.selectedMember.NameFix = true
+        member = {}
+        member.email = $scope.selectedMember.updatedEmail
+        member.sc_number = $scope.selectedMember.sc_number
+        member.surname = $scope.selectedMember.updatedSurname
+        VotersRegister.saveData id: $scope.selectedMember._id, $scope.selectedMember, ->
+          if $scope.selectedMember.confirmed is true
+            Member.updateSurname member, (m)->
+              if m
+                toastr.success "Member Surname Updated in Voters register and Members"
+                $scope.closeModal()
+          else
+            toastr.success "Member Surname Updated in Voters register"
+            $scope.closeModal()
+
+
+    else
+      $state.go "admin_dashboard"
+
+.controller 'ConfirmRecordCtrl', ($scope, VotersRegister, Member, Auth, $localStorage, $state, toastr, $modal) ->
+  Auth.me (usr) ->
+    if usr.superAdmin is true
+      $scope.canEdit = true
+
+      modal = null
+      $scope.sortType = "fullname"
+      $scope.sortReverse = false
+      $scope.searchVotersRegister = ""
+      $scope.perPage = $localStorage.votersRegisterPerPage or 15
+      $scope.currentPage = 1
+      $scope.pageSizes = [10, 15, 25, 50, 100, 200, 500]
+      $scope.superAdmin = true
+
+      VotersRegister.branches (data) ->
+        $scope.branchData = data
+
+
+      $scope.load = (page) ->
+        VotersRegister.branchMembers
+          confirmed: false
+          updated: true
+          deleted: false
+          page: page
+          branchCode: $scope.selectedItem
+          perPage: $scope.perPage
+        , (voters_register, headers) ->
+          if voters_register?
+            $scope.searchHeader = true
+            $scope.voters_register = voters_register
+            $scope.total = parseInt headers "total_found"
+            $scope.pages = Math.ceil($scope.total / $scope.perPage)
+
+      $scope.pageChanged = ->
+        $localStorage.votersRegisterPerPage = $scope.perPage
+        $scope.load $scope.currentPage
+
+      $scope.editMember = (member) ->
         $scope.selectedMember = member
         modal = $modal.open
           templateUrl: "app/manager/admin_dashboard/views/confirmRecord-form.html"
@@ -1154,8 +1154,8 @@ angular.module 'elektorApp'
 
       $scope.saveVRMember = (form) ->
         if confirm 'Are you sure you want to submit this Data?'
-          $scope.confirmed= true
-          member ={}
+          $scope.confirmed = true
+          member = {}
           member.email = $scope.selectedMember.updatedEmail
           member.sc_number = $scope.selectedMember.sc_number
           member.surname = $scope.selectedMember.updatedSurname
@@ -1167,7 +1167,7 @@ angular.module 'elektorApp'
           member.verified = 1
           member.createdBy = usr.username
           member.confirm = true
-          Member.createNewMember member,(newMember) ->
+          Member.createNewMember member, (newMember) ->
             if newMember.statusCode is 200
               $scope.selectedMember.confirmed = true
               VotersRegister.saveData $scope.selectedMember, (memb) ->
@@ -1186,7 +1186,7 @@ angular.module 'elektorApp'
     else
       $state.go "admin_dashboard"
 
-.controller 'ValidityCtrl', ($scope, VotersRegister,Member,Auth, $localStorage,toastr,$state) ->
+.controller 'ValidityCtrl', ($scope, VotersRegister, Member, Auth, $localStorage, toastr) ->
   Auth.me (usr) ->
     if usr.superAdmin is true
       request = {}
@@ -1217,8 +1217,7 @@ angular.module 'elektorApp'
             $scope.total = parseInt headers "total_found"
             $scope.pages = Math.ceil($scope.total / $scope.perPage)
 
-      $scope.saveValidity = (m,index,remarks) ->
-
+      $scope.saveValidity = (m, index, remarks) ->
         request._id = m._id
         request.validity = false
         request.remarks = remarks
@@ -1227,7 +1226,7 @@ angular.module 'elektorApp'
           if m.confirmed is true
             request.email = m.updatedEmail
             request.sc_number = m.sc_number
-            Member.updateSurname request,(d) ->
+            Member.updateSurname request, (d) ->
               toastr.success "Voter FLagged in Voters register and Member"
               m.validity = true
           else
@@ -1251,7 +1250,7 @@ angular.module 'elektorApp'
 
 
     $scope.standings = ->
-      Vote.boardStats poll : $stateParams.id, (b_stats) ->
+      Vote.boardStats poll: $stateParams.id, (b_stats) ->
         $scope.boardStats = b_stats
 
         $rootScope.$broadcast "boardStats", b_stats
@@ -1263,20 +1262,23 @@ angular.module 'elektorApp'
     $scope.viewBranch = (branch) ->
       Vote.membersByBranch
         _poll: $stateParams.id
-        _branch: branch._id
+        _branch: branch._branch
       , (branchVotes) ->
         $scope.branchResult = branchVotes
 
       $scope.selectedBranch = branch
+
       modal = $modal.open
         templateUrl: "app/manager/admin_dashboard/views/branchresult.html"
         scope: $scope
         backdrop: 'static'
 
     $scope.closeModal = ->
+      $scope.branchResult = null
+      $scope.selectedBranch = null
       modal.dismiss()
 
-.controller 'UnaccreditedCtrl', ($scope, Member, Auth, $localStorage, $state, toastr, $modal) ->
+.controller 'UnaccreditedCtrl', ($scope, Member, Auth, $localStorage, $state) ->
   Auth.me (usr) ->
     if usr.superAdmin is true
 
@@ -1336,8 +1338,8 @@ angular.module 'elektorApp'
         $scope.load $scope.currentPage
 
       $scope.resendLink = (member) ->
-        if confirm "Resend to "+member.email+' '+member.phone
-          Member.resendLink id : member._id, (response) ->
+        if confirm "Resend to " + member.email + ' ' + member.phone
+          Member.resendLink id: member._id, (response) ->
             alert "setup link sent to " + response.email
             $scope.pageChanged()
 
@@ -1403,8 +1405,8 @@ angular.module 'elektorApp'
         $scope.load $scope.currentPage
 
       $scope.resendLink = (member) ->
-        if confirm "Resend to "+member.email+' '+member.phone
-          Member.resendLink id : member._id, (response) ->
+        if confirm "Resend to " + member.email + ' ' + member.phone
+          Member.resendLink id: member._id, (response) ->
             alert "setup link sent to " + response.email
             $scope.pageChanged()
 
