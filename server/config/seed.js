@@ -19,7 +19,7 @@ var faker = require('faker'),
   Receipt = require('../api/vote/ballot_receipt.model');
 var mongoose = require('mongoose');
 
-/*BoardPosition.remove({}, function () {
+BoardPosition.remove({}, function () {
     console.log("Cleared BoardPosition collection");
 
     Position.find({}, function (e, positions) {
@@ -171,4 +171,4 @@ BoardBranch.remove({}, function () {
       });
     });
   });
-});*/
+});
