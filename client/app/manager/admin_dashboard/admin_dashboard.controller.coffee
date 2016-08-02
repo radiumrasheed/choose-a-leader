@@ -1234,10 +1234,9 @@ angular.module 'elektorApp'
             toastr.success "Voter FLagged in Voters register"
             m.validity = true
 
-.controller 'BoardCtrl', ($scope, Auth, Vote, $rootScope, $stateParams, Poll, $timeout, Member) ->
+.controller 'BoardCtrl', ($scope, Auth, Vote, $rootScope, $stateParams, Poll, $timeout, Member, $modal) ->
   Auth.me (usr) ->
-#    no sense buh pls ignore @least
-
+    modal = null
 
     Member.stats (stats) ->
       $scope.stats = stats
@@ -1260,6 +1259,22 @@ angular.module 'elektorApp'
           $scope.standings()
         , 15000
       return
+
+    $scope.viewBranch = (branch) ->
+      Vote.membersByBranch
+        _poll: $stateParams.id
+        _branch: branch._id
+      , (branchVotes) ->
+        $scope.branchResult = branchVotes
+
+      $scope.selectedBranch = branch
+      modal = $modal.open
+        templateUrl: "app/manager/admin_dashboard/views/branchresult.html"
+        scope: $scope
+        backdrop: 'static'
+
+    $scope.closeModal = ->
+      modal.dismiss()
 
 .controller 'UnaccreditedCtrl', ($scope, Member, Auth, $localStorage, $state, toastr, $modal) ->
   Auth.me (usr) ->

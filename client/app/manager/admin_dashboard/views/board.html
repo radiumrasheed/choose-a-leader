@@ -122,7 +122,8 @@
                                     </thead>
                                     <tbody ng-repeat="b in boardStats.branchStats">
                                     <tr>
-                                        <td class="h6">{{b.name}}
+                                        <td class="h6">
+                                            <a href="" ng-click="viewBranch(b)">{{b.name}}</a>
                                         </td>
                                         <td style="background-color: #adffa7;" class="text-center">{{b.votes}}</td>
                                         <td class="text-center">{{b.accredited}}
