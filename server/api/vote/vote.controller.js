@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var moment = require('moment');
 var _ = require('lodash');
 var Vote = require('./vote.model'),
+  Branch = require('../branch/branch.model'),
     User = require('../auth/auth.model'),
     Position = require('../position/position.model'),
     Receipt = require('./ballot_receipt.model'),
@@ -537,6 +538,40 @@ exports.boardStats = function (req, res) {
             });
             // return res.status(200).json(Lawyers);
         });
+};
+
+exports.membersByBranch = function (req,res) {
+  Branch.findById(req.query._branch, function (err, branch) {
+    var arr = [];
+    if(err) { return handleError(res, err); }
+    if(branch){
+      Receipt.find({"_poll": { $in: [mongoose.mongo.ObjectID(req.query._poll)] }}).populate('_realMember','_branch surname firstName middleName').select('_realMember receiptDate').exec(function (err,receipts) {
+        async.series([
+         function (callback) {
+           _.each(receipts,function (receipt) {
+             var obj = {};
+             if(req.query._branch == receipt._realMember._branch){
+               if(receipt._realMember.middleName == undefined)
+               {
+                 obj.fullname = receipt._realMember.surname+' '+receipt._realMember.firstName;
+               }
+               else{
+                 obj.fullname = receipt._realMember.surname+' '+receipt._realMember.middleName+' '+receipt._realMember.firstName;
+               }
+
+               obj.voteTime = receipt.receiptDate;
+               arr.push(obj);
+             }
+           });
+           callback();
+         }
+        ],function (err) {
+          if(err) { return handleError(res, err); }
+          return res.status(200).send(arr);
+        });
+      })
+    }
+  });
 };
 
 function handleError(res, err) {
