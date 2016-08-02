@@ -1248,6 +1248,29 @@ angular.module 'elektorApp'
     Auth.me (usr) ->
       $scope.standings()
 
+    $scope.PrintElem = (elem) ->
+      $scope.Popup $(elem).html()
+      return
+
+    $scope.Popup = (data) ->
+      mywindow = window.open('', 'results', '')
+      mywindow.document.write '<html><head><title>Branch Stats</title>'
+
+      ###optional stylesheet###
+
+      mywindow.document.write('<link rel="stylesheet" href="../../../app/app.css" type="text/css" />');
+      mywindow.document.write '</head><body>'
+      mywindow.document.write data
+      mywindow.document.write '</body></html>'
+      mywindow.document.close()
+      # necessary for IE >= 10
+      mywindow.focus()
+      # necessary for IE >= 10
+      $timeout ->
+        mywindow.print()
+        mywindow.close()
+        true
+      , 300
 
     $scope.standings = ->
       Vote.boardStats poll: $stateParams.id, (b_stats) ->
@@ -1272,6 +1295,7 @@ angular.module 'elektorApp'
         templateUrl: "app/manager/admin_dashboard/views/branchresult.html"
         scope: $scope
         backdrop: 'static'
+        size: 'lg'
 
     $scope.closeModal = ->
       $scope.branchResult = null

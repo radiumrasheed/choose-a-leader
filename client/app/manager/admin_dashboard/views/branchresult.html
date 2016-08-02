@@ -1,9 +1,10 @@
 <div class="modal-header">
     <button class="btn btn-xs btn-danger pull-right" ng-click="closeModal()"><i class="fa fa-times"></i></button>
+    <button class="pull-right btn btn-xs btn-primary" ng-click="printElem('#branchStats')">Print</button>
     <h4 class="modal-title">{{ selectedBranch.name }} Results</h4>
 </div>
 <div class="modal-body">
-    <div class="row" id="resultsByBranches">
+    <div class="row" id="branchStats">
         <div class="center">
             <div class="center">
                 <div style="margin:auto 0;border:thin solid white;text-align:center;">

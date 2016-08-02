@@ -32,10 +32,15 @@
                 <td>{{p.title }}  <br><small><em>{{p.description}}</em></small></td>
                 <td>{{ago(p.opens)}}</td>
                 <td>{{ago(p.closes)}}</td>
-                <td>{{p._branch.name || "NATIONAL" }}<br>
+                <td>{{p._branch.name || "NATIONAL" }}
+                    <br>
                     <a ui-sref="admin_dashboard.results({id: p._id})" class="btn btn-success btn-xs"><i
                             class="fa fa-signal"></i>
-                        Results</a></td>
+                        Result</a>
+                    <a ui-sref="admin_dashboard.board({id: p._id})" class="btn btn-primary btn-xs"><i
+                            class="fa fa-terminal"></i>
+                        Board</a>
+                </td>
                 <td class="text-center">
                     <button class="btn btn-warning btn-xs" ng-click="edit(p)"><i class="fa fa-edit"></i></button>
                     <a ui-sref="admin_dashboard.positions({id: p._id})" class="btn btn-primary btn-xs"><i
