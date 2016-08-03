@@ -592,10 +592,10 @@ exports.membersByBranch = function (req, res) {
             return handleError(res, err);
         }
         if (!branch) {
-            return res.send(401);
+            return res.send(404);
         }
         if (branch) {
-            Receipt.find({"_poll": {$in: [mongoose.mongo.ObjectID(req.query._poll)]}}).populate('_realMember', '_branch surname firstName middleName').select('_realMember receiptDate').exec(function (err, receipts) {
+            Receipt.find({"_poll": {$in: [mongoose.mongo.ObjectID(req.query._poll)]}}).populate('_realMember', '_branch surname firstName middleName').select('_member _realMember receiptDate').exec(function (err, receipts) {
                 async.series([
                     function (callback) {
                         _.each(receipts, function (receipt) {
@@ -610,6 +610,7 @@ exports.membersByBranch = function (req, res) {
                               var time = moment(receipt.receiptDate).format('LLLL');
 
                                 obj.voteTime = time;
+                                obj._member = receipt._member
                                 arr.push(obj);
                             }
                         });

@@ -22,13 +22,17 @@
                 <table class="table table-striped table-hover table-bordered">
                     <thead>
                     <tr class="success">
-                        <th class="text-center text-bold" >VOTER</th>
+                        <th class="text-center text-bold">VOTER</th>
                         <th class="text-center text-capitalize">VOTE TIME</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="b in branchResult">
-                        <td class="text-uppercase">{{b.fullname}}</td>
+                        <td class="text-uppercase">
+                            <a href="" ng-click="viewMember(b)">
+                                {{b.fullname}}
+                            </a>
+                        </td>
                         <td class="text-center">{{b.voteTime}}</td>
                     </tr>
                     </tbody>

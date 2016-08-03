@@ -1297,6 +1297,9 @@ angular.module 'elektorApp'
         backdrop: 'static'
         size: 'lg'
 
+    $scope.viewMember = (member) ->
+      alert member._member
+
     $scope.closeModal = ->
       $scope.branchResult = null
       $scope.selectedBranch = null
