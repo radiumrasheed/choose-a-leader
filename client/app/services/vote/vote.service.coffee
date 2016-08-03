@@ -44,3 +44,9 @@ angular.module 'elektorApp'
       method: 'GET'
       url: '/api/votes/boardStats'
   #      isArray: true
+
+
+    allReceipts:
+      method: 'GET'
+      url: '/api/votes/allReceipts'
+      isArray: true

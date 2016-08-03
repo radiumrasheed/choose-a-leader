@@ -428,49 +428,6 @@ exports.castVote = function (req, res) {
   // });
 };
 
-// Get a single vote
-exports.show = function(req, res) {
-  Vote.findById(req.params.id, function (err, vote) {
-    if(err) { return handleError(res, err); }
-    if(!vote) { return res.send(404); }
-    return res.json(vote);
-  });
-};
-
-// Creates a new vote in the DB.
-exports.create = function(req, res) {
-  Vote.create(req.body, function(err, vote) {
-    if(err) { return handleError(res, err); }
-    return res.json(201, vote);
-  });
-};
-
-// Updates an existing vote in the DB.
-exports.update = function(req, res) {
-  if(req.body._id) { delete req.body._id; }
-  Vote.findById(req.params.id, function (err, vote) {
-    if (err) { return handleError(res, err); }
-    if(!vote) { return res.send(404); }
-    var updated = _.merge(vote, req.body);
-    updated.save(function (err) {
-      if (err) { return handleError(res, err); }
-      return res.json(200, vote);
-    });
-  });
-};
-
-// Deletes a vote from the DB.
-exports.destroy = function(req, res) {
-  Vote.findById(req.params.id, function (err, vote) {
-    if(err) { return handleError(res, err); }
-    if(!vote) { return res.send(404); }
-    vote.remove(function(err) {
-      if(err) { return handleError(res, err); }
-      return res.send(204);
-    });
-  });
-};
-
 exports.lawyerStats = function (req, res) {
   Receipt.find({_poll: req.query.poll}, '-code -signature -receiptDate -smsSent -emailSent')
       .populate('_realMember')
@@ -533,10 +490,67 @@ exports.boardStats = function (req, res) {
                   });
 
                 });
-                // return res.status(200).json(Branches);
             });
-            // return res.status(200).json(Lawyers);
         });
+};
+
+exports.allReceipts = function (req, res) {
+  // Receipt.find({}, '_id code signature receiptDate _votes')
+  //   .sort({ 'receiptDate': 1 })
+  //   .populate('_votes', 'candidate _position voteDate')
+  //   .limit(20)
+  //   .exec(function(e, receipts) {
+  //   Member.populate(receipts, [{
+  //     "path": "_votes.candidate",
+  //     "model": "Member",
+  //     "select": "surname firstName middleName othername sc_number"
+  //   }, {
+  //     "path": "_votes._position",
+  //     "options" : { "sort" : { 'index' : 1 } },
+  //     "model": "Position",
+  //     "select": "_id name code index candidates.fullname candidates.code candidates._id candidates._member"
+  //   }], function (err, populated) {
+  //     return res.json(populated);
+  //   });
+  // });
+  
+  var page = (req.query.page || 1) - 1,
+    perPage = req.query.perPage || 100;
+  
+  Receipt.count({}, function (e, total) {
+    Receipt.find({}, '_id code signature receiptDate _member')
+      .sort({ 'receiptDate': 1 })
+      .skip(page * perPage)
+      .limit(perPage)
+      .lean()
+      .exec(function(e, receipts) {
+        var _tasks = [];
+      
+        _.each(receipts, function(r) {
+        
+          _tasks.push(function(_cb) {
+            Vote.find({ _member: r._member }, 'candidate _position voteDate')
+              .populate('_position', '_id name code index')
+              .populate('candidate', 'surname firstName middleName othername sc_number')
+              .exec(function(err, votes) {
+                return _cb(err, votes);
+              });
+          });
+        });
+      
+        // Run Tasks Concurrently
+        async.parallel(_tasks, function(__err, __resp) {
+          var toReturn = receipts;
+        
+          _.each(__resp, function(votes, index) {
+            toReturn[index].votes = _.sortBy(votes, function(v) { return v._position.index; });
+          });
+        
+          res.header('total_found', total);
+          return res.json(toReturn);
+        });
+      });
+  });
 };
 
 function handleError(res, err) {

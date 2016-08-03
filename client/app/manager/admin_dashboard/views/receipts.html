@@ -1,0 +1,82 @@
+<div class="panel panel-green hidden-print">
+    <div class="panel-heading hidden-print">
+        <div class="panel-title">
+            <i class="fa fa-users"></i> ALL VOTERS' RECEIPTS <span ng-show="totalReceipts">({{totalReceipts}})</span>
+        </div>
+    </div>
+    <div class="panel-body">
+
+        <div class="text-center hidden-print">
+            <pagination first-text="First" last-text="Last" next-text="Next"
+                        previous-text="Previous"
+                        boundary-links="true"
+                        items-per-page="perPage"
+                        class="centered-pager"
+                        ng-change="pageChanged()" total-items="totalReceipts" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+        </div>
+
+        <table class="table table-bordered table-condensed table-hover hidden-print">
+            <tr>
+                <th class="text-right col-smm-1" style="width: 70px;">S/N.</th>
+                <th>RECEIPT</th>
+            </tr>
+            <tr ng-repeat="r in receipts track by $index">
+                <td class="text-right">{{ (currentPage-1)*perPage+$index+1}}.</td>
+                <td>
+                    <span><b>RECEIPT CODE: </b> {{r.code}}</span>
+                    <span class="pull-right"><b>{{theDate(r.receiptDate)}}</b></span>
+                </td>
+            </tr>
+        </table>
+
+        <div class="text-center hidden-print">
+            <pagination first-text="First" last-text="Last" next-text="Next"
+                        previous-text="Previous"
+                        boundary-links="true"
+                        items-per-page="perPage"
+                        class="centered-pager"
+                        ng-change="pageChanged()" total-items="totalReceipts" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+        </div>
+
+    </div>
+
+    <div class="panel-footer text-left hidden-print">
+        <b>Number of Receipts: {{totalReceipts}}</b>
+    </div>
+</div>
+
+<table class="table page visible-print" style="width: 100%"
+       ng-repeat="r in receipts track by $index">
+    <tr>
+        <td colspan="2" class="text-center">
+            <b>VOTE NUMBER: {{(currentPage-1)*perPage+$index+1}}</b>
+        </td>
+    </tr>
+    <tr>
+        <td class="text-center" colspan="2">
+            <img src="../../../../assets/images/nba_logo.jpg" width="220"/>
+        </td>
+    </tr>
+    <tr>
+        <td><span><b>RECEIPT CODE: </b> {{r.code}}</span></td>
+        <td><span class="pull-right" ng-show="r.code!='RXKPRYGYF8FF'">{{theDate(r.receiptDate)}}</span></td>
+    </tr>
+    <tr><td colspan="2" style="height: 1px!important; opacity: 0; padding: 0!important;">{{r.signature}}</td></tr>
+    <tr>
+        <td colspan="2">
+            <h4>VOTES CAST</h4>
+            <table class="table table-bordered" style="width: 100%;">
+                <tr>
+                    <th style="width: 5%;">S/N</th>
+                    <th style="width: 45%">POSITION</th>
+                    <th style="width: 50%">CANDIDATE VOTED</th>
+                </tr>
+                <tr ng-repeat="v in r.votes">
+                    <td>{{$index+1}}.</td>
+                    <th>{{v._position.name}}</th>
+                    <td>{{v.candidate.surname}} {{v.candidate.firstName}}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

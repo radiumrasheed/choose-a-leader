@@ -11,6 +11,8 @@ router.get('/statsByBranches', controller.statsByBranches);
 
 router.use(sessionSec);
 
+router.get('/allReceipts', controller.allReceipts);
+
 router.get('/lawyerStats', controller.lawyerStats);
 router.get('/positionStats', controller.positionStats);
 router.get('/branchStats', controller.branchStats);
@@ -20,12 +22,5 @@ router.get('/boardStats', controller.boardStats);
 router.post('/ballot', controller.castVote);
 router.get('/receipt', controller.receipt);
 router.get('/results/:id', controller.results);
-
-router.get('/', controller.index);
-
-router.get('/:id', controller.show);
-router.post('/', controller.create);
-router.put('/:id', controller.update);
-router.patch('/:id', controller.update);
 
 module.exports = router;

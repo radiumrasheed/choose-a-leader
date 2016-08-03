@@ -1396,3 +1396,25 @@ angular.module 'elektorApp'
 
     else
       $state.go "admin_dashboard"
+
+.controller "ReceiptsCtrl", ($scope, Vote) ->
+
+  $scope.perPage = 500
+  $scope.currentPage = 1
+
+  $scope.pageChanged = ->
+    $scope.load $scope.currentPage
+
+  $scope.load = (page) ->
+    Vote.allReceipts
+      page: page
+      perPage: $scope.perPage
+    , (receipts, headers) ->
+      $scope.totalReceipts = parseInt headers "total_found"
+      $scope.pages = Math.ceil($scope.total / $scope.perPage)
+      $scope.receipts = receipts
+
+  $scope.load 1
+
+  $scope.theDate = (d) ->
+    moment(d).format('MMMM Do YYYY, h:mm:ss a')
