@@ -53,6 +53,7 @@ angular.module 'elektorApp'
     voteRoll:
       method: 'GET'
       url: '/api/votes/voteRoll'
+      isArray: true
 
     membersByBranch:
       method: 'GET'
