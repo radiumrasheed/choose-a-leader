@@ -1,24 +1,22 @@
 <div ng-controller="BoardCtrl" class="panel panel-green">
     <div class="panel-heading">
-        <div class="panel-title">
-
+        <div class="panel-title text-bold">
+            <div class="text-uppercase col-md-6 col-md-offset-2" ng-if="boardStats" class=" alert alert-primary pull-right">
+                <i class="fa fa-calendar"></i>Total Votes Cast: {{boardStats.votedStats}} &nbsp;&nbsp;
+                <i class="fa fa-television"></i>Total Accredited Voters: {{boardStats.accreditedStats}}
+            </div>
+            <br>
             <div class="pull-right">
-                <div ng-click="goFullscreen" class="btn-success-outline btn btn-xs">Fullscreen</div>
                 <div ng-click="flag.lawyers=!flag.lawyers" class="btn-primary btn btn-xs">Lawyers</div>
                 <div ng-click="flag.positions=!flag.positions" class="btn-primary  btn btn-xs">Positions</div>
                 <div ng-click="flag.branches=!flag.branches" class="btn-primary btn btn-xs">Branches</div>
             </div>
             <i class="fa fa-terminal"></i> LIVE BOARD
-            <br>
-
         </div>
     </div>
 
-    <div  class="panel-body">
-        <div ng-if="boardStats" class=" alert alert-primary pull-right">
-          <i class="fa fa-calendar"></i> Total Votes Cast:{{boardStats.votedStats}} &nbsp;&nbsp;
-          <i class="fa fa-television"></i>   Total Accredited Voters:{{boardStats.accreditedStats}}
-        </div>
+    <div class="panel-body">
+
         <div ng-if="!flag.lawyers" id="Lawyers">
 
             <div class="col-md-12">
@@ -44,7 +42,7 @@
                                     <tbody ng-repeat="l in boardStats.lawyerStats">
                                     <tr>
                                         <td class="h4 text-uppercase">{{l._realMember.surname+'
-                                          '+(l._realMember.firstName||l._realMmember.othername)}}
+                                            '+(l._realMember.firstName||l._realMmember.othername)}}
                                         </td>
                                         <td class="text-center">{{l._realMember.branch}}</td>
                                         <!--<td class="text-center">{{l.ipAddress}}</td>-->
@@ -82,7 +80,7 @@
                                     </thead>
                                     <tbody ng-repeat="p in boardStats.positionStats">
                                     <tr>
-                                        <td class="h6">{{p.name}}
+                                        <td class="text-uppercase h6">{{p.name}}
                                         </td>
                                         <td style="background-color: #adffa7;" class="text-center">{{p.votes}}</td>
                                     </tr>
@@ -114,22 +112,16 @@
                                         <th class="text-center text-bold">BRANCH</th>
                                         <th class="text-center text-bold">VOTES</th>
                                         <th class="text-center text-bold">ACCREDITED</th>
-                                        <!--<th class="text-center text-bold">INVALIDATED</th>-->
-<!--
-                                        <th class="text-center text-bold">ELIGIBLE</th>
--->
                                     </tr>
                                     </thead>
                                     <tbody ng-repeat="b in boardStats.branchStats">
                                     <tr>
-                                        <td class="h6">{{b.name}}
+                                        <td class="h6 text-uppercase">
+                                            <a href="" ng-click="viewBranch(b)">{{b.name}}</a>
                                         </td>
                                         <td style="background-color: #adffa7;" class="text-center">{{b.votes}}</td>
                                         <td class="text-center">{{b.accredited}}
                                         </td>
-                                        <!--<td class="text-center">{{b.invalidated}}</td>-->
-                                        <!--<td class="text-center">{{b.eligible}}
-                                        </td>-->
                                     </tr>
                                     </tbody>
                                 </table>

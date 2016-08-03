@@ -1,0 +1,42 @@
+<div class="modal-header">
+    <button class="btn btn-xs btn-danger pull-right" ng-click="closeModal()"><i class="fa fa-times"></i></button>
+    <button class="pull-right btn btn-xs btn-primary" ng-click="printElem('#branchStats')">Print</button>
+    <h4 class="modal-title">{{ selectedBranch.name }} Results</h4>
+</div>
+<div class="modal-body">
+    <div class="row" id="branchStats">
+        <div class="center">
+            <div class="center">
+                <div style="margin:auto 0;border:thin solid white;text-align:center;">
+                    <div class="center">
+                        <img src="../../../../assets/images/nba_logo.jpg" width="110" height="94" width="110px"
+                             height="94px"/>
+                        <h6 class="text-uppercase" STYLE="color: #00B22D;line-height: 18px;">
+                            NIGERIAN BAR ASSOCIATION 2016 ELECTIONS - {{ selectedBranch.name }} RESULTS
+                        </h6>
+                    </div>
+                </div>
+                </di>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                    <tr class="success">
+                        <th class="text-center text-bold" >VOTER</th>
+                        <th class="text-center text-capitalize">VOTE TIME</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="b in branchResult">
+                        <td class="text-uppercase">{{b.fullname}}</td>
+                        <td class="text-center">{{b.voteTime}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="closeModal()">Close</button>
+</div>
