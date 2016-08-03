@@ -4,34 +4,24 @@ var mongoose = require('mongoose');
 var moment = require('moment');
 var _ = require('lodash');
 var Vote = require('./vote.model'),
-    Branch = require('../branch/branch.model'),
-    User = require('../auth/auth.model'),
-    Position = require('../position/position.model'),
-    Receipt = require('./ballot_receipt.model'),
-    Member = require('../member/member.model'),
-    Poll = require('../poll/poll.model'),
-    BoardBranch = require('./board_branch.model'),
-    BoardPosition = require('./board_position.model');
+  Branch = require('../branch/branch.model'),
+  User = require('../auth/auth.model'),
+  Position = require('../position/position.model'),
+  Receipt = require('./ballot_receipt.model'),
+  Member = require('../member/member.model'),
+  Poll = require('../poll/poll.model'),
+  BoardBranch = require('./board_branch.model'),
+  BoardPosition = require('./board_position.model');
 
 var async = require('async');
 var mailer = require('../../components/tools/mailer');
 
 var redis = require('redis'),
-    config = require('../../config/environment'),
-    redisClient = redis.createClient(config.redis.uri);
-
-// Get list of votes
-exports.index = function (req, res) {
-    Vote.find({_member: req.user, _poll: req.query.pollId}, function (err, votes) {
-        if (err) {
-            return handleError(res, err);
-        }
-        return res.json(200, votes);
-    });
-};
+  config = require('../../config/environment'),
+  redisClient = redis.createClient(config.redis.uri);
 
 exports.stats = function (req, res) {
-
+    
     Vote.aggregate([
         {"$match": {"_poll": mongoose.mongo.ObjectID(req.query._poll)}},
         {
@@ -109,7 +99,7 @@ exports.statsByBranches = function (req, res) {
             }], function (err, votesByBranches) {
             return res.json(votesByBranches);
         });
-
+        
     });
 };
 
@@ -132,33 +122,33 @@ exports.receipt = function (req, res) {
         // code: req.query.code,
         _member: req.user
     })
-        .populate('_votes')
-        .exec(function (err, data) {
-            Vote.populate(data, [{
-                "path": "_votes.candidate",
-                "model": "Member"
-                // "select": "surname firstName middleName othername sc_number"
-            }, {
-                "path": "_votes._position",
-                "model": "Position"
-                // "select": "surname firstName middleName othername sc_number"
-            }, {
-                "path": "_votes._poll",
-                "model": "Poll"
-                // "select": "_id name code description"
-            }, {
-                "path": "_votes._position.candidates._member",
-                // "model": "Poll",
-                // "select": "_id name code description"
-            }], function (err, populated) {
-                return res.json(populated);
-            });
-        });
+      .populate('_votes')
+      .exec(function (err, data) {
+          Vote.populate(data, [{
+              "path": "_votes.candidate",
+              "model": "Member"
+              // "select": "surname firstName middleName othername sc_number"
+          }, {
+              "path": "_votes._position",
+              "model": "Position"
+              // "select": "surname firstName middleName othername sc_number"
+          }, {
+              "path": "_votes._poll",
+              "model": "Poll"
+              // "select": "_id name code description"
+          }, {
+              "path": "_votes._position.candidates._member",
+              // "model": "Poll",
+              // "select": "_id name code description"
+          }], function (err, populated) {
+              return res.json(populated);
+          });
+      });
 };
 
 exports.castVote = function (req, res) {
     const CACHE_KEY = "VOTED_" + req.user;
-
+    
     async.parallel([
         function (_cb) {
             Poll.findById(req.body._poll, function (e, poll) {
@@ -181,15 +171,15 @@ exports.castVote = function (req, res) {
         }
         // Validate qualifications of the Member
         var poll = resp[0],
-            user = resp[1],
-            recMember = resp[2];
-
+          user = resp[1],
+          recMember = resp[2];
+        
         var _usr = new String(user._member._branch),
-            _pol = new String(poll._branch);
-
+          _pol = new String(poll._branch);
+        
         _usr = _usr.toLocaleLowerCase(_usr);
         _pol = _pol.toLocaleLowerCase(_pol);
-
+        
         if (!user) {
             return res.status(400).json({message: "User not found!"});
         }
@@ -200,33 +190,33 @@ exports.castVote = function (req, res) {
             console.log("User with ID: ", req.user, " has voted before: ", recMember);
             return res.status(403).json({message: "You have submitted your votes already"});
         }
-
+        
         if (moment().isAfter(poll.opens) && moment().isBefore(poll.closes)) {
-
+            
             if (_usr.toString() === _pol.toString() || poll.national) {
                 // Verify Password
                 user.validPassword(req.body.password, function (err, isMatch) {
                     if (!isMatch) {
                         return res.status(401).send({message: 'Password Incorrect.'});
                     }
-
+                    
                     var member = user._member;
                     if (member.codeConfirmed) {
                         var pollId = req.body._poll;
-
+                        
                         // Build Vote Objects
                         delete req.body.accessCode;
                         delete req.body.password;
                         delete req.body._poll;
-
+                        
                         var keys = _.keys(req.body),
-                            votes = [],
-                            candidateSignature = {};
-
+                          votes = [],
+                          candidateSignature = {};
+                        
                         _.each(keys, function (k) {
                             if (typeof req.body[k] === "object") {
                                 candidateSignature[k] = req.body[k].code;
-
+                                
                                 //console.log(req.body[k]);
                                 votes.push({
                                     _branch: member._branch,
@@ -237,7 +227,7 @@ exports.castVote = function (req, res) {
                                     voteDate: new Date(),
                                     ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress
                                 });
-
+                                
                                 BoardPosition.update({_position: k, _poll: pollId}, {$inc: {votes: 1}}, function (e) {
                                     if (e) {
                                         console.log(e);
@@ -245,26 +235,26 @@ exports.castVote = function (req, res) {
                                 });
                             }
                         });
-
+                        
                         BoardBranch.update({_branch: member._branch, _poll: pollId}, {$inc: {votes: 1}}, function (e) {
                             if (e) {
                                 console.log(e);
                             }
                         });
-
+                        
                         Vote.create(votes, function (err, docs) {
                             if (err) {
                                 return handleError(res, err);
                             }
-
+                            
                             Vote.find({
                                 _member: req.user,
                                 _position: {$in: keys}
                             }, '_id', function (err, savedVotes) {
-
+                                
                                 var voteIds = _.pluck(savedVotes, '_id');
                                 // Create a Receipt after Inserting the Votes
-
+                                
                                 Position.find({_id: {$in: keys}}, function (err, signatures) {
                                     var signature = "";
                                     _.each(signatures, function (s) {
@@ -273,7 +263,7 @@ exports.castVote = function (req, res) {
                                         }
                                         signature += s.code + ":" + candidateSignature[s._id] + ";";
                                     });
-
+                                    
                                     var receipt = {
                                         _votes: voteIds,
                                         _member: req.user,
@@ -284,9 +274,9 @@ exports.castVote = function (req, res) {
                                         ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
                                         signature: signature
                                     };
-
+                                    
                                     Receipt.create(receipt, function (err, receipt) {
-
+                                        
                                         redisClient.set(CACHE_KEY, res.user, function () {
                                             // Send Receipt Code to User
                                             mailer.sendBallotReceiptSMS(member.phoneNumber || member.phone, member.email, receipt.code, receipt.signature, function () {
@@ -451,80 +441,18 @@ exports.castVote = function (req, res) {
     // });
 };
 
-// Get a single vote
-exports.show = function (req, res) {
-    Vote.findById(req.params.id, function (err, vote) {
-        if (err) {
-            return handleError(res, err);
-        }
-        if (!vote) {
-            return res.send(404);
-        }
-        return res.json(vote);
-    });
-};
-
-// Creates a new vote in the DB.
-exports.create = function (req, res) {
-    Vote.create(req.body, function (err, vote) {
-        if (err) {
-            return handleError(res, err);
-        }
-        return res.json(201, vote);
-    });
-};
-
-// Updates an existing vote in the DB.
-exports.update = function (req, res) {
-    if (req.body._id) {
-        delete req.body._id;
-    }
-    Vote.findById(req.params.id, function (err, vote) {
-        if (err) {
-            return handleError(res, err);
-        }
-        if (!vote) {
-            return res.send(404);
-        }
-        var updated = _.merge(vote, req.body);
-        updated.save(function (err) {
-            if (err) {
-                return handleError(res, err);
-            }
-            return res.json(200, vote);
-        });
-    });
-};
-
-// Deletes a vote from the DB.
-exports.destroy = function (req, res) {
-    Vote.findById(req.params.id, function (err, vote) {
-        if (err) {
-            return handleError(res, err);
-        }
-        if (!vote) {
-            return res.send(404);
-        }
-        vote.remove(function (err) {
-            if (err) {
-                return handleError(res, err);
-            }
-            return res.send(204);
-        });
-    });
-};
 
 exports.lawyerStats = function (req, res) {
     Receipt.find({_poll: req.query.poll}, '-code -signature -receiptDate -smsSent -emailSent')
-        .populate('_realMember')
-        .sort('-receiptDate')
-        .limit(5)
-        .exec(function (err, Lawyers) {
-            if (err) {
-                return handleError(res, err);
-            }
-            return res.status(200).json(Lawyers);
-        });
+      .populate('_realMember')
+      .sort('-receiptDate')
+      .limit(5)
+      .exec(function (err, Lawyers) {
+          if (err) {
+              return handleError(res, err);
+          }
+          return res.status(200).json(Lawyers);
+      });
 };
 
 exports.branchStats = function (req, res) {
@@ -536,6 +464,43 @@ exports.branchStats = function (req, res) {
     });
 };
 
+
+//  Get all stats for Poll Board
+exports.boardStats = function (req, res) {
+    Receipt.find({_poll: req.query.poll}, '-code -signature -receiptDate -smsSent -emailSent')
+      .populate('_realMember')
+      .sort('-receiptDate')
+      .limit(10)
+      .exec(function (err, Lawyers) {
+          if (err) {
+              return handleError(res, err);
+          }
+          BoardBranch.find({_poll: req.query.poll}, 'name _branch votes accredited').sort('name').exec(function (err, Branches) {
+              if (err) {
+                  return handleError(res, err);
+              }
+              BoardPosition.find({_poll: req.query.poll}, 'name votes').sort('index').exec(function (err, Positions) {
+                  if (err) {
+                      return handleError(res, err);
+                  }
+                  Member.count({accredited: true}, function (err, accredited) {
+                      if (err) {
+                          return handleError(res, err);
+                      }
+                      Receipt.count({}, function (err, voted) {
+                          if (err) {
+                              return handleError(res, err);
+                          }
+                          return res.status(200).json({positionStats: Positions, branchStats: Branches, lawyerStats: Lawyers, accreditedStats: accredited, votedStats: voted});
+                      });
+                      
+                  });
+                  
+              });
+          });
+      });
+};
+
 exports.positionStats = function (req, res) {
     BoardPosition.find({_poll: req.query.poll}, function (err, Positions) {
         if (err) {
@@ -545,42 +510,62 @@ exports.positionStats = function (req, res) {
     });
 };
 
-//  Get all stats for Poll Board
-exports.boardStats = function (req, res) {
-    Receipt.find({_poll: req.query.poll}, '-code -signature -receiptDate -smsSent -emailSent')
-        .populate('_realMember')
-        .sort('-receiptDate')
-        .limit(10)
-        .exec(function (err, Lawyers) {
-            if (err) {
-                return handleError(res, err);
-            }
-            BoardBranch.find({_poll: req.query.poll}, 'name _branch votes accredited').sort('name').exec(function (err, Branches) {
-                if (err) {
-                    return handleError(res, err);
-                }
-                BoardPosition.find({_poll: req.query.poll}, 'name votes').sort('index').exec(function (err, Positions) {
-                    if (err) {
-                        return handleError(res, err);
-                    }
-                    Member.count({accredited: true}, function (err, accredited) {
-                        if (err) {
-                            return handleError(res, err);
-                        }
-                        Receipt.count({}, function (err, voted) {
-                            if (err) {
-                                return handleError(res, err);
-                            }
-                            return res.status(200).json({positionStats: Positions, branchStats: Branches, lawyerStats: Lawyers, accreditedStats: accredited, votedStats: voted});
-                        });
-
-                    });
-
-                });
-                // return res.status(200).json(Branches);
-            });
-            // return res.status(200).json(Lawyers);
+exports.allReceipts = function (req, res) {
+  var page = (req.query.page || 1) - 1,
+    perPage = req.query.perPage || 100;
+  
+  Receipt.count({}, function (e, total) {
+    Receipt.find({}, '_id code signature receiptDate _member')
+      .sort({ 'receiptDate': 1 })
+      .skip(page * perPage)
+      .limit(perPage)
+      .lean()
+      .exec(function(e, receipts) {
+        var _tasks = [];
+      
+        _.each(receipts, function(r) {
+        
+          _tasks.push(function(_cb) {
+            Vote.find({ _member: r._member }, 'candidate _position voteDate')
+              .populate('_position', '_id name code index')
+              .populate('candidate', 'surname firstName middleName othername sc_number')
+              .exec(function(err, votes) {
+                return _cb(err, votes);
+              });
+          });
         });
+      
+        // Run Tasks Concurrently
+        async.parallel(_tasks, function(__err, __resp) {
+          var toReturn = receipts;
+        
+          _.each(__resp, function(votes, index) {
+            toReturn[index].votes = _.sortBy(votes, function(v) { return v._position.index; });
+          });
+        
+          res.header('total_found', total);
+          return res.json(toReturn);
+        });
+      });
+  });
+};
+
+exports.voteRoll = function(req, res) {
+  var page = (req.query.page || 1) - 1,
+    perPage = req.query.perPage || 100;
+  
+  Receipt.count({}, function (e, total) {
+    Receipt.find({}, '_id code receiptDate _realMember')
+      .populate('_realMember', 'surname firstName middleName othername sc_number')
+      .sort({'receiptDate': 1})
+      .skip(page * perPage)
+      .limit(perPage)
+      .lean()
+      .exec(function (e, receipts) {
+        res.header('total_found', total);
+        return res.json(receipts);
+      });
+  });
 };
 
 //  Get stats per Branch

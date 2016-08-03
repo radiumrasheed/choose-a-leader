@@ -1,0 +1,48 @@
+<div class="panel panel-green">
+    <div class="panel-heading hidden-print">
+        <div class="panel-title">
+            <i class="fa fa-users"></i> ALL VOTERS' RECEIPTS <span ng-show="totalReceipts">({{totalReceipts}})</span>
+        </div>
+    </div>
+    <div class="panel-body">
+
+        <div class="text-center hidden-print">
+            <pagination first-text="First" last-text="Last" next-text="Next"
+                        previous-text="Previous"
+                        boundary-links="true"
+                        items-per-page="perPage"
+                        class="centered-pager"
+                        ng-change="pageChanged()" total-items="totalReceipts" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+        </div>
+
+        <table class="table table-bordered table-condensed table-hover">
+            <tr>
+                <th class="text-right col-smm-1" style="width: 70px;">S/N.</th>
+                <th>NAME</th>
+                <th>RECEIPT CODE</th>
+            </tr>
+            <tr ng-repeat="r in receipts track by $index">
+                <td class="text-right">{{ (currentPage-1)*perPage+$index+1}}.</td>
+                <td class="text-uppercase">{{r._realMember.surname}} {{r._realMember.firstName}} {{r._realMember
+                    .middleName}}</td>
+                <td>
+                    <span>{{r.code}}</span>
+                </td>
+            </tr>
+        </table>
+
+        <div class="text-center hidden-print">
+            <pagination first-text="First" last-text="Last" next-text="Next"
+                        previous-text="Previous"
+                        boundary-links="true"
+                        items-per-page="perPage"
+                        class="centered-pager"
+                        ng-change="pageChanged()" total-items="totalReceipts" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+        </div>
+
+    </div>
+
+    <div class="panel-footer text-left hidden-print">
+        <b>Number of Receipts: {{totalReceipts}}</b>
+    </div>
+</div>

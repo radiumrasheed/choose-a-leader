@@ -12,7 +12,12 @@ router.get('/membersByBranch', controller.membersByBranch);
 
 router.get('/stats', controller.stats);
 router.get('/statsByMembers', controller.statsByMembers);
+
 router.get('/statsByBranches', controller.statsByBranches);
+
+
+router.get('/allReceipts', controller.allReceipts);
+router.get('/voteRoll', controller.voteRoll);
 
 router.get('/lawyerStats', controller.lawyerStats);
 router.get('/positionStats', controller.positionStats);
@@ -23,12 +28,5 @@ router.get('/boardStats', controller.boardStats);
 router.post('/ballot', controller.castVote);
 router.get('/receipt', controller.receipt);
 router.get('/results/:id', controller.results);
-
-router.get('/', controller.index);
-
-router.get('/:id', controller.show);
-router.post('/', controller.create);
-router.put('/:id', controller.update);
-router.patch('/:id', controller.update);
 
 module.exports = router;

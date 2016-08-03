@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 
 var VoteSchema = new Schema({
   _member: { type: Schema.Types.ObjectId, ref: 'Member' },
+  _receipt: { type: Schema.Types.ObjectId, ref: 'Receipt' },
   candidate: { type: Schema.Types.ObjectId, ref: 'Member' },
   _position: { type: Schema.Types.ObjectId, ref: 'Position' },
   _poll: { type: Schema.Types.ObjectId, ref: 'Poll' },

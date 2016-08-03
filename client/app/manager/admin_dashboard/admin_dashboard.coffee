@@ -102,3 +102,13 @@ angular.module 'elektorApp'
     templateUrl: 'app/manager/admin_dashboard/views/resend-link.html'
     controller: 'UnaccreditedCtrl'
 
+  .state 'receipts',
+    url: '/admin_dashboard/print_receipts/'
+    templateUrl: 'app/manager/admin_dashboard/views/receipts.html'
+    controller: 'ReceiptsCtrl'
+
+  .state 'voteRoll',
+    url: '/admin_dashboard/vote_roll/'
+    templateUrl: 'app/manager/admin_dashboard/views/vote_roll.html'
+    controller: 'VoteRollCtrl'
+

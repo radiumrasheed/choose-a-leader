@@ -19,29 +19,29 @@ var faker = require('faker'),
   Receipt = require('../api/vote/ballot_receipt.model');
 var mongoose = require('mongoose');
 
-BoardPosition.remove({}, function () {
-    console.log("Cleared BoardPosition collection");
-
-    Position.find({}, function (e, positions) {
-        _.each(positions, function (position) {
-            Vote.count({ _position: position._id }, function (e, voteCount) {
-
-                // Count Votes for this Position
-                var data = {
-                    _position: position._id,
-                    votes: voteCount,
-                    name: position.name,
-                    description: position.description,
-                    _poll: position._poll,
-                    index: position.index
-                };
-
-                var bp = new BoardPosition(data);
-                bp.save();
-            });
-        });
-    });
-});
+// BoardPosition.remove({}, function () {
+//     console.log("Cleared BoardPosition collection");
+//
+//     Position.find({}, function (e, positions) {
+//         _.each(positions, function (position) {
+//             Vote.count({ _position: position._id }, function (e, voteCount) {
+//
+//                 // Count Votes for this Position
+//                 var data = {
+//                     _position: position._id,
+//                     votes: voteCount,
+//                     name: position.name,
+//                     description: position.description,
+//                     _poll: position._poll,
+//                     index: position.index
+//                 };
+//
+//                 var bp = new BoardPosition(data);
+//                 bp.save();
+//             });
+//         });
+//     });
+// });
 
 User.count({}, function(e, count) {
     if (count < 1) {
@@ -125,50 +125,50 @@ Member.count({}, function (e, count) {
     }
 });
 
-BoardBranch.remove({}, function () {
-  console.log("Clear BoardBranch collection");
-
-  Branch.find({}, function (e, branches) {
-    var i = 0;
-
-    // Count Votes for this branch
-    _.each(branches, function (branch) {
-      Vote.aggregate([
-        { "$match": { "_branch": mongoose.mongo.ObjectID(branch._id) }},
-        { "$group": { "_id": { "_member": "$_member" }, "branchvote": { "$sum": 1 } } }
-      ], function (err, data) {
-
-        async.parallel([
-          function (_cb) {
-            Member.count({ _branch: branch._id, accredited: true }, function (e, accredited){
-              return _cb(e, accredited);
-            });
-          },
-          function (_cb) {
-            Member.count({ _branch: branch._id, validity: false }, function (e, invalidated){
-              return _cb(e, invalidated);
-            });
-          },
-          function (_cb) {
-            Member.count({ _branch: branch._id }, function (e, allMembers){
-              return _cb(e, allMembers);
-            });
-          }
-        ], function (e, response) {
-          var dat = {
-            _branch: branch._id,
-            votes: data.length,
-            name: branch.name,
-            accredited: response[0],
-            invalidated: response[1],
-            eligible: response[2],
-            _poll: mongoose.mongo.ObjectID('5788ca8a07111ac633075528')
-          };
-
-          var bb = new BoardBranch(dat);
-          bb.save();
-        });
-      });
-    });
-  });
-});
+// BoardBranch.remove({}, function () {
+//   console.log("Clear BoardBranch collection");
+//
+//   Branch.find({}, function (e, branches) {
+//     var i = 0;
+//
+//     // Count Votes for this branch
+//     _.each(branches, function (branch) {
+//       Vote.aggregate([
+//         { "$match": { "_branch": mongoose.mongo.ObjectID(branch._id) }},
+//         { "$group": { "_id": { "_member": "$_member" }, "branchvote": { "$sum": 1 } } }
+//       ], function (err, data) {
+//
+//         async.parallel([
+//           function (_cb) {
+//             Member.count({ _branch: branch._id, accredited: true }, function (e, accredited){
+//               return _cb(e, accredited);
+//             });
+//           },
+//           function (_cb) {
+//             Member.count({ _branch: branch._id, validity: false }, function (e, invalidated){
+//               return _cb(e, invalidated);
+//             });
+//           },
+//           function (_cb) {
+//             Member.count({ _branch: branch._id }, function (e, allMembers){
+//               return _cb(e, allMembers);
+//             });
+//           }
+//         ], function (e, response) {
+//           var dat = {
+//             _branch: branch._id,
+//             votes: data.length,
+//             name: branch.name,
+//             accredited: response[0],
+//             invalidated: response[1],
+//             eligible: response[2],
+//             _poll: mongoose.mongo.ObjectID('5788ca8a07111ac633075528')
+//           };
+//
+//           var bb = new BoardBranch(dat);
+//           bb.save();
+//         });
+//       });
+//     });
+//   });
+// });
