@@ -553,6 +553,24 @@ exports.allReceipts = function (req, res) {
   });
 };
 
+exports.voteRoll = function(req, res) {
+  var page = (req.query.page || 1) - 1,
+    perPage = req.query.perPage || 100;
+  
+  Receipt.count({}, function (e, total) {
+    Receipt.find({}, '_id code receiptDate _realMember')
+      .populate('_realMember', 'surname firstName middleName othername sc_number')
+      .sort({ 'receiptDate': 1 })
+      .skip(page * perPage)
+      .limit(perPage)
+      .lean()
+      .exec(function(e, receipts) {
+        res.header('total_found', total);
+        return res.json(receipts);
+      });
+  });
+};
+
 function handleError(res, err) {
   console.log('Vote Module Error', err);
   return res.send(500, err);

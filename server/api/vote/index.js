@@ -12,6 +12,7 @@ router.get('/statsByBranches', controller.statsByBranches);
 router.use(sessionSec);
 
 router.get('/allReceipts', controller.allReceipts);
+router.get('/voteRoll', controller.voteRoll);
 
 router.get('/lawyerStats', controller.lawyerStats);
 router.get('/positionStats', controller.positionStats);
