@@ -1,4 +1,4 @@
-<div class="panel panel-green admin-menu" ng-hide="false">
+<div class="panel panel-green admin-menu hidden-print" ng-hide="false">
     <div class="panel-heading">
         <h2 class="panel-title text-uppercase text-left">
             <i class="fa fa-list m-r-15" data-toggle="collapse" data-target="#collapseExample"></i><abbr ng-hide="true"> Admin Menu</abbr>
@@ -8,9 +8,9 @@
         <a ui-sref="." class="btn btn-block ">
             <i class="fa fa-dashboard"></i><abbr ng-hide="true">HOME</abbr>
         </a>
-<!--        <a ui-sref=".board" class="btn btn-block " ng-hide="isBranchAdmin">
-            <i class="fa fa-terminal"></i><abbr ng-hide="true">BOARD</abbr>
-        </a>-->
+        <!--        <a ui-sref=".board" class="btn btn-block " ng-hide="isBranchAdmin">
+                    <i class="fa fa-terminal"></i><abbr ng-hide="true">BOARD</abbr>
+                </a>-->
         <a ui-sref=".branches" class="btn btn-block " ng-hide="isBranchAdmin">
             <i class="fa fa-globe"></i><abbr ng-hide="true">BRANCHES</abbr>
         </a>
@@ -33,23 +33,38 @@
         <a ui-sref=".voters_register" class="btn btn-block " ng-hide="isBranchAdmin">
             <i class="fa fa-archive"></i> <abbr ng-hide="true">VOTERS REGISTER</abbr>
         </a>
-      <a ui-sref=".support" class="btn btn-block " ng-hide="isBranchAdmin">
-        <i class="fa fa-hourglass"></i> <abbr ng-hide="true">COMPLAINT RESOLUTION</abbr>
-      </a>
-      <a ui-sref=".fixname" class="btn btn-block " ng-hide="isBranchAdmin">
-        <i class="fa fa-edit"></i><abbr ng-hide="true">NAME CHANGE</abbr>
-      </a>
-      <a ui-sref=".confirmrecord" class="btn btn-block " ng-hide="isBranchAdmin">
-        <i class="fa fa-umbrella"></i><abbr ng-hide="true">CONFIRM BRANCH DATA</abbr>
-      </a>
-      <a ui-sref=".unaccredited" class="btn btn-block " ng-hide="isBranchAdmin">
-        <i class="fa fa-slack"></i> <abbr ng-hide="true">UNACCREDITED</abbr>
-      </a>
-      <a ui-sref=".validity" class="btn btn-block" ng-hide="isBranchAdmin">
-        <i class="fa fa-check"></i><abbr ng-hide="true">SCN VERIFICATION</abbr>
-      </a>
-        <a ui-sref=".memberstatus" class="btn btn-block" ng-hide="isBranchAdmin">
-        <i class="fa fa-trademark"></i><abbr ng-hide="true">MEMBER STATUS</abbr>
-      </a>
+        <a ui-sref=".support" class="btn btn-block " ng-hide="isBranchAdmin">
+            <i class="fa fa-hourglass"></i> <abbr ng-hide="true">COMPLAINT RESOLUTION</abbr>
+        </a>
+        <a ui-sref=".fixname" class="btn btn-block " ng-hide="isBranchAdmin">
+            <i class="fa fa-edit"></i><abbr ng-hide="true">NAME CHANGE</abbr>
+        </a>
+        <a ui-sref=".confirmrecord" class="btn btn-block " ng-hide="isBranchAdmin">
+            <i class="fa fa-umbrella"></i><abbr ng-hide="true">CONFIRM BRANCH DATA</abbr>
+        </a>
+        <a ui-sref=".unaccredited" class="btn btn-block " ng-hide="isBranchAdmin">
+            <i class="fa fa-slack"></i> <abbr ng-hide="true">UNACCREDITED</abbr>
+        </a>
+        <a ui-sref=".validity" class="btn btn-block" ng-hide="isBranchAdmin">
+            <i class="fa fa-check"></i><abbr ng-hide="true">SCN VERIFICATION</abbr>
+        </a>
+        <a ui-sref=".status" class="btn btn-block" ng-hide="isBranchAdmin">
+            <i class="fa fa-trademark"></i><abbr ng-hide="true">MEMBER STATUS</abbr>
+        </a>
+        <a ui-sref=".voteRoll" class="btn btn-block " ng-hide="isBranchAdmin">
+            <i class="fa fa-file-video-o"></i><abbr ng-hide="true">PRINT VOTES</abbr>
+        </a>
+        <a ui-sref=".receipts" class="btn btn-block " ng-hide="isBranchAdmin">
+            <i class="fa fa-recycle"></i> <abbr ng-hide="true">PRINT RECEIPTS</abbr>
+        </a>
+        <a ui-sref=".print_voters_register" class="btn btn-block" ng-hide="isBranchAdmin">
+            <i class="fa fa-registered"></i><abbr ng-hide="true">PRINT VOTERS REGISTER</abbr>
+        </a>
+        <a ui-sref=".print_accredited" class="btn btn-block" ng-hide="isBranchAdmin">
+            <i class="fa fa-shekel"></i><abbr ng-hide="true">PRINT ACCREDITED</abbr>
+        </a>
+        <a ui-sref=".print_updated_voters_register" class="btn btn-block" ng-hide="isBranchAdmin">
+            <i class="fa fa-stumbleupon"></i><abbr ng-hide="true">PRINT UPDATED VOTERS REGISTER</abbr>
+        </a>
     </div>
 </div>

@@ -54,3 +54,11 @@ angular.module 'elektorApp'
       method: 'POST'
       isArray: true
       url: '/api/votersReg/specific'
+    allVoters:
+      method: 'GET'
+      isArray: true
+      url: '/api/votersReg/allVoters'
+    updatedVoters:
+      method: 'GET'
+      isArray: true
+      url: '/api/votersReg/updatedVoters'

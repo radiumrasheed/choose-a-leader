@@ -17,6 +17,7 @@ router.get('/resendPassword', controller.resendPassword);
 router.put('/createUser', controller.createUser);
 router.get('/distinctBranch', controller.distinctBranch);
 router.get('/stats', controller.stats);
+router.get('/allAccredited', controller.allAccredited);
 router.get('/', sessionSec, controller.index);
 
 router.get('/:id', sessionSec, controller.show);

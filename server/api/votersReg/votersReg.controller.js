@@ -524,6 +524,83 @@ exports.update2 = function (req, res) {
   });
 };
 
+exports.allVoters = function (req, res) {
+    var page = (req.query.page || 1) - 1,
+        perPage = req.query.perPage || 100;
+
+    Branches.count({}, function (e, total) {
+        Branches.find({}, 'name')
+            .sort({ 'name': 1 })
+            .skip(page * perPage)
+            .limit(perPage)
+            .lean()
+            .exec(function(e, branches) {
+                var _tasks = [];
+
+                _.each(branches, function(b) {
+
+                    _tasks.push(function(_cb) {
+                        VotersReg.find({ branchCode: b.name }, 'fullname')
+                            .exec(function(err, branchMembers) {
+                                return _cb(err, branchMembers);
+                            });
+                    });
+                });
+
+                // Run Tasks Concurrently
+                async.parallel(_tasks, function(__err, __resp) {
+                    var toReturn = branches;
+
+                    _.each(__resp, function(branchMembers, index) {
+                        toReturn[index].branchMembers = _.sortBy(branchMembers, function(b) { return b.fullname.index; });
+                    });
+
+                    res.header('total_found', total);
+                    return res.json(toReturn);
+                });
+            });
+    });
+};
+
+exports.updatedVoters = function (req, res) {
+    var page = (req.query.page || 1) - 1,
+        perPage = req.query.perPage || 100;
+
+    Branches.count({}, function (e, total) {
+        Branches.find({}, 'name')
+            .sort({ 'name': 1 })
+            .skip(page * perPage)
+            .limit(perPage)
+            .lean()
+            .exec(function(e, branches) {
+                var _tasks = [];
+
+                _.each(branches, function(b) {
+
+                    _tasks.push(function(_cb) {
+                        VotersReg.find({ branchCode: b.name, updated: true }, 'fullname updatedTime')
+                            .exec(function(err, branchMembers) {
+                                return _cb(err, branchMembers);
+                            });
+                    });
+                });
+
+                // Run Tasks Concurrently
+                async.parallel(_tasks, function(__err, __resp) {
+                    var toReturn = branches;
+
+                    _.each(__resp, function(branchMembers, index) {
+                        toReturn[index].branchMembers = _.sortBy(branchMembers, function(b) { return b.fullname.index; });
+                    });
+
+                    res.header('total_found', total);
+                    return res.json(toReturn);
+                });
+            });
+    });
+};
+
+
 function handleError(res, err) {
     return res.send(500, err);
 }

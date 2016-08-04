@@ -1,0 +1,84 @@
+<div class="panel panel-green hidden-print">
+    <div class="panel-heading hidden-print">
+        <div class="panel-title">
+            <i class="fa fa-users"></i>VOTERS' REGISTER - UPDATED RECORDS <span ng-show="totalReceipts">({{totalReceipts}})</span>
+        </div>
+    </div>
+    <div class="panel-body">
+<!--        <div class="col-md-6 col-sm-6 col-xs-12 hidden-print">
+            <select ng-options="branch as branch for branch in branchData" class="form-control"
+                    ng-change="noData =false; searchMembers='';currentPage=1; pageChanged();" ng-model="selectedItem" id="branch"
+                    ng-required="true">
+                <option value="">&#45;&#45; Please Select Your Branch &#45;&#45;</option>
+            </select>
+        </div>-->
+        <div class="text-center hidden-print">
+            <pagination first-text="First" last-text="Last" next-text="Next"
+                        previous-text="Previous"
+                        boundary-links="true"
+                        items-per-page="perPage"
+                        class="centered-pager"
+                        ng-change="pageChanged()" total-items="totalReceipts" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+        </div>
+
+        <table class="table table-bordered table-condensed hidden-print table-hover">
+            <tr>
+                <th class="text-right col-smm-1" style="width: 70px;">S/N.</th>
+                <th>NAME</th>
+            </tr>
+            <tr ng-repeat="b in printVotersRegister track by $index">
+                <td class="text-right">{{ (currentPage-1)*perPage+$index+1}}.</td>
+                <td class="text-uppercase">{{b.name}}</td>
+            </tr>
+        </table>
+
+        <div class="text-center hidden-print">
+            <pagination first-text="First" last-text="Last" next-text="Next"
+                        previous-text="Previous"
+                        boundary-links="true"
+                        items-per-page="perPage"
+                        class="centered-pager"
+                        ng-change="pageChanged()" total-items="totalReceipts" ng-model="currentPage" max-size="10" class="pagination-sm" num-pages="pages"></pagination>
+        </div>
+
+    </div>
+
+    <div class="panel-footer text-left hidden-print">
+        <b>Number of Receipts: {{totalReceipts}}</b>
+    </div>
+</div>
+
+
+<table class="table page visible-print" style="width: 100%"
+       ng-repeat="r in printVotersRegister track by $index">
+    <tr>
+        <td colspan="2" class="text-center">
+            <b>VOTERS REGISTER - UPDATED RECORDS</b>
+        </td>
+    </tr>
+    <tr>
+        <td class="text-center" colspan="2">
+            <img src="../../../../assets/images/nba_logo.jpg" width="220"/>
+        </td>
+    </tr>
+    <tr>
+        <td class="text-uppercase"><span class="text-uppercase text-bold"><b>BRANCH NAME: </b> {{r.name}}</span></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <h4>BRANCH MEMBERS</h4>
+            <table class="table table-bordered" style="width: 100%;">
+                <tr>
+                    <th>S/N</th>
+                    <th style="width: 600px;">FULLNAME</th>
+                    <th>TIME UPDATED</th>
+                </tr>
+                <tr ng-repeat="v in r.branchMembers">
+                    <td >{{$index+1}}.</td>
+                    <th style="width: 350px;" class="text-uppercase">{{v.fullname}}</th>
+                    <th style="width: 280px;">{{theDate(v.updatedTime)}}</th>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

@@ -1,6 +1,8 @@
 'use strict';
 
 var _ = require('lodash');
+var async = require('async');
+
 var Member = require('./member.model');
 var Lawyer = require('./Lawyer.model');
 var User = require('../auth/auth.model');
@@ -445,6 +447,45 @@ exports.distinctBranch = function (req, res) {
         branches.sort();
 
         return res.json(200, branches);
+    });
+};
+
+
+exports.allAccredited = function (req, res) {
+    var page = (req.query.page || 1) - 1,
+        perPage = req.query.perPage || 100;
+
+    Branch.count({}, function (e, total) {
+        Branch.find({}, 'name')
+            .sort({ 'name': 1 })
+            .skip(page * perPage)
+            .limit(perPage)
+            .lean()
+            .exec(function(e, branches) {
+                var _tasks = [];
+
+                _.each(branches, function(b) {
+
+                    _tasks.push(function(_cb) {
+                        Member.find({ branch: b.name, accredited : true }, 'surname firstName lastName')
+                            .exec(function(err, branchMembers) {
+                                return _cb(err, branchMembers);
+                            });
+                    });
+                });
+
+                // Run Tasks Concurrently
+                async.parallel(_tasks, function(__err, __resp) {
+                    var toReturn = branches;
+
+                    _.each(__resp, function(branchMembers, index) {
+                        toReturn[index].branchMembers = _.sortBy(branchMembers, function(b) { return b.surname.index; });
+                    });
+
+                    res.header('total_found', total);
+                    return res.json(toReturn);
+                });
+            });
     });
 };
 

@@ -441,7 +441,6 @@ exports.castVote = function (req, res) {
     // });
 };
 
-
 exports.lawyerStats = function (req, res) {
     Receipt.find({_poll: req.query.poll}, '-code -signature -receiptDate -smsSent -emailSent')
       .populate('_realMember')
@@ -463,7 +462,6 @@ exports.branchStats = function (req, res) {
         return res.status(200).json(Branches);
     });
 };
-
 
 //  Get all stats for Poll Board
 exports.boardStats = function (req, res) {

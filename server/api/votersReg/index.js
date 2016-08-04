@@ -24,6 +24,7 @@ router.post('/specific', controller.getSpecific);
 router.post('/branchMembers', controller.branchMembers);
 router.post('/checkVotersName', controller.checkVotersName);
 router.post('/removeVoters', controller.removeVoters);
-
+router.get('/allVoters', controller.allVoters);
+router.get('/updatedVoters', controller.updatedVoters);
 
 module.exports = router;

@@ -102,13 +102,27 @@ angular.module 'elektorApp'
     templateUrl: 'app/manager/admin_dashboard/views/resend-link.html'
     controller: 'UnaccreditedCtrl'
 
-  .state 'receipts',
-    url: '/admin_dashboard/print_receipts/'
+  .state 'admin_dashboard.receipts',
+    url: 'print_receipts'
     templateUrl: 'app/manager/admin_dashboard/views/receipts.html'
     controller: 'ReceiptsCtrl'
 
-  .state 'voteRoll',
-    url: '/admin_dashboard/vote_roll/'
+  .state 'admin_dashboard.voteRoll',
+    url: 'vote_roll'
     templateUrl: 'app/manager/admin_dashboard/views/vote_roll.html'
     controller: 'VoteRollCtrl'
 
+  .state 'admin_dashboard.print_voters_register',
+    url: 'print_voters_register'
+    templateUrl: 'app/manager/admin_dashboard/views/voters_register_roll.html'
+    controller: 'PrintVotersRegisterCtrl'
+
+  .state 'admin_dashboard.print_accredited',
+    url: 'print_accredited'
+    templateUrl: 'app/manager/admin_dashboard/views/accredited_roll.html'
+    controller: 'PrintAccreditedCtrl'
+
+  .state 'admin_dashboard.print_updated_voters_register',
+    url: 'print_updated_voters_register'
+    templateUrl: 'app/manager/admin_dashboard/views/updated_voters_register_roll.html'
+    controller: 'PrintUpdatedVotersRegisterCtrl'

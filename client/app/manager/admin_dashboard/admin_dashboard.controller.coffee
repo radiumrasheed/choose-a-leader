@@ -1442,7 +1442,6 @@ angular.module 'elektorApp'
       $state.go "admin_dashboard"
 
 .controller "ReceiptsCtrl", ($scope, Vote) ->
-
   $scope.perPage = 500
   $scope.currentPage = 1
 
@@ -1464,7 +1463,6 @@ angular.module 'elektorApp'
     moment(d).format('MMMM Do YYYY, h:mm:ss a')
 
 .controller "VoteRollCtrl", ($scope, Vote) ->
-
   $scope.perPage = 6000
   $scope.currentPage = 1
 
@@ -1479,6 +1477,84 @@ angular.module 'elektorApp'
       $scope.totalReceipts = parseInt headers "total_found"
       $scope.pages = Math.ceil($scope.total / $scope.perPage)
       $scope.receipts = receipts
+
+  $scope.load 1
+
+  $scope.theDate = (d) ->
+    moment(d).format('MMMM Do YYYY, h:mm:ss a')
+
+.controller "PrintVotersRegisterCtrl", ($scope, VotersRegister, $localStorage) ->
+  $scope.perPage = 6000
+  $scope.currentPage = 1
+
+  VotersRegister.branches (branch_data)->
+    $scope.branchData = branch_data
+
+  $scope.load = (page) ->
+    VotersRegister.allVoters
+      page: page
+      perPage: $scope.perPage
+    , (members, headers) ->
+      if !members.length
+        $scope.noData = true
+      $scope.searchHeader = false
+      $scope.total = parseInt headers "total_found"
+      $scope.pages = Math.ceil($scope.total / $scope.perPage)
+      $scope.printVotersRegister = members
+
+  $scope.pageChanged = ->
+    $localStorage.memberPerPage = $scope.perPage
+    $scope.load $scope.currentPage
+
+  $scope.load 1
+
+  $scope.theDate = (d) ->
+    moment(d).format('MMMM Do YYYY, h:mm:ss a')
+
+.controller "PrintAccreditedCtrl", ($scope, Member, $localStorage) ->
+  $scope.perPage = 6000
+  $scope.currentPage = 1
+
+  $scope.load = (page) ->
+    Member.allAccredited
+      page: page
+      perPage: $scope.perPage
+    , (members, headers) ->
+      if !members.length
+        $scope.noData = true
+      $scope.searchHeader = false
+      $scope.total = parseInt headers "total_found"
+      $scope.pages = Math.ceil($scope.total / $scope.perPage)
+      $scope.printAccredited = members
+
+  $scope.pageChanged = ->
+    $localStorage.memberPerPage = $scope.perPage
+    $scope.load $scope.currentPage
+
+  $scope.load 1
+
+.controller "PrintUpdatedVotersRegisterCtrl", ($scope, VotersRegister, $localStorage) ->
+  $scope.perPage = 6000
+  $scope.currentPage = 1
+
+  VotersRegister.branches (branch_data)->
+    $scope.branchData = branch_data
+
+  $scope.load = (page) ->
+    VotersRegister.updatedVoters
+      page: page
+      perPage: $scope.perPage
+    , (members, headers) ->
+      if !members.length
+        $scope.noData = true
+      $scope.searchHeader = false
+      $scope.total = parseInt headers "total_found"
+      $scope.pages = Math.ceil($scope.total / $scope.perPage)
+      $scope.printVotersRegister = members
+
+  $scope.pageChanged = ->
+    $localStorage.memberPerPage = $scope.perPage
+    $scope.load $scope.currentPage
 
   $scope.load 1
 

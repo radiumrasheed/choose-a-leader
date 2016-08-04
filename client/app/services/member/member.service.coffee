@@ -43,6 +43,10 @@ angular.module 'elektorApp'
       url: 'api/members/distinctBranch'
       method: 'GET'
       isArray: true
+    allAccredited:
+      url: 'api/members/allAccredited'
+      method: 'GET'
+      isArray: true
 
 .directive 'memberSelectPlugin', ( Member ) ->
   restrict: 'A'
