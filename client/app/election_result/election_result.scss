@@ -1,0 +1,23 @@
+.election_result {
+  margin-top: -50px;
+  padding-top: 90px;
+  text-align: center;
+  width: 100%;
+  min-height: 900px;
+  height: auto !important; /*min-height hack*/
+
+  .ghost-button {
+    color: #000000;
+    background: none;
+    border: 2px solid green;
+    font-size: 24px;
+    padding: 9px 30px;
+    font-weight: normal;
+    display: inline-block;
+    text-decoration: none;
+    min-width: 120px;
+    text-transform: uppercase;
+    display: inline-block;
+
+  }
+}
