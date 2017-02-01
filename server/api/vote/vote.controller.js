@@ -17,8 +17,7 @@ var async = require('async');
 var mailer = require('../../components/tools/mailer');
 
 var redis = require('redis'),
-  config = require('../../config/environment'),
-  redisClient = redis.createClient(config.redis.uri);
+  config = require('../../config/environment');
 
 exports.stats = function (req, res) {
     
@@ -276,7 +275,8 @@ exports.castVote = function (req, res) {
                                     };
                                     
                                     Receipt.create(receipt, function (err, receipt) {
-                                        
+    
+                                        var redisClient = redis.createClient(config.redis.uri);
                                         redisClient.set(CACHE_KEY, res.user, function () {
                                             // Send Receipt Code to User
                                             mailer.sendBallotReceiptSMS(member.phoneNumber || member.phone, member.email, receipt.code, receipt.signature, function () {
